@@ -41,7 +41,6 @@ const Stack = createStackNavigator();
           component={Signup}
           options={{ headerShown: false }}
         />
-
         <Stack.Screen
           name="Message"
           component={Message}

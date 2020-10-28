@@ -22,11 +22,20 @@ import {
 export default class Login extends React.Component{
   constructor(props){
     super(props);
+    this.scrollViewRef = React.createRef();
     this.state={
       name1: "",
       pass: "",
       
     }
+  }
+  componentWillMount(){
+      this.scrolltobottom();
+  }
+  scrolltobottom=()=>{
+      setTimeout(()=>{
+          this.scrollViewRef.current.scrollToEnd({animated: false});
+      },300)
   }
   render(){
     return(
@@ -35,10 +44,9 @@ export default class Login extends React.Component{
                   <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>어리고착한콩</Text>
                   <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}> 님</Text>
               </View>
-              <View style={{display:"flex",flex:0.85}}>
-              <ScrollView ref = {ref => this.scrollView = ref} onContentSizeChange = {(contentWidth, contentHeight) => {
-                this.scrollView.scrollToEnd ({animated : true}); }}> 
-                <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+              <View style={{display:"flex",flex:0.85,backgroundColor:'white'}} >
+              <ScrollView ref={this.scrollViewRef}>
+                     <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
                     <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
                     <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
                     <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
@@ -48,7 +56,42 @@ export default class Login extends React.Component{
                     <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
                     <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
                     <Text style={{fontSize:50}}>힝힝힝</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>힝힝힝</Text>
+                    <Text style={{fontSize:50}}>힝힝힝</Text>
+                    <Text style={{fontSize:50}}>힝힝힝</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>힝힝힝</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>asdasdsadsadasdsad</Text>
+                    <Text style={{fontSize:50}}>힝힝힝</Text>
+                    <Text style={{fontSize:50}}>힝힝힝</Text>
+                    <Text style={{fontSize:50}}>힝힝힝</Text>
               </ ScrollView>
+              </View>
+              <View style={{display:"flex",flex:0.08,backgroundColor:'black'}}>
+
               </View>
           </SafeAreaView>
     )

@@ -11,7 +11,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './login/login';
-import Signup from './signup/signup';
+import Signup from './sign_up/sign_up';
 import Message from './message/message';
 import {
   SafeAreaView,
@@ -30,11 +30,7 @@ const Stack = createStackNavigator();
     return(
       <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          name="Message"
-          component={Message}
-          options={{ headerShown: false }}
-        />
+        
         <Stack.Screen
           name="Login"
           component={Login}
@@ -43,6 +39,12 @@ const Stack = createStackNavigator();
         <Stack.Screen
           name="Signup"
           component={Signup}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Message"
+          component={Message}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

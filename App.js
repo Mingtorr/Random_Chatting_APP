@@ -12,6 +12,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './login/login';
 import Signup from './signup/signup';
+import Message from './message/message';
 import {
   SafeAreaView,
   StyleSheet,
@@ -29,6 +30,11 @@ const Stack = createStackNavigator();
     return(
       <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Message"
+          component={Message}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Login"
           component={Login}

@@ -23,7 +23,6 @@ import RNPickerSelect from 'react-native-picker-select';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { rgbToHex } from '@material-ui/core';
 
  class Sign_up extends React.Component{
   constructor(props){

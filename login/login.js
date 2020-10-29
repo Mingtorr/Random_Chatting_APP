@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     flex:1,
     backgroundColor:"#c7d9ff"
+    // backgroundColor:"white"
   },
   Container_login:{
     display:"flex",
@@ -158,7 +159,8 @@ const styles = StyleSheet.create({
     marginTop:0,
     fontSize:15,
     color:"#f05052",
-    fontFamily:"Jalnan"
+    fontFamily:"Jalnan",
+    marginBottom:3
   },
   Intro_login2:{
     marginTop:0,

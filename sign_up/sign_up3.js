@@ -23,9 +23,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { rgbToHex } from '@material-ui/core';
 
- class Sign_up extends React.Component{
+ class Sign_up3 extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -77,9 +76,9 @@ import { rgbToHex } from '@material-ui/core';
         }
       });
   }
-  singup2Btn = (e) => {
+  singupBtn = (e) => {
     e.preventDefault();
-    this.props.navigation.navigate('Signup2')
+    // this.props.navigation.navigate('Signup')
   };
   render(){
     let radio_props = [     //radio button
@@ -88,121 +87,56 @@ import { rgbToHex } from '@material-ui/core';
     ];
     return(
       <View style={styles.White_sign}>
+        
+
         <View style={styles.Container_sign}>
           <View style={styles.Textbox_sign2}>
             <Text style={styles.Intro_sign}>와글와글</Text>
           </View>
           <View style={styles.Textbox_sign}>
-            <Text style={styles.Intro_sign2}>회원 가입</Text>
+            <Text style={styles.Intro_sign2}>학과/학번</Text>
           </View>
+       
           <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>아이디</Text>
-            <View style={{display:"flex", flexDirection:"row"}}>
-              <TextInput style={styles.Text_sign_input} id="id"
-                value={this.state.id}
-                onChangeText={this.handleName}
-                />
-              {/* <TouchableOpacity style={{padding:-30}} onPress={this.singupBtn}>
-                  <Text style={styles.sign_button}>중복확인</Text>
-              </TouchableOpacity> */}
-              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.onclick}>
-                    <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
-            </TouchableOpacity>
-            </View>
-          </View>
-          
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>비밀번호</Text>
-            <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}   id="pw"
-              name="pw"
-              value={this.state.pw}
-              secureTextEntry={true}
-              onChangeText={this.handleName2}/>
-              </View>
+            <Text style={{fontFamily:'Jalnan',fontSize:15,color:'#f05052',marginRight:80,}}>학과</Text>
+    
+              <RNPickerSelect
+              style={{marginBottom:"30", color:"red"}}
+
+                placeholder={{
+                  label: '학과선택',
+                  value: null,
+               }}
+              
+                 onValueChange={(value) => console.log(value)}
+                    items={[
+                    { label: '컴퓨터공학과', value: 'computer engineering' },
+                    { label: '정보통신공학과', value: 'baseball' },
+                    { label: '화학공학과', value: 'hockey' },
+                    { label: '전자공학과', value: 'hockey' },
+                    { label: '전기공학과', value: 'hockey' },
+                      ]}
+               />
+               
           </View>
 
           <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>비밀번호 확인</Text>
-            <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}   id="sex"
-              name="sex"
-              value={this.state.pw2}
-              secureTextEntry={true}
-              onChangeText={this.handleName2}/>
-            </View>
-          </View>
-
-          <View style={styles.Text_sign_sex}>
-            <Text style={styles.Text_sign_text_sex}>성별</Text>
-           
-             <RadioForm
-                buttonColor={'#f05052'}
-                labelColor={'black'}
-                formHorizontal={true}
-                buttonSize={10}
-                radio_props={radio_props}
-                // buttonWrapStyle={{marginLeft: 10, marginRight: 10}}
-                borderWidth={0.5}
-                
-                initial={0}
-                onPress={(value) => {this.setState({value:value})}}
-             />
-           
-          </View>
-
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>닉네임</Text>
-            <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}   id="pw"
-              name="pw"
-              value={this.state.pw}
-              secureTextEntry={true}
-              onChangeText={this.handleName2}/>
-              </View>
-          </View>
-
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>이메일</Text>
-            <View style={{display:"flex", flexDirection:"row"}}>
+            <Text style={styles.Text_sign_text}>학번</Text>
             <TextInput style={styles.Text_sign_input2}   id="pw2"
               name="pw2"
               value={this.state.pw2}
               secureTextEntry={true}
               onChangeText={this.handleName2}/>
-           
-
-            <TouchableOpacity style={styles.Btn_sign2} onPress={this.onclick}>
-              <Text style={{color:'white',fontFamily:'Jalnan'}}>전송</Text>
-            </TouchableOpacity>
-            </View>
           </View>
 
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>인증번호</Text>
-
-            <View style={{display:"flex", flexDirection:"row"}}>
-
-              <TextInput style={styles.Text_sign_input2}   id="pw2"
-              name="pw2"
-              value={this.state.pw2}
-              secureTextEntry={true}
-              onChangeText={this.handleName2}/>
-
-               <TouchableOpacity style={styles.Btn_sign2} onPress={this.onclick}>
-               <Text style={{color:'white',fontFamily:'Jalnan'}}>확인</Text>
-               </TouchableOpacity>
-
-            </View>
-
-          </View>
-
-          <Text style={styles.sign_explain}>창원대 이메일으로 만 가입이 가능합니다.</Text>
-
+          
+          <Text style={styles.sign_explain}>필수 입력 항목이 아닙니다</Text>
+          <Text style={styles.sign_explain}>하지만 일부 기능에 대해 제한적일 수 있습니다</Text>
           <View>
-            <TouchableOpacity style={styles.Btn_sign} onPress={this.singup2Btn}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>다음</Text>
+            <TouchableOpacity style={styles.Btn_sign} onPress={this.onclick}>
+              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>완료</Text>
             </TouchableOpacity>
+            
           </View>
         </View>
       </View>
@@ -225,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     flex:1,
-    backgroundColor:"white"
+    backgroundColor:"#c7d9ff"
   },
   Container_sign:{
     display:"flex",
@@ -234,8 +168,7 @@ const styles = StyleSheet.create({
     justifyContent:"space-evenly",
     alignItems:"center",
     backgroundColor:"white",
-    width:'95%',
-    height:'100%',
+    width:'80%',
     borderRadius:60,
     
   },
@@ -244,9 +177,8 @@ const styles = StyleSheet.create({
     flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
-   
-   
-  },  Textbox_sign2:{
+  },
+    Textbox_sign2:{
     display:"flex",
     flexDirection:"column",
     justifyContent:"center",
@@ -258,53 +190,52 @@ const styles = StyleSheet.create({
     marginTop:0,
     fontSize:15,
     color:"#f05052",
-    fontFamily:"Jalnan",
-    marginBottom:5
+    fontFamily:"Jalnan"
   },
   Intro_sign2:{
     marginTop:0,
     fontSize:30,
-    // color:"#4f87ba",
     color:"#f05052",
     fontFamily:"Jalnan"
   },
   Text_sign:{
     display:"flex",
-    flexDirection:'column',
-    width:'90%',
+    flexDirection:'row',
+    width:'80%',
     marginTop:15,
     borderBottomWidth:1,
     borderBottomColor:'gray'
   },
-  Text_sign_black:{
+  Text_sign_pick:{
     display:"flex",
     flexDirection:'row',
     width:'80%',
     marginTop:15,
+    borderBottomWidth:1,
+    borderBottomColor:'gray'
   },
   Text_sign_sex:{
     display:"flex",
     flexDirection:'row',
-    justifyContent: 'space-around',
-    width:'90%',
+    width:'80%',
     marginTop:15,
-
-    // borderBottomWidth:1,
-    // borderBottomColor:'gray'
+  
+    borderBottomWidth:1,
+    borderBottomColor:'gray'
   },
   
   Text_sign_text:{
     fontFamily:'Jalnan',
     fontSize:15,
     color:'#f05052',
-    marginBottom:15
+    display:'flex',
     // marginRight:80,
   },
   Text_sign_text_sex:{
     fontFamily:'Jalnan',
     fontSize:15,
     color:'#f05052',
-    marginRight:60,
+
   },
   Text_sign_input:{
     display:"flex",
@@ -312,7 +243,7 @@ const styles = StyleSheet.create({
     flex:0.9,
     height:20,
     fontSize:15,
-    marginLeft:0,
+    marginLeft:20,
     padding:0
     
   },Text_sign_input2:{
@@ -321,8 +252,9 @@ const styles = StyleSheet.create({
     flex:0.9,
     height:20,
     fontSize:15,
-    marginLeft:0,
+    marginLeft:10,
     padding:0
+    
   },
   Btn_sign:{
     borderWidth:0,
@@ -339,25 +271,6 @@ const styles = StyleSheet.create({
     elevation:8,
     marginBottom:10
   },
-  Btn_sign2id:{
-    borderWidth:0,
-    // marginTop:25,
-    color:'white',
-    borderRadius:60,
-    fontFamily:'Jalnan',
-    paddingLeft:10,
-    paddingTop:5,
-    paddingRight:10,
-    paddingBottom:5,
-    fontSize:20,
-    // backgroundColor:'#f05052',
-    
-    elevation:8,
-    marginBottom:5,
-    marginRight:-15,
-    marginTop:-4,
-  },
-
   Btn_sign2:{
     borderWidth:0,
     // marginTop:25,
@@ -370,7 +283,6 @@ const styles = StyleSheet.create({
     paddingBottom:5,
     fontSize:20,
     backgroundColor:'#f05052',
-    
     elevation:8,
     marginBottom:5,
     marginRight:-15,
@@ -385,11 +297,9 @@ const styles = StyleSheet.create({
     fontFamily:'Jalnan',
     color:"gray",
     marginRight:-15,
-    // marginBottom:-30,
-    paddingBottom:-30,
   },
   sel_placeholder:{
     color:'red',
   }
 });
-export default withNavigation(Sign_up);
+export default withNavigation(Sign_up3);

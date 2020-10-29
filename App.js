@@ -30,10 +30,9 @@ const Stack = createStackNavigator();
     return(
       <NavigationContainer>
       <Stack.Navigator>
-        
         <Stack.Screen
           name="Login"
-          component={Login}
+          component={Message}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -18,7 +18,7 @@ import {
   TextInput,
   FlatList
 } from 'react-native';
-
+import Mymessage from './mymessage'
 const arr = [
   {key:0,name:'정영빈',message:'ㅁㅁㅁ'}
   ,{key:1,name:'정영빈',message:'ㅋㅋㅋ'},
@@ -224,7 +224,7 @@ func=()=>{
                   refreshing={this.state.refresh}
                   onRefresh={this.func}
                   data={arr.slice(this.state.start,arr.length)}//여기서
-                  renderItem={({item,index}) => { return(<Text key={item.key} style={{fontSize:20}}>{index}번{item.message}</Text>)}}
+                  renderItem={({item,index}) => { return(<Mymessage/>)}}
                   />
               </View>
               <View style={{display:"flex",flex:0.08,backgroundColor:'black'}}>

@@ -17,12 +17,14 @@ import {
   Button,
   TextInput,
   Alert,
+  Image,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 
  class Sign_up extends React.Component{
   constructor(props){
@@ -85,15 +87,27 @@ import { createStackNavigator } from '@react-navigation/stack';
       {label: '남    ', value: 0 },
       {label: '여', value: 1 }
     ];
+
+    
     return(
       <View style={styles.White_sign}>
         <View style={styles.Container_sign}>
+
+        <View style={{marginTop:50, position:'absolute', left:'5%'}}>
+        <Image 
+        style={{width:25, height:25}}
+        source={require('./cancel.png')} />
+        </View>
+
+          <View>
           <View style={styles.Textbox_sign2}>
             <Text style={styles.Intro_sign}>와글와글</Text>
           </View>
           <View style={styles.Textbox_sign}>
             <Text style={styles.Intro_sign2}>회원 가입</Text>
           </View>
+          </View>
+
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>아이디</Text>
             <View style={{display:"flex", flexDirection:"row"}}>
@@ -132,6 +146,8 @@ import { createStackNavigator } from '@react-navigation/stack';
             </View>
           </View>
 
+          
+
           <View style={styles.Text_sign_sex}>
             <Text style={styles.Text_sign_text_sex}>성별</Text>
            
@@ -152,12 +168,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>닉네임</Text>
-            <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}   id="pw"
+            <View style={{display:"flex", flexDirection:"row"}}>
+            <TextInput style={styles.Text_sign_input}   id="pw"
               name="pw"
               value={this.state.pw}
               secureTextEntry={true}
               onChangeText={this.handleName2}/>
+              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.onclick}>
+                    <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
+            </TouchableOpacity>
               </View>
           </View>
 
@@ -196,11 +215,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 
           </View>
 
-          <Text style={styles.sign_explain}>창원대 이메일으로 만 가입이 가능합니다.</Text>
+          <Text style={styles.sign_explain}>창원대 이메일으로만 가입이 가능합니다.</Text>
 
-          <View>
+          {/* <View>
             <TouchableOpacity style={styles.Btn_sign} onPress={this.singup2Btn}>
               <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>다음</Text>
+            </TouchableOpacity>
+          </View> */}
+
+          <View>
+            <TouchableOpacity style={styles.bar_Btn_sign} onPress={this.singup2Btn}>
+              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center'}}>다음</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -230,7 +255,9 @@ const styles = StyleSheet.create({
     display:"flex",
     flexDirection:"column",
     
-    justifyContent:"space-evenly",
+    // justifyContent:"space-evenly",
+    justifyContent:"space-between",
+
     alignItems:"center",
     backgroundColor:"white",
     width:'95%',
@@ -250,7 +277,7 @@ const styles = StyleSheet.create({
     flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
-    marginTop:20
+    marginTop:30
    
   },
   Intro_sign:{
@@ -258,7 +285,8 @@ const styles = StyleSheet.create({
     fontSize:15,
     color:"#f05052",
     fontFamily:"Jalnan",
-    marginBottom:5
+    marginTop:20,
+    marginBottom:10
   },
   Intro_sign2:{
     marginTop:0,
@@ -389,6 +417,24 @@ const styles = StyleSheet.create({
   },
   sel_placeholder:{
     color:'red',
+  },
+  bar_Btn_sign:{
+    // borderWidth:0,
+    marginTop:25,
+    color:'white',
+    // borderRadius:60,
+    fontFamily:'Jalnan',
+    paddingLeft:30,
+    paddingTop:15,
+    paddingRight:30,
+    paddingBottom:15,
+    fontSize:20,
+    backgroundColor:'#f05052',
+    // elevation:8,
+    marginBottom:30,
+    width: 1000,
+    // textAlign: 'center',
+    
   }
 });
 export default withNavigation(Sign_up);

@@ -17,12 +17,14 @@ import {
   Button,
   TextInput,
   Alert,
+  Image,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 
  class Sign_up2 extends React.Component{
   constructor(props){
@@ -36,6 +38,7 @@ import { createStackNavigator } from '@react-navigation/stack';
       email:"",
       injung: "",
       sex:"",
+      selectmajor:"학과 선택",
     }
   }
 
@@ -75,9 +78,9 @@ import { createStackNavigator } from '@react-navigation/stack';
         }
       });
   }
-  singup3Btn = (e) => {
+  singup2Btn = (e) => {
     e.preventDefault();
-    this.props.navigation.navigate('Signup3')
+    this.props.navigation.navigate('Signup2')
   };
   render(){
     let radio_props = [     //radio button
@@ -86,17 +89,33 @@ import { createStackNavigator } from '@react-navigation/stack';
     ];
     return(
       <View style={styles.White_sign}>
+        <View style={styles.Container_sign}s>
         
-        <View style={styles.Container_sign}>
-        <View style={styles.Textbox_sign2}>
-            <Text style={styles.Intro_sign}>선택사항</Text>
-          </View>
-          <View style={styles.Textbox_sign_emial}>
-            <Text style={styles.Intro_sign2}>학과/학번</Text>
+        <View style={{marginTop:50, position:'absolute', left:'5%'}}>
+        <Image 
+        style={{width:25, height:25}}
+        source={require('./cancel.png')} />
+        </View>
+
+
+          <View>
+
+            <View style={styles.Textbox_sign2}>
+             <Text style={styles.Intro_sign}>와글와글</Text>
+           </View>
+
+            <View style={styles.Textbox_sign}>
+            
+              <Text style={styles.Intro_sign2}>학과/학번</Text>
+            </View>
+
           </View>
           
+          
+     
+
           <View style={styles.Text_sign}>
-            <Text style={{fontFamily:'Jalnan',fontSize:15,color:'#f05052',marginRight:80,}}>학과</Text>
+            <Text style={{fontFamily:'Jalnan',fontSize:15,color:'#f05052',marginRight:80,marginBottom:20}}>학과</Text>
     
               <RNPickerSelect
               style={{marginBottom:"30", color:"red"}}
@@ -118,57 +137,31 @@ import { createStackNavigator } from '@react-navigation/stack';
                
           </View>
 
+
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>학번</Text>
-            <TextInput style={styles.Text_sign_input2}   id="pw2"
+            <View style={{height:20}}>
+            <TextInput style={styles.Text_sign_input2}  id="pw2"
               name="pw2"
               value={this.state.pw2}
               secureTextEntry={true}
               onChangeText={this.handleName2}/>
+              </View>
           </View>
 
-          
-          {/* <Text style={styles.sign_explain}>필수 입력 항목이 아닙니다 !</Text> */}
-          <Text style={styles.sign_explain}>미기입시 일부 기능에 대해 제한적일 수 있습니다</Text>
-          {/* <View style={styles.Text_sign}>
-            <Text style={{fontFamily:'Jalnan',fontSize:15,color:'#f05052',marginRight:80,}}>학과</Text>
-            
-              <RNPickerSelect
-              style={{marginBottom:"30", color:"red"}}
+          <Text style={styles.sign_explain}>! 필수항목이 아니며 일부 기능이 제한 될 수 있습니다.</Text>
+     
 
-                placeholder={{
-                  label: '학과선택',
-                  value: null,
-               }}
-              
-                 onValueChange={(value) => console.log(value)}
-                    items={[
-                    { label: '컴퓨터공학과', value: 'computer engineering' },
-                    { label: '정보통신공학과', value: 'baseball' },
-                    { label: '화학공학과', value: 'hockey' },
-                    { label: '전자공학과', value: 'hockey' },
-                    { label: '전기공학과', value: 'hockey' },
-                      ]}
-               />
-          </View> */}
+          <View style={{height:150}}></View> 
 
-          {/* <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>학번</Text>
-            <TextInput style={styles.Text_sign_input2}   id="pw2"
-              name="pw2"
-              value={this.state.pw2}
-              secureTextEntry={true}
-              onChangeText={this.handleName2}/>
-          </View> */}
-
-          
-
-          {/* <Text style={styles.sign_explain}>학과와 학번은 더 많은 기능들을 위해 사용됩니다.</Text> */}
           <View>
-            <TouchableOpacity style={styles.Btn_sign} onPress={this.singup3Btn}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>완료</Text>
+            <TouchableOpacity style={styles.bar_Btn_sign} onPress={this.singup2Btn}>
+              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center'}}>완료</Text>
             </TouchableOpacity>
           </View>
+
+          {/* 빈공간 채우기용 */}
+          
         </View>
       </View>
     )
@@ -190,16 +183,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     flex:1,
-    backgroundColor:"#c7d9ff"
+    backgroundColor:"white"
   },
   Container_sign:{
     display:"flex",
     flexDirection:"column",
     
-    justifyContent:"space-evenly",
+    justifyContent:"space-between",
     alignItems:"center",
     backgroundColor:"white",
-    width:'80%',
+    width:'95%',
+    height:'100%',
     borderRadius:60,
     
   },
@@ -207,65 +201,69 @@ const styles = StyleSheet.create({
     display:"flex",
     flexDirection:"column",
     justifyContent:"center",
-    alignItems:"center", 
-  },
-  Textbox_sign_email:{
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"center",
-    alignItems:"center", 
-    marginBottom:"25"
-  },
-    Textbox_sign2:{
+    alignItems:"center",
+   
+   
+  },  Textbox_sign2:{
     display:"flex",
     flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
-    marginTop:20
+    // marginTop:15,
+    marginTop:100,
+    marginBottom:10,
    
   },
   Intro_sign:{
     marginTop:0,
     fontSize:15,
-    color:"#4f87ba",
+    color:"#f05052",
     fontFamily:"Jalnan",
-    marginBottom:10,
+    marginBottom:5
   },
   Intro_sign2:{
     marginTop:0,
     fontSize:30,
+    // color:"#4f87ba",
     color:"#f05052",
     fontFamily:"Jalnan"
   },
   Text_sign:{
     display:"flex",
-    flexDirection:'row',
-    width:'80%',
+    flexDirection:'column',
+    width:'90%',
     marginTop:15,
     borderBottomWidth:1,
     borderBottomColor:'gray'
   },
-  Text_sign_sex:{
+  Text_sign_black:{
     display:"flex",
     flexDirection:'row',
     width:'80%',
     marginTop:15,
-  
-    borderBottomWidth:1,
-    borderBottomColor:'gray'
+  },
+  Text_sign_sex:{
+    display:"flex",
+    flexDirection:'row',
+    justifyContent: 'space-around',
+    width:'90%',
+    marginTop:15,
+
+    // borderBottomWidth:1,
+    // borderBottomColor:'gray'
   },
   
   Text_sign_text:{
     fontFamily:'Jalnan',
     fontSize:15,
     color:'#f05052',
+    marginBottom:15
     // marginRight:80,
   },
   Text_sign_text_sex:{
     fontFamily:'Jalnan',
     fontSize:15,
     color:'#f05052',
-
     marginRight:60,
   },
   Text_sign_input:{
@@ -274,7 +272,7 @@ const styles = StyleSheet.create({
     flex:0.9,
     height:20,
     fontSize:15,
-    marginLeft:20,
+    marginLeft:0,
     padding:0
     
   },Text_sign_input2:{
@@ -283,9 +281,8 @@ const styles = StyleSheet.create({
     flex:0.9,
     height:20,
     fontSize:15,
-    marginLeft:10,
+    marginLeft:0,
     padding:0
-    
   },
   Btn_sign:{
     borderWidth:0,
@@ -302,6 +299,25 @@ const styles = StyleSheet.create({
     elevation:8,
     marginBottom:10
   },
+  Btn_sign2id:{
+    borderWidth:0,
+    // marginTop:25,
+    color:'white',
+    borderRadius:60,
+    fontFamily:'Jalnan',
+    paddingLeft:10,
+    paddingTop:5,
+    paddingRight:10,
+    paddingBottom:5,
+    fontSize:20,
+    // backgroundColor:'#f05052',
+    
+    elevation:8,
+    marginBottom:5,
+    marginRight:-15,
+    marginTop:-4,
+  },
+
   Btn_sign2:{
     borderWidth:0,
     // marginTop:25,
@@ -314,6 +330,7 @@ const styles = StyleSheet.create({
     paddingBottom:5,
     fontSize:20,
     backgroundColor:'#f05052',
+    
     elevation:8,
     marginBottom:5,
     marginRight:-15,
@@ -321,16 +338,36 @@ const styles = StyleSheet.create({
   },
   
   sign_explain:{
-      marginTop:15,
+      // marginTop:15,
   },
   sign_button:{
     fontSize:15,
     fontFamily:'Jalnan',
     color:"gray",
     marginRight:-15,
+    // marginBottom:-30,
+    paddingBottom:-30,
   },
   sel_placeholder:{
     color:'red',
+  },
+  bar_Btn_sign:{
+    // borderWidth:0,
+    marginTop:25,
+    color:'white',
+    // borderRadius:60,
+    fontFamily:'Jalnan',
+    paddingLeft:30,
+    paddingTop:15,
+    paddingRight:30,
+    paddingBottom:15,
+    fontSize:20,
+    backgroundColor:'#f05052',
+    // elevation:8,
+    marginBottom:30,
+    width: 1000,
+    // textAlign: 'center',
+    
   }
 });
 export default withNavigation(Sign_up2);

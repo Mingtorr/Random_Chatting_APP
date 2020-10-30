@@ -66,6 +66,10 @@ import { withNavigation } from 'react-navigation';
     e.preventDefault();
     this.props.navigation.navigate('Signup')
   };
+  goMain =(e)=>{
+    e.preventDefault();
+    this.props.navigation.navigate('Main')
+  }
   render(){
     return(
       <View style={styles.White_login}>
@@ -94,7 +98,8 @@ import { withNavigation } from 'react-navigation';
           </View>
           <View>
             <TouchableOpacity style={styles.Btn_login} onPress={this.onclick}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>로그인</Text>
+              
+              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}} onPress={this.goMain}>로그인</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.login_button_view}>

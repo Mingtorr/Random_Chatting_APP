@@ -14,8 +14,9 @@ import Login from './login/login';
 import Signup from './sign_up/sign_up';
 import Signup2 from './sign_up/sign_up2';
 import Signup3 from './sign_up/sign_up3';
-
+import Main from './main/Main';
 import Message from './message/message';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   SafeAreaView,
   StyleSheet,
@@ -27,6 +28,7 @@ import {
   TextInput
 } from 'react-native';
 
+
 const Stack = createStackNavigator();
  export default class App extends React.Component{
   render(){
@@ -35,7 +37,12 @@ const Stack = createStackNavigator();
       <Stack.Navigator>
         <Stack.Screen
           name="Login"
-          component={Message}
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={Bottom}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -65,6 +72,24 @@ const Stack = createStackNavigator();
     </NavigationContainer>
     )
   }
+}
+
+
+const Tab = createBottomTabNavigator();
+
+function Bottom() {
+  return (
+    <Tab.Navigator>
+      {/* 친구찾기 */}
+      <Tab.Screen name="Man" component={Main} />
+      {/* 친구들 찾기 */}
+      <Tab.Screen name="Mans" component={Main} />
+      {/* 메세지함 */}
+      <Tab.Screen name="Message" component={Message} />
+      {/* 설정 */}
+      <Tab.Screen name="Setting" component={Message} />
+    </Tab.Navigator>
+  );
 }
 
 

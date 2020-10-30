@@ -7,12 +7,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 
 export default class Main extends Component {
+    goLog =(e)=>{
+        e.preventDefault();
+        this.props.navigation.navigate('Login')
+    }
     render() {
         return (
             <View style={styles.Container_main}>
                 <View style ={styles.Top_main}>
                     <Text>마크</Text>
                 </View>
+                {/* 이동쉽게 만들어놓은거 */} 
+                <Button title ="로그인으로 가기" onPress={this.goLog}/>
             </View>
         )
     }

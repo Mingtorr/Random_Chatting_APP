@@ -16,6 +16,7 @@ import Signup2 from './sign_up/sign_up2';
 import Signup3 from './sign_up/sign_up3';
 import Main from './main/Main';
 import Message from './message/message';
+import Splash from './splash/Splash';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   SafeAreaView,
@@ -31,13 +32,22 @@ import {
 
 const Stack = createStackNavigator();
  export default class App extends React.Component{
+  state={
+    isLoading : false, //false면 스플래시
+    isLogin : false, // 로그인하면 true로 변경
+  };
+  componentDidMount= async() => {  
+    setTimeout(() => {this.setState({isLoading: true})},1000);
+  }
   render(){
     return(
       <NavigationContainer>
       <Stack.Navigator>
+      {this.state.isLoading ? (
+          <>
         <Stack.Screen
           name="Login"
-          component={Bottom}
+          component={Login}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -67,7 +77,14 @@ const Stack = createStackNavigator();
           component={Message}
           options={{ headerShown: false }}
         />
-
+        </>
+        ):(
+        <><Stack.Screen
+          name="Splash"
+          component={Splash}
+          options={{ headerShown: false }}
+        /></>)
+        }
       </Stack.Navigator>
     </NavigationContainer>
     )

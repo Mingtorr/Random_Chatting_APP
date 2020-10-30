@@ -15,6 +15,7 @@ import Signup from './sign_up/sign_up';
 import Signup2 from './sign_up/sign_up2';
 import Signup3 from './sign_up/sign_up3';
 import Main from './main/Main';
+import Groupmatch from './groupmatch/groupmatch';
 import Message from './message/message';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -88,6 +89,8 @@ function Bottom() {
       <Tab.Screen name="Message" component={Message} />
       {/* 설정 */}
       <Tab.Screen name="Setting" component={Message} />
+      {/* 과팅 */}
+      <Tab.Screen name="Group" component={Groupmatch} />
     </Tab.Navigator>
   );
 }

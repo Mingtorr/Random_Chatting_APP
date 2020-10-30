@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     },
     message_safe:{
         display:"flex",
-        backgroundColor:'#c7d9ff',
+        backgroundColor:'#a1bdff',
         flex:1,
         flexDirection:"column"
     },

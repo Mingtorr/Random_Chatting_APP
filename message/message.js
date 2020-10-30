@@ -16,6 +16,7 @@ import {
   TouchableOpacity ,
   Button,
   TextInput,
+  Image,
   FlatList
 } from 'react-native';
 import Mymessage from './mymessage'
@@ -77,7 +78,7 @@ export default class Login extends React.Component{
       refresh:false
     }
   }
-  componentWillMount(){
+  componentDidMount(){
     this.setState({
       start:arr.length-20
     })
@@ -127,10 +128,14 @@ func=()=>{
     return(
           <SafeAreaView style={styles.message_safe}>
               <View style={styles.message_top}>
+                <View style={{display:'flex',flex:0.5,flexDirection:"row"}}>
+                  <Image style={{width:20,height:20,marginRight:10}}source={require('./logindot.png')}/>
                   <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>어리고착한콩</Text>
                   <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}> 님</Text>
+                </View>
+               
               </View>
-              <View style={{display:"flex",flex:0.85,backgroundColor:'white'}} >
+              <View style={{display:"flex",flex:0.88,backgroundColor:'white'}} >
                 <FlatList
                   ref={this.scrollViewRef}
                   keyExtractor={item => item.key.toString()}
@@ -144,8 +149,11 @@ func=()=>{
                   }}}
                   />
               </View>
-              <View style={{display:"flex",flex:0.08,backgroundColor:'black'}}>
-
+              <View style={{display:"flex",flex:0.06,backgroundColor:'white',flexDirection:'row',justifyContent:'center'}}>
+                <TextInput style={{display:'flex',flex:0.8,marginTop:5,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10}}/>
+                <TouchableOpacity style={{display:'flex',marginTop:5,marginLeft:20}}>
+                  <Image style={{width:35,height:35}} source={require('./sendmessage.png')}/>
+                </TouchableOpacity>
               </View>
           </SafeAreaView>
     )
@@ -166,11 +174,11 @@ const styles = StyleSheet.create({
     },
     message_top:{
         display:"flex",
-        flex:0.08,
+        flex:0.06,
         flexDirection:'row',
         backgroundColor:'#a1bdff',
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
     }
 });
 

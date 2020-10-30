@@ -37,7 +37,7 @@ const Stack = createStackNavigator();
       <Stack.Navigator>
         <Stack.Screen
           name="Login"
-          component={Login}
+          component={Bottom}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -17,6 +17,7 @@ import Signup3 from './sign_up/sign_up3';
 import Main from './main/Main';
 import Message from './message/message';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MessageCollect from './messageCollect/messageCollect'
 import {
   SafeAreaView,
   StyleSheet,
@@ -85,7 +86,7 @@ function Bottom() {
       {/* 친구들 찾기 */}
       <Tab.Screen name="Mans" component={Main} />
       {/* 메세지함 */}
-      <Tab.Screen name="Message" component={Message} />
+      <Tab.Screen name="MessageCollect" component={MessageCollect} />
       {/* 설정 */}
       <Tab.Screen name="Setting" component={Message} />
     </Tab.Navigator>

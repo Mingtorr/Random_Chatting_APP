@@ -13,13 +13,28 @@ import {
 
 export default class Yourmessage extends React.Component{
     render(){
-        return(
-            <View style={{display:'flex',flexDirection:'row',justifyContent:'flex-start',marginBottom:5,marginTop:5}}>
-                <View style={{display:'flex',backgroundColor:'#eaeaea',marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
-        <Text style={{fontSize:18}}>{this.props.message}</Text>
+        if(this.props.pre === true){
+            return(
+                <View style={{display:'flex',flexDirection:"column",justifyContent:'flex-start',marginBottom:5,marginTop:5}}>
+                    <View style={{display:'flex',backgroundColor:'#eaeaea',marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
+                        <Text style={{fontSize:18}}>{this.props.message}</Text>
+                    </View>
                 </View>
-            </View>
-        )
+            )
+        }else{
+            return(
+                <View style={{display:'flex',flexDirection:'column',justifyContent:'flex-start',marginBottom:5,marginTop:5}}>
+                    <View style={{display:'flex'}}>
+                        <Text>asdasd</Text>
+                    </View>
+                    <View style={{display:"flex",flexDirection:'row'}}>
+                        <View style={{display:'flex',backgroundColor:'#eaeaea',marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
+                        <Text style={{fontSize:18}}>{this.props.message}</Text>
+                        </View>
+                    </View>
+                </View>
+            )
+        }
     }
 }
 

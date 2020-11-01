@@ -24,44 +24,44 @@ import Yourmessage from './yourmessage'
 const arr = [
   {key:0,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
   ,{key:1,name:'정영빈',message:'ㅋㅋㅋ',owner:false},
-  {key:2,name:'정영빈',message:'ㅉㅉㅉㅈ',owner:true},
+  {key:2,name:'aaa',message:'ㅉㅉㅉㅈ',owner:true},
   {key:3,name:'정영빈',message:'으어어어',owner:false},
   {key:4,name:'정영빈',message:'이이이잉ㅇ',owner:false},
-  {key:5,name:'정영빈',message:'나는나는',owner:true},
-  {key:6,name:'정영빈',message:'너너너너',owner:true},
+  {key:5,name:'aaa',message:'나는나는',owner:true},
+  {key:6,name:'aaa',message:'너너너너',owner:true},
   {key:7,name:'정영빈',message:'너너나나나나나',owner:false},
   {key:8,name:'정영빈',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:false},
-  {key:9,name:'정영빈',message:'퉁ㅁㄴㅇ',owner:true},
-  {key:10,name:'정영빈',message:'ㅁㅁㅁ',owner:true}
-  ,{key:11,name:'정영빈',message:'ㅋㅋㅋ',owner:true},
+  {key:9,name:'aaa',message:'퉁ㅁㄴㅇ',owner:true},
+  {key:10,name:'aaa',message:'ㅁㅁㅁ',owner:true}
+  ,{key:11,name:'aaa',message:'ㅋㅋㅋ',owner:true},
   {key:12,name:'정영빈',message:'ㅉㅉㅉㅈ',owner:false},
   {key:13,name:'정영빈',message:'으어어어',owner:false},
   {key:14,name:'정영빈',message:'이이이잉ㅇ',owner:false},
-  {key:15,name:'정영빈',message:'나는나는',owner:true},
+  {key:15,name:'aaa',message:'나는나는',owner:true},
   {key:16,name:'정영빈',message:'너너너너',owner:false},
   {key:17,name:'정영빈',message:'너너나나나나나',owner:false},
-  {key:18,name:'정영빈',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:true},
+  {key:18,name:'aaa',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:true},
   {key:19,name:'정영빈',message:'퉁ㅁㄴㅇ',owner:false},
   {key:20,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
-  ,{key:21,name:'정영빈',message:'ㅋㅋㅋ',owner:true},
+  ,{key:21,name:'aaa',message:'ㅋㅋㅋ',owner:true},
   {key:22,name:'정영빈',message:'ㅉㅉㅉㅈ',owner:false},
   {key:23,name:'정영빈',message:'으어어어',owner:false},
   {key:24,name:'정영빈',message:'이이이잉ㅇ',owner:false},
-  {key:25,name:'정영빈',message:'나는나는',owner:true},
+  {key:25,name:'aaa',message:'나는나는',owner:true},
   {key:26,name:'정영빈',message:'너너너너',owner:false},
-  {key:27,name:'정영빈',message:'너너나나나나나',owner:true},
+  {key:27,name:'aaa',message:'너너나나나나나',owner:true},
   {key:28,name:'정영빈',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:false},
   {key:29,name:'정영빈',message:'퉁ㅁㄴㅇ',owner:false},
   {key:30,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
   ,{key:31,name:'정영빈',message:'ㅋㅋㅋ',owner:false},
-  {key:32,name:'정영빈',message:'ㅉㅉㅉㅈ',owner:true},
-  {key:33,name:'정영빈',message:'으어어어',owner:true},
+  {key:32,name:'aaa',message:'ㅉㅉㅉㅈ',owner:true},
+  {key:33,name:'aaa',message:'으어어어',owner:true},
   {key:34,name:'정영빈',message:'이이이잉ㅇ',owner:false},
   {key:35,name:'정영빈',message:'나는나는',owner:false},
   {key:36,name:'정영빈',message:'너너너너',owner:false},
-  {key:37,name:'정영빈',message:'너너나나나나나',owner:true},
-  {key:38,name:'정영빈',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:true},
-  {key:39,name:'정영빈',message:'퉁ㅁㄴㅇ',owner:true},
+  {key:37,name:'aaa',message:'너너나나나나나',owner:true},
+  {key:38,name:'aaa',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:true},
+  {key:39,name:'aaa',message:'퉁ㅁㄴㅇ',owner:true},
   {key:40,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
 
 ]
@@ -75,7 +75,9 @@ export default class Login extends React.Component{
       pass: "",
       start:0,
       page:1,
-      refresh:false
+      refresh:false,
+      lastownername:false,
+      id:'aaa'
     }
   }
   componentDidMount(){
@@ -124,6 +126,17 @@ func=()=>{
     })
   }
 }
+wholastmessage=()=>{
+  this.setState({
+    lastownername:true
+  })
+}
+wholastmessage2=()=>{
+  this.setState({
+    lastownername:false
+  })
+}
+
   render(){
     return(
           <SafeAreaView style={styles.message_safe}>
@@ -142,11 +155,30 @@ func=()=>{
                   refreshing={this.state.refresh}
                   onRefresh={this.func}
                   data={arr.slice(this.state.start,arr.length)}//여기서
-                  renderItem={({item,index}) => { if(item.owner===false){
-                    return(<Yourmessage message={item.message}/>)
-                  }else{
-                    return(<Mymessage message={item.message}/>)
-                  }}}
+                  renderItem={({item,index}) => {
+                    if(index===0){ 
+                      if(this.state.id === arr[index].name){
+                        return(<Mymessage message={item.message}/>)
+                      }else{
+                        return(<Yourmessage message={item.message} pre={false}/>)
+                      }
+                    }else{
+                      if(arr[index-1].name === arr[index].name)
+                      {
+                        if(this.state.id === arr[index].name){
+                          return( <Mymessage message={item.message}/>)
+                        }else{
+                          return(<Yourmessage message={item.message} pre={true}/>)
+                        }
+                      }else{
+                        if(this.state.id === arr[index].name){
+                          return(<Mymessage message={item.message}/>)
+                        }else{
+                          return(<Yourmessage message={item.message} pre={false}/>)
+                        }
+                      }
+                    } 
+                }}
                   />
               </View>
               <View style={{display:"flex",flex:0.06,backgroundColor:'white',flexDirection:'row',justifyContent:'center'}}>

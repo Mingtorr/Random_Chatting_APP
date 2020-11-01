@@ -31,7 +31,7 @@ export default class Yourmessage extends React.Component{
             return(
                 <View style={{display:'flex',flexDirection:'column',justifyContent:'flex-start',marginBottom:5,marginTop:5}}>
                     <View style={{marginLeft:22,marginBottom:10,display:'flex'}}>
-                        <Text style={{fontSize:18,fontWeight:'bold'}}>어리고착한콩</Text>
+                        <Text style={{fontSize:15,fontWeight:'bold'}}>어리고착한콩</Text>
                     </View>
                     <View style={{display:"flex",flexDirection:'row'}}>
                         <View style={{display:'flex',backgroundColor:'#eaeaea',marginRight:10,marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>

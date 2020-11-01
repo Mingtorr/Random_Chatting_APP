@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,7 +18,9 @@ import {
   Button,
   TextInput,
   Image,
-  FlatList
+  FlatList,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
@@ -65,7 +68,7 @@ const arr = [
   {key:40,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
 
 ]
-
+const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
 export default class Login extends React.Component{
   constructor(props){
     super(props);
@@ -136,63 +139,68 @@ wholastmessage2=()=>{
     lastownername:false
   })
 }
-
+rendermessage=({item,index})=>{
+  {
+    if(index===0){ 
+      if(this.state.id === item.name){
+        console.log('5번'+item.message);
+        return(<Mymessage message={item.message}/>)
+      }else{
+        console.log('4번'+item.message);
+        return(<Yourmessage message={item.message} pre={false}/>)
+      }
+    }else{
+      if(arr[this.state.start+index-1].name === item.name)
+      {
+        if(this.state.id === item.name){
+          console.log('3번'+item.message);
+          return( <Mymessage message={item.message}/>)
+        }else{
+          console.log('2번'+item.name+item.message);
+          return(<Yourmessage message={item.message} pre={true}/>)
+        }
+      }
+      else{
+        console.log('1번'+item.message);
+        if(this.state.id === item.name){
+          return(<Mymessage message={item.message}/>)
+        }else{
+          return(<Yourmessage message={item.message} pre={false}/>)
+        }
+      }
+    } 
+}
+}
   render(){
     return(
           <SafeAreaView style={styles.message_safe}>
-              <View style={styles.message_top}>
+            <KeyboardAvoidingView style={styles.message_safe} behavior='padding' onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
+              <View style={styles.message_top} >
                 <View style={{display:'flex',flex:0.5,flexDirection:"row"}}>
                   <Image style={{width:20,height:20,marginRight:10}}source={require('./logindot.png')}/>
                   <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>어리고착한콩</Text>
                   <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}> 님</Text>
                 </View>
-               
               </View>
-              <View style={{display:"flex",flex:0.88,backgroundColor:'white'}} >
+              <View style={{display:"flex",flex:0.93,backgroundColor:'white'}} >
                 <FlatList
                   ref={this.scrollViewRef}
                   keyExtractor={item => item.key.toString()}
                   refreshing={this.state.refresh}
                   onRefresh={this.func}
                   data={arr.slice(this.state.start,arr.length)}//여기서
-                  renderItem={({item,index}) => {
-                    if(index===0){ 
-                      if(this.state.id === item.name){
-                        console.log('5번'+item.message);
-                        return(<Mymessage message={item.message}/>)
-                      }else{
-                        console.log('4번'+item.message);
-                        return(<Yourmessage message={item.message} pre={false}/>)
-                      }
-                    }else{
-                      if(arr[this.state.start+index-1].name === item.name)
-                      {
-                        if(this.state.id === item.name){
-                          console.log('3번'+item.message);
-                          return( <Mymessage message={item.message}/>)
-                        }else{
-                          console.log('2번'+item.name+item.message);
-                          return(<Yourmessage message={item.message} pre={true}/>)
-                        }
-                      }
-                      else{
-                        console.log('1번'+item.message);
-                        if(this.state.id === item.name){
-                          return(<Mymessage message={item.message}/>)
-                        }else{
-                          return(<Yourmessage message={item.message} pre={false}/>)
-                        }
-                      }
-                    } 
-                }}
+                  renderItem={this.rendermessage}
                   />
               </View>
-              <View style={{display:"flex",flex:0.06,backgroundColor:'white',flexDirection:'row',justifyContent:'center'}}>
-                <TextInput style={{display:'flex',flex:0.8,marginTop:5,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10}}/>
+              <View  style={{display:"flex",flex:0.06,backgroundColor:'white',flexDirection:'row',justifyContent:'center'}}>
+              
+                <TextInput onTouchStart={this.scrolltobottom} style={{display:'flex',height:30,width:300,marginTop:5,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10}} on/>
+   
                 <TouchableOpacity style={{display:'flex',marginTop:5,marginLeft:20}}>
                   <Image style={{width:35,height:35}} source={require('./sendmessage.png')}/>
                 </TouchableOpacity>
               </View>
+              </KeyboardAvoidingView>
           </SafeAreaView>
     )
   }
@@ -206,13 +214,13 @@ const styles = StyleSheet.create({
     },
     message_safe:{
         display:"flex",
-        backgroundColor:'#a1bdff',
+        backgroundColor:'white',
         flex:1,
         flexDirection:"column"
     },
     message_top:{
         display:"flex",
-        flex:0.06,
+        height:50,
         flexDirection:'row',
         backgroundColor:'#a1bdff',
         justifyContent:"center",

@@ -61,7 +61,7 @@ const arr = [
   {key:36,name:'정영빈',message:'너너너너',owner:false},
   {key:37,name:'aaa',message:'너너나나나나나',owner:true},
   {key:38,name:'aaa',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:true},
-  {key:39,name:'aaa',message:'퉁ㅁㄴㅇ',owner:true},
+  {key:39,name:'aaa',message:'퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ v v 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ v v 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ',owner:true},
   {key:40,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
 
 ]
@@ -157,21 +157,27 @@ wholastmessage2=()=>{
                   data={arr.slice(this.state.start,arr.length)}//여기서
                   renderItem={({item,index}) => {
                     if(index===0){ 
-                      if(this.state.id === arr[index].name){
+                      if(this.state.id === item.name){
+                        console.log('5번'+item.message);
                         return(<Mymessage message={item.message}/>)
                       }else{
+                        console.log('4번'+item.message);
                         return(<Yourmessage message={item.message} pre={false}/>)
                       }
                     }else{
-                      if(arr[index-1].name === arr[index].name)
+                      if(arr[this.state.start+index-1].name === item.name)
                       {
-                        if(this.state.id === arr[index].name){
+                        if(this.state.id === item.name){
+                          console.log('3번'+item.message);
                           return( <Mymessage message={item.message}/>)
                         }else{
+                          console.log('2번'+item.name+item.message);
                           return(<Yourmessage message={item.message} pre={true}/>)
                         }
-                      }else{
-                        if(this.state.id === arr[index].name){
+                      }
+                      else{
+                        console.log('1번'+item.message);
+                        if(this.state.id === item.name){
                           return(<Mymessage message={item.message}/>)
                         }else{
                           return(<Yourmessage message={item.message} pre={false}/>)

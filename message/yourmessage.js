@@ -16,20 +16,29 @@ export default class Yourmessage extends React.Component{
         if(this.props.pre === true){
             return(
                 <View style={{display:'flex',flexDirection:"column",justifyContent:'flex-start',marginBottom:5,marginTop:5}}>
-                    <View style={{display:'flex',backgroundColor:'#eaeaea',marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
+                    <View style={{display:"flex",flexDirection:'row'}}>
+                        <View style={{display:'flex',backgroundColor:'#eaeaea',marginRight:10,marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
                         <Text style={{fontSize:18}}>{this.props.message}</Text>
+                        </View>
+                        <View style={{backgroundColor:'white',display:'flex',justifyContent:'flex-end'}}>
+                            <Text style={{fontSize:12}}>오후 2:03</Text>
+                        </View>
                     </View>
                 </View>
             )
-        }else{
+        }
+        else{
             return(
                 <View style={{display:'flex',flexDirection:'column',justifyContent:'flex-start',marginBottom:5,marginTop:5}}>
-                    <View style={{display:'flex'}}>
-                        <Text>asdasd</Text>
+                    <View style={{marginLeft:22,marginBottom:10,display:'flex'}}>
+                        <Text style={{fontSize:18,fontWeight:'bold'}}>어리고착한콩</Text>
                     </View>
                     <View style={{display:"flex",flexDirection:'row'}}>
-                        <View style={{display:'flex',backgroundColor:'#eaeaea',marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
+                        <View style={{display:'flex',backgroundColor:'#eaeaea',marginRight:10,marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
                         <Text style={{fontSize:18}}>{this.props.message}</Text>
+                        </View>
+                        <View style={{backgroundColor:'white',display:'flex',justifyContent:'flex-end'}}>
+                            <Text style={{fontSize:12}}>오후 2:03</Text>
                         </View>
                     </View>
                 </View>

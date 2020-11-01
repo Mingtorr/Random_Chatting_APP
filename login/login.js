@@ -66,6 +66,12 @@ import { withNavigation } from 'react-navigation';
     e.preventDefault();
     this.props.navigation.navigate('Signup')
   };
+
+  find_idpwBtn = (e) => {
+    e.preventDefault();
+    this.props.navigation.navigate('Find_idpw')
+  };
+
   render(){
     return(
       <View style={styles.White_login}>
@@ -101,7 +107,7 @@ import { withNavigation } from 'react-navigation';
             <TouchableOpacity style={{marginRight:20}} onPress={this.singupBtn}>
               <Text style={{fontSize:15,fontFamily:'Jalnan'}}>처음이신가요?</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity  style={{marginRight:20}} onPress={this.find_idpwBtn}>
               <Text  style={{fontSize:15,fontFamily:'Jalnan'}}>ID/PW 찾기</Text>
             </TouchableOpacity>
           </View>

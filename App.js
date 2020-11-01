@@ -12,6 +12,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './login/login';
 import Signup from './signup/signup';
+import Find_idpw from './Find_idpw/Find_idpw';
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -28,17 +30,22 @@ const Stack = createStackNavigator();
   render(){
     return(
       <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={Signup}
-          options={{ headerShown: false }}
-        />
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Find_idpw"
+            component={Find_idpw}
+            options={{ headerShown: false }}
+          />
       </Stack.Navigator>
     </NavigationContainer>
     )

@@ -138,9 +138,14 @@ export default function App() {
     setModalVisible(!isModalVisible);
   };
 
+  const deleteRoom = () => {
+    alert("삭제되었습니다.")
+    toggleModal()
+  }
+
   const renderItem = ({item}) =>{
     return (
-      <View style ={styles.container}>
+      <SafeAreaView style ={styles.container}>
         <TouchableOpacity onLongPress = {toggleModal} onPress = {onpress}>
           <View style={styles.messageElem}>
             <View style = {[item.sex === 'M' ? styles.profileMale: styles.profileFemale]}></View>
@@ -166,13 +171,13 @@ export default function App() {
               <Text style = {styles.modalContent}>상대방이 슬퍼할지도 몰라요.{"\n"}
                 다시 생각해보세요 ㅠㅠ
               </Text>
-              <TouchableOpacity onPress = {toggleModal}>
+              <TouchableOpacity onPress = {deleteRoom}>
                 <Text style = {styles.modalButton}>나가기</Text>
               </TouchableOpacity>
             </View>
           </Modal>
         </View>
-      </View>
+      </SafeAreaView>
     )
   }
   

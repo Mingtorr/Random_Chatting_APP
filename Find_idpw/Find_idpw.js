@@ -38,23 +38,6 @@ class Find_idpw extends React.Component{
         });
     }
 
-    idpw_alert = (e) => {
-        console.log(this.state.input_text);
-        
-        const email_check = {
-            email_check: this.state.input_text
-        };
-        
-        Alert.alert(
-            "안내",
-            "유효하지않은 이메일 형식입니다.",
-            [
-                {text: "OK", onPress: () => console.log("OK")}
-            ]
-        );
-
-    };
-
     render(){
         return(
           <View style={styles.idpw_bg}>

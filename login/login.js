@@ -72,6 +72,10 @@ import { withNavigation } from 'react-navigation';
     this.props.navigation.navigate('Find_idpw')
   };
 
+  goMain =(e)=>{
+    e.preventDefault();
+    this.props.navigation.navigate('Main')
+  }
   render(){
     return(
       <View style={styles.White_login}>
@@ -100,7 +104,8 @@ import { withNavigation } from 'react-navigation';
           </View>
           <View>
             <TouchableOpacity style={styles.Btn_login} onPress={this.onclick}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>로그인</Text>
+              
+              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}} onPress={this.goMain}>로그인</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.login_button_view}>
@@ -133,6 +138,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     flex:1,
     backgroundColor:"#c7d9ff"
+    // backgroundColor:"white"
   },
   Container_login:{
     display:"flex",
@@ -164,7 +170,8 @@ const styles = StyleSheet.create({
     marginTop:0,
     fontSize:15,
     color:"#f05052",
-    fontFamily:"Jalnan"
+    fontFamily:"Jalnan",
+    marginBottom:3
   },
   Intro_login2:{
     marginTop:0,

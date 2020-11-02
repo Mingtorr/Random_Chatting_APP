@@ -89,6 +89,7 @@ class Find_idpw extends React.Component{
         idpw_2:{
             flex: 1,
             alignItems: "center",
+            marginTop: 5,
         },
         idpw_3:{
             flex: 2.5,
@@ -116,8 +117,6 @@ class Find_idpw extends React.Component{
             marginBottom: 10,
         },
         Intro_idpw4:{
-            fontSize: 17,
-            fontFamily:"Jalnan"
         },
 
 

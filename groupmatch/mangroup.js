@@ -8,7 +8,8 @@ import {
   TouchableOpacity ,
   Button,
   TextInput,
-  FlatList
+  FlatList,
+  Image
 } from 'react-native';
 
 export default class Mangroup extends React.Component{
@@ -18,10 +19,10 @@ export default class Mangroup extends React.Component{
             <View style={{display:'flex',flex:0.21,marginLeft:20}}>
                 <Text style={{display:'flex',marginLeft:10,marginTop:10,marginBottom:10,fontFamily:'jalnan',color:'#b4cbff'}}>남자 3명</Text>
                 <View style={{display:'flex',backgroundColor:'#dcdcdc82',width:60,height:60,borderRadius:100,marginLeft:5,marginRight:5,marginBottom:5}}>
-
+                    <Image style={{width:60,height:60}} source={require('./boy.png')}/>
                 </View>
             </View>
-            <View style={{display:'flex',flex:0.6,flexDirection:'column'}}>
+            <View style={{display:'flex',flex:0.6,flexDirection:'column',marginTop:10}}>
                 <View style={{display:'flex',flex:0.35,justifyContent:"center",alignItems:'flex-start',marginLeft:10}}>
                     <Text style={{fontSize:18,fontWeight:'bold'}}>{this.props.nickname}</Text>
                 </View>

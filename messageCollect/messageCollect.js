@@ -27,20 +27,11 @@ export default class messageCollect extends React.Component{
   
   render(){
     return(            
-      <View style = {styles.container}>
-        {/* <View style = {styles.collectHead}>
-          <TouchableOpacity>
-            <Text style ={styles.headFont}>1:1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style ={styles.headFont}>과팅</Text>
-          </TouchableOpacity>
-        </View> */}
-
+      <SafeAreaView style = {styles.container}>
         <View style = {styles.collectBody}>
           <MessageTab></MessageTab>
         </View>
-      </View>
+      </SafeAreaView>
     )
   }
 } 

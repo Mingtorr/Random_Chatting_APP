@@ -18,13 +18,15 @@ import {
   TextInput,
   Alert,
   Image,
+  Dimensions,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
  class Sign_up extends React.Component{
   constructor(props){
@@ -88,9 +90,31 @@ import { createStackNavigator } from '@react-navigation/stack';
       {label: '여', value: 1 }
     ];
 
+    let screenHeight = Dimensions.get('window').height;
+
     
     return(
-      <View style={styles.White_sign}>
+      // <SafeAreaView style={{backgroundColor:'white', flex:1, backgroundColor:'yellow'}}>
+      <KeyboardAwareScrollView
+      // behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.Container_sign2}
+    >
+       {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+         
+      <View 
+      // style={styles.White_sign}
+      style={{display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      alignContent: "center",
+      backgroundColor:"white", //dadfa
+      height:screenHeight}}
+      >
+     
+
+     
+     
         <View style={styles.Container_sign}>
 
         <View style={{marginTop:50, position:'absolute', left:'5%'}}>
@@ -225,11 +249,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 
           <View>
             <TouchableOpacity style={styles.bar_Btn_sign} onPress={this.singup2Btn}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center'}}>다음</Text>
+              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center',width:'100%'}}>다음</Text>
             </TouchableOpacity>
           </View>
         </View>
+      
+      
+     
       </View>
+      {/* </TouchableWithoutFeedback> */}
+      </KeyboardAwareScrollView>
+      // </SafeAreaView>
     )
   }
 }
@@ -249,12 +279,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     flex:1,
-    backgroundColor:"white"
+    backgroundColor:"white", //dadfa
+    // height:'100%'
   },
   Container_sign:{
     display:"flex",
     flexDirection:"column",
-    
+    alignContent: "center",//추가된거
     // justifyContent:"space-evenly",
     justifyContent:"space-between",
 
@@ -262,8 +293,15 @@ const styles = StyleSheet.create({
     backgroundColor:"white",
     width:'95%',
     height:'100%',
-    borderRadius:60,
+    // borderRadius:60,
     
+  },
+  Container_sign2:{
+    display:"flex",
+    flexDirection:"column",
+    // flex:1,
+    // borderRadius:60,
+    // height:'100%'
   },
   Textbox_sign:{
     display:"flex",

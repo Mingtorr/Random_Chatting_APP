@@ -174,7 +174,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
           <View style={styles.Text_sign_sex}>
             <Text style={styles.Text_sign_text_sex}>성별</Text>
-           
              <RadioForm
                 buttonColor={'#f05052'}
                 labelColor={'black'}

@@ -45,8 +45,9 @@ export default class Setting extends Component {
                     style = {{marginBottom : "30", color : "red"}}
                     placeholder ={{
                         label : '수신 갯수',
-                        value : null,
+                        value : '',
                     }}
+
                     onValueChange={(value) => console.log(value)}
                     items={[
                     { label: '40', value: '40' },
@@ -67,8 +68,8 @@ const styles = StyleSheet.create({
 
     setting_safe:{
         display:"flex",
-        backgroundColor :'black',
-        // backgroundColor:'#c7d9ff',
+        // backgroundColor :'black',
+        backgroundColor:'#c7d9ff',
         flex:1,
         flexDirection:"column",
     },

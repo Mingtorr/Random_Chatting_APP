@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    flex:1,
+    // flex:1,
     backgroundColor:"white"
   },
   Container_sign:{

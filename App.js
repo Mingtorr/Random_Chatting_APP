@@ -19,6 +19,7 @@ import Groupmatch from './groupmatch/groupmatch';
 import Message from './message/message';
 import Find_idpw from './Find_idpw/Find_idpw';
 import Splash from './splash/Splash';
+import Setting from './settingpage/Setting';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MessageCollect from './messageCollect/messageCollect'
 import {
@@ -50,7 +51,7 @@ const Stack = createStackNavigator();
           <>
         <Stack.Screen
           name="Login"
-          component={Bottom}
+          component={Login}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -86,6 +87,7 @@ const Stack = createStackNavigator();
             component={Find_idpw}
             options={{ headerShown: false }}
           />
+        
         </>
         ):(
         <><Stack.Screen
@@ -109,13 +111,14 @@ function Bottom() {
       {/* 친구찾기 */}
       <Tab.Screen name="Man" component={Main} />
       {/* 친구들 찾기 */}
-      <Tab.Screen name="Mans" component={Main} />
+      <Tab.Screen name="Group" component={Groupmatch} />
       {/* 메세지함 */}
       <Tab.Screen name="MessageCollect" component={MessageCollect} />
+      {/* 알림  나중에 알람넣어요*/}
+      <Tab.Screen name="알림" component={Message}/>
       {/* 설정 */}
-      <Tab.Screen name="Setting" component={Message} />
-      {/* 과팅 */}
-      <Tab.Screen name="Group" component={Groupmatch} />
+      <Tab.Screen name="Setting" component={Setting} />
+      
     </Tab.Navigator>
   );
 }

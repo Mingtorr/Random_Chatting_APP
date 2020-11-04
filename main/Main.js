@@ -11,6 +11,10 @@ export default class Main extends Component {
         e.preventDefault();
         this.props.navigation.navigate('Login')
     }
+    goMsg =(e)=>{
+        e.preventDefault();
+        this.props.navigation.navigate('Message')
+    }
     render() {
         return (
             <View style={styles.Container_main}>
@@ -19,6 +23,7 @@ export default class Main extends Component {
                 </View>
                 {/* 이동쉽게 만들어놓은거 */} 
                 <Button title ="로그인으로 가기" onPress={this.goLog}/>
+                <Button title ="채팅페이지로 가기" onPress ={this.goMsg}/>
             </View>
         )
     }

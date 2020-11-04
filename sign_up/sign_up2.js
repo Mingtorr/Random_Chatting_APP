@@ -18,13 +18,17 @@ import {
   TextInput,
   Alert,
   Image,
+  Dimensions,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { getBottomSpace } from "react-native-iphone-x-helper";
 
  class Sign_up2 extends React.Component{
   constructor(props){
@@ -87,15 +91,30 @@ import { createStackNavigator } from '@react-navigation/stack';
       {label: '남    ', value: 0 },
       {label: '여', value: 1 }
     ];
+
+    let screenHeight = Dimensions.get('window').height - getStatusBarHeight()- getBottomSpace();
+
     return(
-      <View style={styles.White_sign}>
+       <SafeAreaView style={{backgroundColor:'white', flex:1, backgroundColor:'white'}}>
+      <KeyboardAwareScrollView>
+      <View 
+      // style={styles.White_sign}
+      style={{display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      alignContent: "center",
+      backgroundColor:"white", //dadfa
+      height:screenHeight}}
+      >
         <View style={styles.Container_sign}s>
         
-        <View style={{marginTop:50, position:'absolute', left:'5%'}}>
+        <TouchableOpacity style={{marginTop:10, position:'absolute', left:'5%'}} onPress={() => this.props.navigation.goBack()}>
         <Image 
-        style={{width:25, height:25}}
-        source={require('./cancel.png')} />
-        </View>
+          style={{width:25, height:25}}
+          source={require('./cancel.png')} 
+          />
+        </TouchableOpacity>
 
 
           <View>
@@ -140,30 +159,51 @@ import { createStackNavigator } from '@react-navigation/stack';
 
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>학번</Text>
-            <View style={{height:20}}>
+            {/* <View style={{height:20}}>
             <TextInput style={styles.Text_sign_input2}  id="pw2"
               name="pw2"
               value={this.state.pw2}
               secureTextEntry={true}
               onChangeText={this.handleName2}/>
-              </View>
+              </View> */}
+               <RNPickerSelect
+              style={{marginBottom:"30", color:"red"}}
+
+                placeholder={{
+                  label: '학번 선택',
+                  value: null,
+               }}
+              
+                 onValueChange={(value) => console.log(value)}
+                    items={[
+                    { label: '10학번', value: '10' },
+                    { label: '11학번', value: '11' },
+                    { label: '12학번', value: '12' },
+                    { label: '13학번', value: '13' },
+                    { label: '14학번', value: '14' },
+                    { label: '15학번', value: '15' },
+                    { label: '16학번', value: '16' },
+                      ]}
+               />
           </View>
 
           <Text style={styles.sign_explain}>! 필수항목이 아니며 일부 기능이 제한 될 수 있습니다.</Text>
      
 
-          <View style={{height:150}}></View> 
-
+          <View style={{height:'25%'}}></View> 
+            {/* 빈공간 채우기용 */}
           <View>
             <TouchableOpacity style={styles.bar_Btn_sign} onPress={this.singup2Btn}>
               <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center'}}>완료</Text>
             </TouchableOpacity>
           </View>
 
-          {/* 빈공간 채우기용 */}
+         
           
         </View>
       </View>
+      </KeyboardAwareScrollView>
+      </SafeAreaView>
     )
   }
 }
@@ -210,7 +250,7 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     alignItems:"center",
     // marginTop:15,
-    marginTop:100,
+    marginTop:50,
     marginBottom:10,
    
   },
@@ -364,7 +404,7 @@ const styles = StyleSheet.create({
     fontSize:20,
     backgroundColor:'#f05052',
     // elevation:8,
-    marginBottom:30,
+    marginBottom:10,
     width: 1000,
     // textAlign: 'center',
     

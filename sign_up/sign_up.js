@@ -18,12 +18,17 @@ import {
   TextInput,
   Alert,
   Image,
+  Dimensions,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { getBottomSpace } from "react-native-iphone-x-helper";
 
 
  class Sign_up extends React.Component{
@@ -39,6 +44,12 @@ import { createStackNavigator } from '@react-navigation/stack';
       injung: "",
       sex:"",
       selectmajor:"학과 선택",
+      trueID: "사용 가능한 ID입니다.",
+      falseID: "다시 입력 해 주세요",
+      trueNick: "사용 가능한 닉네임입니다.",
+      falseNick: "이미 사용중인 닉네임입니다.",
+      trueEmail: "확인 됐습니다.",
+      falseEmail: "틀렸습니다. 다시 입력해주세요",
     }
   }
 
@@ -82,22 +93,95 @@ import { createStackNavigator } from '@react-navigation/stack';
     e.preventDefault();
     this.props.navigation.navigate('Signup2')
   };
+
+  Alert_id = () =>
+     Alert.alert(                    // 말그대로 Alert를 띄운다
+      "ID 중복확인",                    // 첫번째 text: 타이틀 제목
+      this.state.trueID,                         // 두번째 text: 그 밑에 작은 제목
+      [                              // 버튼 배열
+        // {
+        //   text: "아니요",                              // 버튼 제목
+        //   onPress: () => console.log("아니라는데"),     //onPress 이벤트시 콘솔창에 로그를 찍는다
+        //   style: "cancel"
+        // },
+        { text: "확인", onPress: () => console.log("그렇다는데") }, //버튼 제목
+                                                               // 이벤트 발생시 로그를 찍는다
+      ],
+      { cancelable: false }
+    );
+
+    Alert_nick = () =>
+     Alert.alert(                    // 말그대로 Alert를 띄운다
+      "중복확인",                    // 첫번째 text: 타이틀 제목
+      this.state.trueNick,                         // 두번째 text: 그 밑에 작은 제목
+      [                              // 버튼 배열
+        { text: "확인", onPress: () => console.log("그렇다는데") }, //버튼 제목
+                                                               // 이벤트 발생시 로그를 찍는다
+      ],
+      { cancelable: false }
+    );
+
+    Alert_email = () =>
+     Alert.alert(                    // 말그대로 Alert를 띄운다
+      "인증번호가 전송 되었습니다.",                    // 첫번째 text: 타이틀 제목
+      // this.state.trueNick,                         // 두번째 text: 그 밑에 작은 제목
+      [                              // 버튼 배열
+        { text: "확인", onPress: () => console.log("그렇다는데") }, //버튼 제목
+                                                               // 이벤트 발생시 로그를 찍는다
+      ],
+      { cancelable: false }
+    );
+
+    Alert_injung = () =>
+    Alert.alert(                    // 말그대로 Alert를 띄운다
+                        // 첫번째 text: 타이틀 제목
+     this.state.trueEmail,                         // 두번째 text: 그 밑에 작은 제목
+     [                              // 버튼 배열
+       { text: "확인", onPress: () => console.log("그렇다는데") }, //버튼 제목
+                                                              // 이벤트 발생시 로그를 찍는다
+     ],
+     { cancelable: false }
+   );
+
   render(){
     let radio_props = [     //radio button
       {label: '남    ', value: 0 },
       {label: '여', value: 1 }
     ];
 
+    let screenHeight = Dimensions.get('window').height - getStatusBarHeight()- getBottomSpace();
+
     
     return(
-      <View style={styles.White_sign}>
+      <SafeAreaView style={{backgroundColor:'white', flex:1, backgroundColor:'white'}}>
+      <KeyboardAwareScrollView
+      // behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.Container_sign2}
+    >
+       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+         
+      <View 
+      // style={styles.White_sign}
+      style={{display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      alignContent: "center",
+      backgroundColor:"white", //dadfa
+      height:screenHeight}}
+      >
+     
+
+     
+     
         <View style={styles.Container_sign}>
 
-        <View style={{marginTop:50, position:'absolute', left:'5%'}}>
+        <TouchableOpacity style={{marginTop:10, position:'absolute', left:'5%'}} onPress={() => this.props.navigation.goBack()}>
         <Image 
-        style={{width:25, height:25}}
-        source={require('./cancel.png')} />
-        </View>
+          style={{width:25, height:25}}
+          source={require('./cancel.png')} 
+          />
+        </TouchableOpacity>
 
           <View>
           <View style={styles.Textbox_sign2}>
@@ -118,7 +202,7 @@ import { createStackNavigator } from '@react-navigation/stack';
               {/* <TouchableOpacity style={{padding:-30}} onPress={this.singupBtn}>
                   <Text style={styles.sign_button}>중복확인</Text>
               </TouchableOpacity> */}
-              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.onclick}>
+              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.Alert_id}>
                     <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
             </TouchableOpacity>
             </View>
@@ -174,7 +258,7 @@ import { createStackNavigator } from '@react-navigation/stack';
               value={this.state.pw}
               secureTextEntry={true}
               onChangeText={this.handleName2}/>
-              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.onclick}>
+              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.Alert_nick}>
                     <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
             </TouchableOpacity>
               </View>
@@ -190,7 +274,7 @@ import { createStackNavigator } from '@react-navigation/stack';
               onChangeText={this.handleName2}/>
            
 
-            <TouchableOpacity style={styles.Btn_sign2} onPress={this.onclick}>
+            <TouchableOpacity style={styles.Btn_sign2} onPress={this.Alert_email}>
               <Text style={{color:'white',fontFamily:'Jalnan'}}>전송</Text>
             </TouchableOpacity>
             </View>
@@ -207,7 +291,7 @@ import { createStackNavigator } from '@react-navigation/stack';
               secureTextEntry={true}
               onChangeText={this.handleName2}/>
 
-               <TouchableOpacity style={styles.Btn_sign2} onPress={this.onclick}>
+               <TouchableOpacity style={styles.Btn_sign2} onPress={this.Alert_injung}>
                <Text style={{color:'white',fontFamily:'Jalnan'}}>확인</Text>
                </TouchableOpacity>
 
@@ -225,11 +309,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 
           <View>
             <TouchableOpacity style={styles.bar_Btn_sign} onPress={this.singup2Btn}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center'}}>다음</Text>
+              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center',width:'100%'}}>다음</Text>
             </TouchableOpacity>
           </View>
         </View>
+      
+      
+     
       </View>
+      </TouchableWithoutFeedback>
+      </KeyboardAwareScrollView>
+     </SafeAreaView>
     )
   }
 }
@@ -249,12 +339,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     flex:1,
-    backgroundColor:"white"
+    backgroundColor:"white", //dadfa
+    // height:'100%'
   },
   Container_sign:{
     display:"flex",
     flexDirection:"column",
-    
+    alignContent: "center",//추가된거
     // justifyContent:"space-evenly",
     justifyContent:"space-between",
 
@@ -262,8 +353,15 @@ const styles = StyleSheet.create({
     backgroundColor:"white",
     width:'95%',
     height:'100%',
-    borderRadius:60,
+    // borderRadius:60,
     
+  },
+  Container_sign2:{
+    display:"flex",
+    flexDirection:"column",
+    // flex:1,
+    // borderRadius:60,
+    // height:'100%'
   },
   Textbox_sign:{
     display:"flex",
@@ -277,7 +375,7 @@ const styles = StyleSheet.create({
     flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
-    marginTop:30
+    // marginTop:30
    
   },
   Intro_sign:{
@@ -374,14 +472,14 @@ const styles = StyleSheet.create({
     fontFamily:'Jalnan',
     paddingLeft:10,
     paddingTop:5,
-    paddingRight:10,
+    // paddingRight:10,
     paddingBottom:5,
     fontSize:20,
     // backgroundColor:'#f05052',
     
     elevation:8,
     marginBottom:5,
-    marginRight:-15,
+    marginRight:-20,
     marginTop:-4,
   },
 
@@ -431,7 +529,7 @@ const styles = StyleSheet.create({
     fontSize:20,
     backgroundColor:'#f05052',
     // elevation:8,
-    marginBottom:30,
+    marginBottom:10,
     width: 1000,
     // textAlign: 'center',
     

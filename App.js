@@ -50,7 +50,7 @@ const Stack = createStackNavigator();
           <>
         <Stack.Screen
           name="Login"
-          component={Login}
+          component={Bottom}
           options={{ headerShown: false }}
         />
         <Stack.Screen

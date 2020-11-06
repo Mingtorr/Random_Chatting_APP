@@ -34,8 +34,9 @@ import {
 } from 'react-native';
 
 
+// const Anisplash = Splash.animate({opacity: "1"}, 500)
 const Stack = createStackNavigator();
- export default class App extends React.Component{
+export default class App extends React.Component{
   state={
     isLoading : false, //false면 스플래시
     isLogin : false, // 로그인하면 true로 변경

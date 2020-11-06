@@ -48,7 +48,7 @@ export default class Setting extends Component {
                         value : '',
                     }}
 
-                    onValueChange={(value) => console.log(value)}
+                    onValueChange={value = {}}
                     items={[
                     { label: '40', value: '40' },
                     { label: '35', value: '35' },

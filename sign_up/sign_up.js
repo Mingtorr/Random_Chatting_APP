@@ -38,18 +38,20 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
       id: "",
       pw: "",
       pw2:"",
-      major: "",
-      hnumber:"",
+      nick:"",
       email:"",
       injung: "",
       sex:"",
-      selectmajor:"학과 선택",
+
       trueID: "사용 가능한 ID입니다.",
       falseID: "다시 입력 해 주세요",
       trueNick: "사용 가능한 닉네임입니다.",
       falseNick: "이미 사용중인 닉네임입니다.",
       trueEmail: "확인 됐습니다.",
       falseEmail: "틀렸습니다. 다시 입력해주세요",
+
+      buttonColor:"gray",
+      ativeOn: false,
     }
   }
 
@@ -59,13 +61,43 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
     this.setState({
       id: e,
     });
+    this.activeButton()
     console.log(this.state.id);
   };
   handleName2 = (e) => {
     this.setState({
       pw: e,
     });
+    this.activeButton()
     console.log(this.state.pw);
+  };
+  handleName3 = (e) => {
+    this.setState({
+      pw2: e,
+    });
+    this.activeButton()
+    console.log(this.state.pw2);
+  };
+  handleName4 = (e) => {
+    this.setState({
+      nick: e,
+    });
+    this.activeButton()
+    console.log(this.state.nick);
+  };
+  handleName5 = (e) => {
+    this.setState({
+      email: e,
+    });
+    this.activeButton()
+    console.log(this.state.email);
+  };
+  handleName6 = (e) => {
+    this.setState({
+      injung: e,
+    });
+    this.activeButton()
+    console.log(this.state.injung);
   };
   
   onclick=(e)=>{
@@ -89,10 +121,32 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
         }
       });
   }
+
   singup2Btn = (e) => {
     e.preventDefault();
-    this.props.navigation.navigate('Signup2')
+    if(this.state.ativeOn){
+      
+      this.props.navigation.navigate('Signup2')
+    }
   };
+
+  activeButton = () => {
+    //모든칸이 ""가 아니라면
+    if(this.state.id != "" && this.state.pw != "" && this.state.pw2 != "" && this.state.nick != "" && this.state.email != "" && this.state.injung != ""){
+      this.setState({
+        buttonColor: '#f05052',
+        ativeOn:true,
+      })
+    }
+  
+    else{
+      this.setState({
+        buttonColor: 'gray',
+        ativeOn:false
+      })
+    }
+  }
+
 
   Alert_id = () =>
      Alert.alert(                    // 말그대로 Alert를 띄운다
@@ -222,11 +276,11 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>비밀번호 확인</Text>
             <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}   id="sex"
-              name="sex"
+            <TextInput style={styles.Text_sign_input2}   id="pw2"
+              name="pw2"
               value={this.state.pw2}
               secureTextEntry={true}
-              onChangeText={this.handleName2}/>
+              onChangeText={this.handleName3}/>
             </View>
           </View>
 
@@ -252,11 +306,11 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>닉네임</Text>
             <View style={{display:"flex", flexDirection:"row"}}>
-            <TextInput style={styles.Text_sign_input}   id="pw"
-              name="pw"
-              value={this.state.pw}
+            <TextInput style={styles.Text_sign_input}   id="nick"
+              name="nick"
+              value={this.state.nick}
               secureTextEntry={true}
-              onChangeText={this.handleName2}/>
+              onChangeText={this.handleName4}/>
               <TouchableOpacity style={styles.Btn_sign2id} onPress={this.Alert_nick}>
                     <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
             </TouchableOpacity>
@@ -266,11 +320,11 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>이메일</Text>
             <View style={{display:"flex", flexDirection:"row"}}>
-            <TextInput style={styles.Text_sign_input2}   id="pw2"
-              name="pw2"
-              value={this.state.pw2}
+            <TextInput style={styles.Text_sign_input2}   id="email"
+              name="email"
+              value={this.state.email}
               secureTextEntry={true}
-              onChangeText={this.handleName2}/>
+              onChangeText={this.handleName5}/>
            
 
             <TouchableOpacity style={styles.Btn_sign2} onPress={this.Alert_email}>
@@ -284,11 +338,11 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 
             <View style={{display:"flex", flexDirection:"row"}}>
 
-              <TextInput style={styles.Text_sign_input2}   id="pw2"
-              name="pw2"
-              value={this.state.pw2}
+              <TextInput style={styles.Text_sign_input2}   id="injung"
+              name="injung"
+              value={this.state.injung}
               secureTextEntry={true}
-              onChangeText={this.handleName2}/>
+              onChangeText={this.handleName6}/>
 
                <TouchableOpacity style={styles.Btn_sign2} onPress={this.Alert_injung}>
                <Text style={{color:'white',fontFamily:'Jalnan'}}>확인</Text>
@@ -307,7 +361,20 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
           </View> */}
 
           <View>
-            <TouchableOpacity style={styles.bar_Btn_sign} onPress={this.singup2Btn}>
+            <TouchableOpacity style={{
+              marginTop:25,
+              color:'white',
+              fontFamily:'Jalnan',
+              paddingLeft:30,
+              paddingTop:15,
+              paddingRight:30,
+              paddingBottom:15,
+              fontSize:20,
+              // backgroundColor:'#f05052',
+              backgroundColor:this.state.buttonColor,
+              marginBottom:10,
+              width: 1000,
+            }} onPress={this.singup2Btn}>
               <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center',width:'100%'}}>다음</Text>
             </TouchableOpacity>
           </View>
@@ -518,10 +585,8 @@ const styles = StyleSheet.create({
     color:'red',
   },
   bar_Btn_sign:{
-    // borderWidth:0,
     marginTop:25,
     color:'white',
-    // borderRadius:60,
     fontFamily:'Jalnan',
     paddingLeft:30,
     paddingTop:15,
@@ -529,11 +594,8 @@ const styles = StyleSheet.create({
     paddingBottom:15,
     fontSize:20,
     backgroundColor:'#f05052',
-    // elevation:8,
     marginBottom:10,
     width: 1000,
-    // textAlign: 'center',
-    
   }
 });
 export default withNavigation(Sign_up);

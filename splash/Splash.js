@@ -1,14 +1,47 @@
 import React, { Component } from 'react'
-import {View, Image} from 'react-native';
+import {View, Image, Text, Animated, SafeAreaView, StyleSheet } from 'react-native';
 
 export default class Splash extends Component {
+    state ={
+        animation : new Animated.Value(0)
+    }
+    componentDidMount() {
+        Animated.timing(
+            this.state.animation,
+            {
+                toValue : 1,
+                duration : 500
+            }
+        ).start();
+    }
+
     render() {
+        const animationStyles = {
+            opacity : this.state.animation
+        };
         return (
-            <View>
-                 <Image
-            style={{height:'100%',width:'100%'}}
-            source={require('./Screen.png')}/>
-            </View>
+            <SafeAreaView style= {styles.splash_con}>
+                <Animated.View style = {[styles.splash_ani, animationStyles]}>
+                    <Text>ㅇㄱㅇㄱ</Text>
+                </Animated.View>
+            </SafeAreaView>
         )
     }
 }
+
+const styles = StyleSheet.create ({
+    splash_con :{
+        display : 'flex',
+        flex : 1,
+        justifyContent : 'center',
+        alignItems : 'center',
+    },
+    splash_ani:{
+        backgroundColor : 'pink',
+        width :300,
+        height : 300,
+        display : 'flex',
+        alignItems : 'center',
+        justifyContent : 'center',
+    }
+})

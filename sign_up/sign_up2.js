@@ -34,32 +34,10 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
   constructor(props){
     super(props);
     this.state={
-      id: "",
-      pw: "",
-      pw2:"",
       major: "",
-      hnumber:"",
-      email:"",
-      injung: "",
-      sex:"",
-      selectmajor:"학과 선택",
+      studno:"",
     }
   }
-
-
-
-  handleName = (e) => {
-    this.setState({
-      id: e,
-    });
-    console.log(this.state.id);
-  };
-  handleName2 = (e) => {
-    this.setState({
-      pw: e,
-    });
-    console.log(this.state.pw);
-  };
   
   onclick=(e)=>{
     const post = {
@@ -85,6 +63,8 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
   singup2Btn = (e) => {
     e.preventDefault();
     this.props.navigation.navigate('Signup2')
+
+    console.log(this.state.major);
   };
   render(){
     let radio_props = [     //radio button
@@ -144,7 +124,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
                   value: null,
                }}
               
-                 onValueChange={(value) => console.log(value)}
+                 onValueChange={(value) => this.setState({major: value})}
                     items={[
                     { label: '컴퓨터공학과', value: 'computer engineering' },
                     { label: '정보통신공학과', value: 'baseball' },
@@ -174,15 +154,15 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
                   value: null,
                }}
               
-                 onValueChange={(value) => console.log(value)}
+                 onValueChange={(value) => this.setState({major: studno})}
                     items={[
-                    { label: '10학번', value: '10' },
-                    { label: '11학번', value: '11' },
-                    { label: '12학번', value: '12' },
-                    { label: '13학번', value: '13' },
                     { label: '14학번', value: '14' },
                     { label: '15학번', value: '15' },
                     { label: '16학번', value: '16' },
+                    { label: '17학번', value: '17' },
+                    { label: '18학번', value: '18' },
+                    { label: '19학번', value: '19' },
+                    { label: '20학번', value: '20' },
                       ]}
                />
           </View>

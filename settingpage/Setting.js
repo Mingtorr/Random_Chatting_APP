@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, SafeAreaView, Button, StyleSheet } from 'react-native'
-import RNPickerSelect from 'react-native-picker-select';
-import {Picker} from '@react-native-picker/picker';
+import { Text, View, SafeAreaView, Button, StyleSheet,Picker } from 'react-native'
 export default class Setting extends Component {
     state = {
         alert : true,

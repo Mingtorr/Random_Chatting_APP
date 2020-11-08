@@ -10,7 +10,8 @@ export default class Splash extends Component {
             this.state.animation,
             {
                 toValue : 1,
-                duration : 500
+                duration : 500,
+                useNativeDriver:true
             }
         ).start();
     }

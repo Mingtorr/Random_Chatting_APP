@@ -52,7 +52,7 @@ export default class App extends React.Component{
           <>
         <Stack.Screen
           name="Login"
-          component={Login}
+          component={Bottom}
           options={{ headerShown: false }}
         />
         <Stack.Screen

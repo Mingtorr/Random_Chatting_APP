@@ -20,7 +20,7 @@ export default class Yourmessage extends React.Component{
                         <View style={{display:'flex',backgroundColor:'#eaeaea',marginRight:10,marginLeft:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
                         <Text style={{fontSize:18}}>{this.props.message}</Text>
                         </View>
-                        <View style={{backgroundColor:'#c7d9ff',display:'flex',justifyContent:'flex-end'}}>
+                        <View style={{display:'flex',justifyContent:'flex-end'}}>
                             <Text style={{fontSize:12}}>오후 2:03</Text>
                         </View>
                     </View>

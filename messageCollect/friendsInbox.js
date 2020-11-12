@@ -12,8 +12,6 @@ import {
   Alert,
 } from 'react-native';
 
-import Modal from 'react-native-modal';
-
 export default function App() {
   const DATA = [
     {
@@ -44,21 +42,29 @@ export default function App() {
     },
   ]
 
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-
   const deleteRoom = () =>{
     alert("삭제되었습니다.")
-    toggleModal()
+  }
+
+  const longPressAlert = () =>{
+    Alert.alert("방을 나가시겠습니까?",
+    "상대방이 슬퍼할지도 몰라요.",
+    [
+      {
+        text: "아니요",
+        style: "cancel"
+      },
+      {text: "네", onPress: deleteRoom},
+    ],
+    {cancelable: false}
+    );
   }
 
   const renderItem = ({item}) =>{
     return (
       <SafeAreaView style ={styles.container}>
-        <TouchableOpacity onLongPress = {toggleModal}>
+        
+        <TouchableOpacity onLongPress = {longPressAlert}>
           <View style={styles.messageElem}>
             <View style = {styles.typeProfile}>
               <Text style = {styles.typeFont}>{item.type}명</Text>
@@ -76,21 +82,6 @@ export default function App() {
             </View>
           </View>
         </TouchableOpacity>
-        <View style ={styles.modalContainer}>
-          <Modal isVisible ={isModalVisible}
-            backdropOpacity = {0.1}
-            onBackdropPress = {toggleModal}>
-            <View style = {styles.StyledModalContainer}>
-              <Text style = {styles.modalTitle}>방을 나가시겠습니까?</Text>
-              <Text style = {styles.modalContent}>상대방이 슬퍼할지도 몰라요.{"\n"}
-                다시 생각해보세요 ㅠㅠ
-              </Text>
-              <TouchableOpacity onPress = {deleteRoom}>
-                <Text style = {styles.modalButton}>나가기</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
       </SafeAreaView>
     )
   }
@@ -161,40 +152,6 @@ const styles = StyleSheet.create({
   },
   typeFont:{
     fontSize: 15,
-  },
-  modalContainer:{
-    display:'flex',
-    flex: 1,
-    // justifyContent: 'center',
-    alignItems: 'center',
-  },
-  StyledModalContainer:{
-    display:'flex',
-    flexDirection: 'column',
-    // alignItems: 'center',
-    marginLeft: '8%',
-    width: 310,
-    height: 210,
-    backgroundColor: 'rgba(255,255,255,1)',
-    borderRadius: 10
-  },
-  modalTitle:{
-    marginTop:20,
-    fontSize: 24,
-    marginLeft: 20,
-  },
-  modalContent:{
-    marginTop:20,
-    marginLeft: 20,
-    fontSize:18,
-    color: 'gray',
-  },
-  modalButton:{
-    marginTop: 30,
-    marginLeft: 20,
-    fontSize:15,
-    color: "#f05052",
-    fontWeight:'bold'
   }
 
 })

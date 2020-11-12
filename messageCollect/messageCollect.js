@@ -9,54 +9,61 @@ import {
   Button,
   TextInput,
   FlatList,
+  CheckBox,
 } from 'react-native';
 import FriendInbox from './friendInbox';
 import FriendsInbox from './friendsInbox';
+import Test1 from './test1'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
 
 export default class messageCollect extends React.Component{
   constructor(props){
     super(props);
-
+    this.FriendInbox = React.createRef();
     this.state={
       name1: "",
       pass: "",
+      outButtonBool: true,
     }
   }
-  outMessage =() =>{
-    alert("adf")
+
+  toggleOut = () =>{
+    this.setState({
+      outButtonBool: !this.state.outButtonBool
+    });
+  }
+  onOutButton = () =>{
+    // this.FriendInbox.current.toggleOutButton();
   }
 
   render(){
-    return(            
+    return(
       <SafeAreaView style = {styles.container}>
         <View style = {styles.collectBody}>
-          
-          <TouchableOpacity style={styles.outButton} onPress = {this.outMessage}>
-            <Text>나가기</Text>
-          </TouchableOpacity>
-          <MessageTab/>
-          
+          <MessageTab outButtonBool = {this.state.outButtonBool}/>
+          <TouchableOpacity style={styles.outButton} 
+          onPress = {() => this.setState({
+          outButtonBool: !this.state.outButtonBool
+          }) }>
+        <Text>나가기</Text>
+      </TouchableOpacity>
         </View>
       </SafeAreaView>
     )
   }
-} 
+}
 
 const Tab = createMaterialTopTabNavigator();
 
-function MessageTab() {
+function MessageTab(props) {
   return (
     <Tab.Navigator tabBarOptions =
-      {{style: {backgroundColor: 'none' ,width:'80%'}, 
+      {{style: {backgroundColor: 'none' ,width:'100%'}, 
         tabStyle:{ width:100},
         labelStyle: {fontSize: 15}
       }}>
-      <Tab.Screen name="1:1" component={FriendInbox} />
+      <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool}/>} />
       <Tab.Screen name="과팅" component={FriendsInbox} />
-      {/* <Tab.Screen name="편집" options = {} */}
-      {/* <Tab.Screen name ="나가기"  /> */}
     </Tab.Navigator>
     
   );
@@ -82,7 +89,6 @@ const styles = StyleSheet.create({
   collectBody:{
     flex:1,
     backgroundColor: "white",
-    // width: '80%',
   },
   tabBar:{
     backgroundColor:'red'

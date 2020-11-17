@@ -28,7 +28,7 @@ export default class FriendInbox extends React.Component {
           min: "30",
           messagetime: "12:30",
           isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 0,
         },
         {
           id: 2,
@@ -76,7 +76,7 @@ export default class FriendInbox extends React.Component {
           min: "30",
           messagetime: "12:30",
           isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 9,
         },
         
         {
@@ -136,6 +136,7 @@ export default class FriendInbox extends React.Component {
 
   isChecked = (itemId) => {
     const isThere = this.state.ids.includes(itemId);
+    // console.log("테스트:  " + itemId);
     return isThere;
   };
 
@@ -155,11 +156,16 @@ export default class FriendInbox extends React.Component {
     }
   };
   
-  deleteRoom = () => {
-    alert("삭제되었습니다.")
+  deleteRoom = (itemId) => {
+    const data = [...this.state.DATA]
+    console.log('Delete '+ itemId);
+    this.setState({
+      DATA: data.filter(info => info.id !== itemId)
+    })
+    alert(itemId+"삭제되었습니다.")
   }
 
-  longPressAlert = () =>{
+  longPressAlert = (itemId) =>{
     Alert.alert("방을 나가시겠습니까?",
     "상대방이 슬퍼할지도 몰라요.",
     [
@@ -167,20 +173,30 @@ export default class FriendInbox extends React.Component {
         text: "아니요",
         style: "cancel"
       },
-      {text: "네", onPress: deleteRoom},
+      {text: "네", onPress: () => this.deleteRoom(itemId)}, // 화살표 함수로 바인딩 대체
     ],
     {cancelable: false}
     );
   }
 
-  onpress = () =>{
-    alert("테스트");
+  onpress = (itemId) =>{
+    const data = [...this.state.DATA];
+
+    //클릭시 새로운 메시지 표시 삭제
+    this.setState({
+      DATA: data.map(
+        info => itemId === info.id
+          ? {...info, isNewChatNum: 0}
+          : info
+      )
+    })
+    alert(itemId+"클릭")
   }
 
   renderItem = ({item}) =>{
     return (
       <SafeAreaView style ={styles.container}>
-        <TouchableOpacity onLongPress = {this.longPressAlert} onPress = {this.onpress}>
+        <TouchableOpacity onLongPress = {() => this.longPressAlert(item.id)} onPress = {() => this.onpress(item.id)}>
           <View style={styles.messageElem}>
             <View style = {[item.sex === 'M' ? styles.profileMale: styles.profileFemale]}></View>
             <View style={styles.messageInfo}>
@@ -191,14 +207,22 @@ export default class FriendInbox extends React.Component {
                 <Text style = {styles.lastChat}>{item.lastChat}</Text>
               </View>
             </View>
-            <View style = {styles.messageTime}>
-              {this.props.outButtonBool ? <Text style = {styles.timeFont}>{item.ampm} {item.messagetime}</Text>
+            {
+              this.props.outButtonBool ?
+              <View style = {styles.messageTime}>
+                <Text style = {styles.timeFont}>{item.ampm} {item.messagetime}</Text>
+                  {item.isNewChatNum > 0 ?
+                    <View style = {styles.newChat}>
+                      <Text style = {styles.isNewchat}>{item.isNewChatNum}</Text>
+                    </View> : <View/>
+                  }
+              </View>
               :<CheckBox
-              style={{flex: 1, padding: 10}}
-              onClick ={() => this.toggleChecked(item.id)}
-              isChecked={this.isChecked(item.id)}
-            /> }
-            </View>
+                style={{flex: 1, marginLeft: 40}}
+                onClick ={() => this.toggleChecked(item.id)}
+                isChecked={this.isChecked(item.id)}
+              />
+            }
           </View>
         </TouchableOpacity>
       </SafeAreaView>
@@ -241,7 +265,7 @@ const styles = StyleSheet.create({
   messageHead:{
   },
   nickName: {
-    fontSize:20,
+    fontSize:18,
   },
   lastChat:{
     color: 'gray',
@@ -251,10 +275,12 @@ const styles = StyleSheet.create({
     flex:1.2,
     justifyContent:'flex-end',
     alignItems:'flex-end', 
+    // backgroundColor: 'blue',
+    height: 30
   },
   timeFont:{
     display:'flex',
-    fontSize: 12,
+    fontSize: 10,
     color: 'gray',
   },
   profileMale:{
@@ -277,4 +303,22 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
   },
+  newChat:{
+    flexDirection:'row',
+    alignContent: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    marginTop: 5,
+    marginBottom:5,
+    marginLeft: 5,
+    width: 16,
+    height: 16,
+    backgroundColor: 'red',
+    borderRadius: 8,
+  },
+  isNewchat:{
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: "white"
+  }
 })

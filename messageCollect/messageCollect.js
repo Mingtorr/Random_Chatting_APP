@@ -9,54 +9,66 @@ import {
   Button,
   TextInput,
   FlatList,
+  CheckBox,
 } from 'react-native';
 import FriendInbox from './friendInbox';
 import FriendsInbox from './friendsInbox';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-
 export default class messageCollect extends React.Component{
   constructor(props){
     super(props);
-
+    this.FriendInbox = React.createRef();
     this.state={
       name1: "",
       pass: "",
+      outButtonBool: true,
     }
   }
-  outMessage =() =>{
-    alert("adf")
+
+  toggleOut = () =>{
+    this.setState({
+      outButtonBool: !this.state.outButtonBool
+    });
   }
 
   render(){
-    return(            
+    return(
       <SafeAreaView style = {styles.container}>
-        <View style = {styles.collectBody}>
-          
-          <TouchableOpacity style={styles.outButton} onPress = {this.outMessage}>
-            <Text>나가기</Text>
+        <View style ={styles.messageHead}>
+          <Text style ={{fontSize: 18, fontWeight: 'bold'}}>Message</Text>
+          <TouchableOpacity
+            onPress = {() => this.setState({
+            outButtonBool: !this.state.outButtonBool}) }>
+            <Text style ={{fontSize:15, fontWeight:'bold'}}>편집</Text>
           </TouchableOpacity>
-          <MessageTab/>
+        </View>
+        <View style = {styles.collectBody}>
+          {/* <TouchableOpacity style ={styles.outNavigation}>
+            <Text>뒤로가기</Text>
+            <Text>나가기</Text>
+          </TouchableOpacity> */}
+          <MessageTab outButtonBool = {this.state.outButtonBool}/>
           
         </View>
       </SafeAreaView>
     )
   }
-} 
+}
 
 const Tab = createMaterialTopTabNavigator();
 
-function MessageTab() {
+function MessageTab(props) {
   return (
     <Tab.Navigator tabBarOptions =
-      {{style: {backgroundColor: 'none' ,width:'80%'}, 
+      {{style: {backgroundColor: 'none' ,width:'100%', height:48, marginTop:-8}, 
         tabStyle:{ width:100},
-        labelStyle: {fontSize: 15}
+        labelStyle: {fontSize: 18, fontWeight:'bold' },
+        activeTintColor: 'blue',
+        inactiveTintColor: 'black'
       }}>
-      <Tab.Screen name="1:1" component={FriendInbox} />
+      <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool}/>} />
       <Tab.Screen name="과팅" component={FriendsInbox} />
-      {/* <Tab.Screen name="편집" options = {} */}
-      {/* <Tab.Screen name ="나가기"  /> */}
     </Tab.Navigator>
     
   );
@@ -67,6 +79,14 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection: "column",
     backgroundColor: "white"
+  },
+  messageHead:{
+    flexDirection: 'row',
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   collectHead:{
     height: "7%",
@@ -82,19 +102,29 @@ const styles = StyleSheet.create({
   collectBody:{
     flex:1,
     backgroundColor: "white",
-    // width: '80%',
   },
   tabBar:{
     backgroundColor:'red'
   },
   outButton:{
-    display: 'flex',
     width: '20%',
-    height: 50,
+    height: 40,
     backgroundColor: 'white',
     position: 'absolute',
     marginLeft : '80%',
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
+  outNavigation:{
+    position: 'absolute',
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems:'center',
+    width:'100%',
+    height:40,
+    backgroundColor: 'red',
+    paddingLeft: 10,
+    paddingRight: 15,
+    zIndex: 1,
+  },
 })

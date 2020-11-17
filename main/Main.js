@@ -142,7 +142,7 @@ export default class Main extends Component {
                         
                     </View>
                     <View>
-                    <Button title="전체채팅참여하기" onPress={this.change}/>
+                    <Button style = {styles.Button_main} title="전체채팅참여하기" onPress={this.change}/>
                     </View>
                 </Animated.View>
             </SafeAreaView>
@@ -157,5 +157,8 @@ const styles = StyleSheet.create({
         backgroundColor:"#c7d9ff",
         flexDirection:'column'
       },
+      Button_main :{
+        backgroundColor: 'rgba(52, 52, 52, 0.8)'
+      }
    
 })

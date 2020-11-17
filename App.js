@@ -6,10 +6,9 @@
  * @flow strict-local
  */
 
-
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import Login from './login/login';
 import Signup from './sign_up/sign_up';
 import Signup2 from './sign_up/sign_up2';
@@ -19,90 +18,105 @@ import Groupmatch from './groupmatch/groupmatch';
 import Message from './message/message';
 import Find_idpw from './Find_idpw/Find_idpw';
 import Splash from './splash/Splash';
-import Setting from './settingpage/Setting';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MessageCollect from './messageCollect/messageCollect'
+// import Setting from './settingpage/Setting';
+import Setmain from './settingpage/set_main/Set_main';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import MessageCollect from './messageCollect/messageCollect';
+import Set_privacy from './settingpage/set_privacy/Set_privacy';
+import Set_alarm from './settingpage/set_alarm/Set_alarm';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
-  TouchableOpacity ,
+  TouchableOpacity,
   Button,
-  TextInput
+  TextInput,
 } from 'react-native';
-
 
 // const Anisplash = Splash.animate({opacity: "1"}, 500)
 const Stack = createStackNavigator();
-export default class App extends React.Component{
-  state={
-    isLoading : false, //false면 스플래시
-    isLogin : false, // 로그인하면 true로 변경
+export default class App extends React.Component {
+  state = {
+    isLoading: false, //false면 스플래시
+    isLogin: false, // 로그인하면 true로 변경
   };
-  componentDidMount= async() => {  
-    setTimeout(() => {this.setState({isLoading: true})},1000);
-  }
-  render(){
-    return(
+  componentDidMount = async () => {
+    setTimeout(() => {
+      this.setState({isLoading: true});
+    }, 1000);
+  };
+  render() {
+    return (
       <NavigationContainer>
-      <Stack.Navigator>
-      {this.state.isLoading ? (
-          <>
-        <Stack.Screen
-          name="Login"
-          component={Bottom}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Main"
-          component={Bottom}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={Signup}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Signup2"
-          component={Signup2}
-          options={{ headerShown: false }}
-        />
+        <Stack.Navigator>
+          {this.state.isLoading ? (
+            <>
+              <Stack.Screen
+                name="Login"
+                component={Bottom}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Main"
+                component={Bottom}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Signup"
+                component={Signup}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Signup2"
+                component={Signup2}
+                options={{headerShown: false}}
+              />
 
-        <Stack.Screen
-          name="Signup3"
-          component={Signup3}
-          options={{ headerShown: false }}
-        />
+              <Stack.Screen
+                name="Signup3"
+                component={Signup3}
+                options={{headerShown: false}}
+              />
 
-        <Stack.Screen
-          name="Message"
-          component={Message}
-          options={{ headerShown: false }}
-        />
-        
-        <Stack.Screen
-            name="Find_idpw"
-            component={Find_idpw}
-            options={{ headerShown: false }}
-          />
-        
-        </>
-        ):(
-        <><Stack.Screen
-          name="Splash"
-          component={Splash}
-          options={{ headerShown: false }}
-        /></>)
-        }
-      </Stack.Navigator>
-    </NavigationContainer>
-    )
+              <Stack.Screen
+                name="Message"
+                component={Message}
+                options={{headerShown: false}}
+              />
+
+              <Stack.Screen
+                name="Find_idpw"
+                component={Find_idpw}
+                options={{headerShown: false}}
+              />
+
+              <Stack.Screen
+                name="Set_privacy"
+                component={Set_privacy}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Set_alarm"
+                component={Set_alarm}
+                options={{headerShown: false}}
+              />
+            </>
+          ) : (
+            <>
+              <Stack.Screen
+                name="Splash"
+                component={Splash}
+                options={{headerShown: false}}
+              />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
   }
 }
-
 
 const Tab = createBottomTabNavigator();
 
@@ -116,12 +130,9 @@ function Bottom() {
       {/* 메세지함 */}
       <Tab.Screen name="MessageCollect" component={MessageCollect} />
       {/* 알림  나중에 알람넣어요*/}
-      <Tab.Screen name="알림" component={Message}/>
+      <Tab.Screen name="알림" component={Message} />
       {/* 설정 */}
-      <Tab.Screen name="Setting" component={Setting} />
-      
+      <Tab.Screen name="Setting" component={Setmain} />
     </Tab.Navigator>
   );
 }
-
-

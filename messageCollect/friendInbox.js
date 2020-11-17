@@ -158,10 +158,10 @@ export default class FriendInbox extends React.Component {
   
   deleteRoom = (itemId) => {
     const data = [...this.state.DATA]
-    console.log('Delete '+ itemId);
     this.setState({
       DATA: data.filter(info => info.id !== itemId)
     })
+    console.log('Delete '+ itemId);
     alert(itemId+"삭제되었습니다.")
   }
 
@@ -181,7 +181,6 @@ export default class FriendInbox extends React.Component {
 
   onpress = (itemId) =>{
     const data = [...this.state.DATA];
-
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
       DATA: data.map(
@@ -191,6 +190,19 @@ export default class FriendInbox extends React.Component {
       )
     })
     alert(itemId+"클릭")
+  }
+
+  deleteChek = () =>{
+    let data = [...this.state.DATA]
+    
+    this.state.ids.map((itemId) =>{
+      data = data.filter(num => num.id !== itemId)
+    })
+    this.setState({
+      DATA: data
+    })
+    console.log(data);
+    
   }
 
   renderItem = ({item}) =>{
@@ -231,6 +243,7 @@ export default class FriendInbox extends React.Component {
   render(){
     return (
       <SafeAreaView style={styles.container}>
+        <Button title = '나가기' onPress = {this.deleteChek}></Button>
         <FlatList
           data={this.state.DATA}
           renderItem={this.renderItem}

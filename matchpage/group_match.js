@@ -29,9 +29,9 @@ import Womangroup from '../groupmatch/womangroup';
 import Mangroup from '../groupmatch/mangroup';
 import Creatgroup from '../groupmatch/creategroup';
 
-const Width = Dimensions.get('window').width
-const Height = Dimensions.get('window').height
-
+const Width = Dimensions.get('screen').width;
+const Height = Dimensions.get('screen').height;
+console.log(Height);
 const arr = [
     {key:1,title:'우리오늘... 만나자',nickname:'어린콩개발자',body:'오늘밤에 같이놀 남자3명 구합니다~',people:3,time:'15:04',sex:'f'},
     {key:2,title:'우리오늘... 만나자',nickname:'정휘제',body:'저는 오도 해병입니다',people:3,time:'15:08',sex:'m'},
@@ -70,9 +70,9 @@ export default class Group_match extends React.Component{
                     <Creatgroup closemodal={this.closemodal}/>
                 </Modal>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={{display:'flex', justifyContent:'flex-end',flexDirection:'row'}}>
+                    <View style={{position: 'absolute',zIndex: 9999, top: Height*0.70, left: Width*0.80}}>
                         <TouchableOpacity onPress={this.openmodal} 
-                        style={{position: 'absolute',zIndex: 9999, top: Height*0.65, left: Width*0.85,
+                        style={{
                                 backgroundColor:'#a1bdff', borderRadius: 35, width:50, height: 50, alignItems: "center", justifyContent: "center"}}>
                             <Image style={{width:30,height:30}} source={require('../groupmatch/add.png')}/>
                         </TouchableOpacity>

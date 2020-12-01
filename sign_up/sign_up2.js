@@ -102,7 +102,7 @@ class Sign_up2 extends React.Component {
             }}>
             <View style={styles.Container_sign} s>
               <TouchableOpacity
-                style={{marginTop: 10, position: 'absolute', left: '5%'}}
+                style={{marginTop: 20, position: 'absolute', left: '5%'}}
                 onPress={() => this.props.navigation.goBack()}>
                 <Image
                   style={{width: 25, height: 25}}
@@ -213,200 +213,136 @@ class Sign_up2 extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  login_button_view: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginBottom: 20,
-    marginTop: 20,
+  White_sign:{
+    
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    flex:1,
+    backgroundColor:"white"
   },
-  White_sign: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
-    flex: 1,
-    backgroundColor: 'white',
+  Container_sign:{
+    display:"flex",
+    flexDirection:"column",
+    
+    justifyContent:"space-between",
+    alignItems:"center",
+    backgroundColor:"white",
+    height:'100%',
+    borderRadius:60,
+    
+    ...Platform.select({
+      ios:{
+        width:'95%',
+      },
+      android:{
+        width:'100%',
+      }
+    })
   },
-  Container_sign: {
-    display: 'flex',
-    flexDirection: 'column',
-
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    width: '95%',
-    height: '100%',
-    borderRadius: 60,
-  },
-  Textbox_sign: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  Textbox_sign2: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+  Textbox_sign:{
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"center",
+    alignItems:"center",
+   
+   
+  },  Textbox_sign2:{
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"center",
+    alignItems:"center",
     // marginTop:15,
-    marginTop: 50,
-    marginBottom: 10,
+    marginTop:50,
+    marginBottom:10,
+   
   },
-  Intro_sign: {
-    marginTop: 0,
-    fontSize: 15,
-    color: '#f05052',
-    fontFamily: 'Jalnan',
-    marginBottom: 5,
+  Intro_sign:{
+    marginTop:0,
+    fontSize:15,
+    color:"#f05052",
+    fontFamily:"Jalnan",
+    marginBottom:5
   },
-  Intro_sign2: {
-    marginTop: 0,
-    fontSize: 30,
+  Intro_sign2:{
+    marginTop:0,
+    fontSize:30,
     // color:"#4f87ba",
-    color: '#f05052',
-    fontFamily: 'Jalnan',
+    color:"#f05052",
+    fontFamily:"Jalnan"
   },
-  Text_sign: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '90%',
-    marginTop: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
+  Text_sign:{
+    display:"flex",
+    flexDirection:'column',
+    width:'90%',
+    marginTop:15,
+    borderBottomWidth:1,
+    borderBottomColor:'gray'
   },
-  Text_sign_black: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: '80%',
-    marginTop: 15,
-  },
-  Text_sign_sex: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '90%',
-    marginTop: 15,
-
-    // borderBottomWidth:1,
-    // borderBottomColor:'gray'
-  },
-
-  Text_sign_text: {
-    fontFamily: 'Jalnan',
-    fontSize: 15,
-    color: '#f05052',
-    marginBottom: 15,
+  
+  Text_sign_text:{
+    fontFamily:'Jalnan',
+    fontSize:15,
+    color:'#f05052',
+    marginBottom:15
     // marginRight:80,
   },
-  Text_sign_text_sex: {
-    fontFamily: 'Jalnan',
-    fontSize: 15,
-    color: '#f05052',
-    marginRight: 60,
+  Text_sign_input:{
+    display:"flex",
+    color:'black',
+    flex:0.9,
+    height:20,
+    fontSize:15,
+    marginLeft:0,
+    padding:0
+    
+  },Text_sign_input2:{
+    display:"flex",
+    color:'black',
+    flex:0.9,
+    height:20,
+    fontSize:15,
+    marginLeft:0,
+    padding:0
   },
-  Text_sign_input: {
-    display: 'flex',
-    color: 'black',
-    flex: 0.9,
-    height: 20,
-    fontSize: 15,
-    marginLeft: 0,
-    padding: 0,
+  Btn_sign:{
+    borderWidth:0,
+    marginTop:25,
+    color:'white',
+    borderRadius:60,
+    fontFamily:'Jalnan',
+    paddingLeft:30,
+    paddingTop:3,
+    paddingRight:30,
+    paddingBottom:3,
+    fontSize:20,
+    backgroundColor:'#f05052',
+    elevation:8,
+    marginBottom:10
   },
-  Text_sign_input2: {
-    display: 'flex',
-    color: 'black',
-    flex: 0.9,
-    height: 20,
-    fontSize: 15,
-    marginLeft: 0,
-    padding: 0,
+  
+  sign_explain:{
+      // marginTop:15,
   },
-  Btn_sign: {
-    borderWidth: 0,
-    marginTop: 25,
-    color: 'white',
-    borderRadius: 60,
-    fontFamily: 'Jalnan',
-    paddingLeft: 30,
-    paddingTop: 3,
-    paddingRight: 30,
-    paddingBottom: 3,
-    fontSize: 20,
-    backgroundColor: '#f05052',
-    elevation: 8,
-    marginBottom: 10,
-  },
-  Btn_sign2id: {
-    borderWidth: 0,
-    // marginTop:25,
-    color: 'white',
-    borderRadius: 60,
-    fontFamily: 'Jalnan',
-    paddingLeft: 10,
-    paddingTop: 5,
-    paddingRight: 10,
-    paddingBottom: 5,
-    fontSize: 20,
-    // backgroundColor:'#f05052',
-
-    elevation: 8,
-    marginBottom: 5,
-    marginRight: -15,
-    marginTop: -4,
-  },
-
-  Btn_sign2: {
-    borderWidth: 0,
-    // marginTop:25,
-    color: 'white',
-    borderRadius: 60,
-    fontFamily: 'Jalnan',
-    paddingLeft: 10,
-    paddingTop: 5,
-    paddingRight: 10,
-    paddingBottom: 5,
-    fontSize: 20,
-    backgroundColor: '#f05052',
-
-    elevation: 8,
-    marginBottom: 5,
-    marginRight: -15,
-    marginTop: -4,
-  },
-
-  sign_explain: {
-    // marginTop:15,
-  },
-  sign_button: {
-    fontSize: 15,
-    fontFamily: 'Jalnan',
-    color: 'gray',
-    marginRight: -15,
-    // marginBottom:-30,
-    paddingBottom: -30,
-  },
-  sel_placeholder: {
-    color: 'red',
-  },
-  bar_Btn_sign: {
+  bar_Btn_sign:{
     // borderWidth:0,
-    marginTop: 25,
-    color: 'white',
+    marginTop:25,
+    color:'white',
     // borderRadius:60,
-    fontFamily: 'Jalnan',
-    paddingLeft: 30,
-    paddingTop: 15,
-    paddingRight: 30,
-    paddingBottom: 15,
-    fontSize: 20,
-    backgroundColor: '#f05052',
+    fontFamily:'Jalnan',
+    paddingLeft:30,
+    paddingTop:15,
+    paddingRight:30,
+    paddingBottom:15,
+    fontSize:20,
+    backgroundColor:'#f05052',
     // elevation:8,
-    marginBottom: 10,
+    marginBottom:10,
     width: 1000,
     // textAlign: 'center',
-  },
+    
+  }
 });
 export default withNavigation(Sign_up2);

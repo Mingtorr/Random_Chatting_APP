@@ -14,9 +14,11 @@ import Signup from './sign_up/sign_up';
 import Signup2 from './sign_up/sign_up2';
 import Signup3 from './sign_up/sign_up3';
 import Main from './main/Main';
+import Match_page from './matchpage/match_page';
 import Groupmatch from './groupmatch/groupmatch';
 import Message from './message/message';
 import Find_idpw from './Find_idpw/Find_idpw';
+import Find_idpw2 from './Find_idpw/Find_idpw2';
 import Splash from './splash/Splash';
 // import Setting from './settingpage/Setting';
 import Setmain from './settingpage/set_main/Set_main';
@@ -55,7 +57,7 @@ export default class App extends React.Component {
             <>
               <Stack.Screen
                 name="Login"
-                component={Bottom}
+                component={Login}
                 options={{headerShown: false}}
               />
               <Stack.Screen
@@ -90,6 +92,11 @@ export default class App extends React.Component {
                 name="Find_idpw"
                 component={Find_idpw}
                 options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Find_idpw2"
+                component={Find_idpw2}
+                options={{ headerShown: false }}
               />
 
               <Stack.Screen
@@ -126,7 +133,7 @@ function Bottom() {
       {/* 친구찾기 */}
       <Tab.Screen name="Man" component={Main} />
       {/* 친구들 찾기 */}
-      <Tab.Screen name="Group" component={Groupmatch} />
+      <Tab.Screen name="Group" component={Match_page} />
       {/* 메세지함 */}
       <Tab.Screen name="MessageCollect" component={MessageCollect} />
       {/* 알림  나중에 알람넣어요*/}

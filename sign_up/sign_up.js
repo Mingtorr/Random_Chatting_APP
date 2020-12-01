@@ -230,7 +230,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
      
         <View style={styles.Container_sign}>
 
-        <TouchableOpacity style={{marginTop:10, position:'absolute', left:'5%'}} onPress={() => this.props.navigation.goBack()}>
+        <TouchableOpacity style={{marginTop:20, position:'absolute', left:'5%'}} onPress={() => this.props.navigation.goBack()}>
         <Image 
           style={{width:25, height:25}}
           source={require('./cancel.png')} 
@@ -391,24 +391,15 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 }
 
 const styles = StyleSheet.create({
-  login_button_view:{
-    display:"flex",
-    flexDirection:"row",
-    marginBottom:20,
-    marginTop:20
-  },
   White_sign:{
-    
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-
     flex:1,
     backgroundColor:"white", //dadfa
     // height:'100%'
-
   },
   Container_sign:{
     display:"flex",
@@ -416,13 +407,19 @@ const styles = StyleSheet.create({
     alignContent: "center",//추가된거
     // justifyContent:"space-evenly",
     justifyContent:"space-between",
-
     alignItems:"center",
     backgroundColor:"white",
-    width:'95%',
     height:'100%',
     // borderRadius:60,
     
+    ...Platform.select({
+      ios:{
+        width:'95%',
+      },
+      android:{
+        width:'100%',
+      }
+    })
   },
   Container_sign2:{
     display:"flex",
@@ -436,23 +433,29 @@ const styles = StyleSheet.create({
     flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
-   
-   
-  },  Textbox_sign2:{
+  },
+  Textbox_sign2:{
     display:"flex",
     flexDirection:"column",
     justifyContent:"center",
     alignItems:"center",
     // marginTop:30
-   
   },
   Intro_sign:{
     marginTop:0,
     fontSize:15,
     color:"#f05052",
     fontFamily:"Jalnan",
-    marginTop:20,
-    marginBottom:10
+    marginTop:10,
+
+    ...Platform.select({
+      ios:{
+        marginBottom: 10,
+      },
+      android:{
+        marginBottom: 0,
+      }
+    })
   },
   Intro_sign2:{
     marginTop:0,
@@ -465,23 +468,46 @@ const styles = StyleSheet.create({
     display:"flex",
     flexDirection:'column',
     width:'90%',
-    marginTop:15,
     borderBottomWidth:1,
-    borderBottomColor:'gray'
+    borderBottomColor:'gray',
+
+    ...Platform.select({
+      ios:{
+        marginTop: 15,
+      },
+      android:{
+        marginTop: 10,
+      }
+    })
   },
   Text_sign_black:{
     display:"flex",
     flexDirection:'row',
     width:'80%',
-    marginTop:15,
+
+    ...Platform.select({
+      ios:{
+        marginTop: 15,
+      },
+      android:{
+        marginTop: 0,
+      }
+    })
   },
   Text_sign_sex:{
     display:"flex",
     flexDirection:'row',
-    justifyContent: 'space-around',
     width:'90%',
     marginTop:15,
 
+    ...Platform.select({
+      ios:{
+        justifyContent: 'space-around',
+      },
+      android:{
+        marginBottom: 10,
+      }
+    })
     // borderBottomWidth:1,
     // borderBottomColor:'gray'
   },
@@ -490,14 +516,30 @@ const styles = StyleSheet.create({
     fontFamily:'Jalnan',
     fontSize:15,
     color:'#f05052',
-    marginBottom:15
     // marginRight:80,
+
+    ...Platform.select({
+      ios:{
+        marginBottom: 15,
+      },
+      android:{
+        marginBottom: 5,
+      }
+    })
   },
   Text_sign_text_sex:{
     fontFamily:'Jalnan',
     fontSize:15,
     color:'#f05052',
-    marginRight:60,
+
+    ...Platform.select({
+      ios:{
+        marginRight: 60,
+      },
+      android:{
+        marginRight: 100,
+      }
+    })
   },
   Text_sign_input:{
     display:"flex",
@@ -506,9 +548,9 @@ const styles = StyleSheet.create({
     height:20,
     fontSize:15,
     marginLeft:0,
-    padding:0
-    
-  },Text_sign_input2:{
+    padding:0 
+  },
+  Text_sign_input2:{
     display:"flex",
     color:'black',
     flex:0.9,
@@ -571,7 +613,14 @@ const styles = StyleSheet.create({
   },
   
   sign_explain:{
-      marginTop:15,
+      ...Platform.select({
+        ios:{
+          marginTop: 15,
+        },
+        android:{
+          marginTop: 10,
+        }
+      })
   },
   sign_button:{
     fontSize:15,
@@ -585,8 +634,9 @@ const styles = StyleSheet.create({
     color:'red',
   },
   bar_Btn_sign:{
-    marginTop:25,
+    // borderWidth:0,
     color:'white',
+    // borderRadius:60,
     fontFamily:'Jalnan',
     paddingLeft:30,
     paddingTop:15,
@@ -594,8 +644,19 @@ const styles = StyleSheet.create({
     paddingBottom:15,
     fontSize:20,
     backgroundColor:'#f05052',
+    // elevation:8,
     marginBottom:10,
     width: 1000,
+    // textAlign: 'center',
+    
+    ...Platform.select({
+      ios:{
+        marginTop: 25,
+      },
+      android:{
+        marginTop: 15,
+      }
+    })
   }
 });
 export default withNavigation(Sign_up);

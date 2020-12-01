@@ -63,9 +63,8 @@ function MessageTab(props) {
         inactiveTintColor: 'black'
       }}>
       <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool}/>} />
-      <Tab.Screen name="과팅" component={FriendsInbox} />
+      <Tab.Screen name="과팅" children= {() => <FriendsInbox />} />
     </Tab.Navigator>
-    
   );
 }
 

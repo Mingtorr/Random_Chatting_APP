@@ -40,7 +40,7 @@ export default class FriendInbox extends React.Component {
           min: "30",
           messagetime: "12:30",
           isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 22,
         },
         {
           id: 3,
@@ -52,7 +52,7 @@ export default class FriendInbox extends React.Component {
           min: "30",
           messagetime: "12:30",
           isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 77,
         },
         {
           id: 4,
@@ -64,7 +64,7 @@ export default class FriendInbox extends React.Component {
           min: "30",
           messagetime: "12:30",
           isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 344,
         },
         {
           id: 5,
@@ -189,7 +189,7 @@ export default class FriendInbox extends React.Component {
           : info
       )
     })
-    alert(itemId+"클릭")
+    alert(itemId+"클릭"+ data[itemId-1].isNewChatNum)
   }
 
   deleteChek = () =>{
@@ -225,7 +225,9 @@ export default class FriendInbox extends React.Component {
                 <Text style = {styles.timeFont}>{item.ampm} {item.messagetime}</Text>
                   {item.isNewChatNum > 0 ?
                     <View style = {styles.newChat}>
-                      <Text style = {styles.isNewchat}>{item.isNewChatNum}</Text>
+                      {item.isNewChatNum <300
+                        ?<Text style = {styles.isNewchat}>{item.isNewChatNum}</Text>
+                        :<Text style = {styles.isNewchat}>+300</Text>} 
                     </View> : <View/>
                   }
               </View>
@@ -324,10 +326,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom:5,
     marginLeft: 5,
-    width: 16,
     height: 16,
     backgroundColor: 'red',
     borderRadius: 8,
+    paddingLeft: 4,
+    paddingRight: 4
   },
   isNewchat:{
     fontWeight: 'bold',

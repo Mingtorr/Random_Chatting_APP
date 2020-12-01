@@ -40,7 +40,7 @@ export default class FriendInbox extends React.Component {
           min: "30",
           messagetime: "12:30",
           isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 22,
         },
         {
           id: 3,
@@ -52,7 +52,7 @@ export default class FriendInbox extends React.Component {
           min: "30",
           messagetime: "12:30",
           isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 77,
         },
         {
           id: 4,
@@ -64,7 +64,7 @@ export default class FriendInbox extends React.Component {
           min: "30",
           messagetime: "12:30",
           isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 344,
         },
         {
           id: 5,
@@ -158,10 +158,10 @@ export default class FriendInbox extends React.Component {
   
   deleteRoom = (itemId) => {
     const data = [...this.state.DATA]
-    console.log('Delete '+ itemId);
     this.setState({
       DATA: data.filter(info => info.id !== itemId)
     })
+    console.log('Delete '+ itemId);
     alert(itemId+"삭제되었습니다.")
   }
 
@@ -181,7 +181,6 @@ export default class FriendInbox extends React.Component {
 
   onpress = (itemId) =>{
     const data = [...this.state.DATA];
-
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
       DATA: data.map(
@@ -190,7 +189,20 @@ export default class FriendInbox extends React.Component {
           : info
       )
     })
-    alert(itemId+"클릭")
+    alert(itemId+"클릭"+ data[itemId-1].isNewChatNum)
+  }
+
+  deleteChek = () =>{
+    let data = [...this.state.DATA]
+    
+    this.state.ids.map((itemId) =>{
+      data = data.filter(num => num.id !== itemId)
+    })
+    this.setState({
+      DATA: data
+    })
+    console.log(data);
+    
   }
 
   renderItem = ({item}) =>{
@@ -213,7 +225,9 @@ export default class FriendInbox extends React.Component {
                 <Text style = {styles.timeFont}>{item.ampm} {item.messagetime}</Text>
                   {item.isNewChatNum > 0 ?
                     <View style = {styles.newChat}>
-                      <Text style = {styles.isNewchat}>{item.isNewChatNum}</Text>
+                      {item.isNewChatNum <300
+                        ?<Text style = {styles.isNewchat}>{item.isNewChatNum}</Text>
+                        :<Text style = {styles.isNewchat}>+300</Text>} 
                     </View> : <View/>
                   }
               </View>
@@ -231,6 +245,7 @@ export default class FriendInbox extends React.Component {
   render(){
     return (
       <SafeAreaView style={styles.container}>
+        <Button title = '나가기' onPress = {this.deleteChek}></Button>
         <FlatList
           data={this.state.DATA}
           renderItem={this.renderItem}
@@ -311,10 +326,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom:5,
     marginLeft: 5,
-    width: 16,
     height: 16,
     backgroundColor: 'red',
     borderRadius: 8,
+    paddingLeft: 4,
+    paddingRight: 4
   },
   isNewchat:{
     fontWeight: 'bold',

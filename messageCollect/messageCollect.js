@@ -44,12 +44,7 @@ export default class messageCollect extends React.Component{
           </TouchableOpacity>
         </View>
         <View style = {styles.collectBody}>
-          {/* <TouchableOpacity style ={styles.outNavigation}>
-            <Text>뒤로가기</Text>
-            <Text>나가기</Text>
-          </TouchableOpacity> */}
           <MessageTab outButtonBool = {this.state.outButtonBool}/>
-          
         </View>
       </SafeAreaView>
     )
@@ -68,9 +63,8 @@ function MessageTab(props) {
         inactiveTintColor: 'black'
       }}>
       <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool}/>} />
-      <Tab.Screen name="과팅" component={FriendsInbox} />
+      <Tab.Screen name="과팅" children= {() => <FriendsInbox />} />
     </Tab.Navigator>
-    
   );
 }
 

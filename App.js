@@ -26,6 +26,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MessageCollect from './messageCollect/messageCollect';
 import Set_privacy from './settingpage/set_privacy/Set_privacy';
 import Set_alarm from './settingpage/set_alarm/Set_alarm';
+import {fcmService} from './push/FCMService';
+import {localNotificationService} from './push/LocalNotificationService';
 import {
   SafeAreaView,
   StyleSheet,
@@ -48,6 +50,39 @@ export default class App extends React.Component {
     setTimeout(() => {
       this.setState({isLoading: true});
     }, 1000);
+
+    fcmService.registerAppWithFCM();
+    fcmService.register(onRegister, onNotification, onOpenNotification);
+    localNotificationService.configure(onOpenNotification);
+
+    function onRegister(token) {
+      console.log('[App] onRegister : token :', token);
+    }
+
+    function onNotification(notify) {
+      console.log('[App] onNotification : notify :', notify);
+      const options = {
+        soundName: 'default',
+        playSound: true,
+      };
+      localNotificationService.showNotification(
+        0,
+        notify.title,
+        notify.body,
+        notify,
+        options,
+      );
+    }
+
+    function onOpenNotification(notify) {
+      console.log('[App] onOpenNotification : notify :', notify);
+      alert('Open Notification : notify.body :' + notify.body);
+    }
+    return () => {
+      console.log('[App] unRegister');
+      fcmService.unRegister();
+      localNotificationService.unregister();
+    };
   };
   render() {
     return (
@@ -96,7 +131,7 @@ export default class App extends React.Component {
               <Stack.Screen
                 name="Find_idpw2"
                 component={Find_idpw2}
-                options={{ headerShown: false }}
+                options={{headerShown: false}}
               />
 
               <Stack.Screen

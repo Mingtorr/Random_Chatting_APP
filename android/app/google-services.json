@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "548866444473",
+    "project_id": "waglewagle-44a13",
+    "storage_bucket": "waglewagle-44a13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548866444473:android:c1bcec094bc4f266631f68",
+        "android_client_info": {
+          "package_name": "com.wagleapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548866444473-fnfnl47bf6714jsositk6ep52fuak7lg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wagleapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "548866444473-r2e5pbvoi3i7i0ii7mjl2h0r6e3k30pt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_cWzACJnSLs5Mc0X_M3Z35BUL9Y5c4uU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548866444473-r2e5pbvoi3i7i0ii7mjl2h0r6e3k30pt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

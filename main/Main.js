@@ -14,6 +14,7 @@ import {SafeAreaView} from 'react-navigation';
 import {event} from 'react-native-reanimated';
 import Message from '../message/message';
 import Yourmessage from '../message/yourmessage';
+import AsyncStorage from '@react-native-community/async-storage'
 
 const arr = [
   {key: 0, name: '정영빈', message: 'ㅁㅁㅁ', owner: false},
@@ -77,7 +78,13 @@ export default class Main extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    AsyncStorage.getItem('login_onoff', (err, result) => {
+      const user_info = JSON.parse(result)
+        console.log(result);
+    })
+
+  }
 
   _fadeIn() {
     Animated.timing(this.state.value, {
@@ -168,7 +175,7 @@ export default class Main extends Component {
           </View>
           <View style={{flex: 0.7}}></View>
           <View>
-            <TouchableOpacity
+          <TouchableOpacity
               style={{
                 display: 'flex',
                 justifyContent: 'center',

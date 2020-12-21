@@ -29,173 +29,252 @@ import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } f
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { getBottomSpace } from "react-native-iphone-x-helper";
-
+const func = require('../server/api');
 
  class Sign_up extends React.Component{
   constructor(props){
     super(props);
     this.state={
       id: "",
-      pw: "",
-      pw2:"",
-      nick:"",
-      email:"",
-      injung: "",
-      sex:"",
+      passwd: "",
+      passwd2: "",
+      email: "",
+      authNum: "", //보낸 인증번호
+      authCheckNum: "", // 사용자가 적은 인증번호
+      sex: "0", // 0:남자, 1:여자
+      nickname: "",
 
-      trueID: "사용 가능한 ID입니다.",
-      falseID: "다시 입력 해 주세요",
-      trueNick: "사용 가능한 닉네임입니다.",
-      falseNick: "이미 사용중인 닉네임입니다.",
-      trueEmail: "확인 됐습니다.",
-      falseEmail: "틀렸습니다. 다시 입력해주세요",
-
-      buttonColor:"gray",
-      ativeOn: false,
+      checked_id: false, // ID 중복검사
+      checked_email: false, // 메일 인증 확인
+      sendEmailClick: false, //메일 보냄 확인
+      checking_passwd: false, //비번 확인
+      nickname_check: false, //닉네임 중복검사
     }
   }
 
+  singupBtn = (e) => {
+    e.preventDefault();
+    
+    var checkpass = this.state.passwd;
+    checkpass = checkpass.replace(/(\s*)/g, "");
 
-
-  handleName = (e) => {
-    this.setState({
-      id: e,
-    });
-    this.activeButton()
-    console.log(this.state.id);
-  };
-  handleName2 = (e) => {
-    this.setState({
-      pw: e,
-    });
-    this.activeButton()
-    console.log(this.state.pw);
-  };
-  handleName3 = (e) => {
-    this.setState({
-      pw2: e,
-    });
-    this.activeButton()
-    console.log(this.state.pw2);
-  };
-  handleName4 = (e) => {
-    this.setState({
-      nick: e,
-    });
-    this.activeButton()
-    console.log(this.state.nick);
-  };
-  handleName5 = (e) => {
-    this.setState({
-      email: e,
-    });
-    this.activeButton()
-    console.log(this.state.email);
-  };
-  handleName6 = (e) => {
-    this.setState({
-      injung: e,
-    });
-    this.activeButton()
-    console.log(this.state.injung);
-  };
-  
-  onclick=(e)=>{
-    const post = {
-      name: this.state.name1,
-      pass: this.state.pass,
+    if (!this.state.checked_id) {
+      alert("아이디 중복검사를 해주세요");
+    } else if (!(this.state.passwd === this.state.passwd2)) {
+      alert("비밀번호가 일지하지 않습니다.");
+    } else if (checkpass === "") {
+      alert("비밀번호에 공백은 들어가서는 안됩니다.");
+    } else if (!this.state.checked_email) {
+      alert("메일 인증을 해주세요");
+    } else {
+    const user_info = {
+      id: this.state.id,
+      passwd: this.state.passwd2,
+      sex: this.state.sex,
+      nickname: this.state.nickname,
+      email: this.state.email,
     };
-    fetch("http://192.168.200.193:3001/api/login", {
+    fetch(func.api(3001,'Signup'), {
       method: "post",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(post),
+      body: JSON.stringify(user_info),
     })
       .then((res) => res.json())
       .then((json) => {
-        if (json.boolean === false) {
-         alert("아이디 비밀번호 틀림")
-        } else {
-          alert("로그인 성공")
+        if (json) {
+          this.props.navigation.navigate('Signup2',{
+            user_id: this.state.id
+          })
         }
       });
-  }
+  };
+}
 
-  singup2Btn = (e) => {
+  sendEmail = (e) => {
+    var re = /^[a-zA-Z0-9_]{4,20}$/;
     e.preventDefault();
-    if(this.state.ativeOn){
-      
-      this.props.navigation.navigate('Signup2')
+    if (this.state.email.length === 0) {
+      alert("이메일을 입력해주세요!");
+      return;
+    } else if(!this.check(re, this.state.email, "잘못된 형식의 이메일입니다.")){
+      return;
+    } else{
+      console.log(this.state.email);
+      this.setState({
+      sendEmailClick: true,
+      });
+      const email = {
+        sendEmail: this.state.email,
+      };
+      console.log(email);
+      fetch(func.api(3001,'Sendmail'), {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(email),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          alert("인증 메일이 전송되었습니다.");
+            this.setState({
+              authNum: json,
+            });
+          
+
+          // if (json === true) {
+          //   alert("이미 가입된 메일입니다.");
+          // } else {
+          //   alert("인증 메일이 전송되었습니다.");
+          //   this.setState({
+          //     authNum: json,
+          //   });
+          // }
+        });
     }
   };
 
-  activeButton = () => {
-    //모든칸이 ""가 아니라면
-    if(this.state.id != "" && this.state.pw != "" && this.state.pw2 != "" && this.state.nick != "" && this.state.email != "" && this.state.injung != ""){
-      this.setState({
-        buttonColor: '#f05052',
-        ativeOn:true,
-      })
+  // 인증메일을 확인한다.
+  authEmail = (e) => {
+    e.preventDefault();
+    if (this.state.authCheckNum.length === 0) {
+      alert("인증번호를 입력해주세요");
+      return;
     }
-  
-    else{
+    if (this.state.authNum.toString() === this.state.authCheckNum.toString()) {
+      alert("인증성공");
       this.setState({
-        buttonColor: 'gray',
-        ativeOn:false
+        checked_email: true,
+      });
+    } else {
+      alert("인증실패");
+    }
+  };
+
+  check = (re, what, message) => {
+    if (re.test(what)) {
+      return true;
+    }
+    alert(message);
+    return false;
+  };
+
+  checkId = (e) => {
+    e.preventDefault();
+    var re = /^[a-zA-Z0-9]{4,12}$/; //아이디는 4~12자의 영문 대소문자와 숫자로만 입력
+    if (!this.check(re, this.state.id, "아이디는 4~12자의 영문 대소문자와 숫자로만 입력가능합니다.")) {
+      return;
+    } else {
+      const checkId = {
+        id: this.state.id,
+      };
+      fetch(func.api(3001,'CheckId'), {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(checkId),
       })
+        .then((res) => res.json())
+        .then((json) => {
+          if (json) {
+            alert("사용가능한 아이디 입니다.");
+            this.setState({
+              checked_id: true,
+            });
+          } else {
+            alert("이미 사용중인 아이디 입니다.");
+          }
+        });
+    }
+  };
+
+  passwdcheck = (e) => {
+    if (this.state.passwd.length === 0 || this.state.passwd2.length === 0){
+      alert("비밀번호를 입력해주세요")
+    } else if (this.state.passwd !== this.state.passwd2) {
+      alert("비밀번호가 일치하지 않습니다.");
+    } else if (this.state.passwd === this.state.passwd2) {
+      alert("비밀번호가 일치합니다.");
+      this.setState({
+        checking_passwd: true,
+      });
     }
   }
 
+  nickNamecheck = (e) => {
+    var re = /^[a-zA-Z0-9가-힣]{2,8}$/;
+    if (!this.check(re, this.state.nickname, "닉네임은 2~8자의 영문,한글 ,숫자로만 입력가능합니다.")){
+      return;
+    } else {
+      const Nickname = {
+        nickname: this.state.nickname,
+      };
+      fetch(func.api(3001,'CheckNickname'), {
+        method: "post",
+        header: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(Nickname),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          if(json) {
+            alert("사용가능한 닉네임입니다");
+            this.setState({
+              nickname_check: true
+            });
+          }else{
+            alert("이미 사용중인 닉네임입니다");
+          }
+        })
+      }
+    }
 
-  Alert_id = () =>
-     Alert.alert(                    // 말그대로 Alert를 띄운다
-      "ID 중복확인",                    // 첫번째 text: 타이틀 제목
-      this.state.trueID,                         // 두번째 text: 그 밑에 작은 제목
-      [                              // 버튼 배열
-        // {
-        //   text: "아니요",                              // 버튼 제목
-        //   onPress: () => console.log("아니라는데"),     //onPress 이벤트시 콘솔창에 로그를 찍는다
-        //   style: "cancel"
-        // },
-        { text: "확인", onPress: () => console.log("그렇다는데") }, //버튼 제목
-                                                               // 이벤트 발생시 로그를 찍는다
-      ],
-      { cancelable: false }
-    );
-
-    Alert_nick = () =>
-     Alert.alert(                    // 말그대로 Alert를 띄운다
-      "중복확인",                    // 첫번째 text: 타이틀 제목
-      this.state.trueNick,                         // 두번째 text: 그 밑에 작은 제목
-      [                              // 버튼 배열
-        { text: "확인", onPress: () => console.log("그렇다는데") }, //버튼 제목
-                                                               // 이벤트 발생시 로그를 찍는다
-      ],
-      { cancelable: false }
-    );
-
-    Alert_email = () =>
-     Alert.alert(                    // 말그대로 Alert를 띄운다
-      "인증번호가 전송 되었습니다.",                    // 첫번째 text: 타이틀 제목
-      // this.state.trueNick,                         // 두번째 text: 그 밑에 작은 제목
-      [                              // 버튼 배열
-        { text: "확인", onPress: () => console.log("그렇다는데") }, //버튼 제목
-                                                               // 이벤트 발생시 로그를 찍는다
-      ],
-      { cancelable: false }
-    );
-
-    Alert_injung = () =>
-    Alert.alert(                    // 말그대로 Alert를 띄운다
-                        // 첫번째 text: 타이틀 제목
-     this.state.trueEmail,                         // 두번째 text: 그 밑에 작은 제목
-     [                              // 버튼 배열
-       { text: "확인", onPress: () => console.log("그렇다는데") }, //버튼 제목
-                                                              // 이벤트 발생시 로그를 찍는다
-     ],
-     { cancelable: false }
-   );
+//////////////////////////
+  onSubmit = (e) => {
+    e.preventDefault(); //이벤트 발생시 새로고침을 안하게 한다.
+    var checkpass = this.state.passwd;
+    checkpass = checkpass.replace(/(\s*)/g, "");
+    console.log(checkpass.charAt(0));
+    if (this.state.id.length > 100 || this.state.passwd.length > 100) {
+      alert("아이디와 비밀번호의 길이가 너무 깁니다!!");
+      return;
+    }
+    if (!this.state.checked_id) {
+      alert("아이디 중복검사를 해주세요");
+    } else if (!(this.state.passwd === this.state.passwd2)) {
+      alert("비밀번호가 일지하지 않습니다.");
+    } else if (checkpass === "") {
+      alert("비밀번호에 공백은 들어가서는 안됩니다.");
+    } else if (!this.state.checked_email) {
+      alert("메일 인증을 해주세요");
+    } else {
+      const user_info = {
+        id: this.state.id,
+        passwd: this.state.passwd2,
+        email: this.state.email,
+      };
+      fetch(func.api(3001,'Signup'), {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(user_info),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          if (json) {
+            alert("회원가입 성공");
+          } else {
+            alert("회원가입 실패");
+          }
+        });
+    }
+  };
+/////////////////////
 
   render(){
     let radio_props = [     //radio button
@@ -225,9 +304,6 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
       height:screenHeight}}
       >
      
-
-     
-     
         <View style={styles.Container_sign}>
 
         <TouchableOpacity style={{marginTop:20, position:'absolute', left:'5%'}} onPress={() => this.props.navigation.goBack()}>
@@ -251,12 +327,12 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
             <View style={{display:"flex", flexDirection:"row"}}>
               <TextInput style={styles.Text_sign_input} id="id"
                 value={this.state.id}
-                onChangeText={this.handleName}
+                onChangeText={(text) => this.setState({id: text})}
                 />
               {/* <TouchableOpacity style={{padding:-30}} onPress={this.singupBtn}>
                   <Text style={styles.sign_button}>중복확인</Text>
               </TouchableOpacity> */}
-              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.Alert_id}>
+              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.checkId }>
                     <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
             </TouchableOpacity>
             </View>
@@ -265,23 +341,27 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>비밀번호</Text>
             <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}   id="pw"
-              name="pw"
-              value={this.state.pw}
+            <TextInput style={styles.Text_sign_input2}   id="passwd"
+              name="passwd"
+              value={this.state.passwd}
               secureTextEntry={true}
-              onChangeText={this.handleName2}/>
+              onChangeText={(text) => this.setState({passwd: text})}/>
               </View>
           </View>
 
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>비밀번호 확인</Text>
-            <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}   id="pw2"
-              name="pw2"
-              value={this.state.pw2}
+            <View style={{display:"flex", flexDirection:"row"}}>
+            <TextInput style={styles.Text_sign_input2}   id="passwd2"
+              name="passwd2"
+              value={this.state.passwd2}
               secureTextEntry={true}
-              onChangeText={this.handleName3}/>
+              onChangeText={(text) => this.setState({passwd2: text})}/>
+              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.passwdcheck}>
+                    <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
+              </TouchableOpacity>
             </View>
+            
           </View>
 
           
@@ -296,9 +376,8 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
                 radio_props={radio_props}
                 // buttonWrapStyle={{marginLeft: 10, marginRight: 10}}
                 borderWidth={0.5}
-                
                 initial={0}
-                onPress={(value) => {this.setState({value:value})}}
+                onPress={(value) => {this.setState({sex:value})}}
              />
            
           </View>
@@ -306,14 +385,13 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
           <View style={styles.Text_sign}>
             <Text style={styles.Text_sign_text}>닉네임</Text>
             <View style={{display:"flex", flexDirection:"row"}}>
-            <TextInput style={styles.Text_sign_input}   id="nick"
-              name="nick"
-              value={this.state.nick}
-              secureTextEntry={true}
-              onChangeText={this.handleName4}/>
-              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.Alert_nick}>
+            <TextInput style={styles.Text_sign_input}   id="nickname"
+              name="nickname"
+              value={this.state.nickname}
+              onChangeText={(text) => this.setState({nickname: text})}/>
+              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.nickNamecheck}>
                     <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
               </View>
           </View>
 
@@ -323,11 +401,9 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
             <TextInput style={styles.Text_sign_input2}   id="email"
               name="email"
               value={this.state.email}
-              secureTextEntry={true}
-              onChangeText={this.handleName5}/>
-           
-
-            <TouchableOpacity style={styles.Btn_sign2} onPress={this.Alert_email}>
+              onChangeText={(text) => this.setState({email: text})}/>
+            <Text style={{color:'gray', fontWeight:"bold", fontSize:15, marginRight: 10}}>@changwon.ac.kr</Text>
+            <TouchableOpacity style={styles.Btn_sign2} onPress={this.sendEmail}>
               <Text style={{color:'white',fontFamily:'Jalnan'}}>전송</Text>
             </TouchableOpacity>
             </View>
@@ -338,13 +414,13 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 
             <View style={{display:"flex", flexDirection:"row"}}>
 
-              <TextInput style={styles.Text_sign_input2}   id="injung"
-              name="injung"
-              value={this.state.injung}
+              <TextInput style={styles.Text_sign_input2}   id="authCheckNum"
+              name="authCheckNum"
+              value={this.state.authCheckNum}
               secureTextEntry={true}
-              onChangeText={this.handleName6}/>
+              onChangeText={(text) => this.setState({authCheckNum: text})}/>
 
-               <TouchableOpacity style={styles.Btn_sign2} onPress={this.Alert_injung}>
+               <TouchableOpacity style={styles.Btn_sign2} onPress={this.authEmail}>
                <Text style={{color:'white',fontFamily:'Jalnan'}}>확인</Text>
                </TouchableOpacity>
 
@@ -366,22 +442,19 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
               color:'white',
               fontFamily:'Jalnan',
               paddingLeft:30,
-              paddingTop:15,
+              paddingTop:10,
               paddingRight:30,
-              paddingBottom:15,
+              paddingBottom:10,
               fontSize:20,
-              // backgroundColor:'#f05052',
-              backgroundColor:this.state.buttonColor,
+              backgroundColor:'#f05052',
               marginBottom:10,
               width: 1000,
-            }} onPress={this.singup2Btn}>
+            }} onPress={this.singupBtn}>
               <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center',width:'100%'}}>다음</Text>
             </TouchableOpacity>
           </View>
         </View>
-      
-      
-     
+  
       </View>
       </TouchableWithoutFeedback>
       </KeyboardAwareScrollView>
@@ -586,11 +659,9 @@ const styles = StyleSheet.create({
     paddingBottom:5,
     fontSize:20,
     // backgroundColor:'#f05052',
-    
-    elevation:8,
     marginBottom:5,
     marginRight:-20,
-    marginTop:-4,
+    marginTop:-8,
   },
 
   Btn_sign2:{
@@ -605,8 +676,6 @@ const styles = StyleSheet.create({
     paddingBottom:5,
     fontSize:20,
     backgroundColor:'#f05052',
-    
-    elevation:8,
     marginBottom:5,
     marginRight:-15,
     marginTop:-4,

@@ -16,10 +16,12 @@ import {
   TouchableOpacity ,
   Button,
   TextInput,
-  Image
+  Image,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import Swiper from 'react-native-swiper'
+import AsyncStorage from '@react-native-community/async-storage'
+const func = require('../server/api');
 
  class Login extends React.Component{
   constructor(props){
@@ -27,9 +29,22 @@ import Swiper from 'react-native-swiper'
     this.state={
       name1: "",
       pass: "",
-      
+      login_onoff: false
     }
   }
+  componentWillMount(){
+    console.log(func.api(3001,'login'));
+    AsyncStorage.getItem('login_onoff', (err, result) => {
+      const user_info = JSON.parse(result)
+
+      if(user_info.login_set === 'true'){
+        this.props.navigation.navigate('Main')
+      }else{
+        this.props.navigation.navigate('Login')
+      }
+    })
+  }
+
   handleName = (e) => {
     this.setState({
       name1: e,
@@ -43,12 +58,13 @@ import Swiper from 'react-native-swiper'
     console.log(this.state.pass);
   };
   
-  onclick=(e)=>{
+  onlogin=(e)=>{
     const post = {
-      name: this.state.name1,
-      pass: this.state.pass,
+      id: this.state.name1,
+      passwd: this.state.pass,
     };
-    fetch("http://192.168.200.193:3001/api/login", {
+    console.log(post);
+    fetch(func.api(3001,'login'), {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -57,13 +73,27 @@ import Swiper from 'react-native-swiper'
     })
       .then((res) => res.json())
       .then((json) => {
-        if (json.boolean === false) {
-         alert("아이디 비밀번호 틀림")
+        if (json) {
+            AsyncStorage.setItem('login_onoff', 
+              JSON.stringify({'login_set': 'true', 
+                'user_key': json.user_key,
+                'user_id': json.user_id,
+                'user_sex': json.user_sex,
+                'user_email': json.user_email,
+                'user_deptno': json.user_deptno,
+                'user_stdno': json.user_stdno,
+                'user_nickname': json.user_nickname,
+              }), () => {
+              console.log('로그인 정보 저장')
+
+            this.props.navigation.navigate('Main')
+          })
         } else {
-          alert("로그인 성공")
+          alert("아이디 또는 비밀번호 틀림")
         }
       });
   }
+
   singupBtn = (e) => {
     e.preventDefault();
     this.props.navigation.navigate('Signup')
@@ -74,10 +104,6 @@ import Swiper from 'react-native-swiper'
     this.props.navigation.navigate('Find_idpw')
   };
 
-  goMain =(e)=>{
-    e.preventDefault();
-    this.props.navigation.navigate('Main')
-  }
   render(){
     return(
       <SafeAreaView style={styles.White_login}>
@@ -151,8 +177,8 @@ import Swiper from 'react-native-swiper'
           </View>
 
           <View style={{width: "100%"}}>
-            <TouchableOpacity style={styles.Btn_login} onPress={this.onclick}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}} onPress={this.goMain}>로그인</Text>
+            <TouchableOpacity style={styles.Btn_login} onPress={this.onlogin}>
+              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>로그인</Text>
             </TouchableOpacity>
           </View>
       </SafeAreaView>

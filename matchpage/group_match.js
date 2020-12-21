@@ -72,7 +72,7 @@ export default class Group_match extends React.Component{
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={{display:'flex', justifyContent:'flex-end',flexDirection:'row'}}>
                         <TouchableOpacity onPress={this.openmodal} 
-                        style={{position: 'absolute',zIndex: 9999, top: Height*0.65, left: Width*0.85,
+                        style={{position: 'absolute',zIndex: 9999, top: Height*0.70, left: Width*0.80,
                                 backgroundColor:'#a1bdff', borderRadius: 35, width:50, height: 50, alignItems: "center", justifyContent: "center"}}>
                             <Image style={{width:30,height:30}} source={require('../groupmatch/add.png')}/>
                         </TouchableOpacity>

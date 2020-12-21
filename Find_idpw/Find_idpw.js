@@ -25,87 +25,104 @@ class Find_idpw extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            input_email: "",
-            input_confirm: "",
-
-            button_color1: "gray",
-            use1: false,
-
-            button_color2: "gray",
-            use2: false,
-
-            button_color3: "gray",
-            use3: false
+            email: "",
+            authNum: "", //보낸 인증번호
+            authCheckNum: "", // 사용자가 적은 인증번호
+            checked_email: false, // 메일 인증 확인
+            sendEmailClick: false, //메일 보냄 확인
         };
     }
+
+    check = (re, what, message) => {
+        if (re.test(what)) {
+          return true;
+        }
+        alert(message);
+        return false;
+    };
 
     backBtn = (e) => {
         e.preventDefault();
         this.props.navigation.navigate('Login')
     };
 
-    email_text = (e) => {
-        this.setState({
-            input_email: e
-        });
-
-        if(this.state.input_email !== ""){
-            this.setState({
-                button_color1: "#f05052",
-                use1: true,
+    sendEmail = (e) => {    
+        var re = /^[a-zA-Z0-9_]{4,20}$/;
+        e.preventDefault();
+        if (this.state.email.length === 0) {
+          alert("이메일을 입력해주세요!");
+          return;
+        } else if(!this.check(re, this.state.email, "잘못된 형식의 이메일입니다.")){
+          return;
+        } else{
+          console.log(this.state.email);
+          this.setState({
+          sendEmailClick: true,
+          });
+          const email = {
+            sendEmail: this.state.email,
+          };
+          console.log(email);
+          fetch("http://172.20.10.2:3001/Sendmail2", {
+            method: "post",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(email),
+          })
+            .then((res) => res.json())
+            .then((json) => {
+              if (json) {
+                alert("인증 메일이 전송되었습니다.");
+                this.setState({
+                  authNum: json,
+                });
+              } else {
+                alert("가입된 이메일이 없습니다.");
+              }
             });
         }
-        else{
+      };
+
+    authEmail = (e) => {
+        e.preventDefault();
+        if (this.state.authCheckNum.length === 0) {
+            alert("인증번호를 입력해주세요");
+            return;
+        }
+        if (this.state.authNum.toString() === this.state.authCheckNum.toString()) {
+            alert("인증성공");
             this.setState({
-                button_color1: "gray",
-                use1: false,
+            checked_email: true,
             });
+        } else {
+            alert("인증실패");
         }
-
-        this.nextbutton_active()
-    }
-
-    confirm_text = (e) => {
-        this.setState({
-            input_confirm: e
-        });
-
-        if(this.state.input_confirm !== ""){
-            this.setState({
-                button_color2: "#f05052",
-                use2: true,
-            });
-        }
-        else{
-            this.setState({
-                button_color2: "gray",
-                use2: false,
-            });
-        }
-
-        this.nextbutton_active()
-    }
-    
-    nextbutton_active = () => {
-        if(this.state.use1 && this.state.use2){
-            this.setState({
-                button_color3: "#f05052",
-                use3: true
-            })
-        }
-        else{
-            this.setState({
-                button_color3: "gray",
-                use3: false
-            })
-        }
-    }
+    };
 
     nextBtn = (e) => {
-        if(this.state.use3){
-            e.preventDefault();
-            this.props.navigation.navigate('Find_idpw2')
-        }
+        e.preventDefault();
+        
+        if (!this.state.checked_email) {
+          alert("메일 인증을 해주세요");
+        } else {
+        const find_idpw = {
+          email: this.state.email
+        };
+        fetch("http://172.20.10.2:3001/Find_idpw", {
+          method: "post",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(find_idpw),
+        })
+          .then((res) => res.json())
+          .then((json) => {
+                this.props.navigation.navigate('Find_idpw2',{
+                user_id: json
+            })
+          });
+      };
     };
 
     render(){
@@ -136,7 +153,8 @@ class Find_idpw extends React.Component{
                         <Text style={styles.Text_idpw_text}>Email</Text>
                         <View style={styles.idpw_3}>
                             <View style={styles.Text_idpw}>
-                                <TextInput style={styles.Text_idpw_input} value={this.state.input_email} onChangeText={this.email_text}/>
+                                <TextInput style={styles.Text_idpw_input} value={this.state.email} 
+                                            onChangeText={(text) => this.setState({email: text})}/>
                                 <Text style={{color:'gray', fontWeight:"bold", fontSize:15, marginRight: 10}}>@changwon.ac.kr</Text>
                                 <TouchableOpacity style={{
                                     borderWidth:0,
@@ -148,10 +166,10 @@ class Find_idpw extends React.Component{
                                     paddingRight:10,
                                     paddingBottom:5,
                                     fontSize:20,
-                                    backgroundColor: this.state.button_color1,
+                                    backgroundColor: '#f05052',
                                     elevation:8,
                                     marginBottom:5,
-                                    marginTop:-4}} onPress={this.email_alert} activeOpacity={this.state.use1 ? 0.5 : 1}>
+                                    marginTop:-4}} onPress={this.sendEmail}>
                                     <Text style={{color:'white', fontFamily:'Jalnan'}}>전송</Text>
                                 </TouchableOpacity>
                             </View>
@@ -162,7 +180,8 @@ class Find_idpw extends React.Component{
                         <Text style={styles.Text_idpw_text}>인증번호</Text>
                         <View style={styles.idpw_4}>
                             <View style={styles.Text_idpw}>
-                                <TextInput style={styles.Text_idpw_input} value={this.state.input_confirm} onChangeText={this.confirm_text}/>
+                                <TextInput style={styles.Text_idpw_input} value={this.state.authCheckNum}
+                                                onChangeText={(text) => this.setState({authCheckNum: text})}/>
                                 <TouchableOpacity style={{
                                     borderWidth:0,
                                     color:'white',
@@ -173,11 +192,11 @@ class Find_idpw extends React.Component{
                                     paddingRight:10,
                                     paddingBottom:5,
                                     fontSize:20,
-                                    backgroundColor: this.state.button_color2,                                    
+                                    backgroundColor: '#f05052',                                    
                                     elevation:8,
                                     marginBottom:5,
                                     marginRight:-15,
-                                    marginTop:-4}} onPress={this.confirm_alert} activeOpacity={this.state.use2 ? 0.5 : 1}>
+                                    marginTop:-4}} onPress={this.authEmail}>
                                     <Text style={{color:'white', fontFamily:'Jalnan'}}>확인</Text>
                                 </TouchableOpacity>
                             </View>
@@ -189,9 +208,9 @@ class Find_idpw extends React.Component{
                         <TouchableOpacity style={{
                                 width: "100%",
                                 alignItems: "center",
-                                backgroundColor: this.state.button_color3,
+                                backgroundColor: '#f05052',
                                 paddingTop: 10,
-                                paddingBottom: 10,}} onPress={this.nextBtn} activeOpacity={this.state.use3 ? 0.5 : 1}>
+                                paddingBottom: 10,}} onPress={this.nextBtn}>
                             <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>다음</Text>
                         </TouchableOpacity>
                     </View>

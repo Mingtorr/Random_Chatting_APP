@@ -27,44 +27,45 @@ class Find_idpw2 extends React.Component{
         this.state={
             pw1: "",
             pw2: "",
-            pw1_check: false,
-            pw2_check: false,
 
-            button_color: "gray",
-            change_check: false
         };
     }
+
+    changeBtn = (e) => {
+        if (this.state.pw1.length === 0 || this.state.pw2.length === 0){
+            alert("비밀번호를 입력해주세요")
+        } else if (this.state.pw1 !== this.state.pw2) {
+        alert("비밀번호가 일치하지 않습니다.");
+        } else if (this.state.pw1 === this.state.pw2) {
+        
+            const user_info = {
+                user_id: this.props.route.params.user_id,
+                user_pw: this.state.pw1
+            };
+            console.log(user_info);
+
+            fetch("http://172.20.10.2:3001/Find_idpw2", {
+            method: 'post',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(user_info),
+            })
+            .then((res) => res.json())
+            .then((json) => {
+                if (json === true) {
+                this.props.navigation.navigate('Login')
+                } else {
+                alert("비밀번호 수정 실패")
+                }
+            });
+        }
+    };
 
     backBtn = (e) => {
         e.preventDefault();
         this.props.navigation.navigate('Find_idpw')
     };
-
-    input_pw1 = (e) => {
-        this.setState({
-            pw1: e,
-            pw1_check: true
-        });
-        
-        this.change_button_active()
-    }
-    input_pw2 = (e) => {
-        this.setState({
-            pw2: e,
-            pw2_check: true
-        });
-
-        this.change_button_active()
-    }
-
-    change_button_active = () => {
-        if(this.state.pw1_check && this.state.pw2_check){
-            this.setState({
-                button_color: "#f05052",
-                change_check: true
-            })
-        }
-    }
 
     render(){
         return(
@@ -88,7 +89,8 @@ class Find_idpw2 extends React.Component{
                         <Text style={styles.Text_idpw_text}>비밀번호</Text>
                         <View style={styles.idpw2_2}>
                             <View style={styles.Text_idpw}>
-                                <TextInput style={styles.Text_idpw_input} value={this.state.pw1} onChangeText={this.input_pw1}/>
+                                <TextInput style={styles.Text_idpw_input} value={this.state.pw1} secureTextEntry={true}
+                                onChangeText={(text) => this.setState({pw1: text})}/>
                             </View>
                         </View>
                     </View>
@@ -97,7 +99,8 @@ class Find_idpw2 extends React.Component{
                         <Text style={styles.Text_idpw_text}>비밀번호 확인</Text>
                         <View style={styles.idpw2_3}>
                             <View style={styles.Text_idpw}>
-                                <TextInput style={styles.Text_idpw_input} value={this.state.pw2} onChangeText={this.input_pw2}/>
+                                <TextInput style={styles.Text_idpw_input} value={this.state.pw2} secureTextEntry={true}
+                                onChangeText={(text) => this.setState({pw2: text})}/>
                             </View>
                         </View>
                     </View>
@@ -108,9 +111,9 @@ class Find_idpw2 extends React.Component{
                             style={{
                             width: "100%",
                             alignItems: "center",
-                            backgroundColor: this.state.button_color,
+                            backgroundColor: '#f05052',
                             paddingTop: 10,
-                            paddingBottom: 10}} onPress={this.change_alert} activeOpacity={this.state.change_check ? 0.5 : 1}>
+                            paddingBottom: 10}} onPress={this.changeBtn}>
                             <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>변경</Text>
                         </TouchableOpacity>
                     </View>

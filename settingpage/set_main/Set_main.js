@@ -1,7 +1,20 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, SafeAreaView, TouchableOpacity } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default class Set_main extends Component {
+  
+  logout = async ()=>{
+    // console.log(AsyncStorage.getItem('login_onoff'));
+    const keys = await AsyncStorage.getAllKeys();
+    AsyncStorage.removeItem('login_onoff', () => {
+      console.log('로그아웃'); // User1 출력
+      // console.log(AsyncStorage.getItem('login_onoff'));
+    this.props.navigation.navigate('Login')
+    });
+    
+
+  }
 
   go_Privacy =(e)=>{
     e.preventDefault();
@@ -31,6 +44,14 @@ export default class Set_main extends Component {
         </TouchableOpacity>
         <TouchableOpacity style = {styles.Box_set_main}>
           <Text style = {{fontFamily : 'Jalnan', marginLeft : 30}}>공지사항</Text>
+          <Text style = {{fontFamily : 'Jalnan', marginRight : 30, fontSize : 20}}>{'>'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style = {styles.Box_set_main} onPress={this.logout}>
+          <Text style = {{fontFamily : 'Jalnan', marginLeft : 30}}>로그아웃</Text>
+          <Text style = {{fontFamily : 'Jalnan', marginRight : 30, fontSize : 20}}>{'>'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style = {styles.Box_set_main}>
+          <Text style = {{fontFamily : 'Jalnan', marginLeft : 30}}>회원탈퇴</Text>
           <Text style = {{fontFamily : 'Jalnan', marginRight : 30, fontSize : 20}}>{'>'}</Text>
         </TouchableOpacity>
       </SafeAreaView>

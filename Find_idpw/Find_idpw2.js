@@ -19,7 +19,7 @@ import {
     Keyboard} from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { withNavigation } from 'react-navigation';
-
+const func = require('../server/api');
 
 class Find_idpw2 extends React.Component{
     constructor(props){
@@ -44,7 +44,7 @@ class Find_idpw2 extends React.Component{
             };
             console.log(user_info);
 
-            fetch("http://172.20.10.2:3001/Find_idpw2", {
+            fetch(func.api(3001,'Find_idpw2'), {
             method: 'post',
             headers: {
                 'content-type': 'application/json',

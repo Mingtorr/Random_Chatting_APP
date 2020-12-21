@@ -108,6 +108,7 @@ const func = require('../server/api');
   render(){
     return(
       <SafeAreaView style={styles.White_login}>
+        <KeyboardAwareScrollView>
           <View style={styles.bg1}>
             <View style={styles.Textbox_login2}>
               <Text style={styles.Intro_login}>창원대 매칭앱</Text>
@@ -182,6 +183,7 @@ const func = require('../server/api');
               <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>로그인</Text>
             </TouchableOpacity>
           </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     )
   }

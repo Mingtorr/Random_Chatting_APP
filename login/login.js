@@ -142,6 +142,7 @@ class Login extends React.Component {
                   style={styles.wrapper}
                   autoplay={true}
                   autoplayTimeout={3}
+                  showsPagination={false}
                   activeDot={
                     <View
                       style={{

@@ -168,7 +168,7 @@ export default class Main extends Component {
           </View>
           <View style={{flex: 0.7}}></View>
           <View>
-            <TouchableOpacity
+          <TouchableOpacity
               style={{
                 display: 'flex',
                 justifyContent: 'center',

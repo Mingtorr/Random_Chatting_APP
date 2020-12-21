@@ -22,88 +22,118 @@ import {
   KeyboardAvoidingView,
   Platform
 } from 'react-native';
+import io from "socket.io-client";
 import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
-const arr = [
-  {key:0,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
-  ,{key:1,name:'정영빈',message:'ㅋㅋㅋ',owner:false},
-  {key:2,name:'aaa',message:'ㅉㅉㅉㅈ',owner:true},
-  {key:3,name:'정영빈',message:'으어어어',owner:false},
-  {key:4,name:'정영빈',message:'이이이잉ㅇ',owner:false},
-  {key:5,name:'aaa',message:'나는나는',owner:true},
-  {key:6,name:'aaa',message:'너너너너',owner:true},
-  {key:7,name:'정영빈',message:'너너나나나나나',owner:false},
-  {key:8,name:'정영빈',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:false},
-  {key:9,name:'aaa',message:'퉁ㅁㄴㅇ',owner:true},
-  {key:10,name:'aaa',message:'ㅁㅁㅁ',owner:true}
-  ,{key:11,name:'aaa',message:'ㅋㅋㅋ',owner:true},
-  {key:12,name:'정영빈',message:'ㅉㅉㅉㅈ',owner:false},
-  {key:13,name:'정영빈',message:'으어어어',owner:false},
-  {key:14,name:'정영빈',message:'이이이잉ㅇ',owner:false},
-  {key:15,name:'aaa',message:'나는나는',owner:true},
-  {key:16,name:'정영빈',message:'너너너너',owner:false},
-  {key:17,name:'정영빈',message:'너너나나나나나',owner:false},
-  {key:18,name:'aaa',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:true},
-  {key:19,name:'정영빈',message:'퉁ㅁㄴㅇ',owner:false},
-  {key:20,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
-  ,{key:21,name:'aaa',message:'ㅋㅋㅋ',owner:true},
-  {key:22,name:'정영빈',message:'ㅉㅉㅉㅈ',owner:false},
-  {key:23,name:'정영빈',message:'으어어어',owner:false},
-  {key:24,name:'정영빈',message:'이이이잉ㅇ',owner:false},
-  {key:25,name:'aaa',message:'나는나는',owner:true},
-  {key:26,name:'정영빈',message:'너너너너',owner:false},
-  {key:27,name:'aaa',message:'너너나나나나나',owner:true},
-  {key:28,name:'정영빈',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:false},
-  {key:29,name:'정영빈',message:'퉁ㅁㄴㅇ',owner:false},
-  {key:30,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
-  ,{key:31,name:'정영빈',message:'ㅋㅋㅋ',owner:false},
-  {key:32,name:'aaa',message:'ㅉㅉㅉㅈ',owner:true},
-  {key:33,name:'aaa',message:'으어어어',owner:true},
-  {key:34,name:'정영빈',message:'이이이잉ㅇ',owner:false},
-  {key:35,name:'정영빈',message:'나는나는',owner:false},
-  {key:36,name:'정영빈',message:'너너너너',owner:false},
-  {key:37,name:'aaa',message:'너너나나나나나',owner:true},
-  {key:38,name:'aaa',message:'ㅋㅋㅋㅋㅋㅋㅋㅋ',owner:true},
-  {key:39,name:'aaa',message:'퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ v v 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ v v 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ 퉁ㅁㄴㅇ',owner:true},
-  {key:40,name:'정영빈',message:'ㅁㅁㅁ',owner:false}
 
-]
+const socket = io("http://172.20.10.2:3001");
+
+
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
 export default class Login extends React.Component{
   constructor(props){
     super(props);
     this.scrollViewRef = React.createRef();
     this.state={
-      name1: "",
+      userkey: 1,
+      name2:'',
       pass: "",
       start:0,
       page:1,
       refresh:false,
       lastownername:false,
+      arr : [],
+      text:'',
       id:'aaa'
     }
   }
   componentDidMount(){
-    this.setState({
-      start:arr.length-20
+    console.log(this.state.start+"tltltltllqkfkqfkqkfqkfkqfk");
+    const data = {
+      userkey:this.state.userkey,
+
+    }
+    fetch("http://172.20.10.2:3001/showmessage", {
+    method: "post",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then(res=>res.json()).then((json)=>{
+    json.map((value,index)=>{
+      console.log(value);
+      const row = {
+        key : value.message_key,
+        name : '정영빈',
+        message : value.message_body,
+        owner:false
+      }
+      this.setState({
+        arr:[...this.state.arr,row],
+      })
+      if(this.state.arr.length >20){
+        this.setState({
+          start:this.state.arr.length-20
+        },this.scrolltobottom())
+      }else{
+        this.setState({
+          start:0
+        },this.scrolltobottom())
+      }
     })
-    this.scrolltobottom();
-    console.log('zzzzzzzzzzzzzz'+arr.length);
+  });
+    if(this.state.arr.length>20){
+      this.setState({
+        start:this.state.arr.length-20
+      })
+    }
+    
+    console.log('zzzzzzzzzzzzzz'+this.state.arr.length);
     console.log(this.state.page);
+    socket.on('recieve_message',(message)=>{
+      console.log("메시지"+message);
+      this.setState({
+        arr:[...this.state.arr,message]
+      })
+      this.scrolltobottom();
+    })
+}
+sendmessage=()=>{
+  console.log("시발");
+  const data = {
+    roomid:3,
+    userkey:this.state.userkey,
+    message:this.state.text,
+  }
+  fetch("http://172.20.10.2:3001/save_message", {
+    method: "post",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then();
+  socket.emit("onclick_message",this.state.text);
+  this.setState({
+    text:''
+  })
+
+   //메시지 보냄
 }
 scrolltobottom=()=>{
     setTimeout(()=>{
+      if ((this.scrollViewRef !== null) && (this.scrollViewRef.current !== null)){
         this.scrollViewRef.current.scrollToEnd({animated: false});
-    },300)
+    }
+    },400)
 }
 scrolltomessage=()=>{
-  console.log('arr크기'+(arr.length-this.state.start));
+  console.log('arr크기'+(this.state.arr.length-this.state.start));
   setTimeout(()=>{
-    if(arr.length-this.state.start<20){
+    if(this.state.arr.length-this.state.start<20){
     }else{
       this.scrollViewRef.current.scrollToIndex({animated: false,index:19});
     }
-  },300)
+  },400)
 }
 func=()=>{
   if(this.state.start<19){
@@ -129,6 +159,12 @@ func=()=>{
     })
   }
 }
+message_onchange=(e)=>{
+  this.setState({
+    text:e
+  })
+  console.log(this.state.text);
+}
 wholastmessage=()=>{
   this.setState({
     lastownername:true
@@ -150,7 +186,8 @@ rendermessage=({item,index})=>{
         return(<Yourmessage message={item.message} pre={false}/>)
       }
     }else{
-      if(arr[this.state.start+index-1].name === item.name)
+      
+      if(this.state.arr[this.state.start+index-1].name === item.name)
       {
         if(this.state.id === item.name){
           console.log('3번'+item.message);
@@ -168,9 +205,13 @@ rendermessage=({item,index})=>{
           return(<Yourmessage message={item.message} pre={false}/>)
         }
       }
+      console.log(this.state.start);
+      console.log(index);
+      console.log(this.state.arr[1]);
     } 
 }
 }
+
   render(){
     return(
           <SafeAreaView style={styles.message_safe}>
@@ -188,15 +229,15 @@ rendermessage=({item,index})=>{
                   keyExtractor={item => item.key.toString()}
                   refreshing={this.state.refresh}
                   onRefresh={this.func}
-                  data={arr.slice(this.state.start,arr.length)}//여기서
+                  data={this.state.arr.slice(this.state.start,this.state.arr.length)}//여기서
                   renderItem={this.rendermessage}
                   />
               </View>
               <View  style={{display:"flex",flex:0.06,backgroundColor:'white',flexDirection:'row',justifyContent:'center',marginBottom:10}}>
               
-                <TextInput onTouchStart={this.scrolltobottom} style={{display:'flex',height:30,width:300,marginTop:5,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10}} on/>
+                <TextInput value={this.state.text} id="text" name="text" onChangeText={this.message_onchange} onTouchStart={this.scrolltobottom} style={{display:'flex',height:30,width:300,marginTop:5,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10}} on/>
    
-                <TouchableOpacity style={{display:'flex',marginTop:5,marginLeft:20}}>
+                <TouchableOpacity style={{display:'flex',marginTop:5,marginLeft:20}} onPress={this.sendmessage}>
                   <Image style={{width:35,height:35}} source={require('./sendmessage.png')}/>
                 </TouchableOpacity>
               </View>

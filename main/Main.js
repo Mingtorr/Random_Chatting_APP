@@ -173,8 +173,7 @@ export default class Main extends Component {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-              }}
-              onPress={this.change}>
+              }} onPress={this.change}>
               <Text
                 style={{
                   fontFamily: 'Jalnan',

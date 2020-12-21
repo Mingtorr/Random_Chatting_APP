@@ -29,7 +29,7 @@ import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } f
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { getBottomSpace } from "react-native-iphone-x-helper";
-
+const func = require('../server/api');
 
  class Sign_up extends React.Component{
   constructor(props){
@@ -74,7 +74,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
       nickname: this.state.nickname,
       email: this.state.email,
     };
-    fetch("http://172.20.10.2:3001/Signup", {
+    fetch(func.api(3001,'Signup'), {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -109,7 +109,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
         sendEmail: this.state.email,
       };
       console.log(email);
-      fetch("http://172.20.10.2:3001/Sendmail", {
+      fetch(func.api(3001,'Sendmail'), {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -170,7 +170,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
       const checkId = {
         id: this.state.id,
       };
-      fetch("http://172.20.10.2:3001/CheckId", {
+      fetch(func.api(3001,'CheckId'), {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -212,7 +212,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
       const Nickname = {
         nickname: this.state.nickname,
       };
-      fetch("http://172.20.10.2:3001/CheckNickname", {
+      fetch(func.api(3001,'CheckNickname'), {
         method: "post",
         header: {
           "content-type": "application/json",
@@ -257,7 +257,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
         passwd: this.state.passwd2,
         email: this.state.email,
       };
-      fetch("http://172.20.10.2:3001/Signup", {
+      fetch(func.api(3001,'Signup'), {
         method: "post",
         headers: {
           "content-type": "application/json",

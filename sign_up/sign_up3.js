@@ -23,7 +23,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+const func = require('../server/api');
  class Sign_up3 extends React.Component{
   constructor(props){
     super(props);
@@ -60,7 +60,7 @@ import { createStackNavigator } from '@react-navigation/stack';
       name: this.state.name1,
       pass: this.state.pass,
     };
-    fetch("http://192.168.200.193:3001/api/login", {
+    fetch(func.api(3001,'api/login'), {
       method: "post",
       headers: {
         "content-type": "application/json",

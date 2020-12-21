@@ -13,7 +13,7 @@ var http = require("http").createServer(app);
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "snsk3779@",
   database: "mydb",
 });
 
@@ -46,6 +46,7 @@ app.post("/Signup", async function (req, res, next) {
     .createHash("sha512")
     .update(inputPassword + salt)
     .digest("hex");
+    console.log(req.body);
   connection.query("INSERT INTO user_table (user_id, user_salt, user_passwd, user_sex, user_nickname, user_email) values (?,?,?,?,?,?)", 
                     [body.id, salt, hashPassword, body.sex, body.nickname, body.email], function (err, rows, fields) {
     if (err) {

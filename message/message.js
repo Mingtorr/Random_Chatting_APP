@@ -25,7 +25,7 @@ import {
 import io from "socket.io-client";
 import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
-
+const func = require('../server/api');
 const socket = io("http://172.20.10.2:3001");
 
 
@@ -53,7 +53,7 @@ export default class Login extends React.Component{
       userkey:this.state.userkey,
 
     }
-    fetch("http://172.20.10.2:3001/showmessage", {
+    fetch(func.api(3001,'showmessage'), {
     method: "post",
     headers: {
       "content-type": "application/json",
@@ -105,7 +105,7 @@ sendmessage=()=>{
     userkey:this.state.userkey,
     message:this.state.text,
   }
-  fetch("http://172.20.10.2:3001/save_message", {
+  fetch(func.api(3001,'save_message'), {
     method: "post",
     headers: {
       "content-type": "application/json",

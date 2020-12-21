@@ -38,6 +38,7 @@ import {
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {getBottomSpace} from 'react-native-iphone-x-helper';
+const func = require('../server/api');
 
 class Sign_up2 extends React.Component {
   constructor(props) {
@@ -55,7 +56,8 @@ class Sign_up2 extends React.Component {
       user_id: this.props.route.params.user_id
     };
     console.log(post);
-    fetch("http://172.20.10.2:3001/Signup2", {
+    
+    fetch(func.api(3001,'Signup2'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',

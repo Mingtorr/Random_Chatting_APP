@@ -17,7 +17,7 @@ import {
   Button,
   TextInput
 } from 'react-native';
-
+const func = require('../server/api');
 
 export default class Login extends React.Component{
   constructor(props){
@@ -46,7 +46,7 @@ export default class Login extends React.Component{
       name: this.state.name1,
       pass: this.state.pass,
     };
-    fetch("http://192.168.200.193:3001/api/login", {
+    fetch(func.api(3001,login), {
       method: "post",
       headers: {
         "content-type": "application/json",

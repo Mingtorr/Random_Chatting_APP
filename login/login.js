@@ -21,6 +21,7 @@ import {
 import { withNavigation } from 'react-navigation';
 import Swiper from 'react-native-swiper'
 import AsyncStorage from '@react-native-community/async-storage'
+const func = require('../server/api');
 
  class Login extends React.Component{
   constructor(props){
@@ -32,6 +33,7 @@ import AsyncStorage from '@react-native-community/async-storage'
     }
   }
   componentWillMount(){
+    console.log(func.api(3001,'login'));
     AsyncStorage.getItem('login_onoff', (err, result) => {
       const user_info = JSON.parse(result)
 
@@ -62,7 +64,7 @@ import AsyncStorage from '@react-native-community/async-storage'
       passwd: this.state.pass,
     };
     console.log(post);
-    fetch("http://172.20.10.2:3001/login", {
+    fetch(func.api(3001,'login'), {
       method: "post",
       headers: {
         "content-type": "application/json",

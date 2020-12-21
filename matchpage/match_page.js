@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import Solo_match from './solomatch';
-import Group_match from './group_match';
+import Group_match from './groupmatch';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
@@ -25,7 +25,8 @@ export default class match_page extends React.Component{
       chatting:'채팅권추가',
       title:'만들수 있는 채팅 수',
       change:'과팅',
-      isEnabled:false
+      isEnabled:false,
+      div:<Solo_match/>
     }
   }
   toggleSwitch=()=>{
@@ -45,7 +46,8 @@ export default class match_page extends React.Component{
         click:true,
         chatting:'과팅권추가',
         title:'만들수 있는 과팅 수',
-        change:'1 : 1'
+        change:'1 : 1',
+        div:<Group_match/>
       })
       Animated.timing(this.state.animatedValue, {
         duration: 1000,
@@ -57,7 +59,8 @@ export default class match_page extends React.Component{
         click:false,
         chatting:'채팅권추가',
       title:'만들수 있는 채팅 수',
-      change:'과팅'
+      change:'과팅',
+      div:<Solo_match/>
       })
       Animated.timing(this.state.animatedValue, {
         duration: 1000,
@@ -86,7 +89,7 @@ export default class match_page extends React.Component{
                 </View>
                 <View style={{display:'flex',flex:0.45,flexDirection:'row'}}>
                   <View style={{display:'flex',flex:0.4,marginBottom:10,marginLeft:50,justifyContent:'center'}}>
-                    <TouchableOpacity  onPress={this.startAnimation}>
+                    <TouchableOpacity  onPress={this.startAnimation} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
                     <Text style={{fontSize:15,fontWeight:'bold',fontFamily:"Jalnan",color:'red'}}>{this.state.change}</Text>
                     </TouchableOpacity>
                   </View>
@@ -111,15 +114,15 @@ export default class match_page extends React.Component{
                     </View>
                     <View style={{display:'flex',flex:0.7,justifyContent:'center'}}>
                       <Text style={{fontSize:16,fontFamily:"Jalnan",fontWeight:'bold',color:'white',paddingBottom:4}}>부적절한 대화나 혐오성 발언은</Text>
-                      <Text style={{fontSize:16,fontFamily:"Jalnan",fontWeight:'bold',color:'white'}}>제제 대상이 될수 있습니다.</Text>
+                      <Text style={{fontSize:16,fontFamily:"Jalnan",fontWeight:'bold',color:'white'}}>제재 대상이 될 수 있습니다.</Text>
                     </View>
                   </View>
                   <View style={{display:'flex',flex:0.05,backgroundColor:'red'}}>
             
                   </View>
                 </View>
-                <View style={{display:'flex',flex:0.8,backgroundColor:'blue'}}>
-                <Solo_match/>
+                <View style={{display:'flex',flex:0.8}}>
+                  {this.state.div}
                 </View>
               </View>
             </SafeAreaView>

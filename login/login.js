@@ -33,7 +33,9 @@ import AsyncStorage from '@react-native-community/async-storage'
   }
   componentWillMount(){
     AsyncStorage.getItem('login_onoff', (err, result) => {
-      if(result === 'true'){
+      const user_info = JSON.parse(result)
+
+      if(user_info.login_set === 'true'){
         this.props.navigation.navigate('Main')
       }else{
         this.props.navigation.navigate('Login')
@@ -69,14 +71,23 @@ import AsyncStorage from '@react-native-community/async-storage'
     })
       .then((res) => res.json())
       .then((json) => {
-        if (json === false) {
-         alert("아이디 또는 비밀번호 틀림")
-        } else {
-          AsyncStorage.setItem('login_onoff','true', () => {
-            console.log('로그인 정보 저장')
-          });
+        if (json) {
+            AsyncStorage.setItem('login_onoff', 
+              JSON.stringify({'login_set': 'true', 
+                'user_key': json.user_key,
+                'user_id': json.user_id,
+                'user_sex': json.user_sex,
+                'user_email': json.user_email,
+                'user_deptno': json.user_deptno,
+                'user_stdno': json.user_stdno,
+                'user_nickname': json.user_nickname,
+              }), () => {
+              console.log('로그인 정보 저장')
 
-          this.props.navigation.navigate('Main')
+            this.props.navigation.navigate('Main')
+          })
+        } else {
+          alert("아이디 또는 비밀번호 틀림")
         }
       });
   }

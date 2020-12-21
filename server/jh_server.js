@@ -47,7 +47,7 @@ app.post("/Signup", async function (req, res, next) {
     .update(inputPassword + salt)
     .digest("hex");
   connection.query("INSERT INTO user_table (user_id, user_salt, user_passwd, user_sex, user_nickname, user_email) values (?,?,?,?,?,?)", 
-  [body.id, salt, hashPassword, body.sex, body.nickname, body.email], function (err, rows, fields) {
+                    [body.id, salt, hashPassword, body.sex, body.nickname, body.email], function (err, rows, fields) {
     if (err) {
       console.log("sign_up error");
       res.send(false);
@@ -76,7 +76,7 @@ app.post("/Signup2", async function (req, res, next) {
 //로그인 salt 적용
 app.post("/login", async function (req, res, next) {
   let body = req.body;
-  connection.query("SELECT user_key,user_id,user_salt,user_passwd FROM user_table WHERE user_id = (?)", [body.id], function (err, rows, fields) {
+  connection.query("SELECT user_key, user_id, user_salt,user_passwd FROM user_table WHERE user_id = (?)", [body.id], function (err, rows, fields) {
     if (rows === undefined || rows[0] === undefined) {
       res.send(false);
     } else {
@@ -88,10 +88,14 @@ app.post("/login", async function (req, res, next) {
         .createHash("sha512")
         .update(inputPassword + salt)
         .digest("hex");
+
       if (dbPassword === hashPassword) {
-        res.send(true);
+        connection.query("SELECT user_key, user_sex, user_email, user_deptno, user_stdno, user_nickname FROM user_table WHERE user_id = (?)", 
+                          [body.id], function(err, rows, fields) {
+          res.send(rows[0]);
+        })
       } else {
-        res.send(false);
+        console.log("로그인 에러");
       }
     }
   });
@@ -186,16 +190,20 @@ app.post("/Sendmail", (req, res) => {
     };
     
   connection.query("SELECT user_email FROM user_table WHERE user_email = (?)", [email], function (err, rows, fields) {
-    if (rows[0] === undefined) {
-      //중복된 메일 없음 메일 발송
-      console.log("발송");
-      mailSender.sendGmail(emailParam);
-      res.send(authNum.toString());
-    } else {
-      console.log("미발송");
-      //중복된 메일이 있음
-      res.send(true);
-    }
+    console.log("발송");
+    mailSender.sendGmail(emailParam);
+    res.send(authNum.toString());
+
+    // if (rows[0] === undefined) {
+    //   //중복된 메일 없음 메일 발송
+    //   console.log("발송");
+    //   mailSender.sendGmail(emailParam);
+    //   res.send(authNum.toString());
+    // } else {
+    //   console.log("미발송");
+    //   //중복된 메일이 있음
+    //   res.send(true);
+    // }
   });
 });
 

@@ -118,14 +118,20 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
       })
         .then((res) => res.json())
         .then((json) => {
-          if (json === true) {
-            alert("이미 가입된 메일입니다.");
-          } else {
-            alert("인증 메일이 전송되었습니다.");
+          alert("인증 메일이 전송되었습니다.");
             this.setState({
               authNum: json,
             });
-          }
+          
+
+          // if (json === true) {
+          //   alert("이미 가입된 메일입니다.");
+          // } else {
+          //   alert("인증 메일이 전송되었습니다.");
+          //   this.setState({
+          //     authNum: json,
+          //   });
+          // }
         });
     }
   };

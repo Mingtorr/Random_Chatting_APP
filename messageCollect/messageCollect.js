@@ -14,17 +14,41 @@ import {
 import FriendInbox from './friendInbox';
 import FriendsInbox from './friendsInbox';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import io from 'socket.io-client'
+
+const socket = io('192.168.123.254:3001');
 
 export default class messageCollect extends React.Component{
   constructor(props){
     super(props);
-    this.FriendInbox = React.createRef();
+    
     this.state={
       name1: "",
       pass: "",
       outButtonBool: true,
     }
   }
+
+  testOnClick = () => {
+    console.log('test');
+    const post = {
+      test: '들어갓',
+      test1: '들어갓2'
+    };
+    fetch('http://192.168.42.191:3001/Test',{
+      method: 'post',
+      headers:{
+        'content-type': 'application/json',
+      },
+      body:JSON.stringify(post),
+    })
+    .then((res) => res.json())
+    .then((json) => {
+      if(json.boolean){
+        alert('데이터 입력 성공')
+      }
+    });
+  };
 
   toggleOut = () =>{
     this.setState({
@@ -38,6 +62,7 @@ export default class messageCollect extends React.Component{
         <View style ={styles.messageHead}>
           <Text style ={{fontSize: 18, fontWeight: 'bold'}}>Message</Text>
           <TouchableOpacity
+            onLongPress = {this.testOnClick}
             onPress = {() => this.setState({
             outButtonBool: !this.state.outButtonBool}) }>
             <Text style ={{fontSize:15, fontWeight:'bold'}}>편집</Text>
@@ -57,10 +82,15 @@ function MessageTab(props) {
   return (
     <Tab.Navigator tabBarOptions =
       {{style: {backgroundColor: 'none' ,width:'100%', height:48, marginTop:-8}, 
-        tabStyle:{ width:100},
-        labelStyle: {fontSize: 18, fontWeight:'bold' },
-        activeTintColor: 'blue',
-        inactiveTintColor: 'black'
+        tabStyle:{ width:70},
+        labelStyle: {fontSize: 16, fontWeight:'bold' },
+        activeTintColor: '#eb6c63',
+        inactiveTintColor: '#bababa',
+        indicatorStyle:{
+          borderColor:'#eb6c63',
+          borderWidth: 2,
+          backgroundColor:'#eb6c63',
+        }
       }}>
       <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool}/>} />
       <Tab.Screen name="과팅" children= {() => <FriendsInbox />} />

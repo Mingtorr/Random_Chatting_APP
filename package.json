@@ -25,15 +25,9 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-<<<<<<< HEAD
-    "http-proxy-middleware": "^1.0.5",
-    "mysql": "^2.18.1",
-    "nodemailer": "^6.4.17",
-=======
     "http-proxy-middleware": "^1.0.6",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.16",
->>>>>>> master
     "react": "16.13.1",
     "react-native": "0.63.3",
     "react-native-check-box": "^2.1.7",

@@ -55,14 +55,12 @@ class Find_idpw extends React.Component{
         } else if(!this.check(re, this.state.email, "잘못된 형식의 이메일입니다.")){
           return;
         } else{
-          console.log(this.state.email);
           this.setState({
           sendEmailClick: true,
           });
           const email = {
             sendEmail: this.state.email,
           };
-          console.log(email);
           fetch(func.api(3001,'Sendmail2'), {
             method: "post",
             headers: {

@@ -79,11 +79,14 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
-    AsyncStorage.getItem('login_onoff', (err, result) => {
-      const user_info = JSON.parse(result)
-        console.log(result);
-    })
+    // AsyncStorage.getItem('login_user_info', (err, result) => {
+    //   const user_info = JSON.parse(result)
+    //     console.log(user_info);
+    // })
 
+    // AsyncStorage.getItem('login_onoff_set', (err, result) => {
+    //     console.log(result);
+    // })
   }
 
   _fadeIn() {
@@ -112,10 +115,10 @@ export default class Main extends Component {
   }
   find_dimesions(layout) {
     const {x, y, width, height} = layout;
-    console.log(x);
-    console.log(y);
-    console.log(width);
-    console.log(height);
+    // console.log(x);
+    // console.log(y);
+    // console.log(width);
+    // console.log(height);
     this.setState({
       animatedValue: new Animated.Value(height),
     });

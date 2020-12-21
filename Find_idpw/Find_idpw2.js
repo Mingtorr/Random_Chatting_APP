@@ -42,7 +42,6 @@ class Find_idpw2 extends React.Component{
                 user_id: this.props.route.params.user_id,
                 user_pw: this.state.pw1
             };
-            console.log(user_info);
 
             fetch(func.api(3001,'Find_idpw2'), {
             method: 'post',

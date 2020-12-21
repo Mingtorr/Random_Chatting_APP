@@ -19,8 +19,9 @@ import {
   Image,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import Swiper from 'react-native-swiper'
-import AsyncStorage from '@react-native-community/async-storage'
+import Swiper from 'react-native-swiper';
+import AsyncStorage from '@react-native-community/async-storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const func = require('../server/api');
 
  class Login extends React.Component{
@@ -28,16 +29,13 @@ const func = require('../server/api');
     super(props);
     this.state={
       name1: "",
-      pass: "",
-      login_onoff: false
+      pass: ""
     }
   }
   componentWillMount(){
-    console.log(func.api(3001,'login'));
-    AsyncStorage.getItem('login_onoff', (err, result) => {
-      const user_info = JSON.parse(result)
-
-      if(user_info.login_set === 'true'){
+    // console.log(func.api(3001,'login'));
+    AsyncStorage.getItem('login_onoff_set', (err, result) => {
+      if(result === 'true'){
         this.props.navigation.navigate('Main')
       }else{
         this.props.navigation.navigate('Login')
@@ -49,13 +47,13 @@ const func = require('../server/api');
     this.setState({
       name1: e,
     });
-    console.log(this.state.name1);
+    // console.log(this.state.name1);
   };
   handleName2 = (e) => {
     this.setState({
       pass: e,
     });
-    console.log(this.state.pass);
+    // console.log(this.state.pass);
   };
   
   onlogin=(e)=>{
@@ -63,7 +61,7 @@ const func = require('../server/api');
       id: this.state.name1,
       passwd: this.state.pass,
     };
-    console.log(post);
+
     fetch(func.api(3001,'login'), {
       method: "post",
       headers: {
@@ -74,8 +72,10 @@ const func = require('../server/api');
       .then((res) => res.json())
       .then((json) => {
         if (json) {
-            AsyncStorage.setItem('login_onoff', 
-              JSON.stringify({'login_set': 'true', 
+          AsyncStorage.setItem('login_onoff_set', 'true', () => {
+            AsyncStorage.setItem('login_user_info', 
+              JSON.stringify({
+                'login_set': 'true',
                 'user_key': json.user_key,
                 'user_id': json.user_id,
                 'user_sex': json.user_sex,
@@ -84,10 +84,11 @@ const func = require('../server/api');
                 'user_stdno': json.user_stdno,
                 'user_nickname': json.user_nickname,
               }), () => {
-              console.log('로그인 정보 저장')
+              // console.log('로그인 정보 저장')
 
-            this.props.navigation.navigate('Main')
-          })
+              this.props.navigation.navigate('Main')
+            })
+          });
         } else {
           alert("아이디 또는 비밀번호 틀림")
         }

@@ -7,13 +7,12 @@ export default class Set_main extends Component {
   logout = async ()=>{
     // console.log(AsyncStorage.getItem('login_onoff'));
     const keys = await AsyncStorage.getAllKeys();
-    AsyncStorage.removeItem('login_onoff', () => {
+    console.log(keys);
+    AsyncStorage.removeItem('login_onoff_set', () => {
       console.log('로그아웃'); // User1 출력
       // console.log(AsyncStorage.getItem('login_onoff'));
     this.props.navigation.navigate('Login')
     });
-    
-
   }
 
   go_Privacy =(e)=>{

@@ -1,9 +1,11 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
-module.exports = function(app) {
+// const { createProxyMiddleware } = require('http-proxy-middleware');
+// const createProxyMiddleware = require("h78\/ttp-proxy-middleware");
+const createProxyMiddleware = require("h78\/ttp-proxy-middleware");
+
+module.exports = function (app) {
   app.use(
-    '/api',
-    createProxyMiddleware({
-      target: 'http://192.168.200.193:3001',
+    createProxyMiddleware("/api", {
+      target: "http://192.168.43.161:3001/",
       changeOrigin: true,
     })
   );

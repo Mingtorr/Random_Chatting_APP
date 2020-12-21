@@ -2,6 +2,7 @@
   "name": "wagleapp",
   "version": "0.0.1",
   "private": true,
+  "proxy": "http://192.168.43.161:3001",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -24,6 +25,7 @@
     "@react-navigation/stack": "^5.9.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.6",
     "mysql": "^2.18.1",
@@ -32,6 +34,7 @@
     "react-native": "0.63.3",
     "react-native-check-box": "^2.1.7",
     "react-native-dropdown-picker": "^3.7.1",
+    "react-native-flipper": "^0.67.0",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-iphone-x-helper": "^1.3.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",

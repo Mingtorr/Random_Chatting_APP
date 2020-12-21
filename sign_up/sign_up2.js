@@ -56,7 +56,8 @@ class Sign_up2 extends React.Component {
       user_id: this.props.route.params.user_id
     };
     console.log(post);
-    ("http://172.20.10.2:3001/Signup2", {
+    
+    fetch(func.api(3001,'Signup2'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',

@@ -26,8 +26,8 @@ import io from "socket.io-client";
 import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
 const func = require('../server/api');
-const socket = io("http://172.20.10.2:3001");
-
+const socket = io(func.api(3004,''));
+import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
 export default class Login extends React.Component{
@@ -35,7 +35,7 @@ export default class Login extends React.Component{
     super(props);
     this.scrollViewRef = React.createRef();
     this.state={
-      userkey: 1,
+      userkey: '',
       name2:'',
       pass: "",
       start:0,
@@ -48,10 +48,14 @@ export default class Login extends React.Component{
     }
   }
   componentDidMount(){
-    console.log(this.state.start+"tltltltllqkfkqfkqkfqkfkqfk");
+    AsyncStorage.getItem('login_user_info', (err, result) => {
+      console.log(JSON.parse(result).user_key);
+      this.setState({
+        userkey:JSON.parse(result).user_key
+      })
+    });
     const data = {
       userkey:this.state.userkey,
-
     }
     fetch(func.api(3001,'showmessage'), {
     method: "post",

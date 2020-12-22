@@ -37,8 +37,7 @@ app.post("/save_message", (req, res) => {
   });
   app.post("/showmessage", (req, res) => {
     console.log(req.body);
-    const roomname = 'room1';
-    connection.query('SELECT * FROM messageRoom_table,message_table WHERE messageRoom_table.room_id = message_table.room_id and messageRoom_table.room_name = ? and message_table.user_key = ?;',[roomname,req.body.userkey],function(err,rows,field){
+    connection.query('SELECT * FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time;',[req.body.roomid],function(err,rows,field){
         if(err){
             console.log(err);
         }else{
@@ -49,10 +48,11 @@ app.post("/save_message", (req, res) => {
   });
 io.on("connection",function(socket){
     console.log("asdasdasd");
-    socket.on('onclick_message',(message)=>{
-        console.log(message);
-        const data = {key:2,name:'정영빈',message:message,owner:false}
-        io.emit('recieve_message',data);
+    socket.on('onclick_message',(data)=>{
+        const index = 1
+        console.log(data);
+        const messagedata = {key:index,name:data.name,message:data.message}
+        io.emit('recieve_message',messagedata);
     })
 })
 

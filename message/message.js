@@ -36,6 +36,7 @@ export default class Login extends React.Component{
     this.scrollViewRef = React.createRef();
     this.state={
       userkey: '',
+      myname:'',
       name2:'',
       pass: "",
       start:0,
@@ -51,26 +52,28 @@ export default class Login extends React.Component{
     AsyncStorage.getItem('login_user_info', (err, result) => {
       console.log(JSON.parse(result).user_key);
       this.setState({
-        userkey:JSON.parse(result).user_key
+        userkey:JSON.parse(result).user_key,
+        myname:JSON.parse(result).user_nickname
       })
     });
     const data = {
-      userkey:this.state.userkey,
+      roomid:1,//roomid
     }
-    fetch(func.api(3001,'showmessage'), {
+    
+   fetch(func.api(3004,'showmessage'), {
     method: "post",
     headers: {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
   }).then(res=>res.json()).then((json)=>{
+    console.log('이거를 보시오'+json);
     json.map((value,index)=>{
       console.log(value);
       const row = {
         key : value.message_key,
-        name : '정영빈',
+        name : value.user_nickname,
         message : value.message_body,
-        owner:false
       }
       this.setState({
         arr:[...this.state.arr,row],
@@ -94,10 +97,10 @@ export default class Login extends React.Component{
     
     console.log('zzzzzzzzzzzzzz'+this.state.arr.length);
     console.log(this.state.page);
-    socket.on('recieve_message',(message)=>{
-      console.log("메시지"+message);
+    socket.on('recieve_message',(data)=>{
+      console.log("받은데이터"+data);
       this.setState({
-        arr:[...this.state.arr,message]
+        arr:[...this.state.arr,data]
       })
       this.scrolltobottom();
     })
@@ -105,18 +108,19 @@ export default class Login extends React.Component{
 sendmessage=()=>{
   console.log("시발");
   const data = {
-    roomid:3,
+    roomid:1, //룸아이디 입력
+    name:this.state.myname,
     userkey:this.state.userkey,
     message:this.state.text,
   }
-  fetch(func.api(3001,'save_message'), {
+  fetch(func.api(3004,'save_message'), {
     method: "post",
     headers: {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
   }).then();
-  socket.emit("onclick_message",this.state.text);
+  socket.emit("onclick_message",data);
   this.setState({
     text:''
   })
@@ -182,31 +186,31 @@ wholastmessage2=()=>{
 rendermessage=({item,index})=>{
   {
     if(index===0){ 
-      if(this.state.id === item.name){
+      if(this.state.myname === item.name){
         console.log('5번'+item.message);
         return(<Mymessage message={item.message}/>)
       }else{
         console.log('4번'+item.message);
-        return(<Yourmessage message={item.message} pre={false}/>)
+        return(<Yourmessage message={item.message} name={item.name} pre={false}/>)
       }
     }else{
       
       if(this.state.arr[this.state.start+index-1].name === item.name)
       {
-        if(this.state.id === item.name){
+        if(this.state.myname === item.name){
           console.log('3번'+item.message);
           return( <Mymessage message={item.message}/>)
         }else{
           console.log('2번'+item.name+item.message);
-          return(<Yourmessage message={item.message} pre={true}/>)
+          return(<Yourmessage message={item.message} name={item.name} pre={true}/>)
         }
       }
       else{
         console.log('1번'+item.message);
-        if(this.state.id === item.name){
+        if(this.state.myname === item.name){
           return(<Mymessage message={item.message}/>)
         }else{
-          return(<Yourmessage message={item.message} pre={false}/>)
+          return(<Yourmessage message={item.message} name={item.name} pre={false}/>)
         }
       }
       console.log(this.state.start);

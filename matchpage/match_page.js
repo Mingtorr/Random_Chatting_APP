@@ -61,7 +61,7 @@ export default class match_page extends React.Component{
         chatting:'과팅권 추가',
         buttonColor1:'gray',
         buttonColor2:'#E94e68',
-        title:'만들수 있는 과팅 수',
+        title:'내 채팅방권 개수',
         change:'오픈채팅', 
         div:<Group_match/>
       })

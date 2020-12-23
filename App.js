@@ -148,11 +148,6 @@ export default class App extends React.Component {
                 options={{headerShown: false}}
               />
               <Stack.Screen
-                name="MessageCollect"
-                component={MessageCollect}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
                 name="FriendInbox"
                 component={FriendInbox}
                 options={{headerShown: false}}

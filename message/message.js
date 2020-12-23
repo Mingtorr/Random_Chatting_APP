@@ -28,7 +28,6 @@ import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
 const func = require('../server/api');
 const socket = io(func.api(3004,''));
-import {withNavigation} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0

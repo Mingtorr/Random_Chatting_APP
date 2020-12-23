@@ -13,12 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
-<<<<<<< HEAD
-import Message from '../message/message'
-=======
-import {withNavigation} from 'react-navigation';
 
->>>>>>> 35dfa0709cc450f24e62cf9aeff5b7194a972d07
 const func = require('../server/api');
 
 export default class FriendInbox extends React.Component {
@@ -216,14 +211,8 @@ export default class FriendInbox extends React.Component {
           : info
       )
     })
-<<<<<<< HEAD
-    alert()
-    alert(itemId+"클릭"+ data[itemId-1].isNewChatNum)
-    // this.props.navigation.navigate('Message', {movie:'123123'});
-=======
     
     this.props.go.navigate('Message',{roomid: itemId})
->>>>>>> 35dfa0709cc450f24e62cf9aeff5b7194a972d07
   }
 
   deleteChek = () =>{

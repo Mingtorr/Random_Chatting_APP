@@ -22,6 +22,7 @@ import {
   KeyboardAvoidingView,
   Platform
 } from 'react-native';
+import {withNavigation} from 'react-navigation';
 import io from "socket.io-client";
 import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
@@ -30,7 +31,7 @@ const socket = io(func.api(3004,''));
 import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
-export default class Login extends React.Component{
+class Message extends React.Component{
   constructor(props){
     super(props);
     this.scrollViewRef = React.createRef();
@@ -277,3 +278,4 @@ const styles = StyleSheet.create({
     }
 });
 
+export default withNavigation(Message);

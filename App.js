@@ -38,6 +38,7 @@ import {
   Button,
   TextInput,
 } from 'react-native';
+import FriendInbox from './messageCollect/friendInbox';
 
 // const Anisplash = Splash.animate({opacity: "1"}, 500)
 const Stack = createStackNavigator();
@@ -122,6 +123,16 @@ export default class App extends React.Component {
                 component={Message}
                 options={{headerShown: false}}
               />
+              <Stack.Screen
+                name="MessageCollect"
+                component={MessageCollect}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="FriendInbox"
+                component={FriendInbox}
+                options={{headerShown: false}}
+              />
 
               <Stack.Screen
                 name="Find_idpw"
@@ -172,7 +183,7 @@ function Bottom() {
       {/* 메세지함 */}
       <Tab.Screen name="MessageCollect" component={MessageCollect} />
       {/* 알림  나중에 알람넣어요*/}
-      <Tab.Screen name="알림" component={Message} />
+      {/* <Tab.Screen name="알림" component={Message} /> */}
       {/* 설정 */}
       <Tab.Screen name="Setting" component={Setmain} />
     </Tab.Navigator>

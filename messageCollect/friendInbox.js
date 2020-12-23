@@ -13,6 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
+import Message from '../message/message'
 const func = require('../server/api');
 
 export default class FriendInbox extends React.Component {
@@ -151,6 +152,7 @@ export default class FriendInbox extends React.Component {
   }
 
   componentDidMount(){
+
   }
 
   isChecked = (itemId) => {
@@ -208,7 +210,9 @@ export default class FriendInbox extends React.Component {
           : info
       )
     })
+    alert()
     alert(itemId+"클릭"+ data[itemId-1].isNewChatNum)
+    // this.props.navigation.navigate('Message', {movie:'123123'});
   }
 
   deleteChek = () =>{

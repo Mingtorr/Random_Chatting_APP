@@ -13,7 +13,7 @@ const route = require("./routes/indexswy");
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "snsk3779@",
+  password: "root",
   database: "mydb",
 });
 

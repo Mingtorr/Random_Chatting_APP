@@ -28,6 +28,7 @@ import Set_privacy from './settingpage/set_privacy/Set_privacy';
 import Set_alarm from './settingpage/set_alarm/Set_alarm';
 import {fcmService} from './push/FCMService';
 import {localNotificationService} from './push/LocalNotificationService';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   SafeAreaView,
   StyleSheet,
@@ -45,7 +46,26 @@ export default class App extends React.Component {
   state = {
     isLoading: false, //false면 스플래시
     isLogin: false, // 로그인하면 true로 변경
+    fisrt_name: 'Login',
+    fisrt_components: Login,
+    second_name: 'Main',
+    second_components: Bottom,
   };
+
+  componentWillMount() {
+    // console.log(func.api(3001,'login'));
+    AsyncStorage.getItem('login_onoff_set', (err, result) => {
+      if (result === 'true') {
+        this.setState({
+          fisrt_name: 'Main',
+          fisrt_components: Bottom,
+          second_name: 'Login',
+          second_components: Login,
+        });
+      }
+    });
+  }
+
   componentDidMount = async () => {
     setTimeout(() => {
       this.setState({isLoading: true});
@@ -91,13 +111,13 @@ export default class App extends React.Component {
           {this.state.isLoading ? (
             <>
               <Stack.Screen
-                name="Login"
-                component={Login}
+                name={this.state.fisrt_name}
+                component={this.state.fisrt_components}
                 options={{headerShown: false}}
               />
               <Stack.Screen
-                name="Main"
-                component={Bottom}
+                name={this.state.second_name}
+                component={this.state.second_components}
                 options={{headerShown: false}}
               />
               <Stack.Screen

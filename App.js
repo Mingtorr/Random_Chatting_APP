@@ -116,7 +116,11 @@ export default class App extends React.Component {
                 component={Signup3}
                 options={{headerShown: false}}
               />
-
+              <Stack.Screen
+                name="MessageCollect"
+                component={MessageCollect}
+                options={{headerShown: false}}
+              />
               <Stack.Screen
                 name="Message"
                 component={Message}

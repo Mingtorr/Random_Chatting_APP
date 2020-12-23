@@ -14,6 +14,7 @@ import {
 import FriendInbox from './friendInbox';
 import FriendsInbox from './friendsInbox';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client'
 
 const socket = io('192.168.123.254:3001');
@@ -55,11 +56,14 @@ export default class messageCollect extends React.Component{
       outButtonBool: !this.state.outButtonBool
     });
   }
-
+  gomessage = () =>{
+    this.props.navigation.navigate('Login');
+  }
   render(){
     return(
       <SafeAreaView style = {styles.container}>
         <View style ={styles.messageHead}>
+          <Button title="asdasd" onPress={this.gomessage}/>
           <Text style ={{fontSize: 18, fontWeight: 'bold'}}>Message</Text>
           <TouchableOpacity
             onLongPress = {this.testOnClick}
@@ -69,7 +73,7 @@ export default class messageCollect extends React.Component{
           </TouchableOpacity>
         </View>
         <View style = {styles.collectBody}>
-          <MessageTab outButtonBool = {this.state.outButtonBool}/>
+          <MessageTab outButtonBool = {this.state.outButtonBool} go = {this.props.navigation}/>
         </View>
       </SafeAreaView>
     )
@@ -92,7 +96,7 @@ function MessageTab(props) {
           backgroundColor:'#eb6c63',
         }
       }}>
-      <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool}/>} />
+      <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool} go={props.go}/>}/>
       <Tab.Screen name="과팅" children= {() => <FriendsInbox />} />
     </Tab.Navigator>
   );

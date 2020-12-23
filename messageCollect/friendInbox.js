@@ -13,9 +13,12 @@ import {
   Alert,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
+import {withNavigation} from 'react-navigation';
+
 const func = require('../server/api');
 
 export default class FriendInbox extends React.Component {
+  
   constructor(props){
     super(props);
     const today = new Date();
@@ -208,7 +211,8 @@ export default class FriendInbox extends React.Component {
           : info
       )
     })
-    alert(itemId+"클릭"+ data[itemId-1].isNewChatNum)
+    
+    this.props.go.navigate('Message',{roomid: itemId})
   }
 
   deleteChek = () =>{
@@ -263,6 +267,7 @@ export default class FriendInbox extends React.Component {
     )
   }
   render(){
+    
     return (
       <SafeAreaView style={styles.container}>
         {/* <Button title = '나가기' onPress = {this.deleteChek}></Button> */}

@@ -27,10 +27,11 @@ import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
 const func = require('../server/api');
 const socket = io(func.api(3004,''));
+import {withNavigation} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
-export default class Login extends React.Component{
+ class Message extends React.Component{
   constructor(props){
     super(props);
     this.scrollViewRef = React.createRef();
@@ -57,7 +58,7 @@ export default class Login extends React.Component{
       })
     });
     const data = {
-      roomid:1,//roomid
+      roomid:this.props.route.params.roomid,//roomid
     }
     
    fetch(func.api(3004,'showmessage'), {
@@ -108,7 +109,7 @@ export default class Login extends React.Component{
 sendmessage=()=>{
   console.log("시발");
   const data = {
-    roomid:1, //룸아이디 입력
+    roomid:this.props.route.params.roomid, //룸아이디 입력
     name:this.state.myname,
     userkey:this.state.userkey,
     message:this.state.text,
@@ -219,10 +220,13 @@ rendermessage=({item,index})=>{
     } 
 }
 }
-
+go = () =>{
+  console.log(this.props.route.params.roomid);
+}
   render(){
     return(
           <SafeAreaView style={styles.message_safe}>
+            <Button title="asdasd" onPress={this.go}/>
             <KeyboardAvoidingView style={styles.message_safe} behavior='padding' onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
               <View style={styles.message_top} >
                 <View style={{display:'flex',flex:0.5,flexDirection:"row"}}>
@@ -277,3 +281,4 @@ const styles = StyleSheet.create({
     }
 });
 
+export default withNavigation(Message)

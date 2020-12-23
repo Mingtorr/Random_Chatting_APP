@@ -29,6 +29,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import RadioForm from 'react-native-simple-radio-button';
 import RNPickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import LinearGradient from 'react-native-linear-gradient';
 const { windowHidth, windowHeight } = Dimensions.get("window");
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 150 : 0
 export default class Solo_match extends React.Component{
@@ -70,11 +71,11 @@ export default class Solo_match extends React.Component{
                 <View style={{display:'flex',flex:0.7}}>
                     <View style={{display:'flex',flex:0.25,flexDirection:'row'}}>
                         <View style={{display:'flex',flex:0.7,justifyContent:'center',marginLeft:40}}>
-                        <Text style={{fontSize:18,fontWeight:'bold',fontFamily:"Jalnan"}}>이성에게 보내기</Text>
+                        <Text style={{fontSize:18,fontWeight:'bold'}}>이성에게만</Text>
                         </View>
                         <View style={{display:'flex',flex:0.3,justifyContent:'center'}}>
                             <Switch
-                            trackColor={{ false: "white", true: "red" }}
+                            trackColor={{ false: "white", true: "#eb6c63" }}
                             thumbColor={this.state.isEnabled ? "white" : "white"}
                             ios_backgroundColor="#white"
                             onValueChange={this.toggleSwitch}
@@ -85,11 +86,11 @@ export default class Solo_match extends React.Component{
                     </View>
                     <View style={{display:'flex',flex:0.25,flexDirection:'row'}}>
                         <View style={{display:'flex',flex:0.7,justifyContent:'center',marginLeft:40}}>
-                            <Text style={{fontSize:18,fontWeight:'bold',fontFamily:"Jalnan"}}>같은 학과</Text>
+                            <Text style={{fontSize:18,fontWeight:'bold'}}>같은 학과만</Text>
                         </View>
                         <View style={{display:'flex',flex:0.3,justifyContent:'center'}}>
                             <Switch
-                            trackColor={{ false: "white", true: "red" }}
+                            trackColor={{ false: "white", true: "#eb6c63" }}
                             thumbColor={this.state.isEnabled ? "white" : "white"}
                             ios_backgroundColor="#white"
                             onValueChange={this.toggleSwitch}
@@ -100,7 +101,7 @@ export default class Solo_match extends React.Component{
                     </View>
                     <View style={{display:'flex',flex:0.25}}>
                         <View style={{display:'flex',flex:0.4,marginLeft:40}}>
-                            <Text style={{fontSize:18,fontWeight:'bold',fontFamily:"Jalnan"}}>학번</Text>
+                            <Text style={{fontSize:18,fontWeight:'bold'}}>학번</Text>
                         </View>
                         <View style={{display:'flex',flex:0.6,zIndex:999}}>
                             <View style={{display:'flex',justifyContent:'center',alignItems:'center',marginLeft:'10%',marginRight:'10%'}}>
@@ -111,18 +112,22 @@ export default class Solo_match extends React.Component{
                             paddingHorizontal: 10,
                             paddingVertical: 8,
                             placeholderColor: '#ababa',
-                            borderRadius:20,
-                            borderWidth: 0.5,
+                            borderRadius:10,
+                            // borderWidth: 0.5,
                             fontWeight:'bold',fontFamily:"Jalnan",
-                            color: '#ababa',},inputIOS:{justifyContent: 'center',
+                            backgroundColor:'#e9ecef',
+                            height:40,
+                            color: 'gray',},inputIOS:{justifyContent: 'center',
                             textAlign: 'center',
                             paddingHorizontal: 10,
                             paddingVertical: 8,
                             placeholderColor: '#ababa',
-                            borderWidth: 0.5,
-                            borderRadius:20,
+                            // borderWidth: 0.5,
+                            borderRadius:10,
                             fontWeight:'bold',fontFamily:"Jalnan",
-                            color: '#ababa',}}}
+                            color: 'gray',
+                            height:40,
+                            backgroundColor:'#e9ecef'}}}
                             placeholder={
                                 {
                                 // label: '학과선택',
@@ -131,7 +136,7 @@ export default class Solo_match extends React.Component{
                             }
                             onValueChange={(value) => this.setState({major: value})}
                             items={[
-                                {label: '학번을 선택해주세요.', value: 'nothing'},
+                                {label: '모든 학번', value: 'all'},
                                 {label: '21학번', value: 'computer engineering'},
                                 {label: '20학번', value: 'baseball'},
                                 {label: '19학번', value: 'hockey'},
@@ -144,26 +149,30 @@ export default class Solo_match extends React.Component{
                     </View>
                     <View style={{display:'flex',flex:0.5}}>
                             <View style={{display:'flex',flex:0.3,justifyContent:'center',marginLeft:40}}>
-                            <Text style={{fontSize:18,fontWeight:'bold',fontFamily:"Jalnan"}}>메세지</Text>
+                            <Text style={{fontSize:18,fontWeight:'bold'}}>메세지</Text>
                             </View>
                             
                             <View style={{display:'flex',flex:0.6,width:'80%',marginLeft:'10%'}}>
                                 <TextInput
-                                style={{ height: '100%', borderColor: 'gray', borderWidth: 1 ,padding:10}}
+                                placeholder='보낼 메세지를 입력해주세요'
+                                style={{ height: '100%', borderColor: 'gray', borderWidth: 1 ,borderRadius:15,padding:10}}
                                 multiline={true}
                                 numberOfLines={4}
                                 />
                             </View>
                            
                     </View>
+                    <View>
+                        
+                    </View>
                 </View>
                 <View style={{display:'flex',flex:0.1}}>
 
                 </View>
                 </KeyboardAvoidingView>
-                <View style={{display:'flex',flex:0.1,backgroundColor:'red',justifyContent:'center',alignItems:'center'}}>
+                <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#E94e68', '#eb6c63']} style={styles.linearGradient}style={{display:'flex',flex:0.1,backgroundColor:'#E94e68',justifyContent:'center',alignItems:'center'}}>
                     <Text style={{fontSize:18,fontWeight:'bold',fontFamily:"Jalnan",color:'white'}}>메세지 보내기</Text>
-                </View>
+                </LinearGradient>
                 
             </SafeAreaView>
         )

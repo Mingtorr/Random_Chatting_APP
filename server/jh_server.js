@@ -50,7 +50,7 @@ app.post("/Signup", async function (req, res, next) {
   connection.query("INSERT INTO user_table (user_id, user_salt, user_passwd, user_sex, user_nickname, user_email) values (?,?,?,?,?,?)", 
                     [body.id, salt, hashPassword, body.sex, body.nickname, body.email], function (err, rows, fields) {
     if (err) {
-      console.log("sign_up error");
+      console.log("sign_up error",err);
       res.send(false);
     } else {
       console.log("sign_up ok");

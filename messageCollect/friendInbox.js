@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import React, {useState} from 'react';
 import {
   SafeAreaView,
@@ -20,173 +21,68 @@ export default class FriendInbox extends React.Component {
     const today = new Date();
 
     this.state = {
-      userKey: 1,
+      user_Info: '',
       messagesRoom:[],
       DATA : [
         {
           room_id: 1,
-          sex: "M",
-          nickName: "남자8호",
-          lastChat: "어디서 만나요?",
+          user_sex: "m",
+          user_nickname: "남자8호",
+          message_body: "어디서 만나요?",
           ampm: "오후",
           hour: "12",
           min: "30",
-          messagetime: "12:30",
+          day: '22',
+          month: '12',
+          year:'2020',
           isNewChat: false,
           isNewChatNum: 0,
-        },
-        {
+        },{
           room_id: 2,
-          sex: "M",
-          nickName: "남자2호",
-          lastChat: "어디서 만나요?",
+          user_sex: "f",
+          user_nickname: "여자1",
+          message_body: "어디서 만나요?",
           ampm: "오후",
           hour: "12",
           min: "30",
-          messagetime: "12:30",
+          day: '21',
+          month: '12',
+          year:'2020',
           isNewChat: false,
-          isNewChatNum: 22,
-        },
-        {
+          isNewChatNum: 0,
+        },{
           room_id: 3,
-          sex: "F",
-          nickName: "여자1호",
-          lastChat: "어디서 만나요?",
+          user_sex: "f",
+          user_nickname: "여자2",
+          message_body: "어디서 만나요?",
           ampm: "오후",
           hour: "12",
           min: "30",
-          messagetime: "12:30",
+          day: '22',
+          month: '12',
+          year:'2020',
           isNewChat: false,
-          isNewChatNum: 77,
-        },
-        {
+          isNewChatNum: 0,
+        },{
           room_id: 4,
-          sex: "F",
-          nickName: "여자1호",
-          lastChat: "어디서 만나요?",
+          user_sex: "m",
+          user_nickname: "남자8호",
+          message_body: "어디서 만나요?",
           ampm: "오후",
           hour: "12",
           min: "30",
-          messagetime: "12:30",
+          day: '22',
+          month: '12',
+          year:'2020',
           isNewChat: false,
-          isNewChatNum: 344,
-        },
-        {
-          room_id: 5,
-          sex: "F",
-          nickName: "여자1호",
-          lastChat: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          messagetime: "12:30",
-          isNewChat: false,
-          isNewChatNum: 9,
-        },
-        
-        {
-          room_id: 6,
-          sex: "F",
-          nickName: "여자1호",
-          lastChat: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          messagetime: "12:30",
-          isNewChat: false,
-          isNewChatNum: 2,
-        },
-        
-        {
-          room_id: 7,
-          sex: "F",
-          nickName: "여자1호",
-          lastChat: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          messagetime: "12:30",
-          isNewChat: false,
-          isNewChatNum: 2,
-        },
-        
-        {
-          room_id: 8,
-          sex: "F",
-          nickName: "여자4호",
-          lastChat: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          messagetime: "12:30",
-          isNewChat: false,
-          isNewChatNum: 2,
-        },
-        {
-          room_id: 9,
-          sex: "F",
-          nickName: "여자5호",
-          lastChat: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          messagetime: "12:30",
-          isNewChat: false,
-          isNewChatNum: 2,
+          isNewChatNum: 0,
         },
       ],
       ids: [],
       day: today.getDate(),
       year: today.getFullYear(),
     };
-    const userKey ={
-      userKey: this.state.userKey
-    }
 
-    fetch(func.api(3001,'GetMessageRoom'),{
-      method: 'post',
-      headers:{
-        'content-type': 'application/json',
-      },
-      body:JSON.stringify(userKey),
-    })
-      .then((res) => res.json())
-      .then((json) =>{
-        console.log('fetch안에 내용');
-        json.map((row) =>{
-          console.log("row:" + JSON.stringify(row));
-          const newtime = new Date(row.message_time);
-          let year = newtime.getFullYear();
-          let month = newtime.getMonth()+1;
-          let day = newtime.getDate();
-          let hour = newtime.getHours();
-          let min = newtime.getMinutes();
-          console.log(month+ '월 ' + day+ '일 ' + hour+':'+min);
-          console.log('시간: '+ hour);
-          console.log('분: ' + min);
-          const newrow = row;
-          newrow.year = year;
-          if (hour > 12){
-            newrow.ampm = '오후'
-            newrow.hour = hour - 12;
-          }else{
-            newrow.ampm = '오전'
-            newrow.hour = hour;
-          }
-          newrow.month = month;
-          newrow.day = day;
-          newrow.min = min;
-          newrow.isNewchatNum = 0;
-          console.log("new"+JSON.stringify(newrow));
-
-          this.setState({
-            messagesRoom:[...this.state.messagesRoom, newrow]
-          })
-          console.log("room", this.state.messagesRoom);
-        })
-
-      }).catch((err) => console.log("err: ", err))
-    
     const year = today.getFullYear(); // 년도
     const month = today.getMonth() + 1;  // 월
     const date = today.getDate();  // 날짜
@@ -195,15 +91,71 @@ export default class FriendInbox extends React.Component {
     console.log(year + '/' + month + '/' + date);
     console.log(hour + ':' + min);
     console.log("현재시간:", today);
+    
   }
-  
+  componentWillMount(){
+
+    AsyncStorage.getItem('login_user_info',(err, result)=>{
+      const info = JSON.parse(result)
+      console.log('async userKey: ', info.user_key);
+      this.setState({
+        user_Info: info,
+      })
+      const key ={
+        userKey: this.state.user_Info.user_key
+      }
+      console.log(key.userKey);
+      fetch(func.api(3002,'GetMessageRoom2'),{
+        method: 'post',
+        headers:{
+          'content-type': 'application/json',
+        },
+        body:JSON.stringify(key),
+      }).then((res) => res.json())
+        .then((json) =>{
+          console.log('fetch안에 내용', this.state.user_Info.user_key);
+          json.map((row) =>{
+            console.log("row:" + JSON.stringify(row));
+            const newtime = new Date(row.message_time);
+            let year = newtime.getFullYear();
+            let month = newtime.getMonth()+1;
+            let day = newtime.getDate();
+            let hour = newtime.getHours();
+            let min = newtime.getMinutes();
+            console.log(month+ '월 ' + day+ '일 ' + hour+':'+min);
+            console.log('시간: '+ hour);
+            console.log('분: ' + min);
+            const newrow = row;
+            newrow.year = year;
+            if (hour > 12){
+              newrow.ampm = '오후'
+              newrow.hour = hour - 12;
+            }else{
+              newrow.ampm = '오전'
+              newrow.hour = hour;
+            }
+            newrow.month = month;
+            newrow.day = day;
+            newrow.min = min;
+            newrow.isNewchatNum = 0;
+            console.log("new"+JSON.stringify(newrow));
+
+            this.setState({
+              messagesRoom:[...this.state.messagesRoom, newrow]
+            })
+            console.log("room", this.state.messagesRoom);
+          })
+
+        }).catch((err) => console.log("err: ", err))
+    })
+  }
 
   componentDidMount(){
   }
 
   isChecked = (itemId) => {
     const isThere = this.state.ids.includes(itemId);
-    // console.log("테스트:  " + itemId);
+
     return isThere;
   };
 
@@ -324,30 +276,25 @@ export default class FriendInbox extends React.Component {
 }
 
 function ShowDate(props) {
-  console.log("섹스섹스섹스", props.item.day);
   if(props.year =! props.item.year){
-    console.log("1");
     return(
       <View>
         <Text style = {styles.timeFont}>{props.item.year}-{props.item.month}-{props.item.day}</Text>
       </View>
     )
-  }else if(props.day-1 === props.item.day){
-    console.log("2");
+  }else if(props.day-1 == props.item.day){
     return(
       <View>
         <Text style = {styles.timeFont}>어제</Text>
       </View>
     )
   }else if(props.day != props.item.day){
-    console.log("3");
     return(
       <View>
         <Text style = {styles.timeFont}>{props.item.year}-{props.item.month}-{props.item.day}   </Text>
       </View>
     )
   }else{
-    console.log("4");
     return(
       <View>
         <Text style = {styles.timeFont}>{props.item.ampm} {props.item.hour}:{props.item.min}</Text>

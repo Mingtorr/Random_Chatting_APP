@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = 3002;
 
 const cors = require("cors");
 const bodyparser = require("body-parser");
@@ -24,6 +24,48 @@ app.use(cors());
 app.use(bodyparser.json());   
 app.use("/api", route);
 
+app.post('/GetMessageRoom2', (req, res) =>{
+  const userKey = req.body.userKey;
+  console.log(userKey);
+  connection.query(`SELECT part.room_id, part.user_key, info.user_nickname, info.user_sex 
+  FROM participant as part Join user_table as info on part.user_key= info.user_key  
+  where room_id in (SELECT room_id FROM participant WHERE user_key = ?) and part.user_key !=?`,
+  [userKey, userKey],
+  function (err, rows, fields){
+    if(err){
+      console.log(err+ '채팅방 목록 불러오기에러');
+    }else{
+      // console.log('방목록:', rows);
+      const roomarr = [];
+      rows.map((v,i,n)=>{
+        roomarr.push(v.room_id)
+      })
+
+      const messageRoom = rows
+      console.log(messageRoom);
+      connection.query(`SELECT TB.message_body, TB.message_time 
+        FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY room_id order by message_time desc) as Rnum FROM message_table where room_id in(?))TB 
+        where Rnum =1`,
+      [roomarr],
+      function (err, rows, fields) {
+        if(err){
+          console.log('TTBTB',err);
+        }else{
+          const bodyTime = rows;
+          console.log(bodyTime);
+
+          const message = [];
+          messageRoom.map((info, index) =>{
+            message.push({...info, ...bodyTime[index]})
+          })
+          console.log('통합: ', message);
+          res.send(message);
+        }
+      })
+    }
+  })
+})
+
 app.post('/GetMessageRoom', (req,res) => {
   
   const userKey = req.body.userKey
@@ -46,7 +88,7 @@ app.post('/GetMessageRoom', (req,res) => {
         [userKey, userKey, userKey],
         function(err, rows, fields){
           if (err){
-            console.log("에러");
+            console.log("에러", err);
           }else{
             const others = rows;
             console.log('others' + JSON.stringify(others));

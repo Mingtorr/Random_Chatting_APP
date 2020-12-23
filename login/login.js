@@ -38,7 +38,6 @@ class Login extends React.Component {
     };
   }
   componentWillMount() {
-    // console.log(func.api(3001,'login'));
     AsyncStorage.getItem('login_onoff_set', (err, result) => {
       if (result === 'true') {
         this.props.navigation.navigate('Main');
@@ -62,6 +61,7 @@ class Login extends React.Component {
   };
 
   onlogin = (e) => {
+    console.log('asdf')
     const post = {
       id: this.state.name1,
       passwd: this.state.pass,
@@ -91,7 +91,6 @@ class Login extends React.Component {
                 user_nickname: json.user_nickname,
               }),
               () => {
-                // console.log('로그인 정보 저장')
 
                 this.props.navigation.navigate('Main');
               },

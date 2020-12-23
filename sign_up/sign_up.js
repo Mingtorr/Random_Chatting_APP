@@ -129,6 +129,7 @@ class Sign_up extends React.Component {
           this.setState({
             authNum: json,
           });
+          console.log('인증번호', this.state.authNum);
 
           // if (json === true) {
           //   alert("이미 가입된 메일입니다.");
@@ -509,10 +510,10 @@ class Sign_up extends React.Component {
                 </Text>
 
                 {/* <View>
-            <TouchableOpacity style={styles.Btn_sign} onPress={this.singup2Btn}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>다음</Text>
-            </TouchableOpacity>
-          </View> */}
+                  <TouchableOpacity style={styles.Btn_sign} onPress={this.singup2Btn}>
+                    <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>다음</Text>
+                  </TouchableOpacity>
+                </View> */}
 
                 <View>
                   <TouchableOpacity

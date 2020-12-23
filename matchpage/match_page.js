@@ -22,10 +22,10 @@ export default class match_page extends React.Component{
     super(props);
     this.state={
       animatedValue:new Animated.Value(140),
-      click:false,
+      buttonColor1:'#E94e68',
+      buttonColor2:'gray',
       chatting:'채팅권 추가',
       title:'내 채팅권 개수',
-      change:'일반채팅',
       isEnabled:false,
       div:<Solo_match/>
     }
@@ -41,24 +41,11 @@ export default class match_page extends React.Component{
       })
     }
   }
-  startAnimation = () => {
-    if(this.state.click === false){
+  startAnimationL = () => {
       this.setState({
-        click:true,
-        chatting:'과팅권 추가',
-        title:'만들수 있는 과팅 수',
-        change:'오픈채팅', 
-        div:<Group_match/>
-      })
-      Animated.timing(this.state.animatedValue, {
-        duration: 1000,
-        toValue: 56,
-        useNativeDriver: false,
-      }).start();
-    }else{
-      this.setState({
-        click:false,
         chatting:'채팅권 추가',
+        buttonColor1:'#E94e68',
+        buttonColor2:'gray',
       title:'내 채팅권 개수',
       change:'일반채팅',
       div:<Solo_match/>
@@ -68,7 +55,22 @@ export default class match_page extends React.Component{
         toValue: 140,
         useNativeDriver: false,
       }).start();
-    }
+  };
+  startAnimationR = () => {
+      this.setState({
+        chatting:'과팅권 추가',
+        buttonColor1:'gray',
+        buttonColor2:'#E94e68',
+        title:'만들수 있는 과팅 수',
+        change:'오픈채팅', 
+        div:<Group_match/>
+      })
+      Animated.timing(this.state.animatedValue, {
+        duration: 1000,
+        toValue: 56,
+        useNativeDriver: false,
+      }).start();
+
   };
     render(){
       const windowWidth = Dimensions.get('window').width;
@@ -81,14 +83,14 @@ export default class match_page extends React.Component{
                 <View style={{display:'flex',flex:0.45,flexDirection:'row',justifyContent:'space-between'}}>
                   <View style={{width:3}}></View>
                   <View style={{marginBottom:10,justifyContent:'center'}}>
-                    <TouchableOpacity  onPress={this.startAnimation} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-                    <Text style={{fontSize:15,fontWeight:'bold',fontFamily:"Jalnan",color:'#E94e68'}}>{this.state.change}</Text>
+                    <TouchableOpacity  onPress={this.startAnimationL} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                    <Text style={{fontSize:15,fontWeight:'bold',color:this.state.buttonColor1}}>일반채팅</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{marginBottom:10,justifyContent:'center'}}><Text style={{fontSize:20, color:'gray'}}>|</Text></View>
                   <View style={{marginBottom:10,justifyContent:'center'}}>
-                    <TouchableOpacity  onPress={this.startAnimation} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-                    <Text style={{fontSize:15,fontWeight:'bold',fontFamily:"Jalnan",color:'#E94e68'}}>{this.state.change}</Text>
+                    <TouchableOpacity  onPress={this.startAnimationR} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                    <Text style={{fontSize:15,fontWeight:'bold',color:this.state.buttonColor2}}>오픈채팅</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{width:3}}></View>

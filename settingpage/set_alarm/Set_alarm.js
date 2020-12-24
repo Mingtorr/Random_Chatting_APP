@@ -5,13 +5,33 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Image,
+  Switch,
   Button,
+  Platform,
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-export default class Set_alarm extends Component {
-  state = {
-    alert: true,
-    receptionnum: '00',
+import {withNavigation} from 'react-navigation';
+
+class Set_alarm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      alert: true,
+      receptionnum: '00',
+      isEnabled: true,
+      isEnabled_two: true,
+    };
+  }
+  toggleSwitch = () => {
+    this.setState({
+      isEnabled: !this.state.isEnabled,
+    });
+  };
+  toggleSwitch_two = () => {
+    this.setState({
+      isEnabled_two: !this.state.isEnabled_two,
+    });
   };
   alerton = () => {
     this.setState({
@@ -31,14 +51,61 @@ export default class Set_alarm extends Component {
           <TouchableOpacity
             style={styles.back_alarm}
             onPress={() => this.props.navigation.goBack()}>
-            <Text>{'<'}</Text>
+            <Image
+              style={{width: 25, height: 25}}
+              source={require('./cancel.png')}
+            />
           </TouchableOpacity>
           <View style={styles.Head_alarm}>
             <Text>Setting</Text>
             <Text>알람 설정</Text>
           </View>
         </View>
-        <View style={styles.set_alarm_btn}>
+        {/* 메세지 알람 */}
+        <View style={styles.Msg_alarm}>
+          <Text style={styles.Textmsg_alarm}>메세지 알림</Text>
+          <Switch
+            trackColor={{false: '#767577', true: '#f05052'}}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={this.toggleSwitch}
+            value={this.state.isEnabled}
+          />
+        </View>
+        {/* 공지알람 */}
+        <View style={styles.Msg_alarm}>
+          <Text style={styles.Textmsg_alarm}>공지 알림</Text>
+          <Switch
+            trackColor={{false: '#767577', true: '#f05052'}}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={this.toggleSwitch_two}
+            value={this.state.isEnabled_two}
+          />
+        </View>
+        {/* 메세지 수신거부 */}
+        <View style={styles.Msg_alarm}>
+          <Text style={styles.Textmsg_alarm}>메세지 수신 갯수</Text>
+          <View style={{width: 100}}>
+            <RNPickerSelect
+              style={{marginBottom: '30', color: 'red'}}
+              placeholder={{}}
+              // placeholder={{
+              //   // label: '수신갯수',
+              //   // value: '00',
+              // }}
+              onValueChange={(value) => this.setState({receptionnum: value})}
+              items={[
+                {label: '무한대', value: '00'},
+                {label: '40개', value: '40'},
+                {label: '35개', value: '35'},
+                {label: '30개', value: '30'},
+                {label: '25개', value: '25'},
+                {label: '20개', value: '20'},
+              ]}
+            />
+          </View>
+        </View>
+        {/* 기존 */}
+        {/* <View style={styles.set_alarm_btn}>
           <Text style={{fontFamily: 'Jalnan', marginRight: 50}}>알림</Text>
           {this.state.alert ? (
             <View style={styles.set_alarm_btn2}>
@@ -73,7 +140,7 @@ export default class Set_alarm extends Component {
               ]}
             />
           </View>
-        </View>
+        </View> */}
       </SafeAreaView>
     );
   }
@@ -92,6 +159,7 @@ const styles = StyleSheet.create({
   },
   back_alarm: {
     marginLeft: 30,
+    position: 'absolute',
   },
   Head_alarm: {
     width: '100%',
@@ -117,4 +185,32 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  Msg_alarm: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+    paddingBottom: 10,
+    paddingRight: 10,
+    ...Platform.select({
+      ios: {
+        marginTop: 15,
+      },
+      android: {
+        marginTop: 10,
+      },
+    }),
+  },
+  Textmsg_alarm: {
+    fontFamily: 'Jalnan',
+    fontSize: 15,
+    color: 'black',
+    // color: '#f05052',
+    marginLeft: '10%',
+  },
 });
+
+export default withNavigation(Set_alarm);

@@ -13,9 +13,10 @@ import {
   Alert,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
+import io from "socket.io-client";
 
 const func = require('../server/api');
-
+const socket = io(func.api(3004,''));
 export default class FriendInbox extends React.Component {
   
   constructor(props){
@@ -38,7 +39,23 @@ export default class FriendInbox extends React.Component {
     
   }
   componentWillMount(){
-
+    socket.on('recieve_messageroom',(data)=>{
+      console.log(data);
+      console.log(this.state.messagesRoom);
+      // this.state.messagesRoom.map((v,i,a)=>{
+      //   if(v.room_id === data.roomid){
+      //     this.state.messagesRoom[i].message_body = data.message 
+      //   }
+      // })
+      const room = [...this.state.messagesRoom];
+      this.setState({
+        messagesRoom: room.map(
+          info => data.roomid === info.room_id
+          ? {...info, message_body: data.message}
+          : info
+        )
+      })
+    })
     AsyncStorage.getItem('login_user_info',(err, result)=>{
       const info = JSON.parse(result)
       this.setState({
@@ -47,6 +64,7 @@ export default class FriendInbox extends React.Component {
       const key ={
         userKey: this.state.user_Info.user_key
       }
+      socket.emit('messageroomjoin',this.state.user_Info.user_key);
       fetch(func.api(3002,'GetMessageRoom'),{
         method: 'post',
         headers:{
@@ -158,7 +176,7 @@ export default class FriendInbox extends React.Component {
     );
   }
 
-  onpress = (itemId) =>{
+  onpress = (itemId,itemId2) =>{
     const data = [...this.state.messagesRoom];
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
@@ -168,8 +186,8 @@ export default class FriendInbox extends React.Component {
           : info
       )
     })
-    
-    this.props.go.navigate('Message',{roomid: itemId})
+    console.log("asdasd"+JSON.stringify(itemId));
+    this.props.go.navigate('Message',{roomid: itemId,touser: itemId2})
   }
 
   deleteChek = () =>{
@@ -189,7 +207,7 @@ export default class FriendInbox extends React.Component {
   renderItem = ({item}) =>{
     return (
       <SafeAreaView style = {styles.container}>
-        <TouchableOpacity onLongPress = {() => this.longPressAlert(item.room_id)} onPress = {() => this.onpress(item.room_id)}>
+        <TouchableOpacity onLongPress = {() => this.longPressAlert(item.room_id)} onPress = {() => this.onpress(item.room_id,item.user_key)}>
           <View style={styles.messageElem}>
             <View style = {[item.user_sex === '0' ? styles.profileMale: styles.profileFemale]}></View>
             <View style={styles.messageInfo}>

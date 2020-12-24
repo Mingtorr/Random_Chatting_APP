@@ -12,7 +12,7 @@ const io = require("socket.io")(http);
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "snsk3779@",
   database: "mydb",
 });
 
@@ -41,7 +41,6 @@ app.post("/save_message", (req, res) => {
         if(err){
             console.log(err);
         }else{
-            console.log(rows);
             res.send(rows);
         }
     })
@@ -50,9 +49,19 @@ io.on("connection",function(socket){
     console.log("asdasdasd");
     socket.on('onclick_message',(data)=>{
         const index = 1
-        console.log(data);
+        const test = {
+            string:'asdasdasdasd'
+        }
         const messagedata = {key:index,name:data.name,message:data.message}
-        io.emit('recieve_message',messagedata);
+        io.to(JSON.stringify(data.touserkey)).emit('recieve_messageroom',data);
+        io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
+    })
+    socket.on('roomjoin',(data)=>{ 
+        socket.join(JSON.stringify(data.roomid));
+        console.log(JSON.stringify(data.roomid)+'참가');
+    })
+    socket.on('messageroomjoin',(data)=>{ 
+        socket.join(JSON.stringify(data));
     })
 })
 

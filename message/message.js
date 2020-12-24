@@ -39,6 +39,7 @@ class Message extends React.Component{
     this.state={
       userkey: '',
       myname:'',
+      touserkey:this.props.route.params.touser,
       name2:'',
       pass: "",
       start:0,
@@ -61,7 +62,8 @@ class Message extends React.Component{
     const data = {
       roomid:this.props.route.params.roomid,//roomid
     }
-    
+    socket.emit('roomjoin',data); //방참가
+
    fetch(func.api(3004,'showmessage'), {
     method: "post",
     headers: {
@@ -69,13 +71,12 @@ class Message extends React.Component{
     },
     body: JSON.stringify(data),
   }).then(res=>res.json()).then((json)=>{
-    console.log('이거를 보시오'+json);
     json.map((value,index)=>{
-      console.log(value);
       const row = {
         key : value.message_key,
         name : value.user_nickname,
         message : value.message_body,
+        time: value.message_time
       }
       this.setState({
         arr:[...this.state.arr,row],
@@ -97,10 +98,8 @@ class Message extends React.Component{
       })
     }
     
-    console.log('zzzzzzzzzzzzzz'+this.state.arr.length);
     // console.log(this.state.page);
     socket.on('recieve_message',(data)=>{
-      console.log("받은데이터"+data);
       this.setState({
         arr:[...this.state.arr,data]
       })
@@ -108,12 +107,12 @@ class Message extends React.Component{
     })
 }
 sendmessage=()=>{
-  console.log("시발");
   const data = {
     roomid:this.props.route.params.roomid, //룸아이디 입력
     name:this.state.myname,
     userkey:this.state.userkey,
     message:this.state.text,
+    touserkey:this.state.touserkey
   }
   fetch(func.api(3004,'save_message'), {
     method: "post",
@@ -137,7 +136,6 @@ scrolltobottom=()=>{
     },400)
 }
 scrolltomessage=()=>{
-  console.log('arr크기'+(this.state.arr.length-this.state.start));
   setTimeout(()=>{
     if(this.state.arr.length-this.state.start<20){
     }else{
@@ -151,7 +149,7 @@ func=()=>{
       refresh:true,
       start:0
     },()=>{
-      console.log(this.state.start);
+   
       this.setState({
         refresh:false
       })
@@ -161,7 +159,7 @@ func=()=>{
       refresh:true,
       start:this.state.start-20,
     },()=>{
-      console.log(this.state.start);
+   
       this.scrolltomessage();
       this.setState({
         refresh:false
@@ -173,7 +171,6 @@ message_onchange=(e)=>{
   this.setState({
     text:e
   })
-  console.log(this.state.text);
 }
 wholastmessage=()=>{
   this.setState({
@@ -189,10 +186,10 @@ rendermessage=({item,index})=>{
   {
     if(index===0){ 
       if(this.state.myname === item.name){
-        console.log('5번'+item.message);
+      
         return(<Mymessage message={item.message}/>)
       }else{
-        console.log('4번'+item.message);
+       
         return(<Yourmessage message={item.message} name={item.name} pre={false}/>)
       }
     }else{
@@ -200,24 +197,21 @@ rendermessage=({item,index})=>{
       if(this.state.arr[this.state.start+index-1].name === item.name)
       {
         if(this.state.myname === item.name){
-          console.log('3번'+item.message);
+         
           return( <Mymessage message={item.message}/>)
         }else{
-          console.log('2번'+item.name+item.message);
+         
           return(<Yourmessage message={item.message} name={item.name} pre={true}/>)
         }
       }
       else{
-        console.log('1번'+item.message);
+ 
         if(this.state.myname === item.name){
           return(<Mymessage message={item.message}/>)
         }else{
           return(<Yourmessage message={item.message} name={item.name} pre={false}/>)
         }
       }
-      console.log(this.state.start);
-      console.log(index);
-      console.log(this.state.arr[1]);
     } 
 }
 }

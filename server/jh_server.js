@@ -11,11 +11,10 @@ const crypto = require('crypto');
 var http = require('http').createServer(app);
 
 var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "snsk3779@",
-  database: "mydb",
-
+  host: 'localhost',
+  user: 'root',
+  password: 'snsk3779@',
+  database: 'mydb',
 });
 
 connection.connect();
@@ -181,12 +180,51 @@ app.post('/Find_idpw2', (req, res) => {
   );
 });
 
+app.post('/call', (req, res) => {
+  const key = req.body.key;
+  // console.log(req.body.key);
+  connection.query(
+    'SELECT user_id from user_table WHERE user_key = (?)',
+    [key],
+    function (err, rows, result) {
+      if (err) {
+        // console.log('call fail');
+        // console.log(err);
+      } else {
+        // console.log('call good');
+        res.send(rows[0]);
+        // console.log(rows);
+      }
+    },
+  );
+});
+
+app.post('/withdrawal', (req, res) => {
+  const key = req.body.key;
+  connection.query(
+    'DELETE from user_table WHERE user_key = (?)',
+    [key],
+    function (err, rows, result) {
+      if (err) {
+        console.log(err);
+        console.log('withdrawal fail');
+        res.send(false);
+      } else {
+        console.log('withdrawal good');
+        // console.log(rows);
+        res.send(true);
+      }
+    },
+  );
+});
+
 app.post('/Sendmail', (req, res) => {
   const email = req.body.sendEmail;
   var authNum = Math.floor(Math.random() * 1000000) + 100000;
   if (authNum > 1000000) {
     authNum = authNum - 100000;
   }
+  console.log(authNum);
   let emailParam = {
     toEmail: email + '@changwon.ac.kr', //@changwon.ac.kr
     subject: '와글와글 회원가입 인증 메일입니다.',

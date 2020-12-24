@@ -130,7 +130,6 @@ class Sign_up2 extends React.Component {
                   }}>
                   학과
                 </Text>
-
                 <RNPickerSelect
                   style={{marginBottom: '30', color: 'red'}}
                   placeholder={

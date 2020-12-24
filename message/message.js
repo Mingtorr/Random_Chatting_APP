@@ -98,7 +98,7 @@ class Message extends React.Component{
     }
     
     console.log('zzzzzzzzzzzzzz'+this.state.arr.length);
-    console.log(this.state.page);
+    // console.log(this.state.page);
     socket.on('recieve_message',(data)=>{
       console.log("받은데이터"+data);
       this.setState({

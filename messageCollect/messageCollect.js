@@ -62,7 +62,6 @@ export default class messageCollect extends React.Component{
     return(
       <SafeAreaView style = {styles.container}>
         <View style ={styles.messageHead}>
-          <Button title="asdasd" onPress={this.gomessage}/>
           <Text style ={{fontSize: 18, fontWeight: 'bold'}}>Message</Text>
           <TouchableOpacity
             onLongPress = {this.testOnClick}

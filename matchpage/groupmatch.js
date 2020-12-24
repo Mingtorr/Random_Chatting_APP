@@ -27,6 +27,7 @@ import {
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import RadioForm from 'react-native-simple-radio-button';
 import RNPickerSelect from 'react-native-picker-select';
+import Group_req from './group_req';
 let imagePath = require('./llama.png');
 
 const DATA = [
@@ -66,7 +67,7 @@ const renderItem = ({item}) => (
       shadowColor: '#000000',
       shadowOpacity: 0.1,
     }}>
-    <View style={{display: 'flex', flexDirection: 'row'}}>
+    <View style={{display: 'flex', flexDirection: 'row', shadowOpacity: 0}}>
       <View style={{width: '70%'}}>
         {/* 3/3 */}
         <View style={{justifyContent: 'center'}}>
@@ -114,15 +115,43 @@ const renderItem = ({item}) => (
 export default class Group_match extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      modalTF: 'none',
+    };
   }
+
+  openmodal = (e) => {
+    if (this.state.modalTF == 'none') {
+      this.setState({
+        modalTF: 'flex',
+      });
+      this.props.shadow();
+    } else {
+      this.setState({
+        modalTF: 'none',
+      });
+      this.props.shadow();
+    }
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.matching_tab_bg}>
         <View
           style={{
             position: 'absolute',
-            zIndex: 9999,
+            zIndex: 2,
+            marginLeft: '5%',
+            marginTop: '15%',
+            display: this.state.modalTF,
+          }}>
+          <Group_req />
+        </View>
+
+        <View
+          style={{
+            position: 'absolute',
+            zIndex: 900,
             top: Height * 0.6,
             left: Width * 0.8,
           }}>
@@ -142,6 +171,7 @@ export default class Group_match extends React.Component {
             />
           </TouchableOpacity>
         </View>
+
         <View style={{display: 'flex', flex: 1, backgroundColor: 'white'}}>
           <FlatList
             data={DATA}

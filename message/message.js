@@ -22,16 +22,17 @@ import {
   KeyboardAvoidingView,
   Platform
 } from 'react-native';
+import {withNavigation} from 'react-navigation';
 import io from "socket.io-client";
 import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
 const func = require('../server/api');
 const socket = io(func.api(3004,''));
-import {withNavigation} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
- class Message extends React.Component{
+
+class Message extends React.Component{
   constructor(props){
     super(props);
     this.scrollViewRef = React.createRef();
@@ -97,7 +98,7 @@ const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
     }
     
     console.log('zzzzzzzzzzzzzz'+this.state.arr.length);
-    console.log(this.state.page);
+    // console.log(this.state.page);
     socket.on('recieve_message',(data)=>{
       console.log("받은데이터"+data);
       this.setState({
@@ -281,4 +282,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default withNavigation(Message)
+export default withNavigation(Message);

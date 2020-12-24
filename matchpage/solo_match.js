@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
   StyleSheet,
@@ -14,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
-  Alert,
   Keyboard,
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';

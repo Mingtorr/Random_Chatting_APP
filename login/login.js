@@ -1,20 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   TouchableOpacity,
-  Button,
   TextInput,
   Image,
   TouchableWithoutFeedback,
@@ -37,16 +27,6 @@ class Login extends React.Component {
       pass: '',
     };
   }
-  componentWillMount() {
-    AsyncStorage.getItem('login_onoff_set', (err, result) => {
-      if (result === 'true') {
-        this.props.navigation.navigate('Main');
-      } else {
-        this.props.navigation.navigate('Login');
-      }
-    });
-  }
-
   handleName = (e) => {
     this.setState({
       name1: e,

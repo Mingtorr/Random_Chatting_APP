@@ -21,37 +21,103 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
 const {windowHidth, windowHeight} = Dimensions.get('window');
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 150 : 0;
+
+import AsyncStorage from '@react-native-community/async-storage';
+const func = require('../server/api');
+
 export default class Solo_match extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      class: '',
-      major: '전공',
+      major: '',
       isEnabled: false,
-      country: 'uk',
+      isDepton: false,
+      message: '',
+      sex: '이성',
     };
   }
+
+  submit = () => {
+    var to_sex = 0;
+    let deptno = '';
+    let userkey = '';
+    if (this.state.message === '') {
+      alert('전송할 메시지를 입력하세요');
+      return;
+    }
+    AsyncStorage.getItem('login_user_info', (err, result) => {
+      userkey = JSON.parse(result).user_key;
+      if (
+        (JSON.parse(result).user_sex == 0 && this.state.isEnabled === false) ||
+        (JSON.parse(result).user_sex == 1 && this.state.isEnabled)
+      ) {
+        to_sex = 1;
+      }
+      if (this.state.isDepton) {
+        console.log(JSON.parse(result).user_deptno);
+        if (JSON.parse(result).user_deptno === '') {
+          alert('자신의 학과를 먼저 선택해주세요');
+          return;
+        }
+        deptno = JSON.parse(result).user_deptno;
+      }
+      if (this.state.major !== '' && JSON.parse(result).user_deptno === '') {
+        alert('자신의 학번를 먼저 선택해주세요');
+        return;
+      }
+    }).then(() => {
+      const box = {
+        major: this.state.major,
+        sex: to_sex,
+        deptno: deptno,
+        message: this.state.message,
+        user_key: userkey,
+      };
+      fetch(func.api(3001, 'sendMessage'), {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(box),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          console.log(json);
+          if (json === false) alert('조건에 맞는 사용자가 없습니다.');
+          else {
+            //row 저장 이후 동작
+          }
+        });
+    });
+  };
+
   _scrollToInput = (reactNode) => {
     this.scroll.props.scrollToFocusedInput(reactNode);
   };
-  toggleSwitch = () => {
-    if (this.state.isEnabled === true) {
+  toggleSwitch1 = () => {
+    if (this.state.sex == '이성') {
       this.setState({
-        isEnabled: false,
+        isEnabled: !this.state.isEnabled,
+        sex: '동성',
       });
     } else {
       this.setState({
-        isEnabled: true,
+        isEnabled: !this.state.isEnabled,
+        sex: '이성',
       });
     }
   };
+  toggleSwitch2 = () => {
+    this.setState({
+      isDepton: !this.state.isDepton,
+    });
+  };
+  handletxt = (e) => {
+    this.setState({
+      message: e,
+    });
+  };
   render() {
-    let radio_props = [
-      //radio button
-      {label: '남    ', value: 0},
-      {label: '여', value: 1},
-    ];
-
     return (
       <SafeAreaView style={styles.matching_tab_bg}>
         <KeyboardAvoidingView
@@ -69,7 +135,7 @@ export default class Solo_match extends React.Component {
                   marginLeft: 40,
                 }}>
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                  이성에게만
+                  {this.state.sex}에게만
                 </Text>
               </View>
               <View
@@ -78,7 +144,7 @@ export default class Solo_match extends React.Component {
                   trackColor={{false: 'white', true: '#eb6c63'}}
                   thumbColor={this.state.isEnabled ? 'white' : 'white'}
                   ios_backgroundColor="#white"
-                  onValueChange={this.toggleSwitch}
+                  onValueChange={this.toggleSwitch1}
                   value={this.state.isEnabled}
                   style={{transform: [{scaleX: 1}, {scaleY: 1}]}}
                 />
@@ -102,8 +168,8 @@ export default class Solo_match extends React.Component {
                   trackColor={{false: 'white', true: '#eb6c63'}}
                   thumbColor={this.state.isEnabled ? 'white' : 'white'}
                   ios_backgroundColor="#white"
-                  onValueChange={this.toggleSwitch}
-                  value={this.state.isEnabled}
+                  onValueChange={this.toggleSwitch2}
+                  value={this.state.isDepton}
                   style={{transform: [{scaleX: 1}, {scaleY: 1}]}}
                 />
               </View>
@@ -130,6 +196,7 @@ export default class Solo_match extends React.Component {
                         paddingVertical: 8,
                         placeholderColor: '#ababa',
                         borderRadius: 10,
+                        fontSize: 17,
                         // borderWidth: 0.5,
                         fontWeight: 'bold',
                         backgroundColor: '#e9ecef',
@@ -138,7 +205,7 @@ export default class Solo_match extends React.Component {
                       },
                       inputIOS: {
                         justifyContent: 'center',
-                        fontSize: 16,
+                        fontSize: 17,
                         textAlign: 'center',
                         paddingHorizontal: 10,
                         paddingVertical: 8,
@@ -159,12 +226,23 @@ export default class Solo_match extends React.Component {
                     }
                     onValueChange={(value) => this.setState({major: value})}
                     items={[
-                      {label: '모든 학번', value: 'all'},
-                      {label: '21학번', value: 'computer engineering'},
-                      {label: '20학번', value: 'baseball'},
-                      {label: '19학번', value: 'hockey'},
-                      {label: '18학번', value: 'hockey'},
-                      {label: '17학번', value: 'hockey'},
+                      {label: '모든 학번', value: ''},
+                      {label: '20학번', value: '20'},
+                      {label: '19학번', value: '19'},
+                      {label: '18학번', value: '18'},
+                      {label: '17학번', value: '17'},
+                      {label: '16학번', value: '16'},
+                      {label: '15학번', value: '15'},
+                      {label: '14학번', value: '14'},
+                      {label: '13학번', value: '13'},
+                      {label: '12학번', value: '12'},
+                      {label: '11학번', value: '11'},
+                      {label: '10학번', value: '10'},
+                      {label: '09학번', value: '09'},
+                      {label: '08학번', value: '08'},
+                      {label: '07학번', value: '07'},
+                      {label: '06학번', value: '06'},
+                      {label: '05학번', value: '05'},
                     ]}
                   />
                 </View>
@@ -197,6 +275,8 @@ export default class Solo_match extends React.Component {
                     borderRadius: 15,
                     padding: 10,
                   }}
+                  value={this.state.message}
+                  onChangeText={this.handletxt}
                   multiline={true}
                   numberOfLines={4}
                 />
@@ -218,15 +298,17 @@ export default class Solo_match extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              fontFamily: 'Jalnan',
-              color: 'white',
-            }}>
-            메세지 보내기
-          </Text>
+          <TouchableOpacity onPress={this.submit}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                fontFamily: 'Jalnan',
+                color: 'white',
+              }}>
+              메세지 보내기
+            </Text>
+          </TouchableOpacity>
         </LinearGradient>
       </SafeAreaView>
     );

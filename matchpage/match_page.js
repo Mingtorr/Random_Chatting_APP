@@ -28,6 +28,7 @@ export default class match_page extends React.Component {
       title: '내 채팅권 개수',
       isEnabled: false,
       div: <Solo_match />,
+<<<<<<< HEAD
     };
   }
   toggleSwitch = () => {
@@ -41,6 +42,34 @@ export default class match_page extends React.Component {
       });
     }
   };
+=======
+      shadowTF: 'none',
+    };
+  }
+  shadow = () => {
+    if (this.state.shadowTF == 'none') {
+      this.setState({
+        shadowTF: 'flex',
+      });
+    } else {
+      this.setState({
+        shadowTF: 'none',
+      });
+    }
+  };
+
+  toggleSwitch = () => {
+    if (this.state.isEnabled === true) {
+      this.setState({
+        isEnabled: false,
+      });
+    } else {
+      this.setState({
+        isEnabled: true,
+      });
+    }
+  };
+>>>>>>> branch1
   startAnimationL = () => {
     this.setState({
       chatting: '채팅권 추가',
@@ -52,7 +81,11 @@ export default class match_page extends React.Component {
     });
     Animated.timing(this.state.animatedValue, {
       duration: 1000,
+<<<<<<< HEAD
       toValue: 30,
+=======
+      toValue: 140,
+>>>>>>> branch1
       useNativeDriver: false,
     }).start();
   };
@@ -61,6 +94,7 @@ export default class match_page extends React.Component {
       chatting: '과팅권 추가',
       buttonColor1: 'gray',
       buttonColor2: '#E94e68',
+<<<<<<< HEAD
       title: '만들수 있는 과팅 수',
       change: '오픈채팅',
       div: <Group_match />,
@@ -68,6 +102,15 @@ export default class match_page extends React.Component {
     Animated.timing(this.state.animatedValue, {
       duration: 1000,
       toValue: 30,
+=======
+      title: '내 채팅방권 개수',
+      change: '오픈채팅',
+      div: <Group_match shadow={this.shadow} />,
+    });
+    Animated.timing(this.state.animatedValue, {
+      duration: 1000,
+      toValue: 56,
+>>>>>>> branch1
       useNativeDriver: false,
     }).start();
   };
@@ -85,18 +128,51 @@ export default class match_page extends React.Component {
             width: '90%',
             top: this.state.animatedValue,
             left: '5%',
+<<<<<<< HEAD
             zIndex: 999,
+=======
+            zIndex: 1,
+>>>>>>> branch1
             borderRadius: 15,
             shadowColor: '#000000',
             shadowOpacity: 0.6,
             shadowOffset: {width: 2, height: 2},
             elevation: 3,
+<<<<<<< HEAD
+=======
+            // backgroundColor: 'balck',
+            // opacity: 0.2,
+>>>>>>> branch1
           }}>
           {/* <View style={{display:'flex',flex:0.2}}>
 
+  
                 </View> */}
           <View
             style={{
+<<<<<<< HEAD
+=======
+              position: 'absolute',
+              display: this.state.shadowTF,
+              flexDirection: 'column',
+              backgroundColor: 'black',
+              opacity: 0.5,
+              height: 140,
+              width: '100%',
+              // top: this.state.animatedValue,
+              // left: '5%',
+              zIndex: 1,
+              borderRadius: 15,
+              // shadowColor: '#000000',
+              // shadowOpacity: 0.6,
+              // shadowOffset: {width: 2, height: 2},
+              elevation: 3,
+              // backgroundColor: 'balck',
+              // opacity: 0.2,
+            }}></View>
+          <View
+            style={{
+>>>>>>> branch1
               display: 'flex',
               flex: 0.45,
               flexDirection: 'row',
@@ -256,6 +332,10 @@ export default class match_page extends React.Component {
                   <Text
                     style={{
                       fontSize: 10,
+<<<<<<< HEAD
+=======
+                      extAlign: 'center',
+>>>>>>> branch1
                       color: 'white',
                       textAlign: 'center',
                       marginTop: 15,

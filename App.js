@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -20,7 +12,6 @@ import Message from './message/message';
 import Find_idpw from './Find_idpw/Find_idpw';
 import Find_idpw2 from './Find_idpw/Find_idpw2';
 import Splash from './splash/Splash';
-// import Setting from './settingpage/Setting';
 import Setmain from './settingpage/set_main/Set_main';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MessageCollect from './messageCollect/messageCollect';
@@ -29,16 +20,6 @@ import Set_alarm from './settingpage/set_alarm/Set_alarm';
 import {fcmService} from './push/FCMService';
 import {localNotificationService} from './push/LocalNotificationService';
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-  Button,
-  TextInput,
-} from 'react-native';
 
 // const Anisplash = Splash.animate({opacity: "1"}, 500)
 const Stack = createStackNavigator();
@@ -53,7 +34,6 @@ export default class App extends React.Component {
   };
 
   componentWillMount() {
-    // console.log(func.api(3001,'login'));
     AsyncStorage.getItem('login_onoff_set', (err, result) => {
       if (result === 'true') {
         this.setState({

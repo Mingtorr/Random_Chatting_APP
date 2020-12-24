@@ -343,6 +343,130 @@ var mailSender = {
   },
 };
 
+//=============================================== solopage =================================================================
+
+app.post('/sendMessage', (req, res) => {
+  let body = req.body;
+  let cnt = 0;
+  if (body.deptno !== '') {
+    if (body.major !== '') {
+      //같은 학과 학번을 선택
+      connection.query(
+        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_sex=(?) and u.user_deptno=(?) and u.user_stdno= (?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        [body.sex, body.deptno, body.major, body.user_key],
+        function (err, rows, fields) {
+          if (rows[0] === undefined) res.send(false);
+          else {
+            // 전송할 유저 찾음
+            let bool = checkroom(rows, body.user_key, body.message);
+            if (bool === false) res.send(false);
+          }
+        },
+      );
+    } else {
+      //같은 학과선택 학번은 선택x
+      connection.query(
+        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_sex=(?) and u.user_deptno=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        [body.sex, body.deptno, body.user_key],
+        function (err, rows, fields) {
+          if (rows[0] === undefined) {
+            res.send(false);
+            console.log('전송할 유저 없음1');
+          } else {
+            // 전송할 유저 찾음
+            let bool = checkroom(rows, body.user_key, body.message);
+            if (bool === false) res.send(false);
+          }
+        },
+      );
+    }
+  } else {
+    if (body.major !== '') {
+      //같은 학과 선택x 학번은 선택
+      connection.query(
+        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_sex=(?) and u.user_stdno=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        [body.sex, body.major, body.user_key],
+        function (err, rows, fields) {
+          if (rows[0] === undefined) {
+            res.send(false);
+            console.log('전송할 유저 없음2');
+          } else {
+            // 전송할 유저 찾음
+            let bool = checkroom(rows, body.user_key, body.message);
+            if (bool === false) res.send(false);
+          }
+        },
+      );
+    } else {
+      connection.query(
+        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_sex=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        [body.sex, body.user_key],
+        function (err, rows, fields) {
+          if (rows[0] === undefined) {
+            console.log('쓰레기 유저에게 전송 sex=2인 사람');
+            //mkroom(rows[0].user_key, body.user_key, body.message);
+            //쓰레기를 담당할 user_key 고정
+          } else {
+            // 전송할 유저 찾음
+            let bool = checkroom(rows, body.user_key, body.message);
+            if (bool === false) res.send(false);
+          }
+        },
+      );
+    }
+  }
+});
+
+async function checkroom(rows, user_key, message) {
+  let cnt = 0;
+  let room_key = 0;
+  rows.map((row, index) => {
+    connection.query(
+      'select p1.room_id from participant p1 inner join participant p2 on p1.room_id = p2.room_id and p2.user_key =(?) where p1.user_key=(?);',
+      [user_key, row.user_key],
+      function (err, rows, fields) {
+        if (rows[0] === undefined) {
+          // 두사람이 속한 대화방이 없다. = 새로운 대화방
+          cnt++;
+          connection.query(
+            'INSERT INTO messageroom_table (room_mode) values(1);', // 방만들기
+            function (err, rows, fields) {
+              if (err) console.log(err);
+              else {
+                console.log(rows.insertId); //추가한 방번호pk
+                room_key = rows.insertId;
+                connection.query(
+                  'INSERT INTO participant (room_id,user_key,count,room_del) values(?,?,?,?)',
+                  [room_key, row.user_key, 1, 0],
+                  function (err, rows, fields) {
+                    if (err) console.log(err);
+                    connection.query(
+                      'INSERT INTO participant (room_id,user_key,count,room_del) values(?,?,?,?)',
+                      [room_key, user_key, 0, 0],
+                      function (err, rows, fields) {
+                        if (err) console.log(err);
+                        connection.query(
+                          'INSERT INTO message_table (room_id,user_key,message_body) values(?,?,?);',
+                          [room_key, user_key, message],
+                          function (err, rows, fields) {
+                            if (err) console.log(err);
+                            console.log('매칭 완료');
+                            return;
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              }
+            },
+          );
+        }
+      },
+    );
+  });
+}
+
 http.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

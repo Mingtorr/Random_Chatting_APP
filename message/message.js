@@ -27,10 +27,13 @@ import io from "socket.io-client";
 import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
 const func = require('../server/api');
+const timefunc = require('./timefunction');
 const socket = io(func.api(3004,''));
 import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
+
+
 
 class Message extends React.Component{
   constructor(props){
@@ -72,11 +75,12 @@ class Message extends React.Component{
     body: JSON.stringify(data),
   }).then(res=>res.json()).then((json)=>{
     json.map((value,index)=>{
+      const realtime = timefunc.settime2(value.message_time);
       const row = {
         key : value.message_key,
         name : value.user_nickname,
         message : value.message_body,
-        time: value.message_time
+        time: realtime
       }
       this.setState({
         arr:[...this.state.arr,row],
@@ -106,13 +110,17 @@ class Message extends React.Component{
       this.scrolltobottom();
     })
 }
+
 sendmessage=()=>{
+  const realtime = timefunc.settime();
+  console.log(realtime);
   const data = {
     roomid:this.props.route.params.roomid, //룸아이디 입력
     name:this.state.myname,
     userkey:this.state.userkey,
     message:this.state.text,
-    touserkey:this.state.touserkey
+    touserkey:this.state.touserkey,
+    time:realtime
   }
   fetch(func.api(3004,'save_message'), {
     method: "post",
@@ -187,10 +195,10 @@ rendermessage=({item,index})=>{
     if(index===0){ 
       if(this.state.myname === item.name){
       
-        return(<Mymessage message={item.message}/>)
+        return(<Mymessage message={item.message} time={item.time}/>)
       }else{
        
-        return(<Yourmessage message={item.message} name={item.name} pre={false}/>)
+        return(<Yourmessage message={item.message} name={item.name} pre={false} time={item.time}/>)
       }
     }else{
       
@@ -198,18 +206,18 @@ rendermessage=({item,index})=>{
       {
         if(this.state.myname === item.name){
          
-          return( <Mymessage message={item.message}/>)
+          return( <Mymessage message={item.message} time={item.time}/>)
         }else{
          
-          return(<Yourmessage message={item.message} name={item.name} pre={true}/>)
+          return(<Yourmessage message={item.message} name={item.name} pre={true} time={item.time}/>)
         }
       }
       else{
  
         if(this.state.myname === item.name){
-          return(<Mymessage message={item.message}/>)
+          return(<Mymessage message={item.message} time={item.time}/>)
         }else{
-          return(<Yourmessage message={item.message} name={item.name} pre={false}/>)
+          return(<Yourmessage message={item.message} name={item.name} pre={false} time={item.time}/>)
         }
       }
     } 
@@ -221,7 +229,6 @@ go = () =>{
   render(){
     return(
           <SafeAreaView style={styles.message_safe}>
-            <Button title="asdasd" onPress={this.go}/>
             <KeyboardAvoidingView style={styles.message_safe} behavior='padding' onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
               <View style={styles.message_top} >
                 <View style={{display:'flex',flex:0.5,flexDirection:"row"}}>

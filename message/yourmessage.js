@@ -21,7 +21,7 @@ export default class Yourmessage extends React.Component{
                         <Text style={{fontSize:18}}>{this.props.message}</Text>
                         </View>
                         <View style={{display:'flex',justifyContent:'flex-end'}}>
-                            <Text style={{fontSize:12}}>오후 2:03</Text>
+                            <Text style={{fontSize:12}}>{this.props.time}</Text>
                         </View>
                     </View>
                 </View>
@@ -38,7 +38,7 @@ export default class Yourmessage extends React.Component{
                         <Text style={{fontSize:18}}>{this.props.message}</Text>
                         </View>
                         <View style={{display:'flex',justifyContent:'flex-end'}}>
-                            <Text style={{fontSize:12}}>오후 2:03</Text>
+                            <Text style={{fontSize:12}}>{this.props.time}</Text>
                         </View>
                     </View>
                 </View>

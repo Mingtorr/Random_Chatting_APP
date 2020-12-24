@@ -52,7 +52,7 @@ io.on("connection",function(socket){
         const test = {
             string:'asdasdasdasd'
         }
-        const messagedata = {key:index,name:data.name,message:data.message}
+        const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
         io.to(JSON.stringify(data.touserkey)).emit('recieve_messageroom',data);
         io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
     })

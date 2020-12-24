@@ -14,7 +14,6 @@ import {
 import FriendInbox from './friendInbox';
 import FriendsInbox from './friendsInbox';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client'
 
 const socket = io('192.168.123.254:3001');
@@ -63,7 +62,6 @@ export default class messageCollect extends React.Component{
     return(
       <SafeAreaView style = {styles.container}>
         <View style ={styles.messageHead}>
-          <Button title="asdasd" onPress={this.gomessage}/>
           <Text style ={{fontSize: 18, fontWeight: 'bold'}}>Message</Text>
           <TouchableOpacity
             onLongPress = {this.testOnClick}

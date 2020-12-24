@@ -13,7 +13,6 @@ import {
   Alert,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
-import {withNavigation} from 'react-navigation';
 
 const func = require('../server/api');
 
@@ -26,61 +25,6 @@ export default class FriendInbox extends React.Component {
     this.state = {
       user_Info: '',
       messagesRoom:[],
-      DATA : [
-        {
-          room_id: 1,
-          user_sex: "m",
-          user_nickname: "남자8호",
-          message_body: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          day: '22',
-          month: '12',
-          year:'2020',
-          isNewChat: false,
-          isNewChatNum: 0,
-        },{
-          room_id: 2,
-          user_sex: "f",
-          user_nickname: "여자1",
-          message_body: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          day: '21',
-          month: '12',
-          year:'2020',
-          isNewChat: false,
-          isNewChatNum: 0,
-        },{
-          room_id: 3,
-          user_sex: "f",
-          user_nickname: "여자2",
-          message_body: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          day: '22',
-          month: '12',
-          year:'2020',
-          isNewChat: false,
-          isNewChatNum: 0,
-        },{
-          room_id: 4,
-          user_sex: "m",
-          user_nickname: "남자8호",
-          message_body: "어디서 만나요?",
-          ampm: "오후",
-          hour: "12",
-          min: "30",
-          day: '22',
-          month: '12',
-          year:'2020',
-          isNewChat: false,
-          isNewChatNum: 0,
-        },
-      ],
       ids: [],
       day: today.getDate(),
       year: today.getFullYear(),
@@ -91,24 +35,19 @@ export default class FriendInbox extends React.Component {
     const date = today.getDate();  // 날짜
     const hour = today.getHours();
     const min = today.getMinutes();
-    console.log(year + '/' + month + '/' + date);
-    console.log(hour + ':' + min);
-    console.log("현재시간:", today);
     
   }
   componentWillMount(){
 
     AsyncStorage.getItem('login_user_info',(err, result)=>{
       const info = JSON.parse(result)
-      console.log('async userKey: ', info.user_key);
       this.setState({
         user_Info: info,
       })
       const key ={
         userKey: this.state.user_Info.user_key
       }
-      console.log(key.userKey);
-      fetch(func.api(3002,'GetMessageRoom2'),{
+      fetch(func.api(3002,'GetMessageRoom'),{
         method: 'post',
         headers:{
           'content-type': 'application/json',
@@ -125,9 +64,9 @@ export default class FriendInbox extends React.Component {
             let day = newtime.getDate();
             let hour = newtime.getHours();
             let min = newtime.getMinutes();
-            console.log(month+ '월 ' + day+ '일 ' + hour+':'+min);
-            console.log('시간: '+ hour);
-            console.log('분: ' + min);
+            // console.log(month+ '월 ' + day+ '일 ' + hour+':'+min);
+            // console.log('시간: '+ hour);
+            // console.log('분: ' + min);
             const newrow = row;
             newrow.year = year;
             if (hour > 12){
@@ -146,7 +85,7 @@ export default class FriendInbox extends React.Component {
             this.setState({
               messagesRoom:[...this.state.messagesRoom, newrow]
             })
-            console.log("room", this.state.messagesRoom);
+            // console.log("room", this.state.messagesRoom);
           })
 
         }).catch((err) => console.log("err: ", err))
@@ -154,6 +93,7 @@ export default class FriendInbox extends React.Component {
   }
 
   componentDidMount(){
+
   }
 
   isChecked = (itemId) => {
@@ -183,15 +123,32 @@ export default class FriendInbox extends React.Component {
     this.setState({
       messagesRoom: data.filter(info => info.room_id !== itemId)
     })
+    const room_del ={
+      room_id: itemId,
+      user_key: this.state.user_Info.user_key
+    }
+
+    fetch(func.api(3002,'DelMessageRoom'),{
+      method: 'post',
+      headers:{
+        'content-type': 'application/json',
+      },
+      body:JSON.stringify(room_del),
+    }).then((res) => res.json())
+      .then((json) => {
+        if (json){
+          alert(itemId+"삭제되었습니다.")
+        }
+      })
+
     console.log('Delete '+ itemId);
-    alert(itemId+"삭제되었습니다.")
   }
 
   longPressAlert = (itemId) =>{
     Alert.alert("방을 나가시겠습니까?",
     "상대방이 슬퍼할지도 몰라요.",
     [
-      {
+      { 
         text: "아니요",
         style: "cancel"
       },
@@ -234,7 +191,7 @@ export default class FriendInbox extends React.Component {
       <SafeAreaView style = {styles.container}>
         <TouchableOpacity onLongPress = {() => this.longPressAlert(item.room_id)} onPress = {() => this.onpress(item.room_id)}>
           <View style={styles.messageElem}>
-            <View style = {[item.user_sex === 'm' ? styles.profileMale: styles.profileFemale]}></View>
+            <View style = {[item.user_sex === '0' ? styles.profileMale: styles.profileFemale]}></View>
             <View style={styles.messageInfo}>
               <View style ={styles.messageHead}>
                 <Text style={styles.nickName}>{item.user_nickname}</Text>

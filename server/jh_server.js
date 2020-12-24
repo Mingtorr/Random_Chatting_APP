@@ -11,10 +11,11 @@ const crypto = require('crypto');
 var http = require('http').createServer(app);
 
 var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '2ajrrhtlvj',
-  database: 'mydb',
+  host: "localhost",
+  user: "root",
+  password: "root",
+  database: "mydb",
+
 });
 
 connection.connect();

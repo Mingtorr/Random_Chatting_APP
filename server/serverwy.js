@@ -13,7 +13,7 @@ const route = require("./routes/indexswy");
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "snsk3779@",
+  password: "root",
   database: "mydb",
 });
 
@@ -24,9 +24,62 @@ app.use(cors());
 app.use(bodyparser.json());   
 app.use("/api", route);
 
-app.post('/GetMessageRoom2', (req, res) =>{
+app.post('/DelMessageRoom', (req, res) =>{
+  console.log(req.body.room_id);
+  connection.query(`SELECT count(room_id) as count FROM mydb.participant where room_id = ? and room_del =?`,
+  [req.body.room_id, 0],
+  function (err, rows, fields) {
+    try{ //
+      if(rows[0].count > 1){ // 최초 삭제 시 participant room_del 에 1 표시하기
+        console.log('최초삭제');
+        connection.query(`
+        UPDATE participant SET room_del = 1 WHERE room_id = ? and user_key = ?`,
+        [req.body.room_id, req.body.user_key],
+        function (err, rows, fields) {
+          try{
+            console.log('삭제 되었습니다.');
+          }catch(err){
+            console.log(err);
+          }
+        })
+      }else{ // 상대방이 나간방 나가기
+        console.log('count: ', rows[0].count);
+        //praticipant, room_table, message 삭제
+        // console.log(2);
+        // connection.query('DELETE FROM participant WHERE room_id = ? ',
+        // [req.body.room_id],
+        // function (err, rows, fields) {
+        //   try{
+        //     connection.query(`
+        //     DELETE room, message FROM messageroom_table as room inner join message_table as message on room.room_id = message.room_id where room.room_id = ?`,
+        //     [req.body.room_id],
+        //     function (err, rows, fields) {
+        //       try{
+        //         console.log('room, message, 삭제 성공');
+        //         res.send(true)
+        //       }catch(err){
+        //         console.log(err);
+        //       }
+        //     }
+        //     )
+        //   } catch(err){
+        //     console.log(4);
+        //     console.log(err);
+        //   }
+
+        // })
+      }
+    } catch(err){
+      console.log('count err: ', err);
+    }
+  })
+})
+
+app.post('/GetMessageRoom', (req, res) =>{
   const userKey = req.body.userKey;
-  console.log(userKey);
+  console.log('userkey: ', userKey);
+  //문제 : 상대방 parti가 삭제 되면 삭제하지 않은 나도 읽어 오지 못한다.
+  //내 parti를 읽어온 뒤 상대방 key를 찾아 메시지방의 상대방 키를 찾음
   connection.query(`SELECT part.room_id, part.user_key, info.user_nickname, info.user_sex 
   FROM participant as part Join user_table as info on part.user_key= info.user_key  
   where room_id in (SELECT room_id FROM participant WHERE user_key = ?) and part.user_key !=?`,
@@ -42,90 +95,25 @@ app.post('/GetMessageRoom2', (req, res) =>{
       })
 
       const messageRoom = rows
-      console.log(messageRoom);
       connection.query(`SELECT TB.message_body, TB.message_time 
         FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY room_id order by message_time desc) as Rnum FROM message_table where room_id in(?))TB 
         where Rnum =1`,
       [roomarr],
       function (err, rows, fields) {
         if(err){
-          console.log('TTBTB',err);
+          console.log('라스트 메시지 에러',err);
         }else{
           const bodyTime = rows;
-          console.log(bodyTime);
 
           const message = [];
           messageRoom.map((info, index) =>{
             message.push({...info, ...bodyTime[index]})
           })
-          console.log('통합: ', message);
           res.send(message);
         }
       })
     }
   })
-})
-
-app.post('/GetMessageRoom', (req,res) => {
-  
-  const userKey = req.body.userKey
-  connection.query('SELECT room_id FROM participant WHERE user_key = ?',
-  [userKey],
-  function(err,rows, fields){
-    if(err){
-      console.log(err+'에러');
-    } else{
-      const myRoomKey = rows
-      console.log('마이룸'+JSON.stringify(myRoomKey));
-      connection.query(
-        `SELECT user_key, user_sex, user_nickname FROM user_table where user_key in 
-          (SELECT user_key FROM participant where room_id in(
-          SELECT room_id from messageroom_table WHERE room_name in (SELECT room_name 
-                    FROM messageroom_table WHERE room_id in 
-                    (SELECT room_id FROM participant WHERE user_key = ?))
-                      AND room_id not in (SELECT room_id FROM participant WHERE user_key = ?)
-                      AND room_mode = ?))`,
-        [userKey, userKey, userKey],
-        function(err, rows, fields){
-          if (err){
-            console.log("에러", err);
-          }else{
-            const others = rows;
-            console.log('others' + JSON.stringify(others));
-
-            const messageRoom = others.reduce((acc, cur, i)=>
-              (Object.assign(acc[i],cur),acc),myRoomKey);
-            
-            // Room2 = Array.from({length:2}, (_, i) => ({...others[i], ...myRoomKey[i]}))
-            // Room3 = others.map((id, index) => ({...id,...myRoomKey[index]}))
-            console.log("메시지 룸: " +JSON.stringify( messageRoom));
-            
-            connection.query('SELECT room_id, message_body, message_time FROM message_table where user_key =?',
-            
-            [userKey],
-            function(err, rows, fields){
-              if (err){
-                console.log('메시지 내용 에러' +err);
-              }else{
-                console.log("메시지 내용"+JSON.stringify(rows));
-                const messageBodyTime = rows;
-                const message = others.map((info, index) =>
-                  ({...info, ...messageBodyTime[index]})
-                )
-                console.log(message);
-                res.send(message);
-              }
-
-            }
-            )
-            
-          }
-        }
-      )
-    }
-  })
-
-  
 })
 
 io.on("connection", function (socket){

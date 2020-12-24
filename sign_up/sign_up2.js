@@ -208,7 +208,7 @@ class Sign_up2 extends React.Component {
                   }
                   onValueChange={(value) => this.setState({studno: value})}
                   items={[
-                    {label: '학번을 선택해주세요.', value: 'nothing'},
+                    {label: '학번을 선택해주세요.', value: ''},
                     {label: '20학번', value: '20'},
                     {label: '19학번', value: '19'},
                     {label: '18학번', value: '18'},

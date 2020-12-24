@@ -55,7 +55,7 @@ export default class App extends React.Component {
 
   componentWillMount() {
     // console.log(func.api(3001,'login'));
-    AsyncStorage.getItem('login_onoff_set', (err, result) => {
+    AsyncStorage.getItem('login_onoff_set', (result) => {
       if (result === 'true') {
         this.setState({
           fisrt_name: 'Main',

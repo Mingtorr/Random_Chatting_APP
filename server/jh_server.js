@@ -344,6 +344,70 @@ var mailSender = {
   },
 };
 
+//=======================================================================
+app.post('/sendMessage', (req, res) => {
+  console.log(req.body);
+  let body = req.body;
+  // 같은 학과에게 전송
+  if (body.deptno !== '') {
+    if (body.major !== '') {
+      connection.query(
+        'select u.user_key, u.user_id, user_connection_time, count(*) as cnt from participant p, user_table u where u.user_sex=(?) and u.user_deptno=(?) and u.user_stdno= (?) and p.user_key = u.user_key and user_connection_time>CURDATE() - INTERVAL 15 DAY group by p.user_key having cnt <20 order by cnt ;',
+        [body.sex, body.deptno, body.major],
+        function (err, rows, fields) {
+          if (rows[0] === undefined) {
+            res.send(false); // 조건을 완화하라
+          } else {
+            //전송할 유저 찾음
+          }
+        },
+      );
+    } else {
+      //같은 학과로 전송하지만 같은 학번은 아님
+      connection.query(
+        'select u.user_key, u.user_id, user_connection_time, count(*) as cnt from participant p, user_table u where u.user_sex=(?) and u.user_deptno=(?) and p.user_key = u.user_key and user_connection_time>CURDATE() - INTERVAL 15 DAY group by p.user_key having cnt <20 order by cnt ;',
+        [body.sex, body.deptno],
+        function (err, rows, fields) {
+          if (rows[0] === undefined) {
+            res.send(false); // 조건을 완화하라
+          } else {
+            //전송할 유저 찾음
+          }
+        },
+      );
+    }
+  } else {
+    //같은 학과 조건 없음
+    if (body.major !== '') {
+      //다른 학과 같은 학번
+      connection.query(
+        'select u.user_key, u.user_id, user_connection_time, count(*) as cnt from participant p, user_table u where u.user_sex=(?) and u.user_stdno= (?) and p.user_key = u.user_key and user_connection_time>CURDATE() - INTERVAL 15 DAY group by p.user_key having cnt <20 order by cnt ;',
+        [body.sex, body.major],
+        function (err, rows, fields) {
+          if (rows[0] === undefined) {
+            res.send(false); // 조건을 완화하라
+          } else {
+            //전송할 유저 찾음
+          }
+        },
+      );
+    } else {
+      //검색 조건 없음
+      connection.query(
+        'select u.user_key, u.user_id, user_connection_time, count(*) as cnt from participant p, user_table u where u.user_sex=(?) and p.user_key = u.user_key and user_connection_time>CURDATE() - INTERVAL 15 DAY group by p.user_key having cnt <20 order by cnt ;',
+        [body.sex],
+        function (err, rows, fields) {
+          if (rows[0] === undefined) {
+            //쓰레기 계정으로 전송
+          } else {
+            //전송할 유저 찾음
+          }
+        },
+      );
+    }
+  }
+});
+
 http.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

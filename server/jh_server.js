@@ -13,7 +13,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '2ajrrhtlvj',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -272,7 +272,7 @@ app.post('/Setdeptno', (req, res) => {
 });
 //학번 설정
 app.post('/Setstdno', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const key = req.body.key;
   const stdno = req.body.stdno;
   connection.query(

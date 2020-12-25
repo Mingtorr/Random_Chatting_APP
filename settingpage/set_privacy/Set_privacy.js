@@ -276,7 +276,7 @@ export default class Set_privacy extends Component {
   };
   //학번 설정
   setstdno = (e) => {
-    console.log(this.state.stdno);
+    // console.log(this.state.stdno);
     this.setState({
       stdno: this.state.studno,
     });

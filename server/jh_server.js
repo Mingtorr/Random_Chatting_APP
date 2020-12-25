@@ -13,7 +13,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -123,7 +123,7 @@ app.post('/CheckNickname', (req, res) => {
   const nickname = req.body.nickname;
   console.log(nickname);
   connection.query(
-    'SELECT user_nickname FROM user_table WHERE user_nickname = (?)',
+    'SELECT * FROM user_table WHERE user_nickname = (?)',
     [nickname],
     function (err, rows, fields) {
       if (rows[0] === undefined) {
@@ -184,7 +184,7 @@ app.post('/call', (req, res) => {
   const key = req.body.key;
   // console.log(req.body.key);
   connection.query(
-    'SELECT user_id from user_table WHERE user_key = (?)',
+    'SELECT * from user_table WHERE user_key = (?)',
     [key],
     function (err, rows, result) {
       if (err) {
@@ -193,12 +193,12 @@ app.post('/call', (req, res) => {
       } else {
         // console.log('call good');
         res.send(rows[0]);
-        // console.log(rows);
+        console.log(rows);
       }
     },
   );
 });
-
+//회원탈퇴
 app.post('/withdrawal', (req, res) => {
   const key = req.body.key;
   connection.query(
@@ -217,7 +217,77 @@ app.post('/withdrawal', (req, res) => {
     },
   );
 });
-
+//아이디 변경
+app.post('/ChangeId', (req, res) => {
+  const changeId = req.body.id;
+  const key = req.body.key;
+  // console.log(ChangeId);
+  connection.query(
+    'UPDATE user_table SET user_id = (?) WHERE user_key =(?)',
+    [changeId, key],
+    function (err, rows, fields) {
+      if (err) {
+        console.log('changeid error' + err);
+      } else {
+        console.log('changed good');
+        res.send(true);
+      }
+    },
+  );
+});
+//닉네임 변경
+app.post('/ChangeNickname', (req, res) => {
+  const changenickname = req.body.nickname;
+  const key = req.body.key;
+  // console.log(ChangeId);
+  connection.query(
+    'UPDATE user_table SET user_nickname = (?) WHERE user_key =(?)',
+    [changenickname, key],
+    function (err, rows, fields) {
+      if (err) {
+        console.log('changenick error' + err);
+      } else {
+        console.log('changnickname good');
+        res.send(true);
+      }
+    },
+  );
+});
+//학과 설정
+app.post('/Setdeptno', (req, res) => {
+  const key = req.body.key;
+  const deptno = req.body.deptno;
+  connection.query(
+    'UPDATE user_table SET user_deptno = (?) WHERE user_key = (?)',
+    [deptno, key],
+    function (err, rows, fields) {
+      if (err) {
+        console.log('setdeptno error' + err);
+      } else {
+        console.log('setdeptno good');
+        res.send(true);
+      }
+    },
+  );
+});
+//학번 설정
+app.post('/Setstdno', (req, res) => {
+  console.log(req.body);
+  const key = req.body.key;
+  const stdno = req.body.stdno;
+  connection.query(
+    'UPDATE user_table SET user_stdno = (?) WHERE user_key = (?)',
+    [stdno, key],
+    function (err, rows, fields) {
+      if (err) {
+        console.log('setstdno error' + err);
+      } else {
+        console.log('setstdno good');
+        res.send(true);
+      }
+    },
+  );
+});
 app.post('/Sendmail', (req, res) => {
   const email = req.body.sendEmail;
   var authNum = Math.floor(Math.random() * 1000000) + 100000;

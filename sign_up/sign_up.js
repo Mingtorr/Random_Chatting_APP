@@ -233,7 +233,7 @@ class Sign_up extends React.Component {
       };
       fetch(func.api(3001, 'CheckNickname'), {
         method: 'post',
-        header: {
+        headers: {
           'content-type': 'application/json',
         },
         body: JSON.stringify(Nickname),

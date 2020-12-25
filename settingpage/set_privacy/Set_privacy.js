@@ -34,11 +34,14 @@ export default class Set_privacy extends Component {
       key: '',
       sex: '',
       deptno: '',
+      stdno: '',
+      studno: '',
       major: '',
       checked_id: false,
       checking_passwd: false,
       nickname_check: false,
       realpass: '',
+      email: '',
     };
   }
   componentWillMount() {
@@ -47,10 +50,11 @@ export default class Set_privacy extends Component {
       // console.log('닉네임 : ' + UserInfo.user_nickname);
       this.setState({
         key: UserInfo.user_key,
-        nickname: UserInfo.user_nickname,
-        sex: UserInfo.user_sex,
-        deptno: UserInfo.user_deptno,
-        stdno: UserInfo.user_stdno,
+        // nickname: UserInfo.user_nickname,
+        // sex: UserInfo.user_sex,
+        // deptno: UserInfo.user_deptno,
+        // stdno: UserInfo.user_stdno,
+        email: UserInfo.user_email,
       });
       const post = {
         key: UserInfo.user_key,
@@ -66,10 +70,21 @@ export default class Set_privacy extends Component {
         .then((json) => {
           this.setState({
             id: json.user_id,
+            nickname: json.user_nickname,
+            sex: json.user_sex,
+            deptno: json.user_deptno,
+            stdno: json.user_stdno,
           });
         });
     });
   }
+  check = (re, what, message) => {
+    if (re.test(what)) {
+      return true;
+    }
+    alert(message);
+    return false;
+  };
   // 아이디 중복검사
   checkId = (e) => {
     e.preventDefault();
@@ -106,6 +121,32 @@ export default class Set_privacy extends Component {
         });
     }
   };
+  // 아이디 변경
+  changeId = (e) => {
+    e.preventDefault();
+    const changeId = {
+      key: this.state.key,
+      id: this.state.id,
+    };
+    fetch(func.api(3001, 'ChangeId'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(changeId),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json) {
+          alert('아이디가 변경되었습니다.');
+          this.setState({
+            checked_id: false,
+          });
+        } else {
+          alert('id 변경 실패 버그 신고');
+        }
+      });
+  };
   // 비밀번호 일치 검사
   passwdcheck = (e) => {
     if (this.state.passwd.length === 0 || this.state.passwd2.length === 0) {
@@ -122,11 +163,13 @@ export default class Set_privacy extends Component {
   //닉네임 중복검사
   nickNamecheck = (e) => {
     var re = /^[a-zA-Z0-9가-힣]{2,8}$/;
+    // console.log(this.state.nickname);
+    // console.log('남자임');
     if (
       !this.check(
         re,
         this.state.nickname,
-        '닉네임은 2~8자의 영문,한글 ,숫자로만 입력가능합니다.',
+        '닉네임은 2~8자의 영문, 한글 ,숫자로만 입력가능합니다.',
       )
     ) {
       return;
@@ -136,7 +179,7 @@ export default class Set_privacy extends Component {
       };
       fetch(func.api(3001, 'CheckNickname'), {
         method: 'post',
-        header: {
+        headers: {
           'content-type': 'application/json',
         },
         body: JSON.stringify(Nickname),
@@ -153,6 +196,123 @@ export default class Set_privacy extends Component {
           }
         });
     }
+  };
+  //닉네임 바꾸기
+  changenickname = (e) => {
+    e.preventDefault();
+    const changenickname = {
+      key: this.state.key,
+      nickname: this.state.nickname,
+    };
+    fetch(func.api(3001, 'ChangeNickname'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(changenickname),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json) {
+          alert('닉네임이 변경되었습니다.');
+          this.setState({
+            nickname_check: false,
+          });
+        } else {
+          alert('nickname 변경 실패 버그 신고');
+        }
+      });
+    AsyncStorage.setItem(
+      'login_user_info',
+      JSON.stringify({
+        user_nickname: this.state.nickname,
+        user_key: this.state.key,
+        user_id: this.state.id,
+        user_sex: this.state.sex,
+        user_email: this.state.email,
+        user_deptno: this.state.deptno,
+        user_stdno: this.state.stdno,
+      }),
+    );
+  };
+  //학과 설정
+  setdeptno = (e) => {
+    e.preventDefault();
+    this.setState({
+      deptno: this.state.major,
+    });
+    // console.log(this.state.major);
+    const set_deptno = {
+      key: this.state.key,
+      deptno: this.state.major,
+    };
+    fetch(func.api(3001, 'Setdeptno'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(set_deptno),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json) {
+          alert('학과 설정 완료');
+        } else {
+          alert('학과 설정 실패 버그 신고 기기기~');
+        }
+      });
+    AsyncStorage.setItem(
+      'login_user_info',
+      JSON.stringify({
+        user_nickname: this.state.nickname,
+        user_key: this.state.key,
+        user_id: this.state.id,
+        user_sex: this.state.sex,
+        user_email: this.state.email,
+        user_deptno: this.state.deptno,
+        user_stdno: this.state.stdno,
+      }),
+    );
+  };
+  //학번 설정
+  setstdno = (e) => {
+    console.log(this.state.stdno);
+    this.setState({
+      stdno: this.state.studno,
+    });
+    e.preventDefault();
+    // console.log(this.state.major);
+    const set_stdno = {
+      key: this.state.key,
+      stdno: this.state.stdno,
+    };
+    fetch(func.api(3001, 'Setstdno'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(set_stdno),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json) {
+          alert('학번 설정 완료');
+        } else {
+          alert('학번 설정 실패 버그 신고 기기기~');
+        }
+      });
+    AsyncStorage.setItem(
+      'login_user_info',
+      JSON.stringify({
+        user_nickname: this.state.nickname,
+        user_key: this.state.key,
+        user_id: this.state.id,
+        user_sex: this.state.sex,
+        user_email: this.state.email,
+        user_deptno: this.state.deptno,
+        user_stdno: this.state.stdno,
+      }),
+    );
   };
   render() {
     let screenHeight =
@@ -185,18 +345,33 @@ export default class Set_privacy extends Component {
                         value={this.state.id}
                         onChangeText={(text) => this.setState({id: text})}
                       />
-                      <TouchableOpacity
-                        style={styles.Btn_privacy}
-                        onPress={this.checkId}>
-                        <Text
-                          style={{
-                            color: 'gray',
-                            fontFamily: 'Jalnan',
-                            fontSize: 15,
-                          }}>
-                          중복확인
-                        </Text>
-                      </TouchableOpacity>
+                      {this.state.checked_id === false ? (
+                        <TouchableOpacity
+                          style={styles.Btn_privacy}
+                          onPress={this.checkId}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            중복확인
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.Btn_privacy}
+                          onPress={this.changeId}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            변경하기
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
                   {/* 비번 */}
@@ -233,7 +408,7 @@ export default class Set_privacy extends Component {
                             fontFamily: 'Jalnan',
                             fontSize: 15,
                           }}>
-                          수정
+                          비밀번호 확인
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -270,31 +445,61 @@ export default class Set_privacy extends Component {
                     )}
                   </View>
                   {/* 닉네임 */}
-                  <View style={styles.Id_privacy}>
-                    <Text style={styles.Textid_privacy}>닉네임</Text>
-                    <View style={{display: 'flex', flexDirection: 'row'}}>
-                      <TextInput
-                        style={styles.Id_input_privacy}
-                        id="nickname"
-                        name="nickname"
-                        value={this.state.nickname}
-                        onChangeText={(text) => this.setState({nickname: text})}
-                      />
-                      <TouchableOpacity
-                        style={styles.Btn_privacy}
-                        onPress={this.nickNamecheck}>
-                        <Text
-                          style={{
-                            color: 'gray',
-                            fontFamily: 'Jalnan',
-                            fontSize: 15,
-                          }}>
-                          중복확인
-                        </Text>
-                      </TouchableOpacity>
+                  {this.state.nickname_check === false ? (
+                    <View style={styles.Id_privacy}>
+                      <Text style={styles.Textid_privacy}>닉네임</Text>
+                      <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <TextInput
+                          style={styles.Id_input_privacy}
+                          id="nickname"
+                          name="nickname"
+                          value={this.state.nickname}
+                          onChangeText={(text) =>
+                            this.setState({nickname: text})
+                          }
+                        />
+                        <TouchableOpacity
+                          style={styles.Btn_privacy}
+                          onPress={this.nickNamecheck}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            중복확인
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                  </View>
-
+                  ) : (
+                    <View style={styles.Id_privacy}>
+                      <Text style={styles.Textid_privacy}>닉네임</Text>
+                      <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <TextInput
+                          style={styles.Id_input_privacy}
+                          id="nickname"
+                          name="nickname"
+                          value={this.state.nickname}
+                          onChangeText={(text) =>
+                            this.setState({nickname: text})
+                          }
+                        />
+                        <TouchableOpacity
+                          style={styles.Btn_privacy}
+                          onPress={this.changenickname}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            변경하기
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  )}
                   {/* <View style={styles.Id_privacy}>
                   <Text style={styles.Textid_privacy}>비밀번호 인증</Text>
                   <View style={{display: 'flex', flexDirection: 'row'}}>
@@ -328,74 +533,95 @@ export default class Set_privacy extends Component {
                           초기 설정 후 변경이 불가능합니다.
                         </Text>
                       </View>
-                      <RNPickerSelect
-                        style={{marginBottom: '30', color: 'red'}}
-                        placeholder={
-                          {
-                            // label: '학과선택',
-                            // value: null,
+                      <View
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <RNPickerSelect
+                          style={{marginBottom: '30', color: 'red'}}
+                          placeholder={
+                            {
+                              // label: '학과선택',
+                              // value: null,
+                            }
                           }
-                        }
-                        onValueChange={(value) => this.setState({major: value})}
-                        items={[
-                          {label: '학과를 선택해주세요.', value: ''},
-                          {label: '국어국문학과', value: '국어국문학과'},
-                          {label: '독어독문학과', value: '독어독문학과'},
-                          {label: '일어일문학과', value: '일어일문학과'},
-                          {label: '철학과', value: '철학과'},
-                          {label: '유아교육과', value: '유아교육과'},
-                          {label: '영어영문학과', value: '영어영문학과'},
-                          {label: '불어불문학과', value: '불어불문학과'},
-                          {label: '사학과', value: '사학과'},
-                          {label: '특수교육과', value: '특수교육과'},
-                          {label: '법학과', value: '법학과'},
-                          {label: '국제관계학과', value: '국제관계학과'},
-                          {label: '사회학과', value: '사회학과'},
-                          {label: '가족복지학과', value: '가족복지학과'},
-                          {label: '행정학과', value: '행정학과'},
-                          {label: '중국학과', value: '중국학과'},
-                          {label: '신문방송학과', value: '신문방송학과'},
-                          {
-                            label: '글로벌비즈니스학부',
-                            value: '글로벌비즈니스학부',
-                          },
-                          {label: '경영학과', value: '경영학과'},
-                          {label: '세무학과', value: '세무학과'},
-                          {label: '국제무역학과', value: '국제무역학과'},
-                          {label: '회계학과', value: '회계학과'},
-                          {label: '수학과', value: '수학과'},
-                          {
-                            label: '생물학화학융합학부',
-                            value: '생물학화학융합학부',
-                          },
-                          {label: '생명보건학부', value: '생명보건학부'},
-                          {label: '식품영양학과', value: '식품영양학과'},
-                          {label: '체육학과', value: '체육학과'},
-                          {label: '물리학과', value: '물리학과'},
-                          {label: '통계학과', value: '통계학과'},
-                          {label: '의류학과', value: '의류학과'},
-                          {label: '간호학과', value: '간호학과'},
-                          {
-                            label: '산업시스템공학과',
-                            value: '산업시스템공학과',
-                          },
-                          {
-                            label: '토목환경화공융합공학부',
-                            value: '토목환경화공융합공학부',
-                          },
-                          {
-                            label: '화공시스템공학과',
-                            value: '화공시스템공학과',
-                          },
-                          {label: '건축공학부', value: '건축공학부'},
-                          {label: '컴퓨터공학과', value: '컴퓨터공학과'},
-                          {label: '조선해양공학과', value: '조선해양공학과'},
-                          {label: '환경공학과', value: '환경공학과'},
-                          {label: '토목공학과', value: '토목공학과'},
-                          {label: '건축공학전공', value: '건축공학전공'},
-                          {label: '정보통신공학과', value: '정보통신공학과'},
-                        ]}
-                      />
+                          onValueChange={(value) =>
+                            this.setState({major: value})
+                          }
+                          items={[
+                            {label: '학과를 선택해주세요.', value: ''},
+                            {label: '국어국문학과', value: '국어국문학과'},
+                            {label: '독어독문학과', value: '독어독문학과'},
+                            {label: '일어일문학과', value: '일어일문학과'},
+                            {label: '철학과', value: '철학과'},
+                            {label: '유아교육과', value: '유아교육과'},
+                            {label: '영어영문학과', value: '영어영문학과'},
+                            {label: '불어불문학과', value: '불어불문학과'},
+                            {label: '사학과', value: '사학과'},
+                            {label: '특수교육과', value: '특수교육과'},
+                            {label: '법학과', value: '법학과'},
+                            {label: '국제관계학과', value: '국제관계학과'},
+                            {label: '사회학과', value: '사회학과'},
+                            {label: '가족복지학과', value: '가족복지학과'},
+                            {label: '행정학과', value: '행정학과'},
+                            {label: '중국학과', value: '중국학과'},
+                            {label: '신문방송학과', value: '신문방송학과'},
+                            {
+                              label: '글로벌비즈니스학부',
+                              value: '글로벌비즈니스학부',
+                            },
+                            {label: '경영학과', value: '경영학과'},
+                            {label: '세무학과', value: '세무학과'},
+                            {label: '국제무역학과', value: '국제무역학과'},
+                            {label: '회계학과', value: '회계학과'},
+                            {label: '수학과', value: '수학과'},
+                            {
+                              label: '생물학화학융합학부',
+                              value: '생물학화학융합학부',
+                            },
+                            {label: '생명보건학부', value: '생명보건학부'},
+                            {label: '식품영양학과', value: '식품영양학과'},
+                            {label: '체육학과', value: '체육학과'},
+                            {label: '물리학과', value: '물리학과'},
+                            {label: '통계학과', value: '통계학과'},
+                            {label: '의류학과', value: '의류학과'},
+                            {label: '간호학과', value: '간호학과'},
+                            {
+                              label: '산업시스템공학과',
+                              value: '산업시스템공학과',
+                            },
+                            {
+                              label: '토목환경화공융합공학부',
+                              value: '토목환경화공융합공학부',
+                            },
+                            {
+                              label: '화공시스템공학과',
+                              value: '화공시스템공학과',
+                            },
+                            {label: '건축공학부', value: '건축공학부'},
+                            {label: '컴퓨터공학과', value: '컴퓨터공학과'},
+                            {label: '조선해양공학과', value: '조선해양공학과'},
+                            {label: '환경공학과', value: '환경공학과'},
+                            {label: '토목공학과', value: '토목공학과'},
+                            {label: '건축공학전공', value: '건축공학전공'},
+                            {label: '정보통신공학과', value: '정보통신공학과'},
+                          ]}
+                        />
+                        <TouchableOpacity
+                          style={styles.Deptno_btn_privacy}
+                          onPress={this.setdeptno}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            설정
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   ) : (
                     <View style={styles.Id_privacy}>
@@ -409,6 +635,82 @@ export default class Set_privacy extends Component {
                       <View style={{display: 'flex', flexDirection: 'row'}}>
                         <Text style={styles.Id_input_privacy}>
                           {this.state.deptno}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                  {this.state.stdno === '' ? (
+                    <View style={styles.Id_privacy}>
+                      <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <Text style={styles.Textid_privacy}>학번</Text>
+                        <Text style={{marginLeft: 20, fontSize: 10}}>
+                          {' '}
+                          초기 설정 후 변경이 불가능합니다.
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <RNPickerSelect
+                          style={{marginBottom: '30', color: 'red'}}
+                          placeholder={
+                            {
+                              // label: '학번 선택',
+                              // value: null,
+                            }
+                          }
+                          onValueChange={(value) =>
+                            this.setState({studno: value})
+                          }
+                          items={[
+                            {label: '학번을 선택해주세요.', value: ''},
+                            {label: '20학번', value: '20'},
+                            {label: '19학번', value: '19'},
+                            {label: '18학번', value: '18'},
+                            {label: '17학번', value: '17'},
+                            {label: '16학번', value: '16'},
+                            {label: '15학번', value: '15'},
+                            {label: '14학번', value: '14'},
+                            {label: '13학번', value: '13'},
+                            {label: '12학번', value: '12'},
+                            {label: '11학번', value: '11'},
+                            {label: '10학번', value: '10'},
+                            {label: '09학번', value: '09'},
+                            {label: '08학번', value: '08'},
+                            {label: '08학번', value: '07'},
+                            {label: '08학번', value: '06'},
+                            {label: '08학번', value: '05'},
+                          ]}
+                        />
+                        <TouchableOpacity
+                          style={styles.Deptno_btn_privacy}
+                          onPress={this.setstdno}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            설정
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ) : (
+                    <View style={styles.Id_privacy}>
+                      <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <Text style={styles.Textid_privacy}>학번</Text>
+                        <Text style={{marginLeft: 20, fontSize: 10}}>
+                          {' '}
+                          초기 설정 후 변경이 불가능합니다.
+                        </Text>
+                      </View>
+                      <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <Text style={styles.Id_input_privacy}>
+                          {this.state.stdno}
                         </Text>
                       </View>
                     </View>
@@ -427,6 +729,9 @@ export default class Set_privacy extends Component {
                     backgroundColor: '#f05052',
                     marginBottom: 10,
                     width: 1000,
+                  }}
+                  onPress={() => {
+                    this.props.navigation.navigate('Main');
                   }}>
                   <Text
                     style={{
@@ -525,6 +830,19 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginRight: -20,
     marginTop: -8,
+  },
+  Deptno_btn_privacy: {
+    borderWidth: 0,
+    color: 'white',
+    borderRadius: 60,
+    fontFamily: 'Jalnan',
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    fontSize: 20,
+    marginBottom: 5,
+    marginTop: -8,
+    marginRight: 20,
   },
   Sex_privacy: {
     display: 'flex',

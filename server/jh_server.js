@@ -13,7 +13,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: '2ajrrhtlvj',
   database: 'mydb',
 });
 
@@ -121,7 +121,7 @@ app.post('/login', async function (req, res, next) {
 
 app.post('/CheckNickname', (req, res) => {
   const nickname = req.body.nickname;
-  console.log(nickname);
+  console.log(req.body);
   connection.query(
     'SELECT user_nickname FROM user_table WHERE user_nickname = (?)',
     [nickname],

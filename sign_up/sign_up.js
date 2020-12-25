@@ -204,20 +204,8 @@ class Sign_up extends React.Component {
     }
   };
 
-  passwdcheck = (e) => {
-    if (this.state.passwd.length === 0 || this.state.passwd2.length === 0) {
-      alert('비밀번호를 입력해주세요');
-    } else if (this.state.passwd !== this.state.passwd2) {
-      alert('비밀번호가 일치하지 않습니다.');
-    } else if (this.state.passwd === this.state.passwd2) {
-      alert('비밀번호가 일치합니다.');
-      this.setState({
-        checking_passwd: true,
-      });
-    }
-  };
-
   nickNamecheck = (e) => {
+    e.preventDefault();
     var re = /^[a-zA-Z0-9가-힣]{2,8}$/;
     if (
       !this.check(
@@ -228,15 +216,16 @@ class Sign_up extends React.Component {
     ) {
       return;
     } else {
-      const Nickname = {
+      const box = {
         nickname: this.state.nickname,
       };
+      console.log(box);
       fetch(func.api(3001, 'CheckNickname'), {
         method: 'post',
-        header: {
+        headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(Nickname),
+        body: JSON.stringify(box),
       })
         .then((res) => res.json())
         .then((json) => {
@@ -249,6 +238,19 @@ class Sign_up extends React.Component {
             alert('이미 사용중인 닉네임입니다');
           }
         });
+    }
+  };
+
+  passwdcheck = (e) => {
+    if (this.state.passwd.length === 0 || this.state.passwd2.length === 0) {
+      alert('비밀번호를 입력해주세요');
+    } else if (this.state.passwd !== this.state.passwd2) {
+      alert('비밀번호가 일치하지 않습니다.');
+    } else if (this.state.passwd === this.state.passwd2) {
+      alert('비밀번호가 일치합니다.');
+      this.setState({
+        checking_passwd: true,
+      });
     }
   };
 

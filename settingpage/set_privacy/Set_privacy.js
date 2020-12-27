@@ -77,6 +77,7 @@ export default class Set_privacy extends Component {
           });
         });
     });
+    console.log(this.state.stdno);
   }
   check = (re, what, message) => {
     if (re.test(what)) {
@@ -159,6 +160,32 @@ export default class Set_privacy extends Component {
         checking_passwd: true,
       });
     }
+  };
+  //비밀번호 변경
+  passchange = (e) => {
+    e.preventDefault();
+    const changepass = {
+      key: this.state.key,
+      pass: this.state.passwd,
+    };
+    fetch(func.api(3001, 'ChangePass'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(changepass),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json) {
+          alert('비밀번호가 변경되었습니다.');
+          this.setState({
+            checking_passwd: false,
+          });
+        } else {
+          alert('password 변경 실패 버그 신고');
+        }
+      });
   };
   //닉네임 중복검사
   nickNamecheck = (e) => {
@@ -284,7 +311,7 @@ export default class Set_privacy extends Component {
     // console.log(this.state.major);
     const set_stdno = {
       key: this.state.key,
-      stdno: this.state.stdno,
+      stdno: this.state.studno,
     };
     fetch(func.api(3001, 'Setstdno'), {
       method: 'post',
@@ -310,7 +337,7 @@ export default class Set_privacy extends Component {
         user_sex: this.state.sex,
         user_email: this.state.email,
         user_deptno: this.state.deptno,
-        user_stdno: this.state.stdno,
+        user_stdno: this.state.studno,
       }),
     );
   };
@@ -343,7 +370,9 @@ export default class Set_privacy extends Component {
                         style={styles.Id_input_privacy}
                         id="id"
                         value={this.state.id}
-                        onChangeText={(text) => this.setState({id: text})}
+                        onChangeText={(text) =>
+                          this.setState({id: text, checked_id: false})
+                        }
                       />
                       {this.state.checked_id === false ? (
                         <TouchableOpacity
@@ -382,6 +411,7 @@ export default class Set_privacy extends Component {
                         style={styles.Id_input_privacy}
                         id="passwd"
                         name="passwd"
+                        secureTextEntry={true}
                         value={this.state.passwd}
                         onChangeText={(text) => this.setState({passwd: text})}
                       />
@@ -396,10 +426,38 @@ export default class Set_privacy extends Component {
                         style={styles.Id_input_privacy}
                         id="passwd2"
                         nmae="passwd2"
+                        secureTextEntry={true}
                         value={this.state.passwd2}
                         onChangeText={(text) => this.setState({passwd2: text})}
                       />
-                      <TouchableOpacity
+                      {this.state.checking_passwd === false ? (
+                        <TouchableOpacity
+                          style={styles.Btn_privacy}
+                          onPress={this.passwdcheck}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            비밀번호 확인
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.Btn_privacy}
+                          onPress={this.passchange}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            비밀번호 변경
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                      {/* <TouchableOpacity
                         style={styles.Btn_privacy}
                         onPress={this.passwdcheck}>
                         <Text
@@ -410,7 +468,7 @@ export default class Set_privacy extends Component {
                           }}>
                           비밀번호 확인
                         </Text>
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                     </View>
                   </View>
                   {/* 성별 */}
@@ -482,7 +540,10 @@ export default class Set_privacy extends Component {
                           name="nickname"
                           value={this.state.nickname}
                           onChangeText={(text) =>
-                            this.setState({nickname: text})
+                            this.setState({
+                              nickname: text,
+                              nickname_check: false,
+                            })
                           }
                         />
                         <TouchableOpacity

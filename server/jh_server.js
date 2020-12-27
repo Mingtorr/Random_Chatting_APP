@@ -235,6 +235,31 @@ app.post('/ChangeId', (req, res) => {
     },
   );
 });
+//비밀번호 변경
+app.post('/ChangePass', async function (req, res, next) {
+  // let body = req.body;
+  const key = req.body.key;
+  let inputPassword = req.body.pass;
+  let salt = Math.round(new Date().valueOf() * Math.random()) + '';
+  let hashPassword = crypto
+    .createHash('sha512')
+    .update(inputPassword + salt)
+    .digest('hex');
+  // console.log(req.body);
+  connection.query(
+    'UPDATE user_table SET user_passwd = (?), user_salt = (?) WHERE user_key= (?)',
+    [hashPassword, salt, key],
+    function (err, rows, fields) {
+      if (err) {
+        console.log('change passwd error', err);
+        res.send(false);
+      } else {
+        console.log('change passwd ok');
+        res.send(true);
+      }
+    },
+  );
+});
 //닉네임 변경
 app.post('/ChangeNickname', (req, res) => {
   const changenickname = req.body.nickname;

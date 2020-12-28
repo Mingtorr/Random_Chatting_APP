@@ -77,7 +77,7 @@ export default class Set_privacy extends Component {
           });
         });
     });
-    console.log(this.state.stdno);
+    // console.log(this.state.stdno);
   }
   check = (re, what, message) => {
     if (re.test(what)) {
@@ -139,10 +139,12 @@ export default class Set_privacy extends Component {
       .then((res) => res.json())
       .then((json) => {
         if (json) {
-          alert('아이디가 변경되었습니다.');
+          alert('아이디가 변경되었습니다. 다시 로그인해주세요.');
           this.setState({
             checked_id: false,
           });
+          AsyncStorage.clear();
+          this.props.navigation.navigate('Login');
         } else {
           alert('id 변경 실패 버그 신고');
         }

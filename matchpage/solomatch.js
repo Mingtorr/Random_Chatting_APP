@@ -20,6 +20,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
 const {windowHidth, windowHeight} = Dimensions.get('window');
+const Height = Dimensions.get('window').height;
+const Width = Dimensions.get('window').width;
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 150 : 0;
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -120,13 +122,20 @@ export default class Solo_match extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.matching_tab_bg}>
-        <KeyboardAvoidingView
+        <KeyboardAwareScrollView
           style={styles.matching_tab_bg}
           behavior="padding"
           keyboardVerticalOffset={keyboardVerticalOffset}>
-          <View style={{display: 'flex', flex: 0.2}}></View>
+          <View
+            style={{display: 'flex', flex: 0.2, height: Height * 0.1}}></View>
           <View style={{display: 'flex', flex: 0.7}}>
-            <View style={{display: 'flex', flex: 0.25, flexDirection: 'row'}}>
+            <View
+              style={{
+                display: 'flex',
+                flex: 0.25,
+                flexDirection: 'row',
+                height: Height * 0.1,
+              }}>
               <View
                 style={{
                   display: 'flex',
@@ -157,6 +166,7 @@ export default class Solo_match extends React.Component {
                   flex: 0.7,
                   justifyContent: 'center',
                   marginLeft: 40,
+                  height: Height * 0.08,
                 }}>
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>
                   같은 학과만
@@ -175,7 +185,13 @@ export default class Solo_match extends React.Component {
               </View>
             </View>
             <View style={{display: 'flex', flex: 0.25}}>
-              <View style={{display: 'flex', flex: 0.4, marginLeft: 40}}>
+              <View
+                style={{
+                  display: 'flex',
+                  flex: 0.4,
+                  marginLeft: 40,
+                  height: Height * 0.04,
+                }}>
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>학번</Text>
               </View>
               <View style={{display: 'flex', flex: 0.6, zIndex: 999}}>
@@ -255,6 +271,7 @@ export default class Solo_match extends React.Component {
                   flex: 0.3,
                   justifyContent: 'center',
                   marginLeft: 40,
+                  height: Height * 0.05,
                 }}>
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>메세지</Text>
               </View>
@@ -274,6 +291,7 @@ export default class Solo_match extends React.Component {
                     borderWidth: 1,
                     borderRadius: 15,
                     padding: 10,
+                    height: Height * 0.15,
                   }}
                   value={this.state.message}
                   onChangeText={this.handletxt}
@@ -285,7 +303,7 @@ export default class Solo_match extends React.Component {
             <View></View>
           </View>
           <View style={{display: 'flex', flex: 0.1}}></View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
         <LinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}

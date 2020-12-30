@@ -16,7 +16,7 @@ import CheckBox from 'react-native-check-box';
 import io from "socket.io-client";
 
 const func = require('../server/api');
-const socket = io(func.api(3004,''));
+
 export default class FriendInbox extends React.Component {
   
   constructor(props){
@@ -39,6 +39,8 @@ export default class FriendInbox extends React.Component {
     
   }
   componentWillMount(){
+    console.log("시발년들ㅇ");
+    const socket = io(func.api(3004,''));
     socket.on('recieve_messageroom',(data)=>{
       console.log(data);
       console.log(this.state.messagesRoom);

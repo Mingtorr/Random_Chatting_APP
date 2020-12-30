@@ -14,8 +14,11 @@ import {
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import io from "socket.io-client";
+import LinearGradient from 'react-native-linear-gradient';
 
 const func = require('../server/api');
+
+const socket = io(func.api(3004,''));
 
 export default class FriendInbox extends React.Component {
   
@@ -40,9 +43,8 @@ export default class FriendInbox extends React.Component {
   }
   componentWillMount(){
     console.log("시발년들ㅇ");
-    const socket = io(func.api(3004,''));
     socket.on('recieve_messageroom',(data)=>{
-      console.log(data);
+      console.log('소켓', data);
       console.log(this.state.messagesRoom);
       // this.state.messagesRoom.map((v,i,a)=>{
       //   if(v.room_id === data.roomid){
@@ -55,9 +57,22 @@ export default class FriendInbox extends React.Component {
           info => data.roomid === info.room_id
           ? {...info, message_body: data.message}
           : info
-        )
+        ),
       })
     })
+
+    socket.on('recieve_ChatNum', (data)=>{
+      console.log('쳇 넘', JSON.stringify(data));
+      const room = [...this.state.messagesRoom];
+      this.setState({
+        messagesRoom: room.map(
+          info => data.roomid === info.room_id
+          ? {...info, count: data.count}
+          : info
+        ),
+      })
+    })
+
     AsyncStorage.getItem('login_user_info',(err, result)=>{
       const info = JSON.parse(result)
       this.setState({
@@ -99,7 +114,6 @@ export default class FriendInbox extends React.Component {
             newrow.month = month;
             newrow.day = day;
             newrow.min = min;
-            newrow.isNewchatNum = 0;
             console.log("new"+JSON.stringify(newrow));
 
             this.setState({
@@ -184,11 +198,23 @@ export default class FriendInbox extends React.Component {
     this.setState({
       messagesRoom: data.map(
         info => itemId === info.room_id
-          ? {...info, isNewChatNum: 0}
+          ? {...info, count: 0}
           : info
       )
     })
-    console.log("asdasd"+JSON.stringify(itemId));
+    const room_chat ={
+      room_id : itemId,
+      user_key : this.state.user_Info.user_key
+    }
+
+    fetch(func.api(3002,'ChatNumZero'),{
+      method: 'post',
+      headers:{
+        'content-type': 'application/json',
+      },
+      body:JSON.stringify(room_chat),
+    })
+
     this.props.go.navigate('Message',{roomid: itemId,touser: itemId2})
   }
 
@@ -211,7 +237,15 @@ export default class FriendInbox extends React.Component {
       <SafeAreaView style = {styles.container}>
         <TouchableOpacity onLongPress = {() => this.longPressAlert(item.room_id)} onPress = {() => this.onpress(item.room_id,item.user_key)}>
           <View style={styles.messageElem}>
-            <View style = {[item.user_sex === '0' ? styles.profileMale: styles.profileFemale]}></View>
+
+            <LinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={item.user_sex ==='0' ? ['#8ac3dc', '#63a7eb'] :['#eb6c63', '#e94e68']}
+              style={styles.linearGradient}
+              style = {[item.user_sex === '0' ? styles.profileMale: styles.profileFemale]}>
+            </LinearGradient>
+
             <View style={styles.messageInfo}>
               <View style ={styles.messageHead}>
                 <Text style={styles.nickName}>{item.user_nickname}</Text>
@@ -224,10 +258,10 @@ export default class FriendInbox extends React.Component {
               this.props.outButtonBool ?
               <View style = {styles.messageTime}>
                 <ShowDate item ={item} year = {this.state.year} day = {this.state.day}/>
-                  {item.isNewChatNum > 0 ?
+                  {item.count > 0 ?
                     <View style = {styles.newChat}>
-                      {item.isNewChatNum <300
-                        ?<Text style = {styles.isNewchat}>{item.isNewChatNum}</Text>
+                      {item.count <300
+                        ?<Text style = {styles.isNewchat}>{item.count}</Text>
                         :<Text style = {styles.isNewchat}>+300</Text>} 
                     </View> : <View/>
                   }

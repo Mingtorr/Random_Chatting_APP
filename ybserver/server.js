@@ -12,7 +12,7 @@ const io = require("socket.io")(http);
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "snsk3779@",
+  password: "root",
   database: "mydb",
 });
 
@@ -46,22 +46,38 @@ app.post("/save_message", (req, res) => {
         }
     })
   });
+
 io.on("connection",function(socket){
     console.log(socket.id);
+
     socket.on('onclick_message',(data)=>{
         const index = 1
         const test = {
             string:'asdasdasdasd'
         }
         const roomsize = data.roomsockets.length
+        const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
+        console.log('메시지데이터:', data);
 
+        io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
+        io.to(JSON.stringify(data.userkey)+'user').emit('recieve_messageroom', data);
         if(roomsize === 2){
-            const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
-            io.to(JSON.stringify(data.touserkey+'유저')).emit('recieve_messageroom',data);
-            io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
-        }else{
-            connection.query('update participant set count = count + 1 where user_key = ? and room_id = ?',[data.touserkey,data.roomid],function(err,rows,field){
-                
+            io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+        }else{ 
+            io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+
+            connection.query('update participant set count = count + 1 where user_key = ? and room_id = ?',
+            [data.touserkey, data.roomid],function(err,rows,field){
+                connection.query('SELECT count from participant where user_key =? and room_id =?',
+                [data.touserkey,data.roomid], function(err, rows, field){
+                    console.log('rows',rows[0].count);
+                    const count ={
+                        count : rows[0].count,
+                        roomid: data.roomid
+                    }
+                    console.log(count);
+                    io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_ChatNum', count)
+                })
             });
         }
     })
@@ -89,8 +105,10 @@ io.on("connection",function(socket){
         
     })
     socket.on('messageroomjoin',(data)=>{
-        socket.join(JSON.stringify(data)+'유저');
+        socket.join(JSON.stringify(data)+'user');
+        console.log('메세지룸 접속: '+ JSON.stringify(data));
     })
+
     socket.on('me',(data)=>{
         const ids =  io.of("").in("2").allSockets();
         const arr = [];

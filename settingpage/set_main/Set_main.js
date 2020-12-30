@@ -66,6 +66,10 @@ class Set_main extends Component {
     e.preventDefault();
     this.props.navigation.navigate('Set_alarm');
   };
+  go_Notice = (e) => {
+    e.preventDefault();
+    this.props.navigation.navigate('Set_notice');
+  };
   render() {
     const {modalVisible} = this.state;
     return (
@@ -130,7 +134,7 @@ class Set_main extends Component {
             {'>'}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.Box_set_main}>
+        <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Notice}>
           <Text style={{fontFamily: 'Jalnan', marginLeft: 30}}>공지사항</Text>
           <Text style={{fontFamily: 'Jalnan', marginRight: 30, fontSize: 20}}>
             {'>'}

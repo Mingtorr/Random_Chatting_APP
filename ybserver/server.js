@@ -25,15 +25,16 @@ app.use(bodyparser.json());
 // 아이디 중복체크
 app.post("/save_message", (req, res) => {
     console.log(req.body);
-    connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',[req.body.roomid,req.body.userkey,req.body.message],function(err,rows,field){
-        if(err){
-            console.log(err);
-        }else{
-            console.log('성공');
-            res.send();
-            
-        }
-    })
+    
+        connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',[req.body.roomid,req.body.userkey,req.body.message],function(err,rows,field){
+            if(err){
+                console.log(err);
+            }else{
+                console.log('성공');
+                res.send();
+                
+            }
+        })
   });
   app.post("/showmessage", (req, res) => {
     console.log(req.body);
@@ -46,22 +47,83 @@ app.post("/save_message", (req, res) => {
     })
   });
 io.on("connection",function(socket){
-    console.log("asdasdasd");
+    console.log(socket.id);
     socket.on('onclick_message',(data)=>{
         const index = 1
         const test = {
             string:'asdasdasdasd'
         }
-        const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
-        io.to(JSON.stringify(data.touserkey)).emit('recieve_messageroom',data);
-        io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
+        const roomsize = data.roomsockets.length
+
+        if(roomsize === 2){
+            const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
+            io.to(JSON.stringify(data.touserkey+'유저')).emit('recieve_messageroom',data);
+            io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
+        }else{
+            connection.query('update participant set count = count + 1 where user_key = ? and room_id = ?',[data.touserkey,data.roomid],function(err,rows,field){
+                
+            });
+        }
     })
     socket.on('roomjoin',(data)=>{ 
         socket.join(JSON.stringify(data.roomid));
         console.log(JSON.stringify(data.roomid)+'참가');
+        var roomCount = io.sockets.adapter.rooms;
+        console.log(roomCount);
+        
+        const ids =  io.of("").in(JSON.stringify(data.roomid)).allSockets();
+        const arr = [];
+        socket.emit('socketid',socket.id);
+        ids.then((successMessage) => {
+            // successMessage is whatever we passed in the resolve(...) function above.
+            // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+            console.log("Yay! " + successMessage.size);
+            const test = successMessage.values();
+            var i = 0;
+            while(i<successMessage.size){
+                arr.push(test.next().value);
+                i = i + 1;
+            }
+            io.to(JSON.stringify(data.roomid)).emit('roomsockets',arr);
+          });
+        
     })
-    socket.on('messageroomjoin',(data)=>{ 
-        socket.join(JSON.stringify(data));
+    socket.on('messageroomjoin',(data)=>{
+        socket.join(JSON.stringify(data)+'유저');
+    })
+    socket.on('me',(data)=>{
+        const ids =  io.of("").in("2").allSockets();
+        const arr = [];
+        ids.then((successMessage) => {
+            // successMessage is whatever we passed in the resolve(...) function above.
+            // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+            console.log("Yay! " + successMessage.size);
+            const test = successMessage.values();
+            var i = 0;
+            while(i<successMessage.size){
+                arr.push(test.next().value);
+                i = i + 1;
+            }
+          });
+        console.log(ids);
+    
+    })
+    socket.on('roomleave',(data)=>{
+        socket.leave(JSON.stringify(data));
+        const ids =  io.of("").in("2").allSockets();
+        const arr = [];
+        ids.then((successMessage) => {
+            // successMessage is whatever we passed in the resolve(...) function above.
+            // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+            console.log("Yay! " + successMessage.size);
+            const test = successMessage.values();
+            var i = 0;
+            while(i<successMessage.size){
+                arr.push(test.next().value);
+                i = i + 1;
+            }
+            io.to(JSON.stringify(data)).emit('roomsockets',arr);
+          });
     })
 })
 

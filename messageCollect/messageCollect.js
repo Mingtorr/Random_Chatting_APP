@@ -16,7 +16,6 @@ import FriendsInbox from './friendsInbox';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import io from 'socket.io-client'
 
-const socket = io('192.168.123.254:3001');
 
 export default class messageCollect extends React.Component{
   constructor(props){

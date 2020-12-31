@@ -54,15 +54,14 @@ io.on("connection",function(socket){
             string:'asdasdasdasd'
         }
         const roomsize = data.roomsockets.length
-
         if(roomsize === 2){
             const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
-            io.to(JSON.stringify(data.touserkey+'유저')).emit('recieve_messageroom',data);
+            io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom',data);
             io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
         }else{
-            connection.query('update participant set count = count + 1 where user_key = ? and room_id = ?',[data.touserkey,data.roomid],function(err,rows,field){
-                
-            });
+            const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
+            io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom',data);
+            io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
         }
     })
     socket.on('roomjoin',(data)=>{ 
@@ -89,7 +88,7 @@ io.on("connection",function(socket){
         
     })
     socket.on('messageroomjoin',(data)=>{
-        socket.join(JSON.stringify(data)+'유저');
+        socket.join(JSON.stringify(data)+'user');
     })
     socket.on('me',(data)=>{
         const ids =  io.of("").in("2").allSockets();

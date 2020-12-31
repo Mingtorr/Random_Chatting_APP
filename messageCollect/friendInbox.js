@@ -16,7 +16,7 @@ import CheckBox from 'react-native-check-box';
 import io from "socket.io-client";
 
 const func = require('../server/api');
-
+const socket = io(func.api(3004,''));
 export default class FriendInbox extends React.Component {
   
   constructor(props){
@@ -39,25 +39,7 @@ export default class FriendInbox extends React.Component {
     
   }
   componentWillMount(){
-    console.log("시발년들ㅇ");
-    const socket = io(func.api(3004,''));
-    socket.on('recieve_messageroom',(data)=>{
-      console.log(data);
-      console.log(this.state.messagesRoom);
-      // this.state.messagesRoom.map((v,i,a)=>{
-      //   if(v.room_id === data.roomid){
-      //     this.state.messagesRoom[i].message_body = data.message 
-      //   }
-      // })
-      const room = [...this.state.messagesRoom];
-      this.setState({
-        messagesRoom: room.map(
-          info => data.roomid === info.room_id
-          ? {...info, message_body: data.message}
-          : info
-        )
-      })
-    })
+    
     AsyncStorage.getItem('login_user_info',(err, result)=>{
       const info = JSON.parse(result)
       this.setState({
@@ -113,7 +95,24 @@ export default class FriendInbox extends React.Component {
   }
 
   componentDidMount(){
-
+    console.log("시발년들ㅇ");
+    socket.on('recieve_messageroom',(data)=>{
+      console.log(data);
+      console.log(this.state.messagesRoom);
+      // this.state.messagesRoom.map((v,i,a)=>{
+      //   if(v.room_id === data.roomid){
+      //     this.state.messagesRoom[i].message_body = data.message 
+      //   }
+      // })
+      const room = [...this.state.messagesRoom];
+      this.setState({
+        messagesRoom: room.map(
+          info => data.roomid === info.room_id
+          ? {...info, message_body: data.message}
+          : info
+        )
+      })
+    })
   }
 
   isChecked = (itemId) => {

@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
+  BackHandler,
   View,
   Text,
   TouchableOpacity ,
@@ -28,11 +29,11 @@ import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
 const func = require('../server/api');
 const timefunc = require('./timefunction');
-const socket = io(func.api(3004,''));
+
 import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
-
+const socket = io(func.api(3004,''));
 
 
 class Message extends React.Component{
@@ -43,6 +44,8 @@ class Message extends React.Component{
       userkey: '',
       myname:'',
       touserkey:this.props.route.params.touser,
+      mysocket:'',
+      roomsockets:[],
       name2:'',
       pass: "",
       start:0,
@@ -54,6 +57,10 @@ class Message extends React.Component{
       id:'aaa'
     }
   }
+  componentWillUnmount() {
+    const roomid = this.props.route.params.roomid
+    socket.emit('roomleave',roomid);
+  }
   componentDidMount(){
     AsyncStorage.getItem('login_user_info', (err, result) => {
       console.log(JSON.parse(result).user_key);
@@ -64,8 +71,23 @@ class Message extends React.Component{
     });
     const data = {
       roomid:this.props.route.params.roomid,//roomid
+      userkey:this.state.userkey
     }
+
     socket.emit('roomjoin',data); //방참가
+    socket.on('socketid',(data)=>{    //my socketid
+      console.log(JSON.stringify(data)+"socketnumber");  
+      this.setState({
+        mysocket:data
+      })
+    })
+    socket.on('roomsockets',(data)=>{   //change roomsockets
+      console.log(JSON.stringify(data));
+      this.setState({
+        roomsockets:data
+      })
+    })
+
 
    fetch(func.api(3004,'showmessage'), {
     method: "post",
@@ -113,14 +135,16 @@ class Message extends React.Component{
 
 sendmessage=()=>{
   const realtime = timefunc.settime();
-  console.log(realtime);
+  const realtime2 = new Date();
   const data = {
     roomid:this.props.route.params.roomid, //룸아이디 입력
+    roomsockets:this.state.roomsockets,
     name:this.state.myname,
     userkey:this.state.userkey,
     message:this.state.text,
     touserkey:this.state.touserkey,
-    time:realtime
+    time:realtime,
+    time2:realtime2
   }
   fetch(func.api(3004,'save_message'), {
     method: "post",
@@ -224,11 +248,12 @@ rendermessage=({item,index})=>{
 }
 }
 go = () =>{
-  console.log(this.props.route.params.roomid);
+  socket.emit('me',{test:'asdasd'});
 }
   render(){
     return(
           <SafeAreaView style={styles.message_safe}>
+            <Button title='click' onPress={this.go}/>
             <KeyboardAvoidingView style={styles.message_safe} behavior='padding' onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
               <View style={styles.message_top} >
                 <View style={{display:'flex',flex:0.5,flexDirection:"row"}}>

@@ -13,7 +13,7 @@ const route = require("./routes/indexswy");
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "snsk3779@",
+  password: "root",
   database: "mydb",
 });
 
@@ -80,7 +80,7 @@ app.post('/GetMessageRoom', (req, res) =>{
   console.log('userkey: ', userKey);
   //문제 : 상대방 parti가 삭제 되면 삭제하지 않은 나도 읽어 오지 못한다.
   //내 parti를 읽어온 뒤 상대방 key를 찾아 메시지방의 상대방 키를 찾음
-  connection.query(`SELECT part.room_id, part.user_key, info.user_nickname, info.user_sex 
+  connection.query(`SELECT part.count, part.room_id, part.user_key, info.user_nickname, info.user_sex 
   FROM participant as part Join user_table as info on part.user_key= info.user_key  
   where room_id in (SELECT room_id FROM participant WHERE user_key = ?) and part.user_key !=?`,
   [userKey, userKey],
@@ -109,9 +109,26 @@ app.post('/GetMessageRoom', (req, res) =>{
           messageRoom.map((info, index) =>{
             message.push({...info, ...bodyTime[index]})
           })
-          res.send(message);
+          connection.query('SELECT count FROM participant where user_key = ?',[userKey],
+          function (err, rows, fields){
+            const mess =[];
+            message.map((info, index)=>{
+              mess.push({...info, ...rows[index]})
+            })
+            res.send(mess);
+          })
         }
       })
+    }
+  })
+})
+
+app.post('/ChatNumZero', (req, res) =>{
+  connection.query('UPDATE participant SET count = 0 WHERE room_id = ? and user_key = ?',
+  [req.body.room_id, req.body.user_key],
+  function (err, rows, fields){
+    if(err){
+      console.log(err);
     }
   })
 })

@@ -143,6 +143,70 @@ io.on("connection",function(socket){
             io.to(JSON.stringify(data)).emit('roomsockets',arr);
           });
     })
+
+    socket.on('singleRoomDel', (data) =>{
+        console.log('선택방 삭제번호:', data);
+        //상대방 유저키 찾기
+        //상대방 유저키번호 소켓방으로 삭제되었다는 것 알리기
+        connection.query(`SELECT count(room_id) as count FROM mydb.participant where room_id = ? and room_del =?`,
+        [data.roomid, 0],
+        function (err, rows, fields) {
+            try{ //
+            if(rows[0].count > 1){ // 최초 삭제 시 participant room_del 에 1 표시하기
+                console.log('최초삭제');
+                connection.query(`
+                UPDATE participant SET room_del = 1 WHERE room_id = ? and user_key != ?`,
+                [data.roomid, data.userkey],
+                function (err, rows, fields) {
+                try{
+                    //상대방 유저키 소켓으로 삭제 이벤트 발생 시키기
+                    const index =1;
+                    const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
+
+                    io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
+                    io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+                    console.log('삭제 되었습니다.');
+                }catch(err){
+                    console.log(err);
+                }
+                })
+            }else{ // 상대방이 나간방 나가기
+                console.log('count: ', rows[0].count);
+                connection.query('DELETE FROM message_table WHERE room_id =?',
+                [data.roomid],
+                function (err, rows, fields) {
+                try{
+                    console.log('메시지 삭제');
+                    connection.query('DELETE FROM participant WHERE room_id =?',
+                    [data.roomid],
+                    function (err, rows,fields) {
+                    try{
+                        console.log('participant: 삭제');
+                        connection.query('DELETE FROM messageroom_table where room_id =?',
+                        [data.roomid],
+                        function (err, rows, fields) {
+                        try{
+                            console.log('room 삭제');
+                            console.log('삭제 완료');
+                        }catch(err){
+                            console.log(err);
+                        }
+                        })
+                    }catch(err){
+                        console.log(err);
+                    }
+                    
+                    })
+                }catch(err){
+                    console.log(err);
+                }
+                })
+        }
+        } catch(err){
+        console.log('count err: ', err);
+        }
+        })
+    })
 })
 
 http.listen(port, () => {

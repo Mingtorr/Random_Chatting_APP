@@ -17,6 +17,7 @@ import io from "socket.io-client";
 import LinearGradient from 'react-native-linear-gradient';
 
 const func = require('../server/api');
+const timefunc = require('../message/timefunction');
 
 const socket = io(func.api(3004,''));
 
@@ -44,8 +45,6 @@ export default class FriendInbox extends React.Component {
   componentWillMount(){
     console.log("시발년들ㅇ");
     socket.on('recieve_messageroom',(data)=>{
-      console.log('소켓', data);
-      console.log(this.state.messagesRoom);
 
       const newtime = new Date(data.time2);
 
@@ -164,27 +163,54 @@ export default class FriendInbox extends React.Component {
   };
   
   deleteRoom = (itemId) => {
+    const realtime = timefunc.settime();
     const data = [...this.state.messagesRoom]
+    console.log('필요한 데이터', data);
+    const realtime2 = new Date();
+    const room_del ={
+      roomid: itemId,
+      userkey: this.state.user_Info.user_key,
+      touserkey: '',
+      time: realtime,
+      time2 : realtime2,
+      message: '상대방이 나갔습니다.',
+      name: '',
+    }
+
+    data.map((value, indax) =>{
+      if(value.room_id === itemId){
+        room_del.touserkey = value.user_key;
+        room_del.name = value.user_nickname;
+      }
+    })
+
     this.setState({
       messagesRoom: data.filter(info => info.room_id !== itemId)
     })
-    const room_del ={
-      room_id: itemId,
-      user_key: this.state.user_Info.user_key
-    }
 
-    fetch(func.api(3002,'DelMessageRoom'),{
-      method: 'post',
-      headers:{
-        'content-type': 'application/json',
+    fetch(func.api(3002,'Del_message'), {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
       },
-      body:JSON.stringify(room_del),
-    }).then((res) => res.json())
-      .then((json) => {
-        if (json){
-          alert(itemId+"삭제되었습니다.")
-        }
-      })
+      body: JSON.stringify(data),
+    }).then();
+
+    
+    socket.emit('singleRoomDel', room_del);
+
+    // fetch(func.api(3002,'DelMessageRoom'),{
+    //   method: 'post',
+    //   headers:{
+    //     'content-type': 'application/json',
+    //   },
+    //   body:JSON.stringify(room_del),
+    // }).then((res) => res.json())
+    //   .then((json) => {
+    //     if (json){
+    //       alert(itemId+"삭제되었습니다.")
+    //     }
+    //   })
 
     console.log('Delete '+ itemId);
   }

@@ -12,7 +12,7 @@ const io = require("socket.io")(http);
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "snsk3779@",
+  password: "root",
   database: "mydb",
 });
 
@@ -46,22 +46,39 @@ app.post("/save_message", (req, res) => {
         }
     })
   });
+
 io.on("connection",function(socket){
     console.log(socket.id);
+
     socket.on('onclick_message',(data)=>{
         const index = 1
         const test = {
             string:'asdasdasdasd'
         }
         const roomsize = data.roomsockets.length
+        const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
+        console.log('메시지데이터:', data);
+
+        io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
+        io.to(JSON.stringify(data.userkey)+'user').emit('recieve_messageroom', data);
         if(roomsize === 2){
-            const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
-            io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom',data);
-            io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
-        }else{
-            const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
-            io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom',data);
-            io.to(JSON.stringify(data.roomid)).emit('recieve_message',messagedata);
+            io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+        }else{ 
+            io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+
+            connection.query('update participant set count = count + 1 where user_key = ? and room_id = ?',
+            [data.touserkey, data.roomid],function(err,rows,field){
+                connection.query('SELECT count from participant where user_key =? and room_id =?',
+                [data.touserkey,data.roomid], function(err, rows, field){
+                    console.log('rows',rows[0].count);
+                    const count ={
+                        count : rows[0].count,
+                        roomid: data.roomid
+                    }
+                    console.log(count);
+                    io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_ChatNum', count)
+                })
+            });
         }
     })
     socket.on('roomjoin',(data)=>{ 
@@ -89,7 +106,9 @@ io.on("connection",function(socket){
     })
     socket.on('messageroomjoin',(data)=>{
         socket.join(JSON.stringify(data)+'user');
+        console.log('메세지룸 접속: '+ JSON.stringify(data));
     })
+
     socket.on('me',(data)=>{
         const ids =  io.of("").in("2").allSockets();
         const arr = [];
@@ -123,6 +142,70 @@ io.on("connection",function(socket){
             }
             io.to(JSON.stringify(data)).emit('roomsockets',arr);
           });
+    })
+
+    socket.on('singleRoomDel', (data) =>{
+        console.log('선택방 삭제번호:', data);
+        //상대방 유저키 찾기
+        //상대방 유저키번호 소켓방으로 삭제되었다는 것 알리기
+        connection.query(`SELECT count(room_id) as count FROM mydb.participant where room_id = ? and room_del =?`,
+        [data.roomid, 0],
+        function (err, rows, fields) {
+            try{ //
+            if(rows[0].count > 1){ // 최초 삭제 시 participant room_del 에 1 표시하기
+                console.log('최초삭제');
+                connection.query(`
+                UPDATE participant SET room_del = 1 WHERE room_id = ? and user_key != ?`,
+                [data.roomid, data.userkey],
+                function (err, rows, fields) {
+                try{
+                    //상대방 유저키 소켓으로 삭제 이벤트 발생 시키기
+                    const index =1;
+                    const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
+
+                    io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
+                    io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+                    console.log('삭제 되었습니다.');
+                }catch(err){
+                    console.log(err);
+                }
+                })
+            }else{ // 상대방이 나간방 나가기
+                console.log('count: ', rows[0].count);
+                connection.query('DELETE FROM message_table WHERE room_id =?',
+                [data.roomid],
+                function (err, rows, fields) {
+                try{
+                    console.log('메시지 삭제');
+                    connection.query('DELETE FROM participant WHERE room_id =?',
+                    [data.roomid],
+                    function (err, rows,fields) {
+                    try{
+                        console.log('participant: 삭제');
+                        connection.query('DELETE FROM messageroom_table where room_id =?',
+                        [data.roomid],
+                        function (err, rows, fields) {
+                        try{
+                            console.log('room 삭제');
+                            console.log('삭제 완료');
+                        }catch(err){
+                            console.log(err);
+                        }
+                        })
+                    }catch(err){
+                        console.log(err);
+                    }
+                    
+                    })
+                }catch(err){
+                    console.log(err);
+                }
+                })
+        }
+        } catch(err){
+        console.log('count err: ', err);
+        }
+        })
     })
 })
 

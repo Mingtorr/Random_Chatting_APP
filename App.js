@@ -17,6 +17,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MessageCollect from './messageCollect/messageCollect';
 import Set_privacy from './settingpage/set_privacy/Set_privacy';
 import Set_alarm from './settingpage/set_alarm/Set_alarm';
+import Set_notice from './settingpage/set_notice/Set_notice';
 import {fcmService} from './push/FCMService';
 import {localNotificationService} from './push/LocalNotificationService';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -162,6 +163,11 @@ export default class App extends React.Component {
               <Stack.Screen
                 name="Set_alarm"
                 component={Set_alarm}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Set_notice"
+                component={Set_notice}
                 options={{headerShown: false}}
               />
             </>

@@ -53,6 +53,7 @@ class Message extends React.Component{
       refresh:false,
       lastownername:false,
       arr : [],
+      arrendkey:'',
       text:'',
       id:'aaa'
     }
@@ -63,7 +64,6 @@ class Message extends React.Component{
   }
   componentDidMount(){
     AsyncStorage.getItem('login_user_info', (err, result) => {
-      console.log(JSON.parse(result).user_key);
       this.setState({
         userkey:JSON.parse(result).user_key,
         myname:JSON.parse(result).user_nickname
@@ -76,13 +76,11 @@ class Message extends React.Component{
 
     socket.emit('roomjoin',data); //방참가
     socket.on('socketid',(data)=>{    //my socketid
-      console.log(JSON.stringify(data)+"socketnumber");  
       this.setState({
         mysocket:data
       })
     })
     socket.on('roomsockets',(data)=>{   //change roomsockets
-      console.log(JSON.stringify(data));
       this.setState({
         roomsockets:data
       })
@@ -102,10 +100,15 @@ class Message extends React.Component{
         key : value.message_key,
         name : value.user_nickname,
         message : value.message_body,
+        sendid:value.user_key,
         time: realtime
       }
+      console.log(row);
       this.setState({
         arr:[...this.state.arr,row],
+      })
+      this.setState({
+        arrendkey:this.state.arr[this.state.arr.length-1].key
       })
       if(this.state.arr.length >20){
         this.setState({
@@ -126,7 +129,6 @@ class Message extends React.Component{
     
     // console.log(this.state.page);
     socket.on('recieve_message',(data)=>{
-      console.log('recive');
       this.setState({
         arr:[...this.state.arr,data]
       })
@@ -145,7 +147,8 @@ sendmessage=()=>{
     message:this.state.text,
     touserkey:this.state.touserkey,
     time:realtime,
-    time2:realtime2
+    time2:realtime2,
+    arrendkey:this.state.arrendkey
   }
   fetch(func.api(3004,'save_message'), {
     method: "post",
@@ -249,12 +252,13 @@ rendermessage=({item,index})=>{
 }
 }
 go = () =>{
-  socket.emit('me',{test:'asdasd'});
+  console.log("신고하기");
+  this.props.navigation.navigate('singo',{messages:this.state.arr,userkey:this.state.userkey,touserkey:this.state.touserkey});
 }
   render(){
     return(
           <SafeAreaView style={styles.message_safe}>
-            <Button title='click' onPress={this.go}/>
+            <Button title='신고하기' onPress={this.go}/>
             <KeyboardAvoidingView style={styles.message_safe} behavior='padding' onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
               <View style={styles.message_top} >
                 <View style={{display:'flex',flex:0.5,flexDirection:"row"}}>

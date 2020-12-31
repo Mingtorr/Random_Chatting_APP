@@ -7,16 +7,13 @@ function settime() {
     if(hours==12){
       
       const stringtime = "오후 "+JSON.stringify(hours)+":"+JSON.stringify(minutes)
-      console.log(stringtime);
       return stringtime;
     }else if(hours>12){
       hours = hours - 12;
       const stringtime = "오후 "+JSON.stringify(hours)+":"+JSON.stringify(minutes)
-      console.log(stringtime);
       return stringtime;
     }else if(hours<12){
       const stringtime = "오전 "+JSON.stringify(hours)+":"+JSON.stringify(minutes)
-      console.log(stringtime);
       return stringtime;
     }
   }
@@ -27,32 +24,26 @@ function settime() {
     if(minutes<10){
         if(hours==12){
             const stringtime = "오후 "+JSON.stringify(hours)+":0"+JSON.stringify(minutes)
-            console.log(stringtime);
             return stringtime;
           }else if(hours>12){
             hours = hours - 12;
             const stringtime = "오후 "+JSON.stringify(hours)+":0"+JSON.stringify(minutes)
-            console.log(stringtime);
             return stringtime;
           }else if(hours<12){
             const stringtime = "오전 "+JSON.stringify(hours)+":0"+JSON.stringify(minutes)
-            console.log(stringtime);
             return stringtime;
           }
     }
     else{
         if(hours==12){
             const stringtime = "오후 "+JSON.stringify(hours)+":"+JSON.stringify(minutes)
-            console.log(stringtime);
             return stringtime;
           }else if(hours>12){
             hours = hours - 12;
             const stringtime = "오후 "+JSON.stringify(hours)+":"+JSON.stringify(minutes)
-            console.log(stringtime);
             return stringtime;
           }else if(hours<12){
             const stringtime = "오전 "+JSON.stringify(hours)+":"+JSON.stringify(minutes)
-            console.log(stringtime);
             return stringtime;
           }
     }

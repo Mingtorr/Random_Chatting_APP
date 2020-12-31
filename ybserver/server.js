@@ -12,7 +12,7 @@ const io = require("socket.io")(http);
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "snsk3779@",
   database: "mydb",
 });
 
@@ -46,17 +46,48 @@ app.post("/save_message", (req, res) => {
         }
     })
   });
+  app.post("/find_touser", (req, res) => {
+    connection.query('insert into reportBan_table (sender_key,report_body,badguy_key) values (?,?,?)',[req.body.userkey,req.body.text,req.body.touserkey],function(err,rows,field){
+        if(err){
+            console.log(err);
+        }
+        else{
+            connection.query('select * from reportBan_table where sender_key = ? and report_body = ? and badguy_key = ?',[req.body.userkey,req.body.text,req.body.touserkey],function(err,rows,field){
+                if(err){
+                    console.log(err);
+                }else{
+                    const key = rows[0].report_key;
+                    const messages = req.body.messages;
+                    console.log(messages);
+                    messages.map((value,index,arr)=>{
+                        connection.query('insert into Ban_message_table (report_key,ban_message_body,ban_message_sender) values (?,?,?)',[key,value.message,value.sendid],function(err,rows,field){
+                            if(err){
+                                console.log(err);
+                            }
+                            else{
+                                console.log('성공');
+                                res.send();
+                            }
+                        })
+                    })
+
+                }                
+            })
+        }
+    })
+  });
 
 io.on("connection",function(socket){
     console.log(socket.id);
 
     socket.on('onclick_message',(data)=>{
-        const index = 1
+        console.log(data.arrendkey+"end message key");
+        const index = data.arrendkey+200;
         const test = {
             string:'asdasdasdasd'
         }
         const roomsize = data.roomsockets.length
-        const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
+        const messagedata = {key:index,name:data.name,message:data.message,time:data.time,sendid:data.userkey}
         console.log('메시지데이터:', data);
 
         io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);

@@ -82,7 +82,7 @@ app.post('/GetMessageRoom', (req, res) =>{
   //내 parti를 읽어온 뒤 상대방 key를 찾아 메시지방의 상대방 키를 찾음
   connection.query(`SELECT part.count, part.room_id, part.user_key, info.user_nickname, info.user_sex 
   FROM participant as part Join user_table as info on part.user_key= info.user_key  
-  where room_id in (SELECT room_id FROM participant WHERE user_key = ?) and part.user_key !=?`,
+  where room_id in (SELECT room_id FROM participant WHERE user_key = ?) and part.user_key !=? and part.room_del =0`,
   [userKey, userKey],
   function (err, rows, fields){
     if(err){
@@ -131,6 +131,20 @@ app.post('/ChatNumZero', (req, res) =>{
       console.log(err);
     }
   })
+})
+
+app.post('Del_message', (req,res) =>{
+  console.log(req.body);
+    
+        connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',
+        [req.body.roomid,req.body.userkey,'delcode5010'],function(err,rows,field){
+            if(err){
+                console.log(err);
+            }else{
+                console.log('성공');
+                res.send();
+            }
+        })
 })
 
 io.on("connection", function (socket){

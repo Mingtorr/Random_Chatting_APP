@@ -126,6 +126,7 @@ class Message extends React.Component{
     
     // console.log(this.state.page);
     socket.on('recieve_message',(data)=>{
+      console.log('recive');
       this.setState({
         arr:[...this.state.arr,data]
       })

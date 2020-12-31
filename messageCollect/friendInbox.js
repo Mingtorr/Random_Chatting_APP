@@ -46,16 +46,27 @@ export default class FriendInbox extends React.Component {
     socket.on('recieve_messageroom',(data)=>{
       console.log('소켓', data);
       console.log(this.state.messagesRoom);
-      // this.state.messagesRoom.map((v,i,a)=>{
-      //   if(v.room_id === data.roomid){
-      //     this.state.messagesRoom[i].message_body = data.message 
-      //   }
-      // })
+
+      const newtime = new Date(data.time2);
+
+      let day = newtime.getDate();
+      let hour = newtime.getHours();
+      let min = newtime.getMinutes();
+      let ampm;
+
+      if (hour > 12){
+        ampm = '오후'
+        hour = hour - 12;
+      }else{
+        ampm = '오전'
+        hour = hour;
+      }
+
       const room = [...this.state.messagesRoom];
       this.setState({
         messagesRoom: room.map(
           info => data.roomid === info.room_id
-          ? {...info, message_body: data.message}
+          ? {...info, message_body: data.message, ampm: ampm, hour: hour, min, min }
           : info
         ),
       })
@@ -229,8 +240,6 @@ export default class FriendInbox extends React.Component {
     })
     console.log(data);
   }
-
-
 
   renderItem = ({item}) =>{
     return (

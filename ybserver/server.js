@@ -46,6 +46,17 @@ app.post("/save_message", (req, res) => {
         }
     })
   });
+  app.post("/mynickname", (req, res) => {
+    console.log(req.body);
+    connection.query('SELECT * FROM user_table where user_key = ?',[req.body.touser],function(err,rows,field){
+        if(err){
+            console.log(err);
+        }else{
+            console.log(rows[0]);
+            res.send(rows[0]);
+        }
+    })
+  });
   app.post("/find_touser", (req, res) => {
     connection.query('insert into reportBan_table (sender_key,report_body,badguy_key) values (?,?,?)',[req.body.userkey,req.body.text,req.body.touserkey],function(err,rows,field){
         if(err){

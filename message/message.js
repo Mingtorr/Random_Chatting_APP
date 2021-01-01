@@ -55,7 +55,8 @@ class Message extends React.Component{
       arr : [],
       arrendkey:'',
       text:'',
-      id:'aaa'
+      id:'aaa',
+      mynickname:''
     }
   }
   componentWillUnmount() {
@@ -73,7 +74,9 @@ class Message extends React.Component{
       roomid:this.props.route.params.roomid,//roomid
       userkey:this.state.userkey
     }
-
+    const data2 = {
+      touser:this.state.touserkey
+    }
     socket.emit('roomjoin',data); //방참가
     socket.on('socketid',(data)=>{    //my socketid
       this.setState({
@@ -85,8 +88,17 @@ class Message extends React.Component{
         roomsockets:data
       })
     })
-
-
+    fetch(func.api(3004,'mynickname'), {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data2),
+    }).then(res=>res.json()).then((json)=>{
+      this.setState({
+        mynickname:json.user_nickname
+      })
+    })
    fetch(func.api(3004,'showmessage'), {
     method: "post",
     headers: {
@@ -261,9 +273,8 @@ go = () =>{
             <Button title='신고하기' onPress={this.go}/>
             <KeyboardAvoidingView style={styles.message_safe} behavior='padding' onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
               <View style={styles.message_top} >
-                <View style={{display:'flex',flex:0.5,flexDirection:"row"}}>
-                  <Image style={{width:20,height:20,marginRight:10}}source={require('./logindot.png')}/>
-                  <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>어리고착한콩</Text>
+                <View style={{display:'flex',flex:0.5,flexDirection:"row",justifyContent:'center'}}>
+                  <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>{this.state.mynickname}</Text>
                   <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}> 님</Text>
                 </View>
               </View>

@@ -94,7 +94,7 @@ function MessageTab(props) {
         }
       }}>
       <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool} go={props.go}/>}/>
-      <Tab.Screen name="과팅" children= {() => <FriendsInbox />} />
+      <Tab.Screen name="과팅" children= {() => <FriendsInbox go={props.go}/>} />
     </Tab.Navigator>
   );
 }

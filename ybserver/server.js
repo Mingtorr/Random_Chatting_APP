@@ -90,7 +90,50 @@ app.post("/save_message", (req, res) => {
 
 io.on("connection",function(socket){
     console.log(socket.id);
-
+    socket.on('groupleave',(data)=>{
+        socket.leave(data.roomkey+'group');
+        var roomCount = io.sockets.adapter.rooms;
+        console.log(roomCount);
+        
+        const ids =  io.of("").in(data.roomkey+'group').allSockets();
+        const arr = [];
+        ids.then((successMessage) => {
+            // successMessage is whatever we passed in the resolve(...) function above.
+            // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+            console.log("Yay! " + successMessage.size);
+            const test = successMessage.values();
+            var i = 0;
+            while(i<successMessage.size){
+                arr.push(test.next().value);
+                i = i + 1;
+            }
+            io.to(data.roomkey+'group').emit('groupsize',arr);
+          });
+    })
+    socket.on('groupjoin',(data)=>{
+        socket.join(data.groupkey+'group');
+        console.log('그룹방 참가');
+        var roomCount = io.sockets.adapter.rooms;
+        console.log(roomCount);
+        
+        const ids =  io.of("").in(data.groupkey+'group').allSockets();
+        const arr = [];
+        ids.then((successMessage) => {
+            // successMessage is whatever we passed in the resolve(...) function above.
+            // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+            console.log("Yay! " + successMessage.size);
+            const test = successMessage.values();
+            var i = 0;
+            while(i<successMessage.size){
+                arr.push(test.next().value);
+                i = i + 1;
+            }
+            io.to(data.groupkey+'group').emit('groupsize',arr);
+          });
+    })
+    socket.on('group_sendmessage',(data)=>{
+        io.to('1group').emit('recieve_groupmessage',data);
+    })
     socket.on('onclick_message',(data)=>{
         console.log(data.arrendkey+"end message key");
         const index = data.arrendkey+200;

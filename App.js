@@ -22,6 +22,7 @@ import Singo from './message/singo';
 import {fcmService} from './push/FCMService';
 import {localNotificationService} from './push/LocalNotificationService';
 import AsyncStorage from '@react-native-community/async-storage';
+import Groupmessage from './groupmessage/groupmessage';
 import {
   SafeAreaView,
   StyleSheet,
@@ -174,6 +175,11 @@ export default class App extends React.Component {
                <Stack.Screen
                 name="singo"
                 component={Singo}
+                options={{headerShown: false}}
+              />
+               <Stack.Screen
+                name="Groupmessage"
+                component={Groupmessage}
                 options={{headerShown: false}}
               />
             </>

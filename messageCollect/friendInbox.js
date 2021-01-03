@@ -64,7 +64,7 @@ export default class FriendInbox extends React.Component {
       this.setState({
         messagesRoom: room.map(
           info => data.roomid === info.room_id
-          ? {...info, message_body: data.message, ampm: ampm, hour: hour, min, min }
+          ? {...info, message_body: data.message, ampm: ampm, hour: hour, min: min }
           : info
         ),
       })

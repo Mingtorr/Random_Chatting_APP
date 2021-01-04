@@ -39,10 +39,12 @@ export default class FriendInbox extends React.Component {
     const date = today.getDate();  // 날짜
     const hour = today.getHours();
     const min = today.getMinutes();
-    
   }
   componentWillMount(){
-    console.log("시발년들ㅇ");
+    const key ={
+      key: this.state.user_Info
+    }
+
     socket.on('recieve_messageroom',(data)=>{
 
       const newtime = new Date(data.time2);
@@ -70,7 +72,6 @@ export default class FriendInbox extends React.Component {
     })
 
     socket.on('recieve_ChatNum', (data)=>{
-      console.log('쳇 넘', JSON.stringify(data));
       const room = [...this.state.messagesRoom];
       this.setState({
         messagesRoom: room.map(
@@ -97,9 +98,7 @@ export default class FriendInbox extends React.Component {
         body:JSON.stringify(key),
       }).then((res) => res.json())
         .then((json) =>{
-          console.log('fetch안에 내용', this.state.user_Info.user_key);
           json.map((row) =>{
-            console.log("row:" + JSON.stringify(row));
             const newtime = new Date(row.message_time);
             let year = newtime.getFullYear();
             let month = newtime.getMonth()+1;
@@ -195,6 +194,11 @@ export default class FriendInbox extends React.Component {
   }
 
   longPressAlert = (itemId) =>{
+    const key ={
+      key:1
+    }
+    
+
     Alert.alert("방을 나가시겠습니까?",
     "상대방이 슬퍼할지도 몰라요.",
     [

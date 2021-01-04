@@ -12,7 +12,8 @@ import {
   CheckBox,
 } from 'react-native';
 import FriendInbox from './friendInbox';
-import FriendsInbox from './friendsInbox';
+// import FriendsInbox from './friendsInbox';
+import Grouproom from './grouproom';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import io from 'socket.io-client'
 
@@ -83,7 +84,7 @@ function MessageTab(props) {
   return (
     <Tab.Navigator tabBarOptions =
       {{style: {backgroundColor: 'none' ,width:'100%', height:48, marginTop:-8}, 
-        tabStyle:{ width:70},
+        // tabStyle:{ width:70},
         labelStyle: {fontSize: 16, fontWeight:'bold' },
         activeTintColor: '#eb6c63',
         inactiveTintColor: '#bababa',
@@ -94,7 +95,7 @@ function MessageTab(props) {
         }
       }}>
       <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool} go={props.go}/>}/>
-      <Tab.Screen name="과팅" children= {() => <FriendsInbox go={props.go}/>} />
+      <Tab.Screen name="오픈채팅" children= {() => <Grouproom go={props.go}/>} />
     </Tab.Navigator>
   );
 }

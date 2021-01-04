@@ -19,6 +19,15 @@ import RadioForm from 'react-native-simple-radio-button';
 import RNPickerSelect from 'react-native-picker-select';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
+// import {
+//   InterstitialAd,
+//   RewardedAd,
+//   BannerAd,
+//   TestIds,
+//   AdEventType,
+//   RewardedAdEventType,
+//   BannerAdSize,
+// } from '@react-native-firebase/admob';
 const {windowHidth, windowHeight} = Dimensions.get('window');
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
@@ -119,6 +128,23 @@ export default class Solo_match extends React.Component {
       message: e,
     });
   };
+
+  componentDidMount = () => {
+    // let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+    //   requestNonPersonalizedAdsOnly: true,
+    //   keywords: ['fashion', 'clothing'],
+    // });
+    // let rewardlListener = rewardAd.onAdEvent((type, error, reward) => {
+    //   if (type === RewardedAdEventType.LOADED) {
+    //     rewardAd.show();
+    //   }
+    // });
+    // rewardAd.load();
+    // return () => {
+    //   rewardlListener = null;
+    // };
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.matching_tab_bg}>
@@ -159,6 +185,12 @@ export default class Solo_match extends React.Component {
                 />
               </View>
             </View>
+            {/* <View>
+              <BannerAd
+                size={BannerAdSize.SMART_BANNER}
+                unitId={TestIds.BANNER}
+              />
+            </View> */}
             <View style={{display: 'flex', flex: 0.25, flexDirection: 'row'}}>
               <View
                 style={{

@@ -87,7 +87,7 @@ export default class Solo_match extends React.Component {
           console.log(json);
           if (json === false) alert('조건에 맞는 사용자가 없습니다.');
           else {
-            //row 저장 이후 동작
+            alert('메시지를 전송했습니다.');
           }
         });
     });

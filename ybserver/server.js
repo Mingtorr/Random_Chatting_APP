@@ -189,6 +189,7 @@ io.on('connection', function (socket) {
     } else {
       io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
 
+<<<<<<< HEAD
       connection.query(
         'update participant set count = count + 1 where user_key = ? and room_id = ?',
         [data.touserkey, data.roomid],
@@ -218,6 +219,71 @@ io.on('connection', function (socket) {
     console.log(JSON.stringify(data.roomid) + '참가');
     var roomCount = io.sockets.adapter.rooms;
     console.log(roomCount);
+=======
+io.on("connection",function(socket){
+    console.log(socket.id);
+    socket.on('groupleave',(data)=>{
+        socket.leave(data.roomkey+'group');
+        var roomCount = io.sockets.adapter.rooms;
+        console.log(roomCount);
+        
+        const ids =  io.of("").in(data.roomkey+'group').allSockets();
+        const arr = [];
+        ids.then((successMessage) => {
+            // successMessage is whatever we passed in the resolve(...) function above.
+            // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+            console.log("Yay! " + successMessage.size);
+            const test = successMessage.values();
+            var i = 0;
+            while(i<successMessage.size){
+                arr.push(test.next().value);
+                i = i + 1;
+            }
+            io.to(data.roomkey+'group').emit('groupsize',arr);
+          });
+    })
+    socket.on('groupjoin',(data)=>{
+        socket.join(data.groupkey+'group');
+        console.log('그룹방 참가');
+        var roomCount = io.sockets.adapter.rooms;
+        console.log(roomCount);
+        
+        const ids =  io.of("").in(data.groupkey+'group').allSockets();
+        const arr = [];
+        ids.then((successMessage) => {
+            // successMessage is whatever we passed in the resolve(...) function above.
+            // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+            console.log("Yay! " + successMessage.size);
+            const test = successMessage.values();
+            var i = 0;
+            while(i<successMessage.size){
+                arr.push(test.next().value);
+                i = i + 1;
+            }
+            io.to(data.groupkey+'group').emit('groupsize',arr);
+          });
+    })
+    socket.on('group_sendmessage',(data)=>{
+        io.to('1group').emit('recieve_groupmessage',data);
+    })
+    socket.on('onclick_message',(data)=>{
+        console.log(data.arrendkey+"end message key");
+        console.log("시발 새끼"+data.userkey);
+        const index = data.arrendkey+200;
+        const test = {
+            string:'asdasdasdasd'
+        }
+        const roomsize = data.roomsockets.length
+        const messagedata = {key:index,name:data.name,message:data.message,time:data.time, sendid:data.userkey}
+        console.log('메시지데이터:', data);
+
+        io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
+        io.to(JSON.stringify(data.userkey)+'user').emit('recieve_messageroom', data);
+        if(roomsize === 2){
+            io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+        }else{ 
+            io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+>>>>>>> beaa6b5fc08f6379ba552af2197c840b056b388b
 
     const ids = io.of('').in(JSON.stringify(data.roomid)).allSockets();
     const arr = [];
@@ -274,6 +340,7 @@ io.on('connection', function (socket) {
     });
   });
 
+<<<<<<< HEAD
   socket.on('singleRoomDel', (data) => {
     console.log('선택방 삭제번호:', data);
     //상대방 유저키 찾기
@@ -313,6 +380,40 @@ io.on('connection', function (socket) {
                   console.log('삭제 되었습니다.');
                 } catch (err) {
                   console.log(err);
+=======
+    socket.on('singleRoomDel', (data) =>{
+        console.log('선택방 삭제번호:', data);
+        //상대방 유저키 찾기
+        //상대방 유저키번호 소켓방으로 삭제되었다는 것 알리기
+        connection.query(`SELECT count(room_id) as count FROM mydb.participant where room_id = ? and room_del =?`,
+        [data.roomid, 0],
+        function (err, rows, fields) {
+            try{ //
+            if(rows[0].count > 1){ //1 최초 삭제 시 participant room_del 에 1 표시하기
+                console.log('최초삭제1');
+                connection.query(`
+                UPDATE participant SET room_del = 1 WHERE room_id = ? and user_key != ?`,
+                [data.roomid, data.userkey],
+                function (err, rows, fields) {
+                try{
+                    //상대방 유저키 소켓으로 삭제 이벤트 발생 시키기
+                    const index =1;
+                    const messagedata = {key:index,name:data.name,message:data.message,time:data.time, sendid:data.userkey}
+
+                    connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',
+                    [data.roomid, data.userkey,'delcode5010'],function(err,rows,field){
+                        if(err){
+                            console.log(err);
+                        }else{
+                            io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
+                            io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+                            console.log('삭제 되었습니다.');
+                        }
+                    })
+
+                }catch(err){
+                    console.log(err);
+>>>>>>> beaa6b5fc08f6379ba552af2197c840b056b388b
                 }
               },
             );

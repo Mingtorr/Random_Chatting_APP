@@ -10,7 +10,15 @@ import {
   Button,
   Switch,
 } from 'react-native';
-
+import {
+  InterstitialAd,
+  RewardedAd,
+  BannerAd,
+  TestIds,
+  AdEventType,
+  RewardedAdEventType,
+  BannerAdSize,
+} from '@react-native-firebase/admob';
 import Solo_match from './solomatch';
 import Group_match from './groupmatch';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -31,6 +39,27 @@ export default class match_page extends React.Component {
       shadowTF: 'none',
     };
   }
+
+  startAdmob = () => {
+    let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+      requestNonPersonalizedAdsOnly: true,
+      keywords: ['fashion', 'clothing'],
+    });
+    let rewardlListener = rewardAd.onAdEvent((type, error, reward) => {
+      if (type === RewardedAdEventType.LOADED) {
+        rewardAd.show();
+      }
+      if (type === RewardedAdEventType.EARNED_REWARD) {
+        // alert('충전 완료');
+      }
+    });
+    rewardAd.load();
+
+    return () => {
+      rewardlListener = null;
+    };
+  };
+
   shadow = () => {
     if (this.state.shadowTF == 'none') {
       this.setState({
@@ -225,30 +254,33 @@ export default class match_page extends React.Component {
               marginBottom: 10,
             }}>
             {/* <View style={{flex:0.55,justifyContent:'center',marginLeft:50,flexDirection:'row'}}> */}
-            <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              colors={['#E94e68', '#eb6c63']}
-              style={styles.linearGradient}
-              style={{
-                width: 110,
-                height: 40,
-                backgroundColor: '#E94e68',
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 10,
-              }}>
-              <Text
+            <TouchableOpacity onPress={this.startAdmob}>
+              <LinearGradient
+                // onPress={this.startAnimationL}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={['#E94e68', '#eb6c63']}
+                style={styles.linearGradient}
                 style={{
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                  fontFamily: 'Jalnan',
-                  color: 'white',
+                  width: 110,
+                  height: 40,
+                  backgroundColor: '#E94e68',
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 10,
                 }}>
-                {this.state.chatting}
-              </Text>
-            </LinearGradient>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    fontFamily: 'Jalnan',
+                    color: 'white',
+                  }}>
+                  {this.state.chatting}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
             {/* </View> */}
           </View>
         </Animated.View>

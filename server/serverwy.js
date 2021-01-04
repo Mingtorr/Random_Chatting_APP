@@ -147,8 +147,21 @@ app.post('/ChatNumZero', (req, res) => {
   );
 });
 
-app.post('Del_message', (req, res) => {
-  console.log(req.body);
+app.post('Del_message', (req,res) =>{
+  console.log('삭제', req.body);
+    
+        connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',
+        [req.body.roomid,req.body.userkey,'delcode5010'],function(err,rows,field){
+            if(err){
+                console.log(err);
+            }else{
+                console.log('성공');
+                res.send();
+            }
+        })
+})
+
+io.on("connection", function (socket){
 
   connection.query(
     'insert into message_table (room_id,user_key,message_body) values (?,?,?)',

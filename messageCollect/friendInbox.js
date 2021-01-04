@@ -47,7 +47,6 @@ export default class FriendInbox extends React.Component {
 
       const newtime = new Date(data.time2);
 
-      let day = newtime.getDate();
       let hour = newtime.getHours();
       let min = newtime.getMinutes();
       let ampm;
@@ -167,7 +166,7 @@ export default class FriendInbox extends React.Component {
       touserkey: '',
       time: realtime,
       time2 : realtime2,
-      message: '상대방이 나갔습니다.',
+      message: 'delcode5010',
       name: '',
     }
 
@@ -178,10 +177,6 @@ export default class FriendInbox extends React.Component {
       }
     })
 
-    this.setState({
-      messagesRoom: data.filter(info => info.room_id !== itemId)
-    })
-
     fetch(func.api(3002,'Del_message'), {
       method: "post",
       headers: {
@@ -189,22 +184,12 @@ export default class FriendInbox extends React.Component {
       },
       body: JSON.stringify(data),
     }).then();
-
     
     socket.emit('singleRoomDel', room_del);
 
-    // fetch(func.api(3002,'DelMessageRoom'),{
-    //   method: 'post',
-    //   headers:{
-    //     'content-type': 'application/json',
-    //   },
-    //   body:JSON.stringify(room_del),
-    // }).then((res) => res.json())
-    //   .then((json) => {
-    //     if (json){
-    //       alert(itemId+"삭제되었습니다.")
-    //     }
-    //   })
+    this.setState({
+      messagesRoom: data.filter(info => info.room_id !== itemId)
+    })
 
     console.log('Delete '+ itemId);
   }
@@ -280,7 +265,9 @@ export default class FriendInbox extends React.Component {
                 <Text style={styles.nickName}>{item.user_nickname}</Text>
               </View>
               <View style = {styles.messageLastChat}>
-                <Text style = {styles.lastChat}>{item.message_body}</Text>
+                {item.message_body === 'delcode5010'
+                ?<Text style = {styles.lastChat}>상대방이 나갔습니다</Text>
+                :<Text style = {styles.lastChat}>{item.message_body}</Text>}
               </View>
             </View>
             {

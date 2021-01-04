@@ -70,6 +70,7 @@ class Message extends React.Component{
         myname:JSON.parse(result).user_nickname
       })
     });
+    console.log("sibal sekiya "+ this.state.userkey);
     const data = {
       roomid:this.props.route.params.roomid,//roomid
       userkey:this.state.userkey
@@ -233,7 +234,7 @@ wholastmessage2=()=>{
 rendermessage=({item,index})=>{
   {
     if(index===0){ 
-      if(this.state.myname === item.name){
+      if(this.state.userkey === item.sendid){
       
         return(<Mymessage message={item.message} time={item.time}/>)
       }else{
@@ -242,9 +243,9 @@ rendermessage=({item,index})=>{
       }
     }else{
       
-      if(this.state.arr[this.state.start+index-1].name === item.name)
+      if(this.state.arr[this.state.start+index-1].userkey === item.sendid)
       {
-        if(this.state.myname === item.name){
+        if(this.state.userkey === item.sendid){
          
           return( <Mymessage message={item.message} time={item.time}/>)
         }else{
@@ -254,7 +255,7 @@ rendermessage=({item,index})=>{
       }
       else{
  
-        if(this.state.myname === item.name){
+        if(this.state.userkey === item.sendid){
           return(<Mymessage message={item.message} time={item.time}/>)
         }else{
           return(<Yourmessage message={item.message} name={item.name} pre={false} time={item.time}/>)

@@ -136,12 +136,13 @@ io.on("connection",function(socket){
     })
     socket.on('onclick_message',(data)=>{
         console.log(data.arrendkey+"end message key");
+        console.log("시발 새끼"+data.userkey);
         const index = data.arrendkey+200;
         const test = {
             string:'asdasdasdasd'
         }
         const roomsize = data.roomsockets.length
-        const messagedata = {key:index,name:data.name,message:data.message,time:data.time,sendid:data.userkey}
+        const messagedata = {key:index,name:data.name,message:data.message,time:data.time, sendid:data.userkey}
         console.log('메시지데이터:', data);
 
         io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
@@ -237,8 +238,8 @@ io.on("connection",function(socket){
         [data.roomid, 0],
         function (err, rows, fields) {
             try{ //
-            if(rows[0].count > 1){ // 최초 삭제 시 participant room_del 에 1 표시하기
-                console.log('최초삭제');
+            if(rows[0].count > 1){ //1 최초 삭제 시 participant room_del 에 1 표시하기
+                console.log('최초삭제1');
                 connection.query(`
                 UPDATE participant SET room_del = 1 WHERE room_id = ? and user_key != ?`,
                 [data.roomid, data.userkey],
@@ -246,11 +247,19 @@ io.on("connection",function(socket){
                 try{
                     //상대방 유저키 소켓으로 삭제 이벤트 발생 시키기
                     const index =1;
-                    const messagedata = {key:index,name:data.name,message:data.message,time:data.time}
+                    const messagedata = {key:index,name:data.name,message:data.message,time:data.time, sendid:data.userkey}
 
-                    io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
-                    io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
-                    console.log('삭제 되었습니다.');
+                    connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',
+                    [data.roomid, data.userkey,'delcode5010'],function(err,rows,field){
+                        if(err){
+                            console.log(err);
+                        }else{
+                            io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
+                            io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
+                            console.log('삭제 되었습니다.');
+                        }
+                    })
+
                 }catch(err){
                     console.log(err);
                 }

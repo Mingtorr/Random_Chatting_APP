@@ -129,6 +129,8 @@ app.post('/ChatNumZero', (req, res) =>{
   function (err, rows, fields){
     if(err){
       console.log(err);
+    }else{
+      console.log('메시지방 숫자 초기화');
     }
   })
 })
@@ -136,15 +138,105 @@ app.post('/ChatNumZero', (req, res) =>{
 app.post('Del_message', (req,res) =>{
   console.log('삭제', req.body);
     
-        connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',
-        [req.body.roomid,req.body.userkey,'delcode5010'],function(err,rows,field){
-            if(err){
-                console.log(err);
+    connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',
+    [req.body.roomid,req.body.userkey,'delcode5010'],function(err,rows,field){
+        if(err){
+            console.log(err);
+        }else{
+            console.log('성공');
+            res.send();
+        }
+    })
+})
+
+app.post('/Get_Group', (req, res) =>{
+  console.log('그룹');
+  
+  connection.query(
+  `SELECT Gpart.group_key, Gpart.user_key, Gpart.count, Gmess.group_title, Gmess.group_date 
+  FROM group_participant as Gpart join group_table as Gmess on Gpart.group_key = Gmess.group_key
+  WHERE Gpart.group_key in (SELECT Gpart.group_key FROM group_participant as Gpart where user_key =?) and Gpart.room_del= 0`,
+  [req.body.userKey], function(err, rows, fields){
+    if(err){
+      console.log(err);
+    }else{
+      console.log('그룹', rows);
+      const group_room =[];
+      let group = {
+        group_key: undefined,
+        user_key: [],
+        count: 0,
+        group_title:'',
+        group_date:'',
+      };
+      const cloneObj = obj => JSON.parse(JSON.stringify(obj));
+      rows.map((value,index,n) =>{
+        if(group.group_key === undefined){
+          group.group_key = value.group_key;
+          group.user_key.push(value.user_key)
+          group.count = value.count
+          group.group_title = value.group_title
+          group.group_date = value.group_date
+          if(rows.length === index+1){ //방에 혼자 있을 때
+            if(group_room.length === 0){
+              const temp = cloneObj(group)
+              group_room[0] = temp
             }else{
-                console.log('성공');
-                res.send();
+              const temp = cloneObj(group)
+              group_room[group_room.length] = temp
             }
-        })
+          }
+        } else if(group.group_key === value.group_key){
+          group.user_key.push(value.user_key)
+
+          if(rows.length === index+1){ //오픈채팅방에 하나만 들어갔을 때
+            if(group_room.length === 0){
+              const temp = cloneObj(group)
+              group_room[0] = temp
+            }else{
+              const temp = cloneObj(group)
+              group_room[group_room.length] = temp
+            }
+          }
+          
+        } else{
+          if(group_room.length === 0){
+            const temp = cloneObj(group)
+            group_room[0] = temp
+          }else{
+            const temp = cloneObj(group)
+            group_room[group_room.length] = temp
+          }
+          group.user_key.length =0;
+          group.group_key = value.group_key;
+          group.user_key.push(value.user_key)
+          group.count = value.count
+          group.group_title = value.group_title
+          group.group_date = value.group_date
+        }
+      })
+      const group_key =[]
+      group_room.map((v,i,n) =>{
+        group_key.push(v.group_key);
+      })
+      console.log('그룹데이터', group_room);
+      connection.query(`SELECT TB.group_message_body, TB.group_message_time 
+      FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY group_key order by group_message_time desc)
+      as Rnum FROM group_message_table where group_key in(?))TB where Rnum =1`,
+      [group_key],function(err, rows, fields){
+        if(err){
+          console.log('err', err);
+        }else{
+          const groups= [];
+          group_room.map((info, index) =>{
+            groups.push({...info, ...rows[index]})
+          })
+          console.log('데이터완성', groups);
+          res.send(groups)
+        }
+      })
+    }
+  })
 })
 
 io.on("connection", function (socket){

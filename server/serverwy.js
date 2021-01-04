@@ -134,7 +134,7 @@ app.post('/ChatNumZero', (req, res) =>{
 })
 
 app.post('Del_message', (req,res) =>{
-  console.log(req.body);
+  console.log('삭제', req.body);
     
         connection.query('insert into message_table (room_id,user_key,message_body) values (?,?,?)',
         [req.body.roomid,req.body.userkey,'delcode5010'],function(err,rows,field){

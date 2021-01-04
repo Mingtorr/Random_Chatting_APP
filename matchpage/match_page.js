@@ -25,6 +25,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions} from 'react-native';
+import * as Progress from 'react-native-progress';
 export default class match_page extends React.Component {
   constructor(props) {
     super(props);
@@ -37,10 +38,14 @@ export default class match_page extends React.Component {
       isEnabled: false,
       div: <Solo_match />,
       shadowTF: 'none',
+      CircleTF: 'off',
     };
   }
 
   startAdmob = () => {
+    this.setState({
+      CircleTF: 'on',
+    });
     let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
       requestNonPersonalizedAdsOnly: true,
       keywords: ['fashion', 'clothing'],
@@ -51,6 +56,9 @@ export default class match_page extends React.Component {
       }
       if (type === RewardedAdEventType.EARNED_REWARD) {
         // alert('충전 완료');
+        this.setState({
+          CircleTF: 'off',
+        });
       }
     });
     rewardAd.load();
@@ -136,9 +144,19 @@ export default class match_page extends React.Component {
             // backgroundColor: 'balck',
             // opacity: 0.2,
           }}>
-          {/* <View style={{display:'flex',flex:0.2}}>
-  
-                </View> */}
+          {this.state.CircleTF == 'on' ? (
+            <Progress.Circle
+              size={70}
+              indeterminate={true}
+              position={'absolute'}
+              left={'41%'}
+              top={200}
+              color={'red'}
+            />
+          ) : (
+            <View></View>
+          )}
+
           <View
             style={{
               position: 'absolute',

@@ -105,23 +105,19 @@ export default class App extends React.Component {
           {this.state.isLoading ? (
             <>
               <Stack.Screen
-                name={this.state.fisrt_name}
-                component={this.state.fisrt_components}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
                 name={this.state.second_name}
                 component={this.state.second_components}
                 options={{headerShown: false}}
               />
               <Stack.Screen
-                name="Signup"
-                component={Signup}
+                name={this.state.fisrt_name}
+                component={this.state.fisrt_components}
                 options={{headerShown: false}}
               />
+
               <Stack.Screen
-                name="Signup2"
-                component={Signup2}
+                name="Signup"
+                component={Signup}
                 options={{headerShown: false}}
               />
 
@@ -172,12 +168,12 @@ export default class App extends React.Component {
                 component={Set_notice}
                 options={{headerShown: false}}
               />
-               <Stack.Screen
+              <Stack.Screen
                 name="singo"
                 component={Singo}
                 options={{headerShown: false}}
               />
-               <Stack.Screen
+              <Stack.Screen
                 name="Groupmessage"
                 component={Groupmessage}
                 options={{headerShown: false}}

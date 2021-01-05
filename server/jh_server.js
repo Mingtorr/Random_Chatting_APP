@@ -88,6 +88,8 @@ app.post('/Signup2', async function (req, res, next) {
 //로그인 salt 적용
 app.post('/login', async function (req, res, next) {
   let body = req.body;
+  let userkey;
+  let arr;
   connection.query(
     'SELECT user_key, user_id, user_salt,user_passwd FROM user_table WHERE user_id = (?)',
     [body.id],
@@ -95,6 +97,7 @@ app.post('/login', async function (req, res, next) {
       if (rows === undefined || rows[0] === undefined) {
         res.send(false);
       } else {
+        userkey = rows[0].user_key;
         let dbPassword = rows[0].user_passwd;
         let salt = rows[0].user_salt;
         let inputPassword = body.passwd;
@@ -109,11 +112,33 @@ app.post('/login', async function (req, res, next) {
             'SELECT user_key, user_sex, user_email, user_deptno, user_stdno, user_nickname FROM user_table WHERE user_id = (?)',
             [body.id],
             function (err, rows, fields) {
-              res.send(rows[0]);
+              //res.send(rows[0]);
+              arr = rows[0];
+              connection.query(
+                'UPDATE user_table SET user_token = (?) WHERE user_id= (?)',
+                [body.token, body.id],
+                function (err, rows, fields) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  connection.query(
+                    'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?)',
+                    [userkey],
+                    function (err, rows, fields) {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        res.send(arr);
+                      }
+                    },
+                  );
+                },
+              );
             },
           );
         } else {
           console.log('로그인 에러');
+          res.send(false);
         }
       }
     },
@@ -477,6 +502,31 @@ var mailSender = {
     });
   },
 };
+//=============================================== 첫 접속하기 =================================================================
+app.post('/onMain', (req, res) => {
+  let body = req.body;
+  console.log(body);
+  connection.query(
+    'UPDATE user_table SET user_token = (?) WHERE user_key= (?);',
+    [body.token, body.user_key],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+      } else {
+        connection.query(
+          'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?);',
+          [body.user_key],
+          function (err, rows, fields) {
+            if (err) {
+              console.log(err);
+            }
+          },
+        );
+      }
+    },
+  );
+  res.send(true);
+});
 
 //=============================================== solopage =================================================================
 

@@ -50,18 +50,38 @@ export default class App extends React.Component {
   };
 
   async componentWillMount() {
-    AsyncStorage.getItem('login_onoff_set', (err, result) => {
-      console.log(result);
+    let bool = false;
+    await AsyncStorage.getItem('login_onoff_set', (err, result) => {
       if (result !== null) {
-        console.log('hi');
         this.setState({
           fisrt_name: 'Main',
           fisrt_components: Bottom,
           second_name: 'Login',
           second_components: Login,
         });
+        bool = true;
       }
     });
+    if (bool === true) {
+      const token = await messaging().getToken();
+      let userkey;
+      AsyncStorage.getItem('login_user_info', (err, result) => {
+        userkey = JSON.parse(result).user_key;
+      }).then(() => {
+        const box = {
+          token: token,
+          user_key: userkey,
+        };
+        console.log(box);
+        fetch(func.api(3001, 'onMain'), {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(box),
+        });
+      });
+    }
   }
 
   componentDidMount = async () => {

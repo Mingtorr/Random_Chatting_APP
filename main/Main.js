@@ -14,7 +14,7 @@ import {SafeAreaView} from 'react-navigation';
 import {event} from 'react-native-reanimated';
 import Message from '../message/message';
 import Yourmessage from '../message/yourmessage';
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const arr = [
   {key: 0, name: '정영빈', message: 'ㅁㅁㅁ', owner: false},
@@ -83,7 +83,6 @@ export default class Main extends Component {
     //   const user_info = JSON.parse(result)
     //     console.log(user_info);
     // })
-
     // AsyncStorage.getItem('login_onoff_set', (err, result) => {
     //     console.log(result);
     // })
@@ -178,12 +177,13 @@ export default class Main extends Component {
           </View>
           <View style={{flex: 0.7}}></View>
           <View>
-          <TouchableOpacity
+            <TouchableOpacity
               style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-              }} onPress={this.change}>
+              }}
+              onPress={this.change}>
               <Text
                 style={{
                   fontFamily: 'Jalnan',

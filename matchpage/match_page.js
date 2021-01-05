@@ -26,6 +26,13 @@ import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions} from 'react-native';
 import * as Progress from 'react-native-progress';
+import AsyncStorage from '@react-native-community/async-storage';
+const func = require('../server/api');
+
+const adUnitId = __DEV__
+  ? TestIds.REWARDED
+  : 'ca-app-pub-5434797501405557/2267266613';
+
 export default class match_page extends React.Component {
   constructor(props) {
     super(props);
@@ -39,34 +46,68 @@ export default class match_page extends React.Component {
       div: <Solo_match />,
       shadowTF: 'none',
       CircleTF: 'off',
+      Heart: 5,
+      userkey: '',
+      myname: '',
     };
   }
 
-  startAdmob = () => {
+  async startAdmob() {
+    let box = {};
+    let unitId =
+      Platform.OS === 'ios'
+        ? 'ca-app-pub-5434797501405557/2267266613'
+        : 'ca-app-pub-5434797501405557/4414384979';
+
     this.setState({
       CircleTF: 'on',
     });
-    let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+
+    let rewardAd = RewardedAd.createForAdRequest(adUnitId, {
       requestNonPersonalizedAdsOnly: true,
       keywords: ['fashion', 'clothing'],
     });
+
     let rewardlListener = rewardAd.onAdEvent((type, error, reward) => {
       if (type === RewardedAdEventType.LOADED) {
         rewardAd.show();
       }
       if (type === RewardedAdEventType.EARNED_REWARD) {
+        //광고 보고 난 후
         // alert('충전 완료');
         this.setState({
-          CircleTF: 'off',
+          CircleTF: 'off', //프로그래스 끄기
+        });
+
+        AsyncStorage.getItem('login_user_info', (err, result) => {
+          //user정보가져오기
+          /*          this.setState({
+            userkey: JSON.parse(result).user_key,
+            myname: JSON.parse(result).user_nickname,
+          });
+*/
+          box = {
+            userkey: JSON.parse(result).user_key,
+            myname: JSON.parse(result).user_nickname,
+          };
         });
       }
     });
     rewardAd.load();
 
-    return () => {
-      rewardlListener = null;
-    };
-  };
+    console.log(box);
+    fetch(func.api(3001, 'Heart_reset'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(box),
+    });
+
+    // return () => {
+    rewardlListener = null;
+    // };
+  }
 
   shadow = () => {
     if (this.state.shadowTF == 'none') {

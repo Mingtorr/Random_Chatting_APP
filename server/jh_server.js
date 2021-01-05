@@ -14,7 +14,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '2ajrrhtlvj',
+  password: 'jeong1207',
   database: 'mydb',
 });
 
@@ -23,6 +23,50 @@ connection.connect();
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(cors());
 app.use(bodyparser.json());
+//====휘제============================================================================================
+app.post('/heart_reset', (req, res) => {
+  console.log('his');
+  let userkey = req.body.userkey;
+  let myname = req.body.myname;
+  let five = 5;
+  console.log(req.body, userkey, myname);
+
+  connection.query(
+    'UPDATE user_table SET user_heart = (?) WHERE user_key = (?)',
+    [five, userkey],
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('success');
+      }
+    },
+  );
+  // connection.query('sql', [heart], function (err) {});
+});
+
+app.post('/Heart_number', (req, res) => {
+  console.log('his');
+  let userkey = req.body.userkey;
+  let myname = req.body.myname;
+  console.log(req.body, userkey, myname);
+
+  connection.query(
+    'SELECT user_heart FROM user_table WHERE user_key =(?)',
+    [userkey],
+    function (err, rows, fields) {
+      console.log(rows[0], 'hi');
+      if (rows[0] === undefined) {
+        console.log('없는데?');
+        res.send(true); //중복 없음 사용가능
+      } else {
+        console.log('있다');
+        res.send(rows[0]); // 중복 있음 사용안됨
+      }
+    },
+  );
+});
+//================================================================================================
 
 app.post('/CheckId', (req, res) => {
   const checkId = req.body.id;

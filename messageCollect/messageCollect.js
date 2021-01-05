@@ -15,8 +15,6 @@ import FriendInbox from './friendInbox';
 // import FriendsInbox from './friendsInbox';
 import Grouproom from './grouproom';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import io from 'socket.io-client'
-
 
 export default class messageCollect extends React.Component{
   constructor(props){
@@ -28,27 +26,6 @@ export default class messageCollect extends React.Component{
       outButtonBool: true,
     }
   }
-
-  testOnClick = () => {
-    console.log('test');
-    const post = {
-      test: '들어갓',
-      test1: '들어갓2'
-    };
-    fetch('http://192.168.42.191:3001/Test',{
-      method: 'post',
-      headers:{
-        'content-type': 'application/json',
-      },
-      body:JSON.stringify(post),
-    })
-    .then((res) => res.json())
-    .then((json) => {
-      if(json.boolean){
-        alert('데이터 입력 성공')
-      }
-    });
-  };
 
   toggleOut = () =>{
     this.setState({
@@ -63,12 +40,12 @@ export default class messageCollect extends React.Component{
       <SafeAreaView style = {styles.container}>
         <View style ={styles.messageHead}>
           <Text style ={{fontSize: 18, fontWeight: 'bold'}}>Message</Text>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onLongPress = {this.testOnClick}
             onPress = {() => this.setState({
             outButtonBool: !this.state.outButtonBool}) }>
             <Text style ={{fontSize:15, fontWeight:'bold'}}>편집</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style = {styles.collectBody}>
           <MessageTab outButtonBool = {this.state.outButtonBool} go = {this.props.navigation}/>
@@ -85,7 +62,7 @@ function MessageTab(props) {
     <Tab.Navigator tabBarOptions =
       {{style: {backgroundColor: 'none' ,width:'100%', height:48, marginTop:-8}, 
         // tabStyle:{ width:70},
-        labelStyle: {fontSize: 16, fontWeight:'bold' },
+        labelStyle: {fontSize: 18, fontWeight:'bold' },
         activeTintColor: '#eb6c63',
         inactiveTintColor: '#bababa',
         indicatorStyle:{

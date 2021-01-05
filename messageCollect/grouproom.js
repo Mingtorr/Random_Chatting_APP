@@ -13,6 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import io from "socket.io-client";
+import ShowTimeFun from './ShowTimeFun'
 const func = require('../server/api');
 const timefunc = require('../message/timefunction');
 
@@ -95,17 +96,30 @@ export default class Grouproom extends React.Component {
   }
 
   deleteRoom = (itemId) => {
-    const data = [...this.state.DATA]
-    this.setState({
-      DATA: data.filter(info => info.id !== itemId)
+    const data = [...this.state.grouproom]
+
+    const DelGroup ={
+      group_key: itemId,
+      userkey : this.state.user_Info.user_key
+    }
+    console.log('그룹삭제', DelGroup);
+    
+    fetch(func.api(3002, 'DelGroupRoom'),{
+      method: 'post',
+      headers:{
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(DelGroup)
     })
-    console.log('Delete '+ itemId);
-    alert(itemId+"삭제되었습니다.")
+
+    this.setState({
+      grouproom: data.filter(info => info.group_key !== itemId)
+    })
   }
 
   longPressAlert = (itemId) =>{
     Alert.alert("방을 나가시겠습니까?",
-    "상대방이 슬퍼할지도 몰라요.",
+    "진짜로 나가겠습니까?",
     [
       {
         text: "아니요",
@@ -119,22 +133,21 @@ export default class Grouproom extends React.Component {
 
   onpress = (itemId) =>{
     this.props.go.navigate('Groupmessage');
-    const data = [...this.state.DATA];
+    const data = [...this.state.grouproom];
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
       DATA: data.map(
-        info => itemId === info.id
-          ? {...info, isNewChatNum: 0}
+        info => itemId === info.group_key
+          ? {...info, count: 0}
           : info
       )
     })
-    alert(itemId+"클릭"+ data[itemId-1].isNewChatNum)
   }
 
   renderItem = ({item}) =>{
     return (
       <SafeAreaView style ={styles.container}>
-        <TouchableOpacity onLongPress = {() => this.longPressAlert(item.id)}  onPress = {() => this.onpress(item.id)}>
+        <TouchableOpacity onLongPress = {() => this.longPressAlert(item.group_key)}  onPress = {() => this.onpress(item.group_key)}>
           <View style={styles.messageElem}>
             <View style = {styles.typeProfile}>
               {/* <Text style = {styles.typeFont}>{item.type}명</Text> */}
@@ -148,7 +161,7 @@ export default class Grouproom extends React.Component {
               </View>
             </View>
             <View style = {styles.messageTime}>
-              <ShowDate item ={item} year = {this.state.year} day = {this.state.day}/>
+              <ShowTimeFun item ={item} year = {this.state.year} day = {this.state.day}/>
               {/* <Text style={styles.timeFont}>{item.ampm} {item.messagetime}</Text> */}
               {item.count > 0 ?
                 <View style = {styles.newChat}>
@@ -174,34 +187,6 @@ export default class Grouproom extends React.Component {
         />
       </SafeAreaView>
     );
-  }
-}
-
-function ShowDate(props) {
-  if(props.year =! props.item.year){
-    return(
-      <View>
-        <Text style = {styles.timeFont}>{props.item.year}-{props.item.month}-{props.item.day}</Text>
-      </View>
-    )
-  }else if(props.day-1 == props.item.day){
-    return(
-      <View>
-        <Text style = {styles.timeFont}>어제</Text>
-      </View>
-    )
-  }else if(props.day != props.item.day){
-    return(
-      <View>
-        <Text style = {styles.timeFont}>{props.item.year}-{props.item.month}-{props.item.day}   </Text>
-      </View>
-    )
-  }else{
-    return(
-      <View>
-        <Text style = {styles.timeFont}>{props.item.ampm} {props.item.hour}:{props.item.min}</Text>
-      </View>
-    )
   }
 }
 

@@ -15,6 +15,7 @@ import {
 import CheckBox from 'react-native-check-box';
 import io from "socket.io-client";
 import LinearGradient from 'react-native-linear-gradient';
+import ShowTimeFun from './ShowTimeFun'
 
 const func = require('../server/api');
 const timefunc = require('../message/timefunction');
@@ -33,12 +34,6 @@ export default class FriendInbox extends React.Component {
       day: today.getDate(),
       year: today.getFullYear(),
     };
-
-    const year = today.getFullYear(); // 년도
-    const month = today.getMonth() + 1;  // 월
-    const date = today.getDate();  // 날짜
-    const hour = today.getHours();
-    const min = today.getMinutes();
   }
   componentWillMount(){
     const key ={
@@ -46,7 +41,6 @@ export default class FriendInbox extends React.Component {
     }
 
     socket.on('recieve_messageroom',(data)=>{
-
       const newtime = new Date(data.time2);
 
       let hour = newtime.getHours();
@@ -105,9 +99,6 @@ export default class FriendInbox extends React.Component {
             let day = newtime.getDate();
             let hour = newtime.getHours();
             let min = newtime.getMinutes();
-            // console.log(month+ '월 ' + day+ '일 ' + hour+':'+min);
-            // console.log('시간: '+ hour);
-            // console.log('분: ' + min);
             const newrow = row;
             newrow.year = year;
             if (hour > 12){
@@ -175,22 +166,12 @@ export default class FriendInbox extends React.Component {
         room_del.name = value.user_nickname;
       }
     })
-
-    fetch(func.api(3002,'Del_message'), {
-      method: "post",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }).then();
     
     socket.emit('singleRoomDel', room_del);
 
     this.setState({
       messagesRoom: data.filter(info => info.room_id !== itemId)
     })
-
-    console.log('Delete '+ itemId);
   }
 
   longPressAlert = (itemId) =>{
@@ -198,7 +179,6 @@ export default class FriendInbox extends React.Component {
       key:1
     }
     
-
     Alert.alert("방을 나가시겠습니까?",
     "상대방이 슬퍼할지도 몰라요.",
     [
@@ -255,7 +235,6 @@ export default class FriendInbox extends React.Component {
       <SafeAreaView style = {styles.container}>
         <TouchableOpacity onLongPress = {() => this.longPressAlert(item.room_id)} onPress = {() => this.onpress(item.room_id,item.user_key)}>
           <View style={styles.messageElem}>
-
             <LinearGradient
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
@@ -270,14 +249,14 @@ export default class FriendInbox extends React.Component {
               </View>
               <View style = {styles.messageLastChat}>
                 {item.message_body === 'delcode5010'
-                ?<Text style = {styles.lastChat}>상대방이 나갔습니다</Text>
+                ?<Text style = {styles.lastChat}>상대방이 나갔습니다.</Text>
                 :<Text style = {styles.lastChat}>{item.message_body}</Text>}
               </View>
             </View>
             {
               this.props.outButtonBool ?
               <View style = {styles.messageTime}>
-                <ShowDate item ={item} year = {this.state.year} day = {this.state.day}/>
+                <ShowTimeFun item ={item} year = {this.state.year} day = {this.state.day}/>
                   {item.count > 0 ?
                     <View style = {styles.newChat}>
                       {item.count <300
@@ -309,34 +288,6 @@ export default class FriendInbox extends React.Component {
         />
       </SafeAreaView>
   )}
-}
-
-function ShowDate(props) {
-  if(props.year =! props.item.year){
-    return(
-      <View>
-        <Text style = {styles.timeFont}>{props.item.year}-{props.item.month}-{props.item.day}</Text>
-      </View>
-    )
-  }else if(props.day-1 == props.item.day){
-    return(
-      <View>
-        <Text style = {styles.timeFont}>어제</Text>
-      </View>
-    )
-  }else if(props.day != props.item.day){
-    return(
-      <View>
-        <Text style = {styles.timeFont}>{props.item.year}-{props.item.month}-{props.item.day}   </Text>
-      </View>
-    )
-  }else{
-    return(
-      <View>
-        <Text style = {styles.timeFont}>{props.item.ampm} {props.item.hour}:{props.item.min}</Text>
-      </View>
-    )
-  }
 }
 
 const styles = StyleSheet.create({
@@ -385,7 +336,7 @@ const styles = StyleSheet.create({
   },
   timeFont:{
     display:'flex',
-    fontSize: 10,
+    fontSize: 12,
     color: 'gray',
   },
   profileMale:{

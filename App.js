@@ -23,6 +23,8 @@ import {fcmService} from './push/FCMService';
 import {localNotificationService} from './push/LocalNotificationService';
 import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
+import messaging from '@react-native-firebase/messaging';
+const func = require('./server/api');
 import {
   SafeAreaView,
   StyleSheet,
@@ -47,9 +49,11 @@ export default class App extends React.Component {
     second_components: Bottom,
   };
 
-  componentWillMount() {
+  async componentWillMount() {
     AsyncStorage.getItem('login_onoff_set', (err, result) => {
-      if (result === 'true') {
+      console.log(result);
+      if (result !== null) {
+        console.log('hi');
         this.setState({
           fisrt_name: 'Main',
           fisrt_components: Bottom,
@@ -69,9 +73,7 @@ export default class App extends React.Component {
     fcmService.register(onRegister, onNotification, onOpenNotification);
     localNotificationService.configure(onOpenNotification);
 
-    function onRegister(token) {
-      console.log('[App] onRegister : token :', token);
-    }
+    function onRegister(token) {}
 
     function onNotification(notify) {
       console.log('[App] onNotification : notify :', notify);
@@ -87,7 +89,6 @@ export default class App extends React.Component {
         options,
       );
     }
-
     function onOpenNotification(notify) {
       console.log('[App] onOpenNotification : notify :', notify);
       alert('Open Notification : notify.body :' + notify.body);
@@ -105,13 +106,13 @@ export default class App extends React.Component {
           {this.state.isLoading ? (
             <>
               <Stack.Screen
-                name={this.state.second_name}
-                component={this.state.second_components}
+                name={this.state.fisrt_name}
+                component={this.state.fisrt_components}
                 options={{headerShown: false}}
               />
               <Stack.Screen
-                name={this.state.fisrt_name}
-                component={this.state.fisrt_components}
+                name={this.state.second_name}
+                component={this.state.second_components}
                 options={{headerShown: false}}
               />
 

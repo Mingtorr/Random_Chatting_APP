@@ -157,7 +157,7 @@ export default class match_page extends React.Component {
             <View></View>
           )}
 
-          <View
+          {/* <View
             style={{
               position: 'absolute',
               display: this.state.shadowTF,
@@ -176,7 +176,7 @@ export default class match_page extends React.Component {
               elevation: 3,
               // backgroundColor: 'balck',
               // opacity: 0.2,
-            }}></View>
+            }}></View> */}
           <View
             style={{
               display: 'flex',

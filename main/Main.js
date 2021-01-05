@@ -14,7 +14,8 @@ import {SafeAreaView} from 'react-navigation';
 import {event} from 'react-native-reanimated';
 import Message from '../message/message';
 import Yourmessage from '../message/yourmessage';
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-community/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 const arr = [
   {key: 0, name: '정영빈', message: 'ㅁㅁㅁ', owner: false},
@@ -78,7 +79,7 @@ export default class Main extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // AsyncStorage.getItem('login_user_info', (err, result) => {
     //   const user_info = JSON.parse(result)
     //     console.log(user_info);
@@ -87,6 +88,24 @@ export default class Main extends Component {
     // AsyncStorage.getItem('login_onoff_set', (err, result) => {
     //     console.log(result);
     // })
+
+    const token = await messaging().getToken();
+    AsyncStorage.getItem('login_user_info', (err, result) => {
+      let userkey = JSON.parse(result).user_key;
+    }).then(() => {
+      const box = {
+        token: token,
+        user_key: userkey,
+      };
+      console.log('hihihi');
+      fetch(func.api(3001, 'onMain'), {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(box),
+      });
+    });
   }
 
   _fadeIn() {
@@ -178,12 +197,13 @@ export default class Main extends Component {
           </View>
           <View style={{flex: 0.7}}></View>
           <View>
-          <TouchableOpacity
+            <TouchableOpacity
               style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-              }} onPress={this.change}>
+              }}
+              onPress={this.change}>
               <Text
                 style={{
                   fontFamily: 'Jalnan',

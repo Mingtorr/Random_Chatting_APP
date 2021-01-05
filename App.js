@@ -70,7 +70,6 @@ export default class App extends React.Component {
     localNotificationService.configure(onOpenNotification);
 
     function onRegister(token) {
-      console.log('[App] onRegister : token :', token);
     }
 
     function onNotification(notify) {
@@ -87,7 +86,6 @@ export default class App extends React.Component {
         options,
       );
     }
-
     function onOpenNotification(notify) {
       console.log('[App] onOpenNotification : notify :', notify);
       alert('Open Notification : notify.body :' + notify.body);

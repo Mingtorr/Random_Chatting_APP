@@ -9,6 +9,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 // nodemailer 모듈 요청
 var http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 var connection = mysql.createConnection({
   host: 'localhost',
@@ -37,6 +38,8 @@ app.post('/Notice', (req, res) => {
     }
   });
 });
+
+io.on('connection', function (socket) {});
 
 http.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

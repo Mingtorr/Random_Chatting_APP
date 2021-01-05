@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {getBottomSpace} from 'react-native-iphone-x-helper';
+import messaging from '@react-native-firebase/messaging';
 const func = require('../server/api');
 
 class Login extends React.Component {
@@ -40,13 +41,14 @@ class Login extends React.Component {
     // console.log(this.state.pass);
   };
 
-  onlogin = (e) => {
+  onlogin = async (e) => {
     console.log('asdf');
+    const token = await messaging().getToken();
     const post = {
       id: this.state.name1,
       passwd: this.state.pass,
+      token: token,
     };
-
     fetch(func.api(3001, 'login'), {
       method: 'post',
       headers: {

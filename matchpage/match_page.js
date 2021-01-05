@@ -51,9 +51,41 @@ export default class match_page extends React.Component {
       myname: '',
     };
   }
+  componentDidMount = async () => {
+    let box;
 
-  async startAdmob() {
-    let box = {};
+    await AsyncStorage.getItem('login_user_info', (err, result) => {
+      //user정보가져오기
+      this.setState({
+        userkey: JSON.parse(result).user_key,
+        myname: JSON.parse(result).user_nickname,
+      });
+
+      box = {
+        userkey: JSON.parse(result).user_key,
+        myname: JSON.parse(result).user_nickname,
+      };
+    });
+
+    console.log(box);
+
+    fetch(func.api(3001, 'Heart_number'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(box),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json);
+        this.setState({
+          Heart: json.user_heart,
+        });
+      });
+  };
+
+  startAdmob = async () => {
     let unitId =
       Platform.OS === 'ios'
         ? 'ca-app-pub-5434797501405557/2267266613'
@@ -63,12 +95,14 @@ export default class match_page extends React.Component {
       CircleTF: 'on',
     });
 
+    let box;
+
     let rewardAd = RewardedAd.createForAdRequest(adUnitId, {
       requestNonPersonalizedAdsOnly: true,
       keywords: ['fashion', 'clothing'],
     });
 
-    let rewardlListener = rewardAd.onAdEvent((type, error, reward) => {
+    let rewardlListener = rewardAd.onAdEvent(async (type, error, reward) => {
       if (type === RewardedAdEventType.LOADED) {
         rewardAd.show();
       }
@@ -79,17 +113,27 @@ export default class match_page extends React.Component {
           CircleTF: 'off', //프로그래스 끄기
         });
 
-        AsyncStorage.getItem('login_user_info', (err, result) => {
+        await AsyncStorage.getItem('login_user_info', (err, result) => {
           //user정보가져오기
-          /*          this.setState({
+          this.setState({
             userkey: JSON.parse(result).user_key,
             myname: JSON.parse(result).user_nickname,
+            Heart: 5,
           });
-*/
+
           box = {
             userkey: JSON.parse(result).user_key,
             myname: JSON.parse(result).user_nickname,
           };
+        });
+        console.log(box);
+
+        await fetch(func.api(3001, 'Heart_reset'), {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(box),
         });
       }
     });
@@ -107,7 +151,7 @@ export default class match_page extends React.Component {
     // return () => {
     rewardlListener = null;
     // };
-  }
+  };
 
   shadow = () => {
     if (this.state.shadowTF == 'none') {
@@ -300,7 +344,7 @@ export default class match_page extends React.Component {
                   fontWeight: 'bold',
                   fontFamily: 'Jalnan',
                 }}>
-                5/5
+                {this.state.Heart}/5
               </Text>
             </View>
           </View>

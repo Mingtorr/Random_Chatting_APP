@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View, SafeAreaView} from 'react-native';
-import Noticepush from './Noticepush';
+import Noticepush from './noticepush';
 
 const func = require('../../server/api');
 

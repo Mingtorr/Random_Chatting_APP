@@ -27,6 +27,7 @@ import {withNavigation} from 'react-navigation';
 import io from "socket.io-client";
 import Mymessage from './mymessage'
 import Yourmessage from './yourmessage'
+import Firstmessage from './firstmessage'
 const func = require('../server/api');
 const timefunc = require('./timefunction');
 
@@ -254,35 +255,36 @@ wholastmessage2=()=>{
 }
 rendermessage=({item,index})=>{
   {
-    if(index===0){ 
-      if(this.state.userkey === item.sendid){
-      
-        return(<Mymessage message={item.message} time={item.time}/>)
-      }else{
-       
-        return(<Yourmessage message={item.message} name={item.name} pre={false} time={item.time}/>)
-      }
-    }else{
-      
-      if(this.state.arr[this.state.start+index-1].userkey === item.sendid)
-      {
+      if(index===0){ 
         if(this.state.userkey === item.sendid){
-         
-          return( <Mymessage message={item.message} time={item.time}/>)
-        }else{
-         
-          return(<Yourmessage message={item.message} name={item.name} pre={true} time={item.time}/>)
-        }
-      }
-      else{
- 
-        if(this.state.userkey === item.sendid){
+        
           return(<Mymessage message={item.message} time={item.time}/>)
         }else{
+         
           return(<Yourmessage message={item.message} name={item.name} pre={false} time={item.time}/>)
         }
-      }
-    } 
+      }else{
+        
+        if(this.state.arr[this.state.start+index-1].userkey === item.sendid)
+        {
+          if(this.state.userkey === item.sendid){
+           
+            return( <Mymessage message={item.message} time={item.time}/>)
+          }else{
+           
+            return(<Yourmessage message={item.message} name={item.name} pre={true} time={item.time}/>)
+          }
+        }
+        else{
+   
+          if(this.state.userkey === item.sendid){
+            return(<Mymessage message={item.message} time={item.time}/>)
+          }else{
+            return(<Yourmessage message={item.message} name={item.name} pre={false} time={item.time}/>)
+          }
+        }
+      } 
+    
 }
 }
 go = () =>{

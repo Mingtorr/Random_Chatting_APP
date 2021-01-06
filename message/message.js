@@ -56,7 +56,9 @@ class Message extends React.Component{
       arrendkey:'',
       text:'',
       id:'aaa',
-      mynickname:''
+      mynickname:'',
+      toshownickname: this.props.route.params.toshownickname,
+      resultshownickname:0
     }
   }
   componentWillUnmount() {
@@ -67,10 +69,11 @@ class Message extends React.Component{
     AsyncStorage.getItem('login_user_info', (err, result) => {
       this.setState({
         userkey:JSON.parse(result).user_key,
-        myname:JSON.parse(result).user_nickname
+        myname:JSON.parse(result).user_nickname,
+        myshownickname:this.props.route.params.myshownickname
       })
     });
-    console.log("sibal sekiya "+ this.state.userkey);
+    console.log("sibal sekiya "+ this.props.route.params.myshownickname);
     const data = {
       roomid:this.props.route.params.roomid,//roomid
       userkey:this.state.userkey
@@ -87,6 +90,12 @@ class Message extends React.Component{
     socket.on('roomsockets',(data)=>{   //change roomsockets
       this.setState({
         roomsockets:data
+      })
+    })
+    socket.on('shownickname',(data)=>{   //change roomsockets
+      console.log("yeeeeeeeeeeeeee"+data);
+      this.setState({
+        resultshownickname:1
       })
     })
     fetch(func.api(3004,'mynickname'), {
@@ -161,7 +170,10 @@ sendmessage=()=>{
     touserkey:this.state.touserkey,
     time:realtime,
     time2:realtime2,
-    arrendkey:this.state.arrendkey
+    arrendkey:this.state.arrendkey,
+    myshownickname:this.state.myshownickname,
+    toshownickname:this.state.toshownickname,
+    
   }
   fetch(func.api(3004,'save_message'), {
     method: "post",
@@ -170,6 +182,15 @@ sendmessage=()=>{
     },
     body: JSON.stringify(data),
   }).then();
+  if(this.state.myshownickname === 0){
+    fetch(func.api(3004,'updateshownickname'), {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then();
+  }
   socket.emit("onclick_message",data);
   this.setState({
     text:''
@@ -275,7 +296,7 @@ go = () =>{
             <KeyboardAvoidingView style={styles.message_safe} behavior='padding' onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
               <View style={styles.message_top} >
                 <View style={{display:'flex',flex:0.5,flexDirection:"row",justifyContent:'center'}}>
-                  <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>{this.state.mynickname}</Text>
+                  {(this.state.toshownickname === 0)&&(this.state.resultshownickname === 0) ?<Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>알수없음</Text> :<Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>{this.state.mynickname}</Text> }
                   <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}> 님</Text>
                 </View>
               </View>

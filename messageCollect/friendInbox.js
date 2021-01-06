@@ -35,11 +35,8 @@ export default class FriendInbox extends React.Component {
       year: today.getFullYear(),
     };
   }
-  componentWillMount(){
-    const key ={
-      key: this.state.user_Info
-    }
-
+  componentDidMount(){
+    console.log('1:1');
     socket.on('recieve_messageroom',(data)=>{
       const newtime = new Date(data.time2);
 
@@ -64,13 +61,22 @@ export default class FriendInbox extends React.Component {
         ),
       })
     })
-
     socket.on('recieve_ChatNum', (data)=>{
       const room = [...this.state.messagesRoom];
       this.setState({
         messagesRoom: room.map(
           info => data.roomid === info.room_id
           ? {...info, count: data.count}
+          : info
+        ),
+      })
+    })
+    socket.on('roomshownickname', (data)=>{
+      const room = [...this.state.messagesRoom];
+      this.setState({
+        messagesRoom: room.map(
+          info => data.roomid === info.room_id
+          ? {...info, shownickname: 1}
           : info
         ),
       })
@@ -192,7 +198,7 @@ export default class FriendInbox extends React.Component {
     );
   }
 
-  onpress = (itemId,itemId2) =>{
+  onpress = (itemId,itemId2, toshownickname) =>{
     const data = [...this.state.messagesRoom];
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
@@ -206,7 +212,7 @@ export default class FriendInbox extends React.Component {
       room_id : itemId,
       user_key : this.state.user_Info.user_key
     }
-
+   
     fetch(func.api(3002,'ChatNumZero'),{
       method: 'post',
       headers:{
@@ -214,8 +220,15 @@ export default class FriendInbox extends React.Component {
       },
       body:JSON.stringify(room_chat),
     })
-
-    this.props.go.navigate('Message',{roomid: itemId,touser: itemId2})
+    fetch(func.api(3002,'getshownickname'),{
+      method: 'post',
+      headers:{
+        'content-type': 'application/json',
+      },
+      body:JSON.stringify(room_chat),
+    }).then(res=>res.json()).then((json)=>{
+      this.props.go.navigate('Message',{roomid: itemId,touser: itemId2,myshownickname: json.shownickname, toshownickname: toshownickname})
+    })
   }
 
   deleteChek = () =>{
@@ -233,7 +246,7 @@ export default class FriendInbox extends React.Component {
   renderItem = ({item}) =>{
     return (
       <SafeAreaView style = {styles.container}>
-        <TouchableOpacity onLongPress = {() => this.longPressAlert(item.room_id)} onPress = {() => this.onpress(item.room_id,item.user_key)}>
+        <TouchableOpacity onLongPress = {() => this.longPressAlert(item.room_id)} onPress = {() => this.onpress(item.room_id,item.user_key, item.shownickname)}>
           <View style={styles.messageElem}>
             <LinearGradient
               start={{x: 0, y: 0}}
@@ -245,7 +258,7 @@ export default class FriendInbox extends React.Component {
 
             <View style={styles.messageInfo}>
               <View style ={styles.messageHead}>
-                <Text style={styles.nickName}>{item.user_nickname}</Text>
+                {(item.shownickname === 0) ? <Text style={styles.nickName}>알수없음</Text>:<Text style={styles.nickName}>{item.user_nickname}</Text>}
               </View>
               <View style = {styles.messageLastChat}>
                 {item.message_body === 'delcode5010'

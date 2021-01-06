@@ -36,6 +36,18 @@ app.post("/save_message", (req, res) => {
             }
         })
   });
+  app.post("/updateshownickname", (req, res) => {
+    console.log(req.body);
+        connection.query('update participant set shownickname = 1 where room_id = ? and user_key = ?',[req.body.roomid,req.body.userkey],function(err,rows,field){
+            if(err){
+                console.log(err);
+            }else{
+                console.log('성공');
+                res.send();
+                
+            }
+        })
+  });
   app.post("/showmessage", (req, res) => {
     console.log(req.body);
     connection.query('SELECT * FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time;',[req.body.roomid],function(err,rows,field){
@@ -144,7 +156,11 @@ io.on("connection",function(socket){
         const roomsize = data.roomsockets.length
         const messagedata = {key:index,name:data.name,message:data.message,time:data.time, sendid:data.userkey}
         console.log('메시지데이터:', data);
-
+        console.log('toshownickname:', data.toshownickname);
+        if(data.toshownickname === 1){
+            io.to(JSON.stringify(data.roomid)).emit('shownickname',{resultshownickname:1});
+            io.to(JSON.stringify(data.touserkey)+'user').emit('roomshownickname', {roomid:data.roomid,resultshownickname:1});
+        }
         io.to(JSON.stringify(data.touserkey)+'user').emit('recieve_messageroom', data);
         io.to(JSON.stringify(data.userkey)+'user').emit('recieve_messageroom', data);
         if(roomsize === 2){

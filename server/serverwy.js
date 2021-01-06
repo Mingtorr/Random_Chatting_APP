@@ -171,7 +171,7 @@ app.post('/Get_Group', (req, res) =>{
           group_room.map((info, index) =>{
             groups.push({...info, ...rows[index]})
           })
-          console.log('데이터완성', groups);
+          // console.log('데이터완성', groups);
           res.send(groups)
         }
       })

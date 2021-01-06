@@ -24,7 +24,9 @@ import {localNotificationService} from './push/LocalNotificationService';
 import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
+import Icon from 'react-native-vector-icons';
 const func = require('./server/api');
+let wesix = require('./wesix.png');
 import {
   SafeAreaView,
   StyleSheet,
@@ -34,6 +36,7 @@ import {
   TouchableOpacity,
   Button,
   TextInput,
+  Image,
 } from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 
@@ -225,10 +228,14 @@ function Bottom() {
       {/* 친구들 찾기 */}
       <Tab.Screen name="Group" component={Match_page} />
       {/* 메세지함 */}
-      <Tab.Screen name="MessageCollect" component={MessageCollect} options={{ unmountOnBlur: true }}
-      listeners={({ navigation }) => ({
-        blur: () => navigation.setParams({ screen: undefined }),
-      })}/>
+      <Tab.Screen
+        name="MessageCollect"
+        component={MessageCollect}
+        options={{unmountOnBlur: true}}
+        listeners={({navigation}) => ({
+          blur: () => navigation.setParams({screen: undefined}),
+        })}
+      />
       {/* 알림  나중에 알람넣어요*/}
       {/* <Tab.Screen name="알림" component={Message} /> */}
       {/* 설정 */}

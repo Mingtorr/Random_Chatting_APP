@@ -24,8 +24,17 @@ export default class Set_notice extends Component {
       .then((res) => res.json())
       .then((json) => {
         json.map((rows) => {
+          const newdate = new Date(rows.notice_date);
+          var month = newdate.getMonth() + 1;
+          var day = newdate.getDate();
+          var noticeday = [month, day].join('/');
+          const newrow = {
+            title: rows.notice_body,
+            date: noticeday,
+          };
+          console.log(newrow);
           this.setState({
-            notices: [...this.state.notices, rows],
+            notices: [...this.state.notices, newrow],
           });
           // console.log(this.state.notices);
 
@@ -43,9 +52,15 @@ export default class Set_notice extends Component {
         {this.state.notices.map((content, index) => {
           console.log(content.notice_body);
           // console.log(this.state.notices);
-          return <Noticepush content={content.notice_body} key={index} />;
+          return (
+            <Noticepush
+              content={content.title}
+              key={index}
+              date={content.date}
+            />
+          );
         })}
-        <Noticepush content="실험용" />
+        <Noticepush content="실험용" date="1/6" />
       </SafeAreaView>
     );
   }

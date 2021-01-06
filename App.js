@@ -24,9 +24,9 @@ import {localNotificationService} from './push/LocalNotificationService';
 import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
-import Icon from 'react-native-vector-icons';
 const func = require('./server/api');
-let wesix = require('./wesix.png');
+let people = require('./Image/people.png');
+let wesix = require('./Image/wesix.png');
 import {
   SafeAreaView,
   StyleSheet,
@@ -224,7 +224,22 @@ function Bottom() {
   return (
     <Tab.Navigator>
       {/* 친구찾기 */}
-      <Tab.Screen name="Man" component={Main} />
+      <Tab.Screen
+        name="Man"
+        component={Main}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color, size}) => (
+            <Image
+              name="home"
+              color={color}
+              size={size}
+              source={people}
+              style={{width: 20, height: 20}}
+            />
+          ),
+        }}
+      />
       {/* 친구들 찾기 */}
       <Tab.Screen name="Group" component={Match_page} />
       {/* 메세지함 */}

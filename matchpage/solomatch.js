@@ -79,6 +79,8 @@ export default class Solo_match extends React.Component {
         return;
       }
     }).then(() => {
+
+      /*
       const heart = {user_key: userkey};
       fetch(func.api(3001, 'minus_heart'), {
         method: 'post',
@@ -95,6 +97,7 @@ export default class Solo_match extends React.Component {
           } else {
             //여기서 match page로 올려주면 됩니다.
             //json.heart 가 감소된 값입니다. 올려줘서 setstate 로 하면 됩니다.
+            */
             const box = {
               major: this.state.major,
               sex: to_sex,
@@ -134,10 +137,10 @@ export default class Solo_match extends React.Component {
                   });
                 }
               });
-          }
+          
         });
-    });
-  };
+            }
+       
 
   _scrollToInput = (reactNode) => {
     this.scroll.props.scrollToFocusedInput(reactNode);

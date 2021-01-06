@@ -1,7 +1,7 @@
 
 
 function api(params,name) {
-    return ('http://172.20.10.2:'+`${params}`+`/${name}`)
+    return ('http://172.30.1.45:'+`${params}`+`/${name}`)
 }
 
 

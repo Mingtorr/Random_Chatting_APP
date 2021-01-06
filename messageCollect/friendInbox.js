@@ -12,6 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
+const func = require('../server/api');
 
 export default class FriendInbox extends React.Component {
   constructor(props){
@@ -142,7 +143,7 @@ export default class FriendInbox extends React.Component {
       userKey: this.state.userKey
     }
 
-    fetch('http://192.168.42.191:3001/GetMessageRoom',{
+    fetch(func.api(3001,'GetMessageRoom'),{
       method: 'post',
       headers:{
         'content-type': 'application/json',

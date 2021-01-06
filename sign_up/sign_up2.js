@@ -55,7 +55,6 @@ class Sign_up2 extends React.Component {
       studno: this.state.studno,
       user_id: this.props.route.params.user_id
     };
-    console.log(post);
     
     fetch(func.api(3001,'Signup2'), {
       method: 'post',
@@ -70,6 +69,29 @@ class Sign_up2 extends React.Component {
           this.props.navigation.navigate('Login')
         } else {
           alert("회원가입 실패")
+        }
+      });
+  };
+
+  backBtn = (e) => {
+    e.preventDefault();
+    const user_id = {
+      user_id: this.props.route.params.user_id
+    };
+    
+    fetch(func.api(3001,'Signup_Delete'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(user_id),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json === true) {
+          this.props.navigation.navigate('Signup')
+        } else {
+          console.log("back_err");
         }
       });
   };
@@ -99,10 +121,10 @@ class Sign_up2 extends React.Component {
               backgroundColor: 'white', //dadfa
               height: screenHeight,
             }}>
-            <View style={styles.Container_sign} s>
+            <View style={styles.Container_sign}>
               <TouchableOpacity
                 style={{marginTop: 20, position: 'absolute', left: '5%'}}
-                onPress={() => this.props.navigation.goBack()}>
+                onPress={this.backBtn}>
                 <Image
                   style={{width: 25, height: 25}}
                   source={require('./cancel.png')}
@@ -189,7 +211,7 @@ class Sign_up2 extends React.Component {
               <View style={styles.Text_sign}>
                 <Text style={styles.Text_sign_text}>학번</Text>
                 {/* <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}  id="pw2"
+              <TextInput style={styles.Text_sign_input2}  id="pw2"
               name="pw2"
               value={this.state.pw2}
               secureTextEntry={true}
@@ -219,9 +241,9 @@ class Sign_up2 extends React.Component {
                     {label: '10학번', value: '10'},
                     {label: '09학번', value: '09'},
                     {label: '08학번', value: '08'},
-                    {label: '08학번', value: '07'},
-                    {label: '08학번', value: '06'},
-                    {label: '08학번', value: '05'},
+                    {label: '07학번', value: '07'},
+                    {label: '06학번', value: '06'},
+                    {label: '05학번', value: '05'},
                   ]}
                 />
               </View>

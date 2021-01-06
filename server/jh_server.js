@@ -59,6 +59,17 @@ app.post("/Signup", async function (req, res, next) {
   });
 });
 
+app.post("/Signup_Delete", async function (req, res, next) {
+  const user_id = req.body.user_id;
+  connection.query("DELETE FROM user_table WHERE user_id = (?)", [user_id], function(err, rows, fields){
+    if (!err){
+      res.send(true);
+    }else{
+      res.send(false);
+    }
+  });
+});
+
 app.post("/Signup2", async function (req, res, next) {
   const user_id = req.body.user_id;
   const major = req.body.major;
@@ -195,6 +206,7 @@ app.post("/Sendmail", (req, res) => {
     mailSender.sendGmail(emailParam);
     res.send(authNum.toString());
 
+    //테스트 (이메일 중복체크 x)
     // if (rows[0] === undefined) {
     //   //중복된 메일 없음 메일 발송
     //   console.log("발송");
@@ -280,13 +292,13 @@ var mailSender = {
       service: "gmail",
       prot: 465,
       auth: {
-        user: "zown98@gmail.com",
-        pass: "tkfkd6460",
+        user: "wagleemail2@gmail.com",
+        pass: "@emailwagle2",
       },
     });
     // 메일 옵션
     var mailOptions = {
-      from: "zown98@gmail.com",
+      from: "wagleemail2@gmail.com",
       to: param.toEmail, // 수신할 이메일
       subject: param.subject, // 메일 제목
       html: param.html, // 메일 내용

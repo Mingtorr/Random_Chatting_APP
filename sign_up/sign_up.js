@@ -13,115 +13,124 @@ import {
   ScrollView,
   View,
   Text,
-  TouchableOpacity ,
+  TouchableOpacity,
   Button,
   TextInput,
   Alert,
   Image,
   Dimensions,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
-import { withNavigation } from 'react-navigation';
+import {withNavigation} from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { getBottomSpace } from "react-native-iphone-x-helper";
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+// import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {getBottomSpace} from 'react-native-iphone-x-helper';
 const func = require('../server/api');
 
- class Sign_up extends React.Component{
-  constructor(props){
+class Sign_up extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      id: "",
-      passwd: "",
-      passwd2: "",
-      email: "",
-      authNum: "", //보낸 인증번호
-      authCheckNum: "", // 사용자가 적은 인증번호
-      sex: "0", // 0:남자, 1:여자
-      nickname: "",
+    this.state = {
+      id: '',
+      passwd: '',
+      passwd2: '',
+      email: '',
+      authNum: '', //보낸 인증번호
+      authCheckNum: '', // 사용자가 적은 인증번호
+      sex: '0', // 0:남자, 1:여자
+      nickname: '',
 
       checked_id: false, // ID 중복검사
       checked_email: false, // 메일 인증 확인
       sendEmailClick: false, //메일 보냄 확인
       checking_passwd: false, //비번 확인
       nickname_check: false, //닉네임 중복검사
-    }
+    };
   }
 
   singupBtn = (e) => {
     e.preventDefault();
-    
+
     var checkpass = this.state.passwd;
-    checkpass = checkpass.replace(/(\s*)/g, "");
+    checkpass = checkpass.replace(/(\s*)/g, '');
 
     if (!this.state.checked_id) {
-      alert("아이디 중복검사를 해주세요");
+      alert('아이디 중복검사를 해주세요');
     } else if (!(this.state.passwd === this.state.passwd2)) {
-      alert("비밀번호가 일지하지 않습니다.");
-    } else if (checkpass === "") {
-      alert("비밀번호에 공백은 들어가서는 안됩니다.");
+      alert('비밀번호가 일지하지 않습니다.');
+    } else if (checkpass === '') {
+      alert('비밀번호에 공백은 들어가서는 안됩니다.');
     } else if (!this.state.checked_email) {
-      alert("메일 인증을 해주세요");
+      alert('메일 인증을 해주세요');
     } else {
-    const user_info = {
-      id: this.state.id,
-      passwd: this.state.passwd2,
-      sex: this.state.sex,
-      nickname: this.state.nickname,
-      email: this.state.email,
-    };
-    fetch(func.api(3001,'Signup'), {
-      method: "post",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(user_info),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json) {
-          this.props.navigation.navigate('Signup2',{
-            user_id: this.state.id
-          })
-        }
-      });
+      const user_info = {
+        id: this.state.id,
+        passwd: this.state.passwd2,
+        sex: this.state.sex,
+        nickname: this.state.nickname,
+        email: this.state.email,
+      };
+      fetch(func.api(3001, 'Signup'), {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(user_info),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          if (json) {
+            this.props.navigation.navigate('Signup2', {
+              user_id: this.state.id,
+            });
+          }
+        });
+    }
   };
-}
 
   sendEmail = (e) => {
     var re = /^[a-zA-Z0-9_]{4,20}$/;
     e.preventDefault();
     if (this.state.email.length === 0) {
-      alert("이메일을 입력해주세요!");
+      alert('이메일을 입력해주세요!');
       return;
-    } else if(!this.check(re, this.state.email, "잘못된 형식의 이메일입니다.")){
+    } else if (
+      !this.check(re, this.state.email, '잘못된 형식의 이메일입니다.')
+    ) {
       return;
-    } else{
+    } else {
       this.setState({
-      sendEmailClick: true,
+        sendEmailClick: true,
       });
       const email = {
         sendEmail: this.state.email,
       };
-      fetch(func.api(3001,'Sendmail'), {
-        method: "post",
+      fetch(func.api(3001, 'Sendmail'), {
+        method: 'post',
         headers: {
-          "content-type": "application/json",
+          'content-type': 'application/json',
         },
         body: JSON.stringify(email),
       })
         .then((res) => res.json())
         .then((json) => {
-          alert("인증 메일이 전송되었습니다.");
-            this.setState({
-              authNum: json,
-            });
-          
+          alert('인증 메일이 전송되었습니다.');
+          this.setState({
+            authNum: json,
+          });
 
+          //테스트 (메일인증x)
           // if (json === true) {
           //   alert("이미 가입된 메일입니다.");
           // } else {
@@ -138,16 +147,16 @@ const func = require('../server/api');
   authEmail = (e) => {
     e.preventDefault();
     if (this.state.authCheckNum.length === 0) {
-      alert("인증번호를 입력해주세요");
+      alert('인증번호를 입력해주세요');
       return;
     }
     if (this.state.authNum.toString() === this.state.authCheckNum.toString()) {
-      alert("인증성공");
+      alert('인증성공');
       this.setState({
         checked_email: true,
       });
     } else {
-      alert("인증실패");
+      alert('인증실패');
     }
   };
 
@@ -162,568 +171,650 @@ const func = require('../server/api');
   checkId = (e) => {
     e.preventDefault();
     var re = /^[a-zA-Z0-9]{4,12}$/; //아이디는 4~12자의 영문 대소문자와 숫자로만 입력
-    if (!this.check(re, this.state.id, "아이디는 4~12자의 영문 대소문자와 숫자로만 입력가능합니다.")) {
+    if (
+      !this.check(
+        re,
+        this.state.id,
+        '아이디는 4~12자의 영문 대소문자와 숫자로만 입력가능합니다.',
+      )
+    ) {
       return;
     } else {
       const checkId = {
         id: this.state.id,
       };
-      fetch(func.api(3001,'CheckId'), {
-        method: "post",
+      fetch(func.api(3001, 'CheckId'), {
+        method: 'post',
         headers: {
-          "content-type": "application/json",
+          'content-type': 'application/json',
         },
         body: JSON.stringify(checkId),
       })
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            alert("사용가능한 아이디 입니다.");
+            alert('사용가능한 아이디 입니다.');
             this.setState({
               checked_id: true,
             });
           } else {
-            alert("이미 사용중인 아이디 입니다.");
+            alert('이미 사용중인 아이디 입니다.');
           }
         });
     }
   };
 
   passwdcheck = (e) => {
-    if (this.state.passwd.length === 0 || this.state.passwd2.length === 0){
-      alert("비밀번호를 입력해주세요")
+    if (this.state.passwd.length === 0 || this.state.passwd2.length === 0) {
+      alert('비밀번호를 입력해주세요');
     } else if (this.state.passwd !== this.state.passwd2) {
-      alert("비밀번호가 일치하지 않습니다.");
+      alert('비밀번호가 일치하지 않습니다.');
     } else if (this.state.passwd === this.state.passwd2) {
-      alert("비밀번호가 일치합니다.");
+      alert('비밀번호가 일치합니다.');
       this.setState({
         checking_passwd: true,
       });
     }
-  }
+  };
 
   nickNamecheck = (e) => {
     var re = /^[a-zA-Z0-9가-힣]{2,8}$/;
-    if (!this.check(re, this.state.nickname, "닉네임은 2~8자의 영문,한글 ,숫자로만 입력가능합니다.")){
+    if (
+      !this.check(
+        re,
+        this.state.nickname,
+        '닉네임은 2~8자의 영문,한글 ,숫자로만 입력가능합니다.',
+      )
+    ) {
       return;
     } else {
       const Nickname = {
         nickname: this.state.nickname,
       };
-      fetch(func.api(3001,'CheckNickname'), {
-        method: "post",
-        header: {
-          "content-type": "application/json",
+      fetch(func.api(3001, 'CheckNickname'), {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
         },
         body: JSON.stringify(Nickname),
       })
         .then((res) => res.json())
         .then((json) => {
-          if(json) {
-            alert("사용가능한 닉네임입니다");
+          if (json) {
+            alert('사용가능한 닉네임입니다');
             this.setState({
-              nickname_check: true
+              nickname_check: true,
             });
-          }else{
-            alert("이미 사용중인 닉네임입니다");
+          } else {
+            alert('이미 사용중인 닉네임입니다');
           }
-        })
-      }
+        });
     }
+  };
 
-//////////////////////////
+  //////////////////////////
   onSubmit = (e) => {
     e.preventDefault(); //이벤트 발생시 새로고침을 안하게 한다.
     var checkpass = this.state.passwd;
-    checkpass = checkpass.replace(/(\s*)/g, "");
+    checkpass = checkpass.replace(/(\s*)/g, '');
     console.log(checkpass.charAt(0));
     if (this.state.id.length > 100 || this.state.passwd.length > 100) {
-      alert("아이디와 비밀번호의 길이가 너무 깁니다!!");
+      alert('아이디와 비밀번호의 길이가 너무 깁니다!!');
       return;
     }
     if (!this.state.checked_id) {
-      alert("아이디 중복검사를 해주세요");
+      alert('아이디 중복검사를 해주세요');
     } else if (!(this.state.passwd === this.state.passwd2)) {
-      alert("비밀번호가 일지하지 않습니다.");
-    } else if (checkpass === "") {
-      alert("비밀번호에 공백은 들어가서는 안됩니다.");
+      alert('비밀번호가 일지하지 않습니다.');
+    } else if (checkpass === '') {
+      alert('비밀번호에 공백은 들어가서는 안됩니다.');
     } else if (!this.state.checked_email) {
-      alert("메일 인증을 해주세요");
+      alert('메일 인증을 해주세요');
     } else {
       const user_info = {
         id: this.state.id,
         passwd: this.state.passwd2,
         email: this.state.email,
       };
-      fetch(func.api(3001,'Signup'), {
-        method: "post",
+      fetch(func.api(3001, 'Signup'), {
+        method: 'post',
         headers: {
-          "content-type": "application/json",
+          'content-type': 'application/json',
         },
         body: JSON.stringify(user_info),
       })
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            alert("회원가입 성공");
+            alert('회원가입 성공');
           } else {
-            alert("회원가입 실패");
+            alert('회원가입 실패');
           }
         });
     }
   };
-/////////////////////
+  /////////////////////
 
-  render(){
-    let radio_props = [     //radio button
-      {label: '남    ', value: 0 },
-      {label: '여', value: 1 }
+  render() {
+    let radio_props = [
+      //radio button
+      {label: '남    ', value: 0},
+      {label: '여', value: 1},
     ];
 
-    let screenHeight = Dimensions.get('window').height - getStatusBarHeight()- getBottomSpace();
+    let screenHeight =
+      Dimensions.get('window').height - getStatusBarHeight() - getBottomSpace();
 
-    
-    return(
-      <SafeAreaView style={{backgroundColor:'white', flex:1, backgroundColor:'white'}}>
-      <KeyboardAwareScrollView
-      // behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={styles.Container_sign2}
-    >
-       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-         
-      <View 
-      // style={styles.White_sign}
-      style={{display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      alignContent: "center",
-      backgroundColor:"white", //dadfa
-      height:screenHeight}}
-      >
-     
-        <View style={styles.Container_sign}>
+    return (
+      <SafeAreaView
+        style={{backgroundColor: 'white', flex: 1, backgroundColor: 'white'}}>
+        <KeyboardAwareScrollView
+          // behavior={Platform.OS == "ios" ? "padding" : "height"}
+          style={styles.Container_sign2}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View
+              // style={styles.White_sign}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignContent: 'center',
+                backgroundColor: 'white', //dadfa
+                height: screenHeight,
+              }}>
+              <View style={styles.Container_sign}>
+                <TouchableOpacity
+                  style={{marginTop: 20, position: 'absolute', left: '5%'}}
+                  onPress={() => this.props.navigation.goBack()}>
+                  <Image
+                    style={{width: 25, height: 25}}
+                    source={require('./cancel.png')}
+                  />
+                </TouchableOpacity>
 
-        <TouchableOpacity style={{marginTop:20, position:'absolute', left:'5%'}} onPress={() => this.props.navigation.goBack()}>
-        <Image 
-          style={{width:25, height:25}}
-          source={require('./cancel.png')} 
-          />
-        </TouchableOpacity>
+                <View>
+                  <View style={styles.Textbox_sign2}>
+                    <Text style={styles.Intro_sign}>와글와글</Text>
+                  </View>
+                  <View style={styles.Textbox_sign}>
+                    <Text style={styles.Intro_sign2}>회원 가입</Text>
+                  </View>
+                </View>
 
-          <View>
-          <View style={styles.Textbox_sign2}>
-            <Text style={styles.Intro_sign}>와글와글</Text>
-          </View>
-          <View style={styles.Textbox_sign}>
-            <Text style={styles.Intro_sign2}>회원 가입</Text>
-          </View>
-          </View>
-
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>아이디</Text>
-            <View style={{display:"flex", flexDirection:"row"}}>
-              <TextInput style={styles.Text_sign_input} id="id"
-                value={this.state.id}
-                onChangeText={(text) => this.setState({id: text})}
-                />
-              {/* <TouchableOpacity style={{padding:-30}} onPress={this.singupBtn}>
+                <View style={styles.Text_sign}>
+                  <Text style={styles.Text_sign_text}>아이디</Text>
+                  <View style={{display: 'flex', flexDirection: 'row'}}>
+                    <TextInput
+                      style={styles.Text_sign_input}
+                      id="id"
+                      value={this.state.id}
+                      onChangeText={(text) => this.setState({id: text})}
+                    />
+                    {/* <TouchableOpacity style={{padding:-30}} onPress={this.singupBtn}>
                   <Text style={styles.sign_button}>중복확인</Text>
               </TouchableOpacity> */}
-              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.checkId }>
-                    <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
-            </TouchableOpacity>
-            </View>
-          </View>
-          
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>비밀번호</Text>
-            <View style={{height:20}}>
-            <TextInput style={styles.Text_sign_input2}   id="passwd"
-              name="passwd"
-              value={this.state.passwd}
-              secureTextEntry={true}
-              onChangeText={(text) => this.setState({passwd: text})}/>
-              </View>
-          </View>
+                    <TouchableOpacity
+                      style={styles.Btn_sign2id}
+                      onPress={this.checkId}>
+                      <Text
+                        style={{
+                          color: 'gray',
+                          fontFamily: 'Jalnan',
+                          fontSize: 15,
+                        }}>
+                        중복확인
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>비밀번호 확인</Text>
-            <View style={{display:"flex", flexDirection:"row"}}>
-            <TextInput style={styles.Text_sign_input2}   id="passwd2"
-              name="passwd2"
-              value={this.state.passwd2}
-              secureTextEntry={true}
-              onChangeText={(text) => this.setState({passwd2: text})}/>
-              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.passwdcheck}>
-                    <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
-              </TouchableOpacity>
-            </View>
-            
-          </View>
+                <View style={styles.Text_sign}>
+                  <Text style={styles.Text_sign_text}>비밀번호</Text>
+                  <View style={{height: 20}}>
+                    <TextInput
+                      style={styles.Text_sign_input2}
+                      id="passwd"
+                      name="passwd"
+                      value={this.state.passwd}
+                      secureTextEntry={true}
+                      onChangeText={(text) => this.setState({passwd: text})}
+                    />
+                  </View>
+                </View>
 
-          
+                <View style={styles.Text_sign}>
+                  <Text style={styles.Text_sign_text}>비밀번호 확인</Text>
+                  <View style={{display: 'flex', flexDirection: 'row'}}>
+                    <TextInput
+                      style={styles.Text_sign_input2}
+                      id="passwd2"
+                      name="passwd2"
+                      value={this.state.passwd2}
+                      secureTextEntry={true}
+                      onChangeText={(text) => this.setState({passwd2: text})}
+                    />
+                    <TouchableOpacity
+                      style={styles.Btn_sign2id}
+                      onPress={this.passwdcheck}>
+                      <Text
+                        style={{
+                          color: 'gray',
+                          fontFamily: 'Jalnan',
+                          fontSize: 15,
+                        }}>
+                        중복확인
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-          <View style={styles.Text_sign_sex}>
-            <Text style={styles.Text_sign_text_sex}>성별</Text>
-             <RadioForm
-                buttonColor={'#f05052'}
-                labelColor={'black'}
-                formHorizontal={true}
-                buttonSize={10}
-                radio_props={radio_props}
-                // buttonWrapStyle={{marginLeft: 10, marginRight: 10}}
-                borderWidth={0.5}
-                initial={0}
-                onPress={(value) => {this.setState({sex:value})}}
-             />
-           
-          </View>
+                <View style={styles.Text_sign_sex}>
+                  <Text style={styles.Text_sign_text_sex}>성별</Text>
+                  <RadioForm
+                    buttonColor={'#f05052'}
+                    labelColor={'black'}
+                    formHorizontal={true}
+                    buttonSize={10}
+                    radio_props={radio_props}
+                    // buttonWrapStyle={{marginLeft: 10, marginRight: 10}}
+                    borderWidth={0.5}
+                    initial={0}
+                    onPress={(value) => {
+                      this.setState({sex: value});
+                    }}
+                  />
+                </View>
 
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>닉네임</Text>
-            <View style={{display:"flex", flexDirection:"row"}}>
-            <TextInput style={styles.Text_sign_input}   id="nickname"
-              name="nickname"
-              value={this.state.nickname}
-              onChangeText={(text) => this.setState({nickname: text})}/>
-              <TouchableOpacity style={styles.Btn_sign2id} onPress={this.nickNamecheck}>
-                    <Text style={{color:'gray',fontFamily:'Jalnan',fontSize:15}}>중복확인</Text>
-              </TouchableOpacity>
-              </View>
-          </View>
+                <View style={styles.Text_sign}>
+                  <Text style={styles.Text_sign_text}>닉네임</Text>
+                  <View style={{display: 'flex', flexDirection: 'row'}}>
+                    <TextInput
+                      style={styles.Text_sign_input}
+                      id="nickname"
+                      name="nickname"
+                      value={this.state.nickname}
+                      onChangeText={(text) => this.setState({nickname: text})}
+                    />
+                    <TouchableOpacity
+                      style={styles.Btn_sign2id}
+                      onPress={this.nickNamecheck}>
+                      <Text
+                        style={{
+                          color: 'gray',
+                          fontFamily: 'Jalnan',
+                          fontSize: 15,
+                        }}>
+                        중복확인
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>이메일</Text>
-            <View style={{display:"flex", flexDirection:"row"}}>
-            <TextInput style={styles.Text_sign_input2}   id="email"
-              name="email"
-              value={this.state.email}
-              onChangeText={(text) => this.setState({email: text})}/>
-            <Text style={{color:'gray', fontWeight:"bold", fontSize:15, marginRight: 10}}>@changwon.ac.kr</Text>
-            <TouchableOpacity style={styles.Btn_sign2} onPress={this.sendEmail}>
-              <Text style={{color:'white',fontFamily:'Jalnan'}}>전송</Text>
-            </TouchableOpacity>
-            </View>
-          </View>
+                <View style={styles.Text_sign}>
+                  <Text style={styles.Text_sign_text}>이메일</Text>
+                  <View style={{display: 'flex', flexDirection: 'row'}}>
+                    <TextInput
+                      style={styles.Text_sign_input2}
+                      id="email"
+                      name="email"
+                      value={this.state.email}
+                      onChangeText={(text) => this.setState({email: text})}
+                    />
+                    <Text
+                      style={{
+                        color: 'gray',
+                        fontWeight: 'bold',
+                        fontSize: 15,
+                        marginRight: 10,
+                      }}>
+                      @changwon.ac.kr
+                    </Text>
+                    <TouchableOpacity
+                      style={styles.Btn_sign2}
+                      onPress={this.sendEmail}>
+                      <Text style={{color: 'white', fontFamily: 'Jalnan'}}>
+                        전송
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-          <View style={styles.Text_sign}>
-            <Text style={styles.Text_sign_text}>인증번호</Text>
+                <View style={styles.Text_sign}>
+                  <Text style={styles.Text_sign_text}>인증번호</Text>
 
-            <View style={{display:"flex", flexDirection:"row"}}>
+                  <View style={{display: 'flex', flexDirection: 'row'}}>
+                    <TextInput
+                      style={styles.Text_sign_input2}
+                      id="authCheckNum"
+                      name="authCheckNum"
+                      value={this.state.authCheckNum}
+                      secureTextEntry={true}
+                      onChangeText={(text) =>
+                        this.setState({authCheckNum: text})
+                      }
+                    />
 
-              <TextInput style={styles.Text_sign_input2}   id="authCheckNum"
-              name="authCheckNum"
-              value={this.state.authCheckNum}
-              secureTextEntry={true}
-              onChangeText={(text) => this.setState({authCheckNum: text})}/>
+                    <TouchableOpacity
+                      style={styles.Btn_sign2}
+                      onPress={this.authEmail}>
+                      <Text style={{color: 'white', fontFamily: 'Jalnan'}}>
+                        확인
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-               <TouchableOpacity style={styles.Btn_sign2} onPress={this.authEmail}>
-               <Text style={{color:'white',fontFamily:'Jalnan'}}>확인</Text>
-               </TouchableOpacity>
+                <Text style={styles.sign_explain}>
+                  창원대 이메일으로만 가입이 가능합니다.
+                </Text>
 
-            </View>
-
-          </View>
-
-          <Text style={styles.sign_explain}>창원대 이메일으로만 가입이 가능합니다.</Text>
-
-          {/* <View>
+                {/* <View>
             <TouchableOpacity style={styles.Btn_sign} onPress={this.singup2Btn}>
               <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>다음</Text>
             </TouchableOpacity>
           </View> */}
 
-          <View>
-            <TouchableOpacity style={{
-              marginTop:25,
-              color:'white',
-              fontFamily:'Jalnan',
-              paddingLeft:30,
-              paddingTop:10,
-              paddingRight:30,
-              paddingBottom:10,
-              fontSize:20,
-              backgroundColor:'#f05052',
-              marginBottom:10,
-              width: 1000,
-            }} onPress={this.singupBtn}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20,textAlign:'center',width:'100%'}}>다음</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-  
-      </View>
-      </TouchableWithoutFeedback>
-      </KeyboardAwareScrollView>
-     </SafeAreaView>
-    )
+                <View>
+                  <TouchableOpacity
+                    style={{
+                      marginTop: 25,
+                      color: 'white',
+                      fontFamily: 'Jalnan',
+                      paddingLeft: 30,
+                      paddingTop: 10,
+                      paddingRight: 30,
+                      paddingBottom: 10,
+                      fontSize: 20,
+                      backgroundColor: '#f05052',
+                      marginBottom: 10,
+                      width: 1000,
+                    }}
+                    onPress={this.singupBtn}>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontFamily: 'Jalnan',
+                        fontSize: 20,
+                        textAlign: 'center',
+                        width: '100%',
+                      }}>
+                      다음
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  White_sign:{
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    flex:1,
-    backgroundColor:"white", //dadfa
+  White_sign: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    flex: 1,
+    backgroundColor: 'white', //dadfa
     // height:'100%'
   },
-  Container_sign:{
-    display:"flex",
-    flexDirection:"column",
-    alignContent: "center",//추가된거
+  Container_sign: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'center', //추가된거
     // justifyContent:"space-evenly",
-    justifyContent:"space-between",
-    alignItems:"center",
-    backgroundColor:"white",
-    height:'100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    height: '100%',
     // borderRadius:60,
-    
+
     ...Platform.select({
-      ios:{
-        width:'95%',
+      ios: {
+        width: '95%',
       },
-      android:{
-        width:'100%',
-      }
-    })
+      android: {
+        width: '100%',
+      },
+    }),
   },
-  Container_sign2:{
-    display:"flex",
-    flexDirection:"column",
+  Container_sign2: {
+    display: 'flex',
+    flexDirection: 'column',
     // flex:1,
     // borderRadius:60,
     // height:'100%'
   },
-  Textbox_sign:{
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"center",
-    alignItems:"center",
+  Textbox_sign: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  Textbox_sign2:{
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"center",
-    alignItems:"center",
+  Textbox_sign2: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
     // marginTop:30
   },
-  Intro_sign:{
-    marginTop:0,
-    fontSize:15,
-    color:"#f05052",
-    fontFamily:"Jalnan",
-    marginTop:10,
+  Intro_sign: {
+    marginTop: 0,
+    fontSize: 15,
+    color: '#f05052',
+    fontFamily: 'Jalnan',
+    marginTop: 10,
 
     ...Platform.select({
-      ios:{
+      ios: {
         marginBottom: 10,
       },
-      android:{
+      android: {
         marginBottom: 0,
-      }
-    })
+      },
+    }),
   },
-  Intro_sign2:{
-    marginTop:0,
-    fontSize:30,
+  Intro_sign2: {
+    marginTop: 0,
+    fontSize: 30,
     // color:"#4f87ba",
-    color:"#f05052",
-    fontFamily:"Jalnan"
+    color: '#f05052',
+    fontFamily: 'Jalnan',
   },
-  Text_sign:{
-    display:"flex",
-    flexDirection:'column',
-    width:'90%',
-    borderBottomWidth:1,
-    borderBottomColor:'gray',
+  Text_sign: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '90%',
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
 
     ...Platform.select({
-      ios:{
+      ios: {
         marginTop: 15,
       },
-      android:{
+      android: {
         marginTop: 10,
-      }
-    })
+      },
+    }),
   },
-  Text_sign_black:{
-    display:"flex",
-    flexDirection:'row',
-    width:'80%',
+  Text_sign_black: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '80%',
 
     ...Platform.select({
-      ios:{
+      ios: {
         marginTop: 15,
       },
-      android:{
+      android: {
         marginTop: 0,
-      }
-    })
+      },
+    }),
   },
-  Text_sign_sex:{
-    display:"flex",
-    flexDirection:'row',
-    width:'90%',
-    marginTop:15,
+  Text_sign_sex: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '90%',
+    marginTop: 15,
 
     ...Platform.select({
-      ios:{
+      ios: {
         justifyContent: 'space-around',
       },
-      android:{
+      android: {
         marginBottom: 10,
-      }
-    })
+      },
+    }),
     // borderBottomWidth:1,
     // borderBottomColor:'gray'
   },
-  
-  Text_sign_text:{
-    fontFamily:'Jalnan',
-    fontSize:15,
-    color:'#f05052',
+
+  Text_sign_text: {
+    fontFamily: 'Jalnan',
+    fontSize: 15,
+    color: '#f05052',
     // marginRight:80,
 
     ...Platform.select({
-      ios:{
+      ios: {
         marginBottom: 15,
       },
-      android:{
+      android: {
         marginBottom: 5,
-      }
-    })
+      },
+    }),
   },
-  Text_sign_text_sex:{
-    fontFamily:'Jalnan',
-    fontSize:15,
-    color:'#f05052',
+  Text_sign_text_sex: {
+    fontFamily: 'Jalnan',
+    fontSize: 15,
+    color: '#f05052',
 
     ...Platform.select({
-      ios:{
+      ios: {
         marginRight: 60,
       },
-      android:{
+      android: {
         marginRight: 100,
-      }
-    })
+      },
+    }),
   },
-  Text_sign_input:{
-    display:"flex",
-    color:'black',
-    flex:0.9,
-    height:20,
-    fontSize:15,
-    marginLeft:0,
-    padding:0 
+  Text_sign_input: {
+    display: 'flex',
+    color: 'black',
+    flex: 0.9,
+    height: 20,
+    fontSize: 15,
+    marginLeft: 0,
+    padding: 0,
   },
-  Text_sign_input2:{
-    display:"flex",
-    color:'black',
-    flex:0.9,
-    height:20,
-    fontSize:15,
-    marginLeft:0,
-    padding:0
+  Text_sign_input2: {
+    display: 'flex',
+    color: 'black',
+    flex: 0.9,
+    height: 20,
+    fontSize: 15,
+    marginLeft: 0,
+    padding: 0,
   },
-  Btn_sign:{
-    borderWidth:0,
-    marginTop:25,
-    color:'white',
-    borderRadius:60,
-    fontFamily:'Jalnan',
-    paddingLeft:30,
-    paddingTop:3,
-    paddingRight:30,
-    paddingBottom:3,
-    fontSize:20,
-    backgroundColor:'#f05052',
-    elevation:8,
-    marginBottom:10
+  Btn_sign: {
+    borderWidth: 0,
+    marginTop: 25,
+    color: 'white',
+    borderRadius: 60,
+    fontFamily: 'Jalnan',
+    paddingLeft: 30,
+    paddingTop: 3,
+    paddingRight: 30,
+    paddingBottom: 3,
+    fontSize: 20,
+    backgroundColor: '#f05052',
+    elevation: 8,
+    marginBottom: 10,
   },
-  Btn_sign2id:{
-    borderWidth:0,
+  Btn_sign2id: {
+    borderWidth: 0,
     // marginTop:25,
-    color:'white',
-    borderRadius:60,
-    fontFamily:'Jalnan',
-    paddingLeft:10,
-    paddingTop:5,
+    color: 'white',
+    borderRadius: 60,
+    fontFamily: 'Jalnan',
+    paddingLeft: 10,
+    paddingTop: 5,
     // paddingRight:10,
-    paddingBottom:5,
-    fontSize:20,
+    paddingBottom: 5,
+    fontSize: 20,
     // backgroundColor:'#f05052',
-    marginBottom:5,
-    marginRight:-20,
-    marginTop:-8,
+    marginBottom: 5,
+    marginRight: -20,
+    marginTop: -8,
   },
 
-  Btn_sign2:{
-    borderWidth:0,
+  Btn_sign2: {
+    borderWidth: 0,
     // marginTop:25,
-    color:'white',
-    borderRadius:60,
-    fontFamily:'Jalnan',
-    paddingLeft:10,
-    paddingTop:5,
-    paddingRight:10,
-    paddingBottom:5,
-    fontSize:20,
-    backgroundColor:'#f05052',
-    marginBottom:5,
-    marginRight:-15,
-    marginTop:-4,
+    color: 'white',
+    borderRadius: 60,
+    fontFamily: 'Jalnan',
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingRight: 10,
+    paddingBottom: 5,
+    fontSize: 20,
+    backgroundColor: '#f05052',
+    marginBottom: 5,
+    marginRight: -15,
+    marginTop: -4,
   },
-  
-  sign_explain:{
-      ...Platform.select({
-        ios:{
-          marginTop: 15,
-        },
-        android:{
-          marginTop: 10,
-        }
-      })
+
+  sign_explain: {
+    ...Platform.select({
+      ios: {
+        marginTop: 15,
+      },
+      android: {
+        marginTop: 10,
+      },
+    }),
   },
-  sign_button:{
-    fontSize:15,
-    fontFamily:'Jalnan',
-    color:"gray",
-    marginRight:-15,
+  sign_button: {
+    fontSize: 15,
+    fontFamily: 'Jalnan',
+    color: 'gray',
+    marginRight: -15,
     // marginBottom:-30,
-    paddingBottom:-30,
+    paddingBottom: -30,
   },
-  sel_placeholder:{
-    color:'red',
+  sel_placeholder: {
+    color: 'red',
   },
-  bar_Btn_sign:{
+  bar_Btn_sign: {
     // borderWidth:0,
-    color:'white',
+    color: 'white',
     // borderRadius:60,
-    fontFamily:'Jalnan',
-    paddingLeft:30,
-    paddingTop:15,
-    paddingRight:30,
-    paddingBottom:15,
-    fontSize:20,
-    backgroundColor:'#f05052',
+    fontFamily: 'Jalnan',
+    paddingLeft: 30,
+    paddingTop: 15,
+    paddingRight: 30,
+    paddingBottom: 15,
+    fontSize: 20,
+    backgroundColor: '#f05052',
     // elevation:8,
-    marginBottom:10,
+    marginBottom: 10,
     width: 1000,
     // textAlign: 'center',
-    
+
     ...Platform.select({
-      ios:{
+      ios: {
         marginTop: 25,
       },
-      android:{
+      android: {
         marginTop: 15,
-      }
-    })
-  }
+      },
+    }),
+  },
 });
 export default withNavigation(Sign_up);

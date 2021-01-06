@@ -52,12 +52,14 @@ export default class Solo_match extends React.Component {
     var to_sex = 0;
     let deptno = '';
     let userkey = '';
+    let nickname;
     if (this.state.message === '') {
       alert('전송할 메시지를 입력하세요');
       return;
     }
     AsyncStorage.getItem('login_user_info', (err, result) => {
       userkey = JSON.parse(result).user_key;
+      nickname = JSON.parse(result).user_nickname;
       if (
         (JSON.parse(result).user_sex == 0 && this.state.isEnabled === false) ||
         (JSON.parse(result).user_sex == 1 && this.state.isEnabled)
@@ -93,10 +95,26 @@ export default class Solo_match extends React.Component {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log(json);
+          console.log(json.user_token);
           if (json === false) alert('조건에 맞는 사용자가 없습니다.');
+          else if (json === true) alert('메시지를 전송했습니다.');
           else {
             alert('메시지를 전송했습니다.');
+            fetch('https://fcm.googleapis.com/fcm/send', {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json',
+                Authorization:
+                  'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
+              },
+              body: JSON.stringify({
+                to: json.user_token,
+                notification: {
+                  title: nickname,
+                  body: this.state.message,
+                },
+              }),
+            });
           }
         });
     });

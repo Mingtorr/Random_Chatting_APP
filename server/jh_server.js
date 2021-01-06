@@ -14,7 +14,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'jeong1207',
+  password: '2ajrrhtlvj',
   database: 'mydb',
 });
 
@@ -546,6 +546,35 @@ var mailSender = {
     });
   },
 };
+
+//==============================================하트 감소========================================================================
+
+app.post('/minus_heart', (req, res) => {
+  let body = req.body;
+  console.log(body);
+  connection.query(
+    'select user_heart from user_table where user_key=(?);',
+    [body.user_key],
+    function (err, rows, fileds) {
+      if (err) console.log(err);
+      else {
+        if (rows[0].user_heart === 0) res.send(false);
+        else {
+          let heart = rows[0].user_heart - 1;
+          connection.query(
+            'UPDATE user_table SET user_heart = (?) WHERE user_key= (?);',
+            [heart, body.user_key],
+            function (err, rows, fileds) {
+              if (err) console.log(err);
+              else res.send(true);
+            },
+          );
+        }
+      }
+    },
+  );
+  res.send(false);
+});
 //=============================================== 첫 접속하기 =================================================================
 app.post('/onMain', (req, res) => {
   let body = req.body;

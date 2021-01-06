@@ -86,6 +86,8 @@ export default class Solo_match extends React.Component {
         message: this.state.message,
         user_key: userkey,
       };
+
+      
       fetch(func.api(3001, 'sendMessage'), {
         method: 'post',
         headers: {
@@ -114,6 +116,19 @@ export default class Solo_match extends React.Component {
                   body: this.state.message,
                 },
               }),
+            });
+            const heart = {user_key: userkey};
+            fetch(func.api(3001, 'minus_heart'), {
+              method: 'post',
+              headers: {
+                'content-type': 'application/json',
+              },
+              body: JSON.stringify(heart),
+            }).then(() => {
+              if (!json) {
+                alert('채팅권 갯수가 부족합니다! 충전해주세요');
+              }
+
             });
           }
         });

@@ -29,9 +29,9 @@ import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-community/async-storage';
 const func = require('../server/api');
 
-const adUnitId = __DEV__
-  ? TestIds.REWARDED
-  : 'ca-app-pub-5434797501405557/2267266613';
+// const adUnitId = __DEV__
+//   ? TestIds.REWARDED
+//   : 'ca-app-pub-5434797501405557/2267266613';
 
 export default class match_page extends React.Component {
   constructor(props) {
@@ -97,10 +97,13 @@ export default class match_page extends React.Component {
 
     let box;
 
-    let rewardAd = RewardedAd.createForAdRequest(adUnitId, {
-      requestNonPersonalizedAdsOnly: true,
-      keywords: ['fashion', 'clothing'],
-    });
+    let rewardAd = RewardedAd.createForAdRequest(
+      'ca-app-pub-5434797501405557/4414384979',
+      {
+        requestNonPersonalizedAdsOnly: true,
+        keywords: ['fashion', 'clothing'],
+      },
+    );
 
     let rewardlListener = rewardAd.onAdEvent(async (type, error, reward) => {
       if (type === RewardedAdEventType.LOADED) {

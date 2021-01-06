@@ -34,7 +34,6 @@ const Width = Dimensions.get('window').width;
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 150 : 0;
 
 import AsyncStorage from '@react-native-community/async-storage';
-import {json} from 'express';
 const func = require('../server/api');
 
 export default class Solo_match extends React.Component {

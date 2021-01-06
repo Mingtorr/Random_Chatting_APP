@@ -566,7 +566,7 @@ app.post('/minus_heart', (req, res) => {
             [heart, body.user_key],
             function (err, rows, fileds) {
               if (err) console.log(err);
-              else res.send(true);
+              else res.send(heart);
             },
           );
         }

@@ -34,6 +34,7 @@ const Width = Dimensions.get('window').width;
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 150 : 0;
 
 import AsyncStorage from '@react-native-community/async-storage';
+import {json} from 'express';
 const func = require('../server/api');
 
 export default class Solo_match extends React.Component {
@@ -79,57 +80,61 @@ export default class Solo_match extends React.Component {
         return;
       }
     }).then(() => {
-      const box = {
-        major: this.state.major,
-        sex: to_sex,
-        deptno: deptno,
-        message: this.state.message,
-        user_key: userkey,
-      };
-
-      
-      fetch(func.api(3001, 'sendMessage'), {
+      const heart = {user_key: userkey};
+      fetch(func.api(3001, 'minus_heart'), {
         method: 'post',
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(box),
+        body: JSON.stringify(heart),
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log(json.user_token);
-          if (json === false) alert('조건에 맞는 사용자가 없습니다.');
-          else if (json === true) alert('메시지를 전송했습니다.');
-          else {
-            alert('메시지를 전송했습니다.');
-            fetch('https://fcm.googleapis.com/fcm/send', {
-              method: 'POST',
-              headers: {
-                'content-type': 'application/json',
-                Authorization:
-                  'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
-              },
-              body: JSON.stringify({
-                to: json.user_token,
-                notification: {
-                  title: nickname,
-                  body: this.state.message,
-                },
-              }),
-            });
-            const heart = {user_key: userkey};
-            fetch(func.api(3001, 'minus_heart'), {
+          if (json === false) {
+            //채팅권이 0일 경우
+            alert('채팅권 갯수가 부족합니다! 충전해주세요');
+          } else {
+            //여기서 match page로 올려주면 됩니다.
+            //json.heart 가 감소된 값입니다. 올려줘서 setstate 로 하면 됩니다.
+            const box = {
+              major: this.state.major,
+              sex: to_sex,
+              deptno: deptno,
+              message: this.state.message,
+              user_key: userkey,
+            };
+
+            fetch(func.api(3001, 'sendMessage'), {
               method: 'post',
               headers: {
                 'content-type': 'application/json',
               },
-              body: JSON.stringify(heart),
-            }).then(() => {
-              if (!json) {
-                alert('채팅권 갯수가 부족합니다! 충전해주세요');
-              }
-
-            });
+              body: JSON.stringify(box),
+            })
+              .then((res) => res.json())
+              .then((json) => {
+                console.log(json.user_token);
+                if (json === false) alert('조건에 맞는 사용자가 없습니다.');
+                else if (json === true) alert('메시지를 전송했습니다.');
+                else {
+                  alert('메시지를 전송했습니다.');
+                  fetch('https://fcm.googleapis.com/fcm/send', {
+                    method: 'POST',
+                    headers: {
+                      'content-type': 'application/json',
+                      Authorization:
+                        'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
+                    },
+                    body: JSON.stringify({
+                      to: json.user_token,
+                      notification: {
+                        title: nickname,
+                        body: this.state.message,
+                      },
+                    }),
+                  });
+                }
+              });
           }
         });
     });

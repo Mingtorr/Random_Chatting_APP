@@ -732,13 +732,13 @@ async function checkroom(row, user_key, message) {
               console.log(rows.insertId); //추가한 방번호pk
               room_key = rows.insertId;
               connection.query(
-                'INSERT INTO participant (room_id,user_key,count,room_del) values(?,?,?,?)',
-                [room_key, row[res].user_key, 1, 0],
+                'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
+                [room_key, row[res].user_key, 1, 0, 0],
                 function (err, rows, fields) {
                   if (err) console.log(err);
                   connection.query(
-                    'INSERT INTO participant (room_id,user_key,count,room_del) values(?,?,?,?)',
-                    [room_key, user_key, 0, 0],
+                    'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
+                    [room_key, user_key, 0, 0, 1],
                     function (err, rows, fields) {
                       if (err) console.log(err);
                       connection.query(
@@ -777,13 +777,13 @@ async function sending1(user_key, message) {
           console.log('쓰레기에 전송');
           room_key = rows.insertId;
           connection.query(
-            'INSERT INTO participant (room_id,user_key,count,room_del) values(?,?,?,?)',
-            [room_key, 0, 1, 0],
+            'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
+            [room_key, 0, 1, 0, 0],
             function (err, rows, fields) {
               if (err) console.log(err);
               connection.query(
-                'INSERT INTO participant (room_id,user_key,count,room_del) values(?,?,?,?)',
-                [room_key, user_key, 0, 0],
+                'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
+                [room_key, user_key, 0, 0, 1],
                 function (err, rows, fields) {
                   if (err) console.log(err);
                   connection.query(

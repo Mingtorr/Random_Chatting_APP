@@ -42,7 +42,6 @@ export default class Grouproom extends React.Component {
       const key ={
         userKey: this.state.user_Info.user_key
       }
-      console.log('구룹1');
       // socket.emit('messageroomjoin',this.state.user_Info.user_key);
       fetch(func.api(3002,'Get_Group'),{
         method: 'post',

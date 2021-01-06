@@ -225,7 +225,10 @@ function Bottom() {
       {/* 친구들 찾기 */}
       <Tab.Screen name="Group" component={Match_page} />
       {/* 메세지함 */}
-      <Tab.Screen name="MessageCollect" component={MessageCollect} />
+      <Tab.Screen name="MessageCollect" component={MessageCollect} options={{ unmountOnBlur: true }}
+      listeners={({ navigation }) => ({
+        blur: () => navigation.setParams({ screen: undefined }),
+      })}/>
       {/* 알림  나중에 알람넣어요*/}
       {/* <Tab.Screen name="알림" component={Message} /> */}
       {/* 설정 */}

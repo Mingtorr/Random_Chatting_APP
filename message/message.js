@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import { Header } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
   SafeAreaView,
@@ -32,7 +33,7 @@ const timefunc = require('./timefunction');
 
 import AsyncStorage from '@react-native-community/async-storage';
 
-const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0
+const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 15
 const socket = io(func.api(3004,''));
 
 
@@ -293,7 +294,10 @@ go = () =>{
     return(
           <SafeAreaView style={styles.message_safe}>
             <Button title='신고하기' onPress={this.go}/>
-            <KeyboardAvoidingView style={styles.message_safe} behavior='padding' onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
+            <KeyboardAvoidingView style={{display:"flex",
+        backgroundColor:'white',
+        flex:1,
+        flexDirection:"column"}} behavior={Platform.OS === "ios" ? "padding" : null} onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
               <View style={styles.message_top} >
                 <View style={{display:'flex',flex:0.5,flexDirection:"row",justifyContent:'center'}}>
                   {(this.state.toshownickname === 0)&&(this.state.resultshownickname === 0) ?<Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>알수없음</Text> :<Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>{this.state.mynickname}</Text> }
@@ -310,8 +314,8 @@ go = () =>{
                   renderItem={this.rendermessage}
                   />
               </View>
-              <View  style={{display:"flex",flex:0.06,backgroundColor:'white',flexDirection:'row',justifyContent:'center',marginBottom:10}}>
-                <TextInput value={this.state.text} id="text" name="text" onChangeText={this.message_onchange} onTouchStart={this.scrolltobottom} style={{display:'flex',height:30,width:300,marginTop:5,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10}} on/> 
+              <View  style={{display:"flex",flex:0.06,backgroundColor:'white',flexDirection:'row',justifyContent:'center',marginBottom:20}}>
+                <TextInput value={this.state.text} id="text" name="text" onFocus={this.scrolltobottom} onChangeText={this.message_onchange} onTouchStart={this.scrolltobottom} style={{display:'flex',height:30,width:300,marginTop:5,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10,paddingTop:5,paddingBottom:5}}/> 
                 <TouchableOpacity style={{display:'flex',marginTop:5,marginLeft:20}} onPress={this.sendmessage}>
                   <Image style={{width:35,height:35}} source={require('./sendmessage.png')}/>
                 </TouchableOpacity>

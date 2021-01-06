@@ -10,10 +10,10 @@ var http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
 var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'mydb',
+  host: "localhost",
+  user: "root",
+  password: "snsk3779@",
+  database: "mydb",
 });
 
 connection.connect();

@@ -57,13 +57,29 @@ app.post('/updateshownickname', (req, res) => {
 app.post('/showmessage', (req, res) => {
   console.log(req.body);
   connection.query(
-    'SELECT * FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time;',
+    'select * from (SELECT user_table.user_key,user_table.user_nickname,message_table.message_body,message_table.message_key,message_table.message_time FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time Desc limit 20) A order by A.message_time asc;',
     [req.body.roomid],
     function (err, rows, field) {
       if (err) {
         console.log(err);
       } else {
         res.send(rows);
+      }
+    },
+  );
+});
+app.post('/showmessageadd', (req, res) => {
+  console.log(req.body);
+  connection.query(
+    'select * from (SELECT user_table.user_key,user_table.user_nickname,message_table.message_body,message_table.message_key,message_table.message_time FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time Desc limit ?,20) A order by A.message_time Desc;',
+    [req.body.roomid,req.body.count*20],
+    function (err, rows, field) {
+      if (err) {
+        console.log(err);
+        return;
+      } else {
+        console.log("sex"+JSON.stringify(rows));
+          res.send(rows)
       }
     },
   );

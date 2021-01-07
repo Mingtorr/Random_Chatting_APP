@@ -60,7 +60,8 @@ class Message extends React.Component{
       id:'aaa',
       mynickname:'',
       toshownickname: this.props.route.params.toshownickname,
-      resultshownickname:0
+      resultshownickname:0,
+      change:1,
     }
   }
   componentWillUnmount() {
@@ -131,6 +132,7 @@ class Message extends React.Component{
       this.setState({
         arrendkey:this.state.arr[this.state.arr.length-1].key
       })
+      /*
       if(this.state.arr.length >20){
         this.setState({
           start:this.state.arr.length-20
@@ -140,14 +142,16 @@ class Message extends React.Component{
           start:0
         },this.scrolltobottom())
       }
+      */
     })
   });
+  /*
     if(this.state.arr.length>20){
       this.setState({
         start:this.state.arr.length-20
       })
     }
-    
+   */ 
     // console.log(this.state.page);
     socket.on('recieve_message',(data)=>{
       this.setState({
@@ -213,20 +217,65 @@ scrolltobottom=()=>{
     },400)
 }
 scrolltomessage=()=>{
+  /*
   setTimeout(()=>{
     if(this.state.arr.length-this.state.start<20){
     }else{
       this.scrollViewRef.current.scrollToIndex({animated: false,index:19});
     }
   },400)
+  */
 }
 func=()=>{
+  const data = {
+    roomid:this.props.route.params.roomid,//roomid
+    userkey:this.state.userkey,
+    count : this.state.change
+  }
+  console.log("asd");
+  fetch(func.api(3004,'showmessageadd'), {
+    method: "post",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then(res=>res.json()).then((json)=>{
+    json.map((value,index)=>{
+      const realtime = timefunc.settime2(value.message_time);
+      const row = {
+        key : value.message_key,
+        name : value.user_nickname,
+        message : value.message_body,
+        sendid:value.user_key,
+        time: realtime
+      }
+      this.setState({
+        arr:[row,...this.state.arr],
+      })
+      console.log(this.state.arr+"asdasd");
+     /*
+      if(this.state.arr.length >20){
+        this.setState({
+          start:this.state.arr.length-20
+        },this.scrolltobottom())
+      }else{
+        this.setState({
+          start:0
+        },this.scrolltobottom())
+      }*/
+      
+    })
+    this.setState({
+      change:this.state.change+1
+    })
+  });
+  /*
+  console.log(this.state.start);
   if(this.state.start<19){
     this.setState({
       refresh:true,
       start:0
     },()=>{
-   
       this.setState({
         refresh:false
       })
@@ -243,6 +292,7 @@ func=()=>{
       })
     })
   }
+  */
 }
 message_onchange=(e)=>{
   this.setState({
@@ -261,8 +311,6 @@ wholastmessage2=()=>{
 }
 rendermessage=({item,index})=>{
   {
-    console.log("유저키"+this.state.userkey);
-    console.log(item);
       if(index===0){ 
         if(this.state.userkey === item.sendid){
           return(<Mymessage message={item.message} time={item.time}/>)
@@ -273,7 +321,6 @@ rendermessage=({item,index})=>{
         
         if(this.state.arr[this.state.start+index-1].sendid === item.sendid)
         {
-          console.log("??2");
           if(this.state.userkey === item.sendid){
             return( <Mymessage message={item.message} time={item.time}/>)
           }else{
@@ -327,7 +374,7 @@ back = () =>{
                   keyExtractor={item => item.key.toString()}
                   refreshing={this.state.refresh}
                   onRefresh={this.func}
-                  data={this.state.arr.slice(this.state.start,this.state.arr.length)}//여기서
+                  data={this.state.arr}//여기서
                   renderItem={this.rendermessage}
                   />
               </View>

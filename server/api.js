@@ -1,7 +1,7 @@
 
 
 function api(params,name) {
-    return ('http://172.30.1.45:'+`${params}`+`/${name}`)
+    return ('http://192.168.0.6:'+`${params}`+`/${name}`)
 }
 module.exports = {
   api,

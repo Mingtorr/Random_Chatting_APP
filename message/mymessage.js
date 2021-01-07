@@ -18,8 +18,8 @@ export default class Mymessage extends React.Component{
                 <View style={{backgroundColor:'white',display:'flex',justifyContent:'flex-end',marginRight:10}}>
                             <Text style={{fontSize:12}}>{this.props.time}</Text>
                 </View>
-                <View style={{display:'flex',backgroundColor:'#c7d9ff',marginRight:16,maxWidth:'70%',paddingLeft:20,paddingRight:20,paddingBottom:10,paddingTop:10,borderRadius:28}}>
-                    <Text style={{fontSize:18}}>{this.props.message}</Text>
+                <View style={{display:'flex',backgroundColor:'#eb6c63',marginRight:16,maxWidth:'70%',paddingLeft:15,paddingRight:15,paddingBottom:8,paddingTop:8,borderRadius:20}}>
+                    <Text style={{fontSize:18,color:'white'}}>{this.props.message}</Text>
                 </View>
             </View>
         )

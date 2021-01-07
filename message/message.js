@@ -75,7 +75,6 @@ class Message extends React.Component{
         myshownickname:this.props.route.params.myshownickname
       })
     });
-    console.log("sibal sekiya "+ this.props.route.params.myshownickname);
     const data = {
       roomid:this.props.route.params.roomid,//roomid
       userkey:this.state.userkey
@@ -95,7 +94,6 @@ class Message extends React.Component{
       })
     })
     socket.on('shownickname',(data)=>{   //change roomsockets
-      console.log("yeeeeeeeeeeeeee"+data);
       this.setState({
         resultshownickname:1
       })
@@ -127,7 +125,6 @@ class Message extends React.Component{
         sendid:value.user_key,
         time: realtime
       }
-      console.log(row);
       this.setState({
         arr:[...this.state.arr,row],
       })
@@ -161,7 +158,13 @@ class Message extends React.Component{
 }
 
 sendmessage=()=>{
-  const realtime = timefunc.settime();
+  if(this.state.text.trim() === ''){
+    this.setState({
+      text:''
+    })
+  
+  }else{
+    const realtime = timefunc.settime();
   const realtime2 = new Date();
   const data = {
     roomid:this.props.route.params.roomid, //룸아이디 입력
@@ -198,6 +201,8 @@ sendmessage=()=>{
     text:''
   })
 
+  }
+  
    //메시지 보냄
 }
 scrolltobottom=()=>{
@@ -256,23 +261,22 @@ wholastmessage2=()=>{
 }
 rendermessage=({item,index})=>{
   {
+    console.log("유저키"+this.state.userkey);
+    console.log(item);
       if(index===0){ 
         if(this.state.userkey === item.sendid){
-        
           return(<Mymessage message={item.message} time={item.time}/>)
         }else{
-         
           return(<Yourmessage message={item.message} name={item.name} pre={false} time={item.time}/>)
         }
       }else{
         
-        if(this.state.arr[this.state.start+index-1].userkey === item.sendid)
+        if(this.state.arr[this.state.start+index-1].sendid === item.sendid)
         {
+          console.log("??2");
           if(this.state.userkey === item.sendid){
-           
             return( <Mymessage message={item.message} time={item.time}/>)
           }else{
-           
             return(<Yourmessage message={item.message} name={item.name} pre={true} time={item.time}/>)
           }
         }
@@ -289,21 +293,32 @@ rendermessage=({item,index})=>{
 }
 }
 go = () =>{
-  console.log("신고하기");
   this.props.navigation.navigate('singo',{messages:this.state.arr,userkey:this.state.userkey,touserkey:this.state.touserkey});
+}
+
+back = () =>{
+  this.props.navigation.navigate('MessageCollect');
 }
   render(){
     return(
           <SafeAreaView style={styles.message_safe}>
-            <Button title='신고하기' onPress={this.go}/>
             <KeyboardAvoidingView style={{display:"flex",
         backgroundColor:'white',
         flex:1,
         flexDirection:"column"}} behavior={Platform.OS === "ios" ? "padding" : null} onAccessibilityAction={this.scrolltobottom} keyboardVerticalOffset={keyboardVerticalOffset}>
               <View style={styles.message_top} >
-                <View style={{display:'flex',flex:0.5,flexDirection:"row",justifyContent:'center'}}>
-                  {(this.state.toshownickname === 0)&&(this.state.resultshownickname === 0) ?<Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>알수없음</Text> :<Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}>{this.state.mynickname}</Text> }
-                  <Text style={{fontFamily:"Jalnan",color:'white',fontSize:20}}> 님</Text>
+                <View style={{display:'flex',flex:0.15, backgroundColor:'white',alignItems:'flex-start'}}>
+                  <TouchableOpacity style={{display:'flex',marginLeft:10}} onPress={this.back}>
+                    <Image style={{width:20,height:20}} source={require('./back.png')}/>
+                  </TouchableOpacity>
+                </View>
+                <View style={{display:'flex',flex:0.7,flexDirection:"row",justifyContent:'center'}}>
+                  {(this.state.toshownickname === 0)&&(this.state.resultshownickname === 0) ?<Text style={{color:'black',fontSize:17,fontWeight:'bold'}}>알수없음</Text> :<Text style={{color:'black',fontWeight:'bold',fontSize:17}}>{this.state.mynickname} 님</Text> }
+                </View>
+                <View style={{display:'flex',flex:0.15, backgroundColor:'white',alignItems:'flex-start'}}>
+                  <TouchableOpacity style={{display:'flex'}} onPress={this.go}>
+                    <Image style={{width:40,height:40}} source={require('./megaphone.png')}/>
+                  </TouchableOpacity>
                 </View>
               </View>
               <View style={{display:"flex",flex:0.93,backgroundColor:'white'}} >
@@ -317,9 +332,9 @@ go = () =>{
                   />
               </View>
               <View  style={{display:"flex",flex:0.06,backgroundColor:'white',flexDirection:'row',justifyContent:'center',marginBottom:20}}>
-                <TextInput value={this.state.text} id="text" name="text" onFocus={this.scrolltobottom} onChangeText={this.message_onchange} onTouchStart={this.scrolltobottom} style={{display:'flex',height:30,width:300,marginTop:5,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10,paddingTop:5,paddingBottom:5}}/> 
-                <TouchableOpacity style={{display:'flex',marginTop:5,marginLeft:20}} onPress={this.sendmessage}>
-                  <Image style={{width:35,height:35}} source={require('./sendmessage.png')}/>
+                <TextInput value={this.state.text} id="text" name="text" onFocus={this.scrolltobottom} onChangeText={this.message_onchange} onTouchStart={this.scrolltobottom} style={{display:'flex',height:30,width:300,marginTop:10,marginBottom:5,backgroundColor:'#dcdcdc82',borderRadius:24,paddingLeft:10,paddingRight:10,paddingTop:5,paddingBottom:5}}/> 
+                <TouchableOpacity style={{display:'flex',marginTop:10,marginLeft:20}} onPress={this.sendmessage}>
+                  <Image style={{width:35,height:35}} source={require('./send.png')}/>
                 </TouchableOpacity>
               </View>
               </KeyboardAvoidingView>
@@ -344,9 +359,11 @@ const styles = StyleSheet.create({
         display:"flex",
         height:50,
         flexDirection:'row',
-        backgroundColor:'#a1bdff',
+        backgroundColor:'white',
         justifyContent:"center",
         alignItems:"center",
+        borderBottomColor:'#bdbdbd',
+        borderBottomWidth:1
     }
 });
 

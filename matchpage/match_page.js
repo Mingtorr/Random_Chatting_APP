@@ -29,9 +29,9 @@ import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-community/async-storage';
 const func = require('../server/api');
 
-// const adUnitId = __DEV__
-//   ? TestIds.REWARDED
-//   : 'ca-app-pub-5434797501405557/2267266613';
+const adUnitId = __DEV__
+  ? TestIds.REWARDED
+  : 'ca-app-pub-5434797501405557/2267266613';
 
 export default class match_page extends React.Component {
   constructor(props) {
@@ -97,15 +97,15 @@ export default class match_page extends React.Component {
 
     let box;
 
-    let rewardAd = RewardedAd.createForAdRequest(
-      'ca-app-pub-5434797501405557/4414384979',
-      {
-        requestNonPersonalizedAdsOnly: true,
-        keywords: ['fashion', 'clothing'],
-      },
-    );
+    const rewardAd = RewardedAd.createForAdRequest(unitId, {
+      requestNonPersonalizedAdsOnly: true,
+      keywords: ['fashion', 'clothing'],
+    });
 
     let rewardlListener = rewardAd.onAdEvent(async (type, error, reward) => {
+      if (error) {
+        console.log('동영상을 불러오는 중 오류가 발생했어요', error);
+      }
       if (type === RewardedAdEventType.LOADED) {
         rewardAd.show();
       }
@@ -142,18 +142,9 @@ export default class match_page extends React.Component {
     });
     rewardAd.load();
 
-    console.log(box);
-    fetch(func.api(3001, 'Heart_reset'), {
-      method: 'post',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(box),
-    });
-
-    // return () => {
-    rewardlListener = null;
-    // };
+    return () => {
+      rewardlListener = null;
+    };
   };
 
   shadow = () => {
@@ -245,7 +236,7 @@ export default class match_page extends React.Component {
             <View></View>
           )}
 
-          {/* <View
+          <View
             style={{
               position: 'absolute',
               display: this.state.shadowTF,
@@ -264,7 +255,7 @@ export default class match_page extends React.Component {
               elevation: 3,
               // backgroundColor: 'balck',
               // opacity: 0.2,
-            }}></View> */}
+            }}></View>
           <View
             style={{
               display: 'flex',

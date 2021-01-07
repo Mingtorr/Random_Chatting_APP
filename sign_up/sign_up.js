@@ -129,6 +129,7 @@ class Sign_up extends React.Component {
           this.setState({
             authNum: json,
           });
+          console.log('인증번호', this.state.authNum);
 
           //테스트 (메일인증x)
           // if (json === true) {
@@ -204,20 +205,8 @@ class Sign_up extends React.Component {
     }
   };
 
-  passwdcheck = (e) => {
-    if (this.state.passwd.length === 0 || this.state.passwd2.length === 0) {
-      alert('비밀번호를 입력해주세요');
-    } else if (this.state.passwd !== this.state.passwd2) {
-      alert('비밀번호가 일치하지 않습니다.');
-    } else if (this.state.passwd === this.state.passwd2) {
-      alert('비밀번호가 일치합니다.');
-      this.setState({
-        checking_passwd: true,
-      });
-    }
-  };
-
   nickNamecheck = (e) => {
+    e.preventDefault();
     var re = /^[a-zA-Z0-9가-힣]{2,8}$/;
     if (
       !this.check(
@@ -228,15 +217,16 @@ class Sign_up extends React.Component {
     ) {
       return;
     } else {
-      const Nickname = {
+      const box = {
         nickname: this.state.nickname,
       };
+      console.log(box);
       fetch(func.api(3001, 'CheckNickname'), {
         method: 'post',
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(Nickname),
+        body: JSON.stringify(box),
       })
         .then((res) => res.json())
         .then((json) => {
@@ -249,6 +239,19 @@ class Sign_up extends React.Component {
             alert('이미 사용중인 닉네임입니다');
           }
         });
+    }
+  };
+
+  passwdcheck = (e) => {
+    if (this.state.passwd.length === 0 || this.state.passwd2.length === 0) {
+      alert('비밀번호를 입력해주세요');
+    } else if (this.state.passwd !== this.state.passwd2) {
+      alert('비밀번호가 일치하지 않습니다.');
+    } else if (this.state.passwd === this.state.passwd2) {
+      alert('비밀번호가 일치합니다.');
+      this.setState({
+        checking_passwd: true,
+      });
     }
   };
 
@@ -349,7 +352,9 @@ class Sign_up extends React.Component {
                       style={styles.Text_sign_input}
                       id="id"
                       value={this.state.id}
-                      onChangeText={(text) => this.setState({id: text})}
+                      onChangeText={(text) =>
+                        this.setState({id: text, checked_id: false})
+                      }
                     />
                     {/* <TouchableOpacity style={{padding:-30}} onPress={this.singupBtn}>
                   <Text style={styles.sign_button}>중복확인</Text>
@@ -378,7 +383,9 @@ class Sign_up extends React.Component {
                       name="passwd"
                       value={this.state.passwd}
                       secureTextEntry={true}
-                      onChangeText={(text) => this.setState({passwd: text})}
+                      onChangeText={(text) =>
+                        this.setState({passwd: text, checking_passwd: false})
+                      }
                     />
                   </View>
                 </View>
@@ -434,7 +441,9 @@ class Sign_up extends React.Component {
                       id="nickname"
                       name="nickname"
                       value={this.state.nickname}
-                      onChangeText={(text) => this.setState({nickname: text})}
+                      onChangeText={(text) =>
+                        this.setState({nickname: text, nickname_check: false})
+                      }
                     />
                     <TouchableOpacity
                       style={styles.Btn_sign2id}
@@ -459,7 +468,9 @@ class Sign_up extends React.Component {
                       id="email"
                       name="email"
                       value={this.state.email}
-                      onChangeText={(text) => this.setState({email: text})}
+                      onChangeText={(text) =>
+                        this.setState({email: text, checked_email: false})
+                      }
                     />
                     <Text
                       style={{
@@ -510,10 +521,10 @@ class Sign_up extends React.Component {
                 </Text>
 
                 {/* <View>
-            <TouchableOpacity style={styles.Btn_sign} onPress={this.singup2Btn}>
-              <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>다음</Text>
-            </TouchableOpacity>
-          </View> */}
+                  <TouchableOpacity style={styles.Btn_sign} onPress={this.singup2Btn}>
+                    <Text style={{color:'white',fontFamily:'Jalnan',fontSize:20}}>다음</Text>
+                  </TouchableOpacity>
+                </View> */}
 
                 <View>
                   <TouchableOpacity

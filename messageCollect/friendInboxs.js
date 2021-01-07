@@ -72,6 +72,7 @@ export default class FriendsInbox extends React.Component {
   }
 
   onpress = (itemId) =>{
+    this.props.go.navigate('Groupmessage');
     const data = [...this.state.DATA];
     //클릭시 새로운 메시지 표시 삭제
     this.setState({

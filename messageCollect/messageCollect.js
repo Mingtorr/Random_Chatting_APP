@@ -12,11 +12,9 @@ import {
   CheckBox,
 } from 'react-native';
 import FriendInbox from './friendInbox';
-import FriendsInbox from './friendsInbox';
+// import FriendsInbox from './friendsInbox';
+import Grouproom from './grouproom';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import io from 'socket.io-client'
-
-const socket = io('192.168.123.254:3001');
 
 export default class messageCollect extends React.Component{
   constructor(props){
@@ -29,47 +27,28 @@ export default class messageCollect extends React.Component{
     }
   }
 
-  testOnClick = () => {
-    console.log('test');
-    const post = {
-      test: '들어갓',
-      test1: '들어갓2'
-    };
-    fetch('http://192.168.42.191:3001/Test',{
-      method: 'post',
-      headers:{
-        'content-type': 'application/json',
-      },
-      body:JSON.stringify(post),
-    })
-    .then((res) => res.json())
-    .then((json) => {
-      if(json.boolean){
-        alert('데이터 입력 성공')
-      }
-    });
-  };
-
   toggleOut = () =>{
     this.setState({
       outButtonBool: !this.state.outButtonBool
     });
   }
-
+  gomessage = () =>{
+    this.props.navigation.navigate('Login');
+  }
   render(){
     return(
       <SafeAreaView style = {styles.container}>
         <View style ={styles.messageHead}>
           <Text style ={{fontSize: 18, fontWeight: 'bold'}}>Message</Text>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onLongPress = {this.testOnClick}
             onPress = {() => this.setState({
             outButtonBool: !this.state.outButtonBool}) }>
             <Text style ={{fontSize:15, fontWeight:'bold'}}>편집</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style = {styles.collectBody}>
-          <MessageTab outButtonBool = {this.state.outButtonBool}/>
+          <MessageTab outButtonBool = {this.state.outButtonBool} go = {this.props.navigation}/>
         </View>
       </SafeAreaView>
     )
@@ -82,8 +61,8 @@ function MessageTab(props) {
   return (
     <Tab.Navigator tabBarOptions =
       {{style: {backgroundColor: 'none' ,width:'100%', height:48, marginTop:-8}, 
-        tabStyle:{ width:70},
-        labelStyle: {fontSize: 16, fontWeight:'bold' },
+        // tabStyle:{ width:70},
+        labelStyle: {fontSize: 18, fontWeight:'bold' },
         activeTintColor: '#eb6c63',
         inactiveTintColor: '#bababa',
         indicatorStyle:{
@@ -92,8 +71,8 @@ function MessageTab(props) {
           backgroundColor:'#eb6c63',
         }
       }}>
-      <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool}/>} />
-      <Tab.Screen name="과팅" children= {() => <FriendsInbox />} />
+      <Tab.Screen name="1:1" children = {()=> <FriendInbox outButtonBool ={props.outButtonBool} go={props.go}/>}/>
+      <Tab.Screen name="오픈채팅" children= {() => <Grouproom go={props.go}/>} />
     </Tab.Navigator>
   );
 }

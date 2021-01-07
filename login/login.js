@@ -1,20 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   TouchableOpacity,
-  Button,
   TextInput,
   Image,
   TouchableWithoutFeedback,
@@ -27,6 +17,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {getBottomSpace} from 'react-native-iphone-x-helper';
+import messaging from '@react-native-firebase/messaging';
 const func = require('../server/api');
 
 class Login extends React.Component {
@@ -37,17 +28,6 @@ class Login extends React.Component {
       pass: '',
     };
   }
-  componentWillMount() {
-    // console.log(func.api(3001,'login'));
-    AsyncStorage.getItem('login_onoff_set', (err, result) => {
-      if (result === 'true') {
-        this.props.navigation.navigate('Main');
-      } else {
-        this.props.navigation.navigate('Login');
-      }
-    });
-  }
-
   handleName = (e) => {
     this.setState({
       name1: e,
@@ -61,12 +41,14 @@ class Login extends React.Component {
     // console.log(this.state.pass);
   };
 
-  onlogin = (e) => {
+  onlogin = async (e) => {
+    console.log('asdf');
+    const token = await messaging().getToken();
     const post = {
       id: this.state.name1,
       passwd: this.state.pass,
+      token: token,
     };
-
     fetch(func.api(3001, 'login'), {
       method: 'post',
       headers: {
@@ -91,8 +73,6 @@ class Login extends React.Component {
                 user_nickname: json.user_nickname,
               }),
               () => {
-                // console.log('로그인 정보 저장')
-
                 this.props.navigation.navigate('Main');
               },
             );
@@ -142,6 +122,7 @@ class Login extends React.Component {
                   style={styles.wrapper}
                   autoplay={true}
                   autoplayTimeout={3}
+                  showsPagination={false}
                   activeDot={
                     <View
                       style={{
@@ -245,113 +226,6 @@ class Login extends React.Component {
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAwareScrollView>
-        {/* <View style={styles.bg1}>
-          <View style={styles.Textbox_login2}>
-            <Text style={styles.Intro_login}>창원대 매칭앱</Text>
-          </View>
-          <View style={styles.Textbox_login}>
-            <Text style={styles.Intro_login2}>와글와글</Text>
-          </View>
-        </View>
-
-        <View style={styles.Swiper_bg}>
-          <Swiper
-            style={styles.wrapper}
-            autoplay={true}
-            autoplayTimeout={3}
-            activeDot={
-              <View
-                style={{
-                  backgroundColor: '#f05052',
-                  width: 9,
-                  height: 9,
-                  borderRadius: 7,
-                  marginLeft: 7,
-                  marginRight: 7,
-                }}
-              />
-            }>
-            <View style={styles.slide1}>
-              <Text style={styles.swiper_text}>
-                '다른 학과' 사람들과 친해질수 있는
-              </Text>
-              <Text style={styles.swiper_text}>최고의 방법</Text>
-              <Image
-                style={styles.swiper_image}
-                source={require('./swiper_image1.png')}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={styles.slide2}>
-              <Text style={styles.swiper_text}>창원대</Text>
-              <Text style={styles.swiper_text}>창원대</Text>
-              <Image
-                style={styles.swiper_image}
-                source={require('./swiper_image1.png')}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={styles.slide3}>
-              <Text style={styles.swiper_text}>와글와글</Text>
-              <Text style={styles.swiper_text}>와글와글</Text>
-              <Image
-                style={styles.swiper_image}
-                source={require('./swiper_image1.png')}
-                resizeMode="cover"
-              />
-            </View>
-          </Swiper>
-        </View>
-
-        <View style={styles.bg2}>
-          <View style={styles.Text_login}>
-            <Text style={styles.Text_login_text}>아이디</Text>
-            <TextInput
-              style={styles.Text_login_input}
-              id="name"
-              value={this.state.name1}
-              onChangeText={this.handleName}
-            />
-          </View>
-          <View style={styles.Text_login}>
-            <Text style={styles.Text_login_text}>비밀번호</Text>
-            <TextInput
-              style={styles.Text_login_input2}
-              id="pass"
-              name="pass"
-              value={this.state.pass}
-              secureTextEntry={true}
-              onChangeText={this.handleName2}
-            />
-          </View>
-        </View>
-
-        <View style={styles.bg3}>
-          <View style={styles.login_button_view}>
-            <TouchableOpacity
-              style={{marginRight: 70}}
-              onPress={this.singupBtn}>
-              <Text style={{fontSize: 15, fontFamily: 'Jalnan'}}>
-                처음이신가요?
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{marginRight: 20}}
-              onPress={this.find_idpwBtn}>
-              <Text style={{fontSize: 15, fontFamily: 'Jalnan'}}>
-                ID/PW 찾기
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={{width: '100%'}}>
-          <TouchableOpacity style={styles.Btn_login} onPress={this.onlogin}>
-            <Text style={{color: 'white', fontFamily: 'Jalnan', fontSize: 20}}>
-              로그인
-            </Text>
-          </TouchableOpacity>
-        </View> */}
       </SafeAreaView>
     );
   }

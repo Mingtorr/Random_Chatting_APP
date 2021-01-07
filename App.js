@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -20,14 +12,19 @@ import Message from './message/message';
 import Find_idpw from './Find_idpw/Find_idpw';
 import Find_idpw2 from './Find_idpw/Find_idpw2';
 import Splash from './splash/Splash';
-// import Setting from './settingpage/Setting';
 import Setmain from './settingpage/set_main/Set_main';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MessageCollect from './messageCollect/messageCollect';
 import Set_privacy from './settingpage/set_privacy/Set_privacy';
 import Set_alarm from './settingpage/set_alarm/Set_alarm';
+import Set_notice from './settingpage/set_notice/Set_notice';
+import Singo from './message/singo';
 import {fcmService} from './push/FCMService';
 import {localNotificationService} from './push/LocalNotificationService';
+import AsyncStorage from '@react-native-community/async-storage';
+import Groupmessage from './groupmessage/groupmessage';
+import messaging from '@react-native-firebase/messaging';
+const func = require('./server/api');
 import {
   SafeAreaView,
   StyleSheet,
@@ -38,6 +35,7 @@ import {
   Button,
   TextInput,
 } from 'react-native';
+import FriendInbox from './messageCollect/friendInbox';
 
 // const Anisplash = Splash.animate({opacity: "1"}, 500)
 const Stack = createStackNavigator();
@@ -45,7 +43,47 @@ export default class App extends React.Component {
   state = {
     isLoading: false, //false면 스플래시
     isLogin: false, // 로그인하면 true로 변경
+    fisrt_name: 'Login',
+    fisrt_components: Login,
+    second_name: 'Main',
+    second_components: Bottom,
   };
+
+  async componentWillMount() {
+    let bool = false;
+    await AsyncStorage.getItem('login_onoff_set', (err, result) => {
+      if (result !== null) {
+        this.setState({
+          fisrt_name: 'Main',
+          fisrt_components: Bottom,
+          second_name: 'Login',
+          second_components: Login,
+        });
+        bool = true;
+      }
+    });
+    if (bool === true) {
+      const token = await messaging().getToken();
+      let userkey;
+      AsyncStorage.getItem('login_user_info', (err, result) => {
+        userkey = JSON.parse(result).user_key;
+      }).then(() => {
+        const box = {
+          token: token,
+          user_key: userkey,
+        };
+        console.log(box);
+        fetch(func.api(3001, 'onMain'), {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(box),
+        });
+      });
+    }
+  }
+
   componentDidMount = async () => {
     setTimeout(() => {
       this.setState({isLoading: true});
@@ -55,9 +93,7 @@ export default class App extends React.Component {
     fcmService.register(onRegister, onNotification, onOpenNotification);
     localNotificationService.configure(onOpenNotification);
 
-    function onRegister(token) {
-      console.log('[App] onRegister : token :', token);
-    }
+    function onRegister(token) {}
 
     function onNotification(notify) {
       console.log('[App] onNotification : notify :', notify);
@@ -73,7 +109,6 @@ export default class App extends React.Component {
         options,
       );
     }
-
     function onOpenNotification(notify) {
       console.log('[App] onOpenNotification : notify :', notify);
       alert('Open Notification : notify.body :' + notify.body);
@@ -91,23 +126,19 @@ export default class App extends React.Component {
           {this.state.isLoading ? (
             <>
               <Stack.Screen
-                name="Login"
-                component={Login}
+                name={this.state.fisrt_name}
+                component={this.state.fisrt_components}
                 options={{headerShown: false}}
               />
               <Stack.Screen
-                name="Main"
-                component={Bottom}
+                name={this.state.second_name}
+                component={this.state.second_components}
                 options={{headerShown: false}}
               />
+
               <Stack.Screen
                 name="Signup"
                 component={Signup}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="Signup2"
-                component={Signup2}
                 options={{headerShown: false}}
               />
 
@@ -116,10 +147,19 @@ export default class App extends React.Component {
                 component={Signup3}
                 options={{headerShown: false}}
               />
-
+              <Stack.Screen
+                name="MessageCollect"
+                component={MessageCollect}
+                options={{headerShown: false}}
+              />
               <Stack.Screen
                 name="Message"
                 component={Message}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="FriendInbox"
+                component={FriendInbox}
                 options={{headerShown: false}}
               />
 
@@ -142,6 +182,21 @@ export default class App extends React.Component {
               <Stack.Screen
                 name="Set_alarm"
                 component={Set_alarm}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Set_notice"
+                component={Set_notice}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="singo"
+                component={Singo}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Groupmessage"
+                component={Groupmessage}
                 options={{headerShown: false}}
               />
             </>
@@ -170,9 +225,12 @@ function Bottom() {
       {/* 친구들 찾기 */}
       <Tab.Screen name="Group" component={Match_page} />
       {/* 메세지함 */}
-      <Tab.Screen name="MessageCollect" component={MessageCollect} />
+      <Tab.Screen name="MessageCollect" component={MessageCollect} options={{ unmountOnBlur: true }}
+      listeners={({ navigation }) => ({
+        blur: () => navigation.setParams({ screen: undefined }),
+      })}/>
       {/* 알림  나중에 알람넣어요*/}
-      <Tab.Screen name="알림" component={Message} />
+      {/* <Tab.Screen name="알림" component={Message} /> */}
       {/* 설정 */}
       <Tab.Screen name="Setting" component={Setmain} />
     </Tab.Navigator>

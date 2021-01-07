@@ -344,7 +344,7 @@ go = () =>{
 }
 
 back = () =>{
-  this.props.navigation.navigate('MessageCollect');
+  this.props.navigation.goBack(null);
 }
   render(){
     return(

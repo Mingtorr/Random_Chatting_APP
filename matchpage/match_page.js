@@ -27,6 +27,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions} from 'react-native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-community/async-storage';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
 // import { Dimensions } from 'react-native';
 
 const chartHeight = Dimensions.get('window').height;
@@ -298,7 +303,8 @@ export default class match_page extends React.Component {
                 }}>
                 <Text
                   style={{
-                    fontSize: 15,
+                    // fontSize: 15,
+                    fontSize: responsiveFontSize(2),
                     fontWeight: 'bold',
                     color: this.state.buttonColor1,
                   }}>
@@ -319,7 +325,7 @@ export default class match_page extends React.Component {
                 }}>
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: responsiveFontSize(2),
                     fontWeight: 'bold',
                     color: this.state.buttonColor2,
                   }}>
@@ -335,15 +341,16 @@ export default class match_page extends React.Component {
             <View
               style={{display: 'flex', flex: 0.6, justifyContent: 'center'}}>
               <Text
+              adjustsFontSizeToFit
                 style={{
-                  fontSize: 18,
+                  fontSize: responsiveFontSize(2.5),
                   fontWeight: 'bold',
                   fontFamily: 'Jalnan',
                 }}>
                 {this.state.title}
               </Text>
-              <View style={{marginTop: 8}}>
-                <Text style={{fontSize: 11, fontWeight: 'bold'}}>
+              <View style={{marginTop: chartHeight*0.01}}>
+                <Text style={{fontSize: responsiveFontSize(1.5), fontWeight: 'bold'}}>
                   하루에 5개씩 지급됩니다!
                 </Text>
               </View>
@@ -358,7 +365,7 @@ export default class match_page extends React.Component {
               }}>
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: responsiveFontSize(2.2),
                   fontWeight: 'bold',
                   fontFamily: 'Jalnan',
                 }}>
@@ -383,8 +390,9 @@ export default class match_page extends React.Component {
                 colors={['#E94e68', '#eb6c63']}
                 style={styles.linearGradient}
                 style={{
-                  width: 110,
-                  height: 40,
+                  // width: 110,
+                  width: chartWidth*0.23,
+                  height: chartHeight*0.055,
                   backgroundColor: '#E94e68',
                   borderRadius: 10,
                   justifyContent: 'center',
@@ -392,8 +400,9 @@ export default class match_page extends React.Component {
                   marginTop: 10,
                 }}>
                 <Text
+                  adjustsFontSizeToFit
                   style={{
-                    fontSize: 16,
+                    fontSize: responsiveFontSize(2),
                     fontWeight: 'bold',
                     fontFamily: 'Jalnan',
                     color: 'white',
@@ -429,10 +438,11 @@ export default class match_page extends React.Component {
                   width: windowWidth,
                 }}>
                 <View style={{width: windowWidth}}>
-                  <Text style={{height: 20}}></Text>
+                  <Text style={{height: chartHeight*0.03}}></Text>
                   <Text
+                    adjustsFontSizeToFit
                     style={{
-                      fontSize: 25,
+                      fontSize: responsiveFontSize(3.8),
                       fontFamily: 'Jalnan',
                       fontWeight: '900',
                       color: 'white',
@@ -443,10 +453,11 @@ export default class match_page extends React.Component {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 10,
+                      fontSize: responsiveFontSize(1.5),
                       color: 'white',
                       textAlign: 'center',
-                      marginTop: 15,
+                      // marginTop: '1%',
+                      marginTop: chartHeight*0.01,
                     }}>
                     !부적절한 대화나 혐오성 발언은 제재 대상이 될 수 있습니다.
                   </Text>

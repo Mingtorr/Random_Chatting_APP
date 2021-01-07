@@ -19,6 +19,11 @@ import RadioForm from 'react-native-simple-radio-button';
 import RNPickerSelect from 'react-native-picker-select';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
 // import {
 //   InterstitialAd,
 //   RewardedAd,
@@ -193,7 +198,8 @@ export default class Solo_match extends React.Component {
           behavior="padding"
           keyboardVerticalOffset={keyboardVerticalOffset}>
           <View
-            style={{display: 'flex', flex: 0.2, height: Height * 0.1}}></View>
+            style={{display: 'flex', flex: 0.2, height: Height * 0.1}}>
+          </View>
           <View style={{display: 'flex', flex: 0.7}}>
             <View
               style={{
@@ -201,6 +207,7 @@ export default class Solo_match extends React.Component {
                 flex: 0.25,
                 flexDirection: 'row',
                 height: Height * 0.1,
+                paddingTop: Height * 0.03,
               }}>
               <View
                 style={{
@@ -209,7 +216,7 @@ export default class Solo_match extends React.Component {
                   justifyContent: 'center',
                   marginLeft: 40,
                 }}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                <Text style={{fontSize: responsiveFontSize(2.3), fontWeight: 'bold'}}>
                   {this.state.sex}에게만
                 </Text>
               </View>
@@ -240,7 +247,7 @@ export default class Solo_match extends React.Component {
                   marginLeft: 40,
                   height: Height * 0.08,
                 }}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                <Text style={{fontSize: responsiveFontSize(2.3), fontWeight: 'bold'}}>
                   같은 학과만
                 </Text>
               </View>
@@ -264,7 +271,7 @@ export default class Solo_match extends React.Component {
                   marginLeft: 40,
                   height: Height * 0.04,
                 }}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>학번</Text>
+                <Text style={{fontSize: responsiveFontSize(2.3), fontWeight: 'bold'}}>학번</Text>
               </View>
               <View style={{display: 'flex', flex: 0.6, zIndex: 999}}>
                 <View
@@ -287,7 +294,7 @@ export default class Solo_match extends React.Component {
                         fontSize: 17,
                         // borderWidth: 0.5,
                         fontWeight: 'bold',
-                        backgroundColor: '#e9ecef',
+                        // backgroundColor: '#e9ecef',
                         height: 40,
                         color: 'gray',
                       },
@@ -345,7 +352,7 @@ export default class Solo_match extends React.Component {
                   marginLeft: 40,
                   height: Height * 0.05,
                 }}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>메세지</Text>
+                <Text style={{fontSize: responsiveFontSize(2.3), fontWeight: 'bold'}}>메세지</Text>
               </View>
 
               <View
@@ -391,7 +398,7 @@ export default class Solo_match extends React.Component {
           <TouchableOpacity onPress={this.submit}>
             <Text
               style={{
-                fontSize: 18,
+                fontSize: responsiveFontSize(2.3),
                 fontWeight: 'bold',
                 fontFamily: 'Jalnan',
                 color: 'white',

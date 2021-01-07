@@ -110,7 +110,7 @@ app.post('/ChatNumZero', (req, res) => {
 
 app.post('/Get_Group', (req, res) =>{
   console.log('그룹');
-  
+
   connection.query(
   `SELECT Gpart.group_key, Gpart.user_key, Gpart.count, Gmess.group_title, Gmess.group_date 
   FROM group_participant as Gpart join group_table as Gmess on Gpart.group_key = Gmess.group_key

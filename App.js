@@ -25,6 +25,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
 const func = require('./server/api');
+let people = require('./Image/people.png');
+let wesix = require('./Image/wesix.png');
 import {
   SafeAreaView,
   StyleSheet,
@@ -34,6 +36,7 @@ import {
   TouchableOpacity,
   Button,
   TextInput,
+  Image,
 } from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 
@@ -221,14 +224,33 @@ function Bottom() {
   return (
     <Tab.Navigator>
       {/* 친구찾기 */}
-      <Tab.Screen name="Man" component={Main} />
+      <Tab.Screen
+        name="Man"
+        component={Main}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color, size}) => (
+            <Image
+              name="home"
+              color={color}
+              size={size}
+              source={people}
+              style={{width: 20, height: 20}}
+            />
+          ),
+        }}
+      />
       {/* 친구들 찾기 */}
       <Tab.Screen name="Group" component={Match_page} />
       {/* 메세지함 */}
-      <Tab.Screen name="MessageCollect" component={MessageCollect} options={{ unmountOnBlur: true }}
-      listeners={({ navigation }) => ({
-        blur: () => navigation.setParams({ screen: undefined }),
-      })}/>
+      <Tab.Screen
+        name="MessageCollect"
+        component={MessageCollect}
+        options={{unmountOnBlur: true}}
+        listeners={({navigation}) => ({
+          blur: () => navigation.setParams({screen: undefined}),
+        })}
+      />
       {/* 알림  나중에 알람넣어요*/}
       {/* <Tab.Screen name="알림" component={Message} /> */}
       {/* 설정 */}

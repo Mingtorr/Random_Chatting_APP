@@ -252,7 +252,6 @@ func=()=>{
       this.setState({
         arr:[row,...this.state.arr],
       })
-      console.log(this.state.arr+"asdasd");
      /*
       if(this.state.arr.length >20){
         this.setState({
@@ -344,6 +343,8 @@ go = () =>{
 }
 
 back = () =>{
+  const roomid = this.props.route.params.roomid
+  socket.emit('roomleave',roomid);
   this.props.navigation.goBack(null);
 }
   render(){

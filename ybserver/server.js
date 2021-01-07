@@ -78,7 +78,6 @@ app.post('/showmessageadd', (req, res) => {
         console.log(err);
         return;
       } else {
-        console.log("sex"+JSON.stringify(rows));
           res.send(rows)
       }
     },

@@ -117,27 +117,38 @@ export default class Group_match extends React.Component {
     super(props);
     this.state = {
       modalTF: 'none',
+      modalDisplay: false,
     };
+  }
+  modalSwhich = () =>{
+    console.log('모달스위치: ', this.state.modalDisplay);
+    this.setState({
+      modalDisplay: !this.state.modalDisplay
+    })
   }
 
   openmodal = (e) => {
+    this.props.shadowSwitch();
     if (this.state.modalTF == 'none') {
       this.setState({
         modalTF: 'flex',
       });
       this.props.shadow();
+      this.modalSwhich()
     } else {
       this.setState({
         modalTF: 'none',
       });
       this.props.shadow();
+      this.modalSwhich()
     }
   };
 
   render() {
     return (
       <SafeAreaView style={styles.matching_tab_bg}>
-        <View
+        {this.state.modalDisplay
+        ?<View
           style={{
             position: 'absolute',
             zIndex: 2,
@@ -147,6 +158,8 @@ export default class Group_match extends React.Component {
           }}>
           <Group_req />
         </View>
+      :<View/>}
+        
 
         <View
           style={{

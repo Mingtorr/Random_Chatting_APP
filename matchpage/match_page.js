@@ -27,6 +27,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions} from 'react-native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-community/async-storage';
+// import { Dimensions } from 'react-native';
+
+const chartHeight = Dimensions.get('window').height;
+const chartWidth = Dimensions.get('window').width;
+
+
 const func = require('../server/api');
 
 const adUnitId = __DEV__
@@ -37,7 +43,9 @@ export default class match_page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      animatedValue: new Animated.Value(140),
+      // animatedValue: new Animated.Value(140),
+      animatedValue: new Animated.Value(chartHeight*0.12),
+      // animatedValue: chartHeight*0.12,
       buttonColor1: '#E94e68',
       buttonColor2: 'gray',
       chatting: '채팅권 추가',
@@ -49,7 +57,10 @@ export default class match_page extends React.Component {
       Heart: 5,
       userkey: '',
       myname: '',
+      shadowDisplay: true,
     };
+    console.log('가로',chartHeight);
+    console.log('세로',chartWidth);
   }
   componentDidMount = async () => {
     let box;
@@ -158,6 +169,12 @@ export default class match_page extends React.Component {
       });
     }
   };
+  shadowSwitch =() =>{
+    console.log('스위치', this.state.shadowDisplay);
+    this.setState({
+      shadowDisplay : !this.state.shadowDisplay
+    })
+  }
 
   toggleSwitch = () => {
     if (this.state.isEnabled === true) {
@@ -181,7 +198,8 @@ export default class match_page extends React.Component {
     });
     Animated.timing(this.state.animatedValue, {
       duration: 1000,
-      toValue: 140,
+      // toValue: 140,
+      toValue: chartHeight*0.12,
       useNativeDriver: false,
     }).start();
   };
@@ -192,11 +210,13 @@ export default class match_page extends React.Component {
       buttonColor2: '#E94e68',
       title: '내 채팅방권 개수',
       change: '오픈채팅',
-      div: <Group_match shadow={this.shadow} />,
+      div: <Group_match shadow={this.shadow} shadowSwitch = {this.shadowSwitch} />,
+      // shadowDisplay: !this.state.shadowDisplay
     });
     Animated.timing(this.state.animatedValue, {
       duration: 1000,
-      toValue: 56,
+      // toValue: 56,
+      toValue: chartHeight*0,
       useNativeDriver: false,
     }).start();
   };
@@ -210,9 +230,11 @@ export default class match_page extends React.Component {
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: 'white',
-            height: 140,
-            width: '90%',
+            height: chartHeight *0.185,
+            // flex: 0.8,
+            width: chartWidth *0.9,
             top: this.state.animatedValue,
+            // top: '10%',
             left: '5%',
             zIndex: 1,
             borderRadius: 15,
@@ -223,39 +245,41 @@ export default class match_page extends React.Component {
             // backgroundColor: 'balck',
             // opacity: 0.2,
           }}>
-          {this.state.CircleTF == 'on' ? (
-            <Progress.Circle
+          {this.state.CircleTF == 'on' 
+          ? ( <Progress.Circle
               size={70}
               indeterminate={true}
               position={'absolute'}
               left={'41%'}
-              top={200}
+              top={chartHeight*0.25}
               color={'red'}
             />
           ) : (
             <View></View>
           )}
+          {this.state.shadowDisplay
+          ?<View/>
+        :<View
+          style={{
+            position: 'absolute',
+            display: this.state.shadowTF,
+            flexDirection: 'column',
+            backgroundColor: 'black',
+            opacity: 0.5,
+            height: chartHeight *0.185,
+            width: chartWidth *0.9,
+            // top: this.state.animatedValue,
+            // left: '5%',
+            zIndex: 1,
+            borderRadius: 15,
+            // shadowColor: '#000000',
+            // shadowOpacity: 0.6,
+            // shadowOffset: {width: 2, height: 2},
+            elevation: 3,
+            // backgroundColor: 'balck',
+            // opacity: 0.2,
+          }}></View>}
 
-          <View
-            style={{
-              position: 'absolute',
-              display: this.state.shadowTF,
-              flexDirection: 'column',
-              backgroundColor: 'black',
-              opacity: 0.5,
-              height: 140,
-              width: '100%',
-              // top: this.state.animatedValue,
-              // left: '5%',
-              zIndex: 1,
-              borderRadius: 15,
-              // shadowColor: '#000000',
-              // shadowOpacity: 0.6,
-              // shadowOffset: {width: 2, height: 2},
-              elevation: 3,
-              // backgroundColor: 'balck',
-              // opacity: 0.2,
-            }}></View>
           <View
             style={{
               display: 'flex',

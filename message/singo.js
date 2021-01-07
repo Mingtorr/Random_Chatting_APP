@@ -84,20 +84,23 @@ class Singo extends React.Component{
         });
         console.log(this.state.singobody);
       };
+
+      backBtn=()=>{
+        this.props.navigation.goBack(null);
+      }
     render(){
         
         return(
             <SafeAreaView style={styles.idpw_bg}>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.idpw_content}>
-                    <TouchableOpacity onPress={this.backBtn}>
+                <TouchableOpacity onPress={this.backBtn}>
                     <View style={{marginTop: 20, left:'5%'}}>
                         <Image 
                         style={{width:25, height:25}}
                         source={require('./cancel.png')} />
                     </View>
                     </TouchableOpacity>
-                    
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.idpw_content}>
                     <View style={styles.idpw_1}>
                         <Text style={styles.Intro_idpw1}>와글 와글</Text>
                         <Text style={styles.Intro_idpw2}>신고하기</Text>
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
 
     idpw_content:{
         display: "flex",
-        height: "92%",
+        height: "88%",
         justifyContent: "space-between",
     },
 

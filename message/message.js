@@ -252,7 +252,6 @@ func=()=>{
       this.setState({
         arr:[row,...this.state.arr],
       })
-      console.log(this.state.arr+"asdasd");
      /*
       if(this.state.arr.length >20){
         this.setState({
@@ -344,7 +343,7 @@ go = () =>{
 }
 
 back = () =>{
-  this.props.navigation.navigate('MessageCollect');
+  this.props.navigation.goBack(null);
 }
   render(){
     return(

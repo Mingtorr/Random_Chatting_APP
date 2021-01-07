@@ -14,7 +14,7 @@ const io = require('socket.io')(http);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -26,7 +26,7 @@ app.use(bodyparser.json());
 
 //공지사항
 app.post('/Notice', (req, res) => {
-  connection.query('SELECT notice_body FROM notice', function (
+  connection.query('SELECT notice_body,notice_date FROM notice', function (
     err,
     rows,
     fields,

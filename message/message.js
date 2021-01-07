@@ -343,6 +343,8 @@ go = () =>{
 }
 
 back = () =>{
+  const roomid = this.props.route.params.roomid
+  socket.emit('roomleave',roomid);
   this.props.navigation.goBack(null);
 }
   render(){

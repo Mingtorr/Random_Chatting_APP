@@ -14,7 +14,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: '2ajrrhtlvj',
   database: 'mydb',
 });
 
@@ -111,18 +111,22 @@ app.post('/Signup', async function (req, res, next) {
   );
 });
 
-app.post("/Signup_Delete", async function (req, res, next) {
+app.post('/Signup_Delete', async function (req, res, next) {
   const user_id = req.body.user_id;
-  connection.query("DELETE FROM user_table WHERE user_id = (?)", [user_id], function(err, rows, fields){
-    if (!err){
-      res.send(true);
-    }else{
-      res.send(false);
-    }
-  });
+  connection.query(
+    'DELETE FROM user_table WHERE user_id = (?)',
+    [user_id],
+    function (err, rows, fields) {
+      if (!err) {
+        res.send(true);
+      } else {
+        res.send(false);
+      }
+    },
+  );
 });
 
-app.post("/Signup2", async function (req, res, next) {
+app.post('/Signup2', async function (req, res, next) {
   const user_id = req.body.user_id;
   const major = req.body.major;
   const studno = req.body.studno;
@@ -432,25 +436,29 @@ app.post('/Sendmail', (req, res) => {
         </p>
       </div>
     </body>`,
-    };
-    
-  connection.query("SELECT user_email FROM user_table WHERE user_email = (?)", [email], function (err, rows, fields) {
-    console.log("발송");
-    mailSender.sendGmail(emailParam);
-    res.send(authNum.toString());
+  };
 
-    //테스트 (이메일 중복체크 x)
-    // if (rows[0] === undefined) {
-    //   //중복된 메일 없음 메일 발송
-    //   console.log("발송");
-    //   mailSender.sendGmail(emailParam);
-    //   res.send(authNum.toString());
-    // } else {
-    //   console.log("미발송");
-    //   //중복된 메일이 있음
-    //   res.send(true);
-    // }
-  });
+  connection.query(
+    'SELECT user_email FROM user_table WHERE user_email = (?)',
+    [email],
+    function (err, rows, fields) {
+      console.log('발송');
+      mailSender.sendGmail(emailParam);
+      res.send(authNum.toString());
+
+      //테스트 (이메일 중복체크 x)
+      // if (rows[0] === undefined) {
+      //   //중복된 메일 없음 메일 발송
+      //   console.log("발송");
+      //   mailSender.sendGmail(emailParam);
+      //   res.send(authNum.toString());
+      // } else {
+      //   console.log("미발송");
+      //   //중복된 메일이 있음
+      //   res.send(true);
+      // }
+    },
+  );
 });
 
 app.post('/Sendmail2', (req, res) => {
@@ -533,13 +541,13 @@ var mailSender = {
       service: 'gmail',
       prot: 465,
       auth: {
-        user: "wagleemail2@gmail.com",
-        pass: "@emailwagle2",
+        user: 'wagleemail2@gmail.com',
+        pass: '@emailwagle2',
       },
     });
     // 메일 옵션
     var mailOptions = {
-      from: "wagleemail2@gmail.com",
+      from: 'wagleemail2@gmail.com',
       to: param.toEmail, // 수신할 이메일
       subject: param.subject, // 메일 제목
       html: param.html, // 메일 내용

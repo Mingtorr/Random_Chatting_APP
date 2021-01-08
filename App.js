@@ -129,13 +129,13 @@ export default class App extends React.Component {
           {this.state.isLoading ? (
             <>
               <Stack.Screen
-                name={this.state.fisrt_name}
-                component={this.state.fisrt_components}
+                name={this.state.second_name}
+                component={this.state.second_components}
                 options={{headerShown: false}}
               />
               <Stack.Screen
-                name={this.state.second_name}
-                component={this.state.second_components}
+                name={this.state.fisrt_name}
+                component={this.state.fisrt_components}
                 options={{headerShown: false}}
               />
 

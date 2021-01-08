@@ -8,9 +8,16 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Alert,
+  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {withNavigation} from 'react-navigation';
+let imagePath = require('./info.png');
+let avatar = require('./avatar.png');
+let question = require('./question.png');
+let blackboard = require('./blackboard.png');
+let logout = require('./logout.png');
+let on = require('./on.png');
 
 const func = require('../../server/api');
 
@@ -110,51 +117,59 @@ class Set_main extends Component {
           </View>
         </Modal>
         <View style={styles.Head_set_main}>
-          <Text style={{fontFamily: 'Jalnan'}}>Setting</Text>
+          <Text style={{fontSize: 20}}>Setting</Text>
         </View>
         <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Privacy}>
-          <Text style={{fontFamily: 'Jalnan', marginLeft: 30}}>
-            개인정보 변경
-          </Text>
-          <Text style={{fontFamily: 'Jalnan', marginRight: 30, fontSize: 20}}>
-            {'>'}
-          </Text>
+          <View
+            style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
+            <Image style={{height: 20, width: 20}} source={avatar} />
+            <Text style={{marginLeft: 15, fontSize: 16}}>개인정보 변경</Text>
+          </View>
+          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Alarm}>
-          <Text style={{fontFamily: 'Jalnan', marginLeft: 30}}>알람 설정</Text>
-          <Text style={{fontFamily: 'Jalnan', marginRight: 30, fontSize: 20}}>
-            {'>'}
-          </Text>
+          <View
+            style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
+            <Image style={{height: 20, width: 20}} source={imagePath} />
+            <Text style={{marginLeft: 15, fontSize: 16}}>알람 설정</Text>
+          </View>
+          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.Box_set_main}>
-          <Text style={{fontFamily: 'Jalnan', marginLeft: 30}}>
-            건의 사항/도움말
-          </Text>
-          <Text style={{fontFamily: 'Jalnan', marginRight: 30, fontSize: 20}}>
-            {'>'}
-          </Text>
+          <View
+            style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
+            <Image style={{height: 20, width: 20}} source={question} />
+            <Text style={{marginLeft: 15, fontSize: 16}}>건의 사항/도움말</Text>
+          </View>
+          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Notice}>
-          <Text style={{fontFamily: 'Jalnan', marginLeft: 30}}>공지사항</Text>
-          <Text style={{fontFamily: 'Jalnan', marginRight: 30, fontSize: 20}}>
-            {'>'}
-          </Text>
+          <View
+            style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
+            <Image style={{height: 20, width: 20}} source={blackboard} />
+            <Text style={{marginLeft: 15, fontSize: 16}}>공지 사항</Text>
+          </View>
+          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.Box_set_main} onPress={this.logout}>
-          <Text style={{fontFamily: 'Jalnan', marginLeft: 30}}>로그아웃</Text>
-          <Text style={{fontFamily: 'Jalnan', marginRight: 30, fontSize: 20}}>
-            {'>'}
-          </Text>
+          <View
+            style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
+            <Image style={{height: 20, width: 20}} source={logout} />
+            <Text style={{marginLeft: 15, fontSize: 16}}>로그아웃</Text>
+          </View>
+          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.Box_set_main}
           onPress={() => {
             this.setModalVisible(true);
           }}>
-          <Text style={{fontFamily: 'Jalnan', marginLeft: 30}}>회원탈퇴</Text>
-          <Text style={{fontFamily: 'Jalnan', marginRight: 30, fontSize: 20}}>
-            {'>'}
-          </Text>
+          <View
+            style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
+            <Image style={{height: 20, width: 20}} source={on} />
+            <Text style={{marginLeft: 15, fontSize: 16}}>회원 탈퇴</Text>
+          </View>
+          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -172,6 +187,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor : 'lightblue',
     borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
   },
   Box_set_main: {
     height: 65,

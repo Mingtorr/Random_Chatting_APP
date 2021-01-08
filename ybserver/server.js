@@ -10,10 +10,10 @@ var http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
 var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "mydb",
+  host: 'localhost',
+  user: 'root',
+  password: 'jeong1207',
+  database: 'mydb',
 });
 
 connection.connect();
@@ -72,13 +72,13 @@ app.post('/showmessageadd', (req, res) => {
   console.log(req.body);
   connection.query(
     'select * from (SELECT user_table.user_key,user_table.user_nickname,message_table.message_body,message_table.message_key,message_table.message_time FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time Desc limit ?,20) A order by A.message_time Desc;',
-    [req.body.roomid,req.body.count*20],
+    [req.body.roomid, req.body.count * 20],
     function (err, rows, field) {
       if (err) {
         console.log(err);
         return;
       } else {
-          res.send(rows)
+        res.send(rows);
       }
     },
   );

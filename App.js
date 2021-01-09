@@ -23,8 +23,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
 const func = require('./server/api');
-let people = require('./Image/people.png');
-let wesix = require('./Image/wesix.png');
+let homeimo = require('./Image/homeimo.png');
+let alarmimo = require('./Image/alarmimo.png');
+let mainimo = require('./Image/mainimo.png');
+let msgimo = require('./Image/msgimo.png');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 
@@ -215,25 +217,52 @@ function Bottom() {
         name="Man"
         component={Main}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: '',
           tabBarIcon: ({color, size}) => (
             <Image
-              name="home"
+              name="homeimo"
               color={color}
               size={size}
-              source={people}
-              style={{width: 20, height: 20}}
+              source={homeimo}
+              style={{marginTop: 15}}
             />
           ),
         }}
       />
       {/* 친구들 찾기 */}
-      <Tab.Screen name="Group" component={Match_page} />
+      <Tab.Screen
+        name="Group"
+        component={Match_page}
+        options={{
+          tabBarLabel: '',
+          tabBarIcon: ({color, size}) => (
+            <Image
+              name="mainimo"
+              color={color}
+              size={size}
+              source={mainimo}
+              style={{marginTop: 15}}
+            />
+          ),
+        }}
+      />
       {/* 메세지함 */}
       <Tab.Screen
         name="MessageCollect"
         component={MessageCollect}
-        options={{unmountOnBlur: true}}
+        options={{
+          unmountOnBlur: true,
+          tabBarLabel: '',
+          tabBarIcon: ({color, size}) => (
+            <Image
+              name="msgimo"
+              color={color}
+              size={size}
+              source={msgimo}
+              style={{marginTop: 15}}
+            />
+          ),
+        }}
         listeners={({navigation}) => ({
           blur: () => navigation.setParams({screen: undefined}),
         })}
@@ -241,7 +270,22 @@ function Bottom() {
       {/* 알림  나중에 알람넣어요*/}
       {/* <Tab.Screen name="알림" component={Message} /> */}
       {/* 설정 */}
-      <Tab.Screen name="Setting" component={Setmain} />
+      <Tab.Screen
+        name="Setting"
+        component={Setmain}
+        options={{
+          tabBarLabel: '',
+          tabBarIcon: ({color, size}) => (
+            <Image
+              name="alarmimo"
+              color={color}
+              size={size}
+              source={alarmimo}
+              style={{marginTop: 15}}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }

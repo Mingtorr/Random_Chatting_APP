@@ -69,6 +69,7 @@ class Set_alarm extends Component {
             ios_backgroundColor="#3e3e3e"
             onValueChange={this.toggleSwitch}
             value={this.state.isEnabled}
+            thumbColor={this.state.isEnabled ? 'white' : '#f4f3f4'}
           />
         </View>
         {/* 공지알람 */}
@@ -79,12 +80,13 @@ class Set_alarm extends Component {
             ios_backgroundColor="#3e3e3e"
             onValueChange={this.toggleSwitch_two}
             value={this.state.isEnabled_two}
+            thumbColor={this.state.isEnabled_two ? 'white' : '#f4f3f4'}
           />
         </View>
         {/* 메세지 수신거부 */}
         <View style={styles.Msg_alarm}>
           <Text style={styles.Textmsg_alarm}>메세지 수신 갯수</Text>
-          <View style={{width: 100}}>
+          <View style={{width: 150}}>
             <RNPickerSelect
               style={{marginBottom: '30', color: 'red'}}
               placeholder={{}}

@@ -22,7 +22,7 @@ const func = require('../server/api');
 import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0;
-const socket = io(func.api(3004, ''));
+const socket = io(func.api(3005, ''));
 
 class Groupmessage extends React.Component {
   constructor(props) {

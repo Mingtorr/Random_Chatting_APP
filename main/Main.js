@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  Button,
   FlatList,
   View,
   Text,
@@ -10,18 +9,14 @@ import {
   Image,
   Animated,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-navigation';
-import {event} from 'react-native-reanimated';
-import Message from '../message/message';
 import Main_Mymessage from './main_mymessage';
 import Main_Yourmessage from './main_yourmessage';
 import AsyncStorage from '@react-native-community/async-storage';
 // import { post } from '../server/routes/indexswy';
 const func = require('../server/api');
 import io from 'socket.io-client';
-const socket = io(func.api(3001, ''));
+const socket = io(func.api(3002, ''));
 
 export default class Main extends Component {
   constructor(props) {

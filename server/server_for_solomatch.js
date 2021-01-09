@@ -1,12 +1,10 @@
 const express = require('express');
 const app = express();
 const port = 3003;
-
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const mysql = require('mysql');
 var http = require('http').createServer(app);
-const io = require('socket.io')(http);
 
 //mysql연결
 var connection = mysql.createConnection({

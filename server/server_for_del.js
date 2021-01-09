@@ -8,7 +8,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '2ajrrhtlvj',
+  password: 'snsk3779@',
   database: 'mydb',
 });
 connection.connect();

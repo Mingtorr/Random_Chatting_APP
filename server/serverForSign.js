@@ -505,8 +505,8 @@ var mailSender = {
       service: 'gmail',
       port: 465,
       auth: {
-        user: 'wagleemail2@gmail.com',
-        pass: '@emailwagle2',
+        user: 'waglewagle20@gmail.com',
+        pass: 'changwon@0',
       },
     });
     // 메일 옵션

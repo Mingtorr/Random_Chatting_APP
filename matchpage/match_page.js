@@ -3,23 +3,36 @@ import {
   SafeAreaView,
   View,
   StyleSheet,
+  Keyboard,
   Text,
   Animated,
   TouchableOpacity,
+  Button,
+  Switch,
 } from 'react-native';
 import {
+  InterstitialAd,
   RewardedAd,
+  BannerAd,
   TestIds,
+  AdEventType,
   RewardedAdEventType,
+  BannerAdSize,
 } from '@react-native-firebase/admob';
 import Solo_match from './solomatch';
 import Group_match from './groupmatch';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions} from 'react-native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-community/async-storage';
-import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+// import { Dimensions } from 'react-native';
 
 const chartHeight = Dimensions.get('window').height;
 const chartWidth = Dimensions.get('window').width;
@@ -30,13 +43,21 @@ const adUnitId = __DEV__
   ? TestIds.REWARDED
   : 'ca-app-pub-5434797501405557/2267266613';
 
+const unitId =
+  Platform.OS === 'ios'
+    ? 'ca-app-pub-5434797501405557/2267266613'
+    : 'ca-app-pub-5434797501405557/4414384979';
+
+let animatedValue =
+  Platform.OS === 'ios' ? chartHeight * 0.16 : chartHeight * 0.12;
+
 export default class match_page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       // animatedValue: new Animated.Value(140),
-      animatedValue: new Animated.Value(chartHeight * 0.12),
-      // animatedValue: chartHeight*0.12,
+      // animatedValue: new Animated.Value(chartHeight * 0.12),
+      // animatedValue: chartHeight * 0.12,
       buttonColor1: '#E94e68',
       buttonColor2: 'gray',
       chatting: '채팅권 추가',
@@ -71,7 +92,7 @@ export default class match_page extends React.Component {
 
     console.log(box);
 
-    fetch(func.api(3003, 'Heart_number'), {
+    fetch(func.api(3001, 'Heart_number'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
@@ -88,11 +109,6 @@ export default class match_page extends React.Component {
   };
 
   startAdmob = async () => {
-    let unitId =
-      Platform.OS === 'ios'
-        ? 'ca-app-pub-5434797501405557/2267266613'
-        : 'ca-app-pub-5434797501405557/4414384979';
-
     this.setState({
       CircleTF: 'on',
     });
@@ -133,7 +149,7 @@ export default class match_page extends React.Component {
         });
         console.log(box);
 
-        await fetch(func.api(3003, 'Heart_reset'), {
+        await fetch(func.api(3001, 'Heart_reset'), {
           method: 'post',
           headers: {
             'content-type': 'application/json',
@@ -187,12 +203,12 @@ export default class match_page extends React.Component {
       change: '일반채팅',
       div: <Solo_match />,
     });
-    Animated.timing(this.state.animatedValue, {
-      duration: 1000,
-      // toValue: 140,
-      toValue: chartHeight * 0.12,
-      useNativeDriver: false,
-    }).start();
+    // Animated.timing(this.state.animatedValue, {
+    //   duration: 1000,
+    //   // toValue: 140,
+    //   toValue: chartHeight * 0.12,
+    //   useNativeDriver: false,
+    // }).start();
   };
   startAnimationR = () => {
     this.setState({
@@ -206,18 +222,18 @@ export default class match_page extends React.Component {
       ),
       // shadowDisplay: !this.state.shadowDisplay
     });
-    Animated.timing(this.state.animatedValue, {
-      duration: 1000,
-      // toValue: 56,
-      toValue: chartHeight * 0,
-      useNativeDriver: false,
-    }).start();
+    // Animated.timing(this.state.animatedValue, {
+    //   duration: 1000,
+    //   // toValue: 56,
+    //   toValue: chartHeight * 0,
+    //   useNativeDriver: false,
+    // }).start();
   };
   render() {
     const windowWidth = Dimensions.get('window').width;
     return (
       <SafeAreaView style={styles.container}>
-        <Animated.View
+        <View
           style={{
             position: 'absolute',
             display: 'flex',
@@ -226,14 +242,14 @@ export default class match_page extends React.Component {
             height: chartHeight * 0.185,
             // flex: 0.8,
             width: chartWidth * 0.9,
-            top: this.state.animatedValue,
+            top: animatedValue,
             // top: '10%',
             left: '5%',
             zIndex: 1,
             borderRadius: 15,
             shadowColor: '#000000',
             shadowOpacity: 0.6,
-            shadowOffset: {width: 2, height: 2},
+            shadowOffset: {width: 1, height: 1},
             elevation: 3,
             // backgroundColor: 'balck',
             // opacity: 0.2,
@@ -407,7 +423,7 @@ export default class match_page extends React.Component {
             </TouchableOpacity>
             {/* </View> */}
           </View>
-        </Animated.View>
+        </View>
         <View
           style={{
             display: 'flex',

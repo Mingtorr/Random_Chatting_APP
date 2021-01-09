@@ -17,7 +17,7 @@ import ShowTimeFun from './ShowTimeFun';
 const func = require('../server/api');
 const timefunc = require('../message/timefunction');
 
-const socket = io(func.api(3004, ''));
+const socket = io(func.api(3005, ''));
 export default class FriendInbox extends React.Component {
   constructor(props) {
     super(props);

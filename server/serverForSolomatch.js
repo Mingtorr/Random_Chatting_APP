@@ -113,7 +113,7 @@ app.post('/Get_Group', (req, res) => {
   connection.query(
     `SELECT Gpart.group_key, Gpart.user_key, Gpart.count, Gmess.group_title, Gmess.group_date 
   FROM group_participant as Gpart join group_table as Gmess on Gpart.group_key = Gmess.group_key
-  WHERE Gpart.group_key in (SELECT Gpart.group_key FROM group_participant as Gpart where user_key =? and Gpart.room_del= 0) and Gpart.room_del= 0 `,
+  WHERE Gpart.group_key in (SELECT Gpart.group_key FROM group_participant as Gpart where user_key =? and Gpart.room_del= 0) and Gpart.room_del= 0`,
     [req.body.userKey],
     function (err, rows, fields) {
       if (err) {

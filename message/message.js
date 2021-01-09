@@ -35,7 +35,7 @@ const timefunc = require('./timefunction');
 import AsyncStorage from '@react-native-community/async-storage';
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 15;
-const socket = io(func.api(3004, ''));
+const socket = io(func.api(3005, ''));
 
 class Message extends React.Component {
   constructor(props) {

@@ -14,7 +14,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '2ajrrhtlvj',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -146,6 +146,7 @@ app.post('/Signup2', async function (req, res, next) {
 
 //로그인 salt 적용
 app.post('/login', async function (req, res, next) {
+  console.log("login")
   let body = req.body;
   let userkey;
   let arr;

@@ -86,9 +86,8 @@ export default class Main extends Component {
       this.setState({
         messages:[...this.state.messages, data]
       })
+      this.scrolltobottom();
     });
-
-    this.scrolltobottom();
   }
 
   sendmessage = () => {
@@ -105,19 +104,19 @@ export default class Main extends Component {
         "content-type": "application/json",
       },
       body: JSON.stringify(message_data),
-    }).then((res) => res.json())
-      .then((json) => {
-        const time = json.allmessage_time;
-        this.setState({
-          my_all_message_time: time
-        });
-      });
+    }).then();
+    // .then((res) => res.json())
+    //   .then((json) => {
+    //     const time = json.allmessage_time;
+    //     this.setState({
+    //       my_all_message_time: time
+    //     });
+    //   });
 
     const user_message_data = {
       user_key: this.state.user_key,
       user_nickname: this.state.user_nickname,
       message_body: this.state.my_all_message,
-      allmessage_time : this.state.my_all_message_time
     };
     
     console.log(user_message_data);
@@ -202,11 +201,11 @@ export default class Main extends Component {
             // refreshing: false
           });
         });
-      });
 
-    this.setState({
-      scroll_number: this.state.scroll_number + 1
-    })
+        this.setState({
+          scroll_number: this.state.scroll_number + 1
+        })
+      });
   };
 
   // _handleRefresh = () => {
@@ -301,7 +300,7 @@ export default class Main extends Component {
         onLayout={(event) => {
           this.find_dimesions(event.nativeEvent.layout);
         }}>
-        <SafeAreaView style={{position: 'absolute', height: '100%', width: '100%'}} onAccessibilityAction={this.scrolltobottom}>
+        <SafeAreaView style={{position: 'absolute', height: '100%', width: '100%'}}>
           <Animated.View style={{flex: 1, opacity: this.state.value}}>
               <TouchableOpacity style={{position: 'absolute', marginTop: 7, left: '2%'}} onPress={this.backBtn}>
                 <Image style={{width:35, height:35}} source={require('./backbutton.png')}/>

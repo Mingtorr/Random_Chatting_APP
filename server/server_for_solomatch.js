@@ -32,8 +32,8 @@ app.post('/GetMessageRoom', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err + '채팅방 목록 불러오기에러');
+        res.send(false);
       } else {
-        // console.log('방목록:', rows);
         const roomarr = [];
         rows.map((v, i, n) => {
           roomarr.push(v.room_id);
@@ -83,6 +83,7 @@ app.post('/getshownickname', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         if (rows[0] != undefined) {
           console.log('DLDDLDDLDLD' + JSON.stringify(rows[0]));
@@ -99,7 +100,9 @@ app.post('/ChatNumZero', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
+        res.send(false);
       }
+      res.send(true);
     },
   );
 });
@@ -115,9 +118,11 @@ app.post('/Get_Group', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         console.log('그룹', rows);
         if (rows[0] === undefined) {
+          res.send(false);
         } else {
           const group_room = [];
           let group = {

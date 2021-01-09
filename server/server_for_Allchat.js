@@ -31,11 +31,13 @@ app.post('/Allchatroom_message', (req, res) => {
       if (err) {
         console.log(err);
         console.log('allchatroom message err');
+        res.send(false);
       } else if (rows[0] !== undefined) {
         console.log('전체 메세지 보냄');
         res.send(rows);
       } else {
         console.log('data x');
+        res.send(false);
       }
     },
   );
@@ -50,8 +52,10 @@ app.post('/My_all_message_save', (req, res) => {
     function (err, rows, field) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         console.log('전체방_내가 보낸 메세지 저장');
+        res.send(true);
         //     connection.query('SELECT allmessage_time FROM allmessage_table WHERE user_key = (?) and allmessage_body = (?) ORDER BY allmessage_time DESC',
         //                 [all_message_data.user_key, all_message_data.my_all_message], function(err,rows,field){
         //     if(rows[0] === undefined){
@@ -80,6 +84,7 @@ app.post('/Infinite_scroll', (req, res) => {
       if (err) {
         console.log(err);
         console.log('allchatroom message scroll err');
+        res.send(false);
       } else {
         console.log('scroll 성공');
         res.send(rows);
@@ -99,6 +104,7 @@ io.on('connection', function (socket) {
         if (err) {
           console.log(err);
           console.log('send_allchatroom qrl err');
+          res.send(false);
         } else {
           console.log('send_allchatroom o');
           const index = {
@@ -117,6 +123,7 @@ io.on('connection', function (socket) {
           io.emit('recieve_allchatroom_message', all_send_message);
 
           console.log('내가 전체 메세지 보냄');
+          res.send(true);
         }
       },
     );

@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from './login/login';
 import Signup from './sign_up/sign_up';
+import Signup2 from './sign_up/sign_up2';
 import Signup3 from './sign_up/sign_up3';
 import Main from './main/Main';
 import Match_page from './matchpage/match_page';
@@ -131,7 +132,11 @@ export default class App extends React.Component {
                 component={Signup}
                 options={{headerShown: false}}
               />
-
+              <Stack.Screen
+                name="Signup2"
+                component={Signup2}
+                options={{headerShown: false}}
+              />
               <Stack.Screen
                 name="Signup3"
                 component={Signup3}

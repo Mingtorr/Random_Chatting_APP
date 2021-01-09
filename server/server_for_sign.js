@@ -94,6 +94,7 @@ app.post('/Signup2', async function (req, res, next) {
         res.send(true);
       } else {
         console.log('err');
+        res.send(false);
       }
     },
   );
@@ -127,7 +128,10 @@ app.post('/login', async function (req, res, next) {
             'SELECT user_key, user_sex, user_email, user_deptno, user_stdno, user_nickname FROM user_table WHERE user_id = (?)',
             [body.id],
             function (err, rows, fields) {
-              //res.send(rows[0]);
+              if (err) {
+                console.log(err);
+                res.send(false);
+              }
               arr = rows[0];
               connection.query(
                 'UPDATE user_table SET user_token = (?) WHERE user_id= (?)',
@@ -135,6 +139,7 @@ app.post('/login', async function (req, res, next) {
                 function (err, rows, fields) {
                   if (err) {
                     console.log(err);
+                    res.send(err);
                   }
                   connection.query(
                     'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?)',
@@ -142,6 +147,7 @@ app.post('/login', async function (req, res, next) {
                     function (err, rows, fields) {
                       if (err) {
                         console.log(err);
+                        res.send(err);
                       } else {
                         res.send(arr);
                       }
@@ -167,6 +173,10 @@ app.post('/CheckNickname', (req, res) => {
     'SELECT * FROM user_table WHERE user_nickname = (?)',
     [nickname],
     function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      }
       if (rows[0] === undefined) {
         console.log('CheckNickname true');
         res.send(true); //중복 없음 사용 가능
@@ -186,9 +196,13 @@ app.post('/Find_idpw', (req, res) => {
     [email],
     function (err, rows, result) {
       console.log(rows[0]);
-
+      if (err) {
+        console.log(err);
+        res.send(false);
+      }
       if (rows[0] === undefined) {
         console.log('다음x');
+        res.send(false);
       } else {
         console.log('다음o');
         res.send(rows[0]);
@@ -230,7 +244,8 @@ app.post('/call', (req, res) => {
     function (err, rows, result) {
       if (err) {
         // console.log('call fail');
-        // console.log(err);
+        console.log(err);
+        res.send(false);
       } else {
         // console.log('call good');
         res.send(rows[0]);
@@ -269,6 +284,7 @@ app.post('/ChangeId', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log('changeid error' + err);
+        res.send(false);
       } else {
         console.log('changed good');
         res.send(true);
@@ -312,6 +328,7 @@ app.post('/ChangeNickname', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log('changenick error' + err);
+        res.send(false);
       } else {
         console.log('changnickname good');
         res.send(true);
@@ -329,6 +346,7 @@ app.post('/Setdeptno', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log('setdeptno error' + err);
+        res.send(false);
       } else {
         console.log('setdeptno good');
         res.send(true);
@@ -347,6 +365,7 @@ app.post('/Setstdno', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log('setstdno error' + err);
+        res.send(false);
       } else {
         console.log('setstdno good');
         res.send(true);
@@ -474,6 +493,7 @@ app.post('/cancelstate', (req, res) => {
       if (err) {
         console.log(err);
       }
+      res.send(true);
     },
   );
 });
@@ -483,7 +503,7 @@ var mailSender = {
   sendGmail: function (param) {
     var transporter = nodemailer.createTransport({
       service: 'gmail',
-      prot: 465,
+      port: 465,
       auth: {
         user: 'wagleemail2@gmail.com',
         pass: '@emailwagle2',
@@ -517,6 +537,7 @@ app.post('/onMain', (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         connection.query(
           'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?);',
@@ -524,6 +545,7 @@ app.post('/onMain', (req, res) => {
           function (err, rows, fields) {
             if (err) {
               console.log(err);
+              res.send(false);
             }
           },
         );

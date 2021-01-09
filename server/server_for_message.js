@@ -32,9 +32,10 @@ app.post('/save_message', (req, res) => {
     function (err, rows, field) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         console.log('성공');
-        res.send();
+        res.send(true);
       }
     },
   );
@@ -47,9 +48,10 @@ app.post('/updateshownickname', (req, res) => {
     function (err, rows, field) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         console.log('성공');
-        res.send();
+        res.send(true);
       }
     },
   );
@@ -62,6 +64,7 @@ app.post('/showmessage', (req, res) => {
     function (err, rows, field) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         res.send(rows);
       }
@@ -76,7 +79,7 @@ app.post('/showmessageadd', (req, res) => {
     function (err, rows, field) {
       if (err) {
         console.log(err);
-        return;
+        res.send(false);
       } else {
         res.send(rows);
       }
@@ -91,6 +94,7 @@ app.post('/mynickname', (req, res) => {
     function (err, rows, field) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         console.log(rows[0]);
         res.send(rows[0]);
@@ -105,6 +109,7 @@ app.post('/find_touser', (req, res) => {
     function (err, rows, field) {
       if (err) {
         console.log(err);
+        res.send(false);
       } else {
         connection.query(
           'select * from reportBan_table where sender_key = ? and report_body = ? and badguy_key = ?',
@@ -112,6 +117,7 @@ app.post('/find_touser', (req, res) => {
           function (err, rows, field) {
             if (err) {
               console.log(err);
+              res.send(false);
             } else {
               const key = rows[0].report_key;
               const messages = req.body.messages;
@@ -123,9 +129,10 @@ app.post('/find_touser', (req, res) => {
                   function (err, rows, field) {
                     if (err) {
                       console.log(err);
+                      res.send(false);
                     } else {
                       console.log('성공');
-                      res.send();
+                      res.send(true);
                     }
                   },
                 );

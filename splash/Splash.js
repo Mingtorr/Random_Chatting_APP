@@ -1,13 +1,6 @@
 // LOGO version
 import React, {Component} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  Animated,
-  SafeAreaView,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, Animated, SafeAreaView, StyleSheet} from 'react-native';
 
 export default class Splash extends Component {
   state = {

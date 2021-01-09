@@ -31,8 +31,8 @@ class Sign_up2 extends React.Component {
       studno: this.state.studno,
       user_id: this.props.route.params.user_id,
     };
-    
-    fetch(func.api(3001,'Signup2'), {
+
+    fetch(func.api(3001, 'Signup2'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
@@ -52,10 +52,10 @@ class Sign_up2 extends React.Component {
   backBtn = (e) => {
     e.preventDefault();
     const user_id = {
-      user_id: this.props.route.params.user_id
+      user_id: this.props.route.params.user_id,
     };
-    
-    fetch(func.api(3001,'Signup_Delete'), {
+
+    fetch(func.api(3001, 'Signup_Delete'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
@@ -65,9 +65,9 @@ class Sign_up2 extends React.Component {
       .then((res) => res.json())
       .then((json) => {
         if (json === true) {
-          this.props.navigation.navigate('Signup')
+          this.props.navigation.navigate('Signup');
         } else {
-          console.log("back_err");
+          console.log('back_err');
         }
       });
   };

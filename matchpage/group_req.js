@@ -1,19 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
-  Alert,
-  Switch,
-  Image,
-  UselessTextInput,
-  FlatList,
-  Dimensions,
-  Keyboard,
-} from 'react-native';
+import {StyleSheet, Text, View, TextInput, Dimensions} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import LinearGradient from 'react-native-linear-gradient';
 const Width_ = Dimensions.get('window').width * 0.9;

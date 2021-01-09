@@ -6,36 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
-  ScrollView,
-  Alert,
   Switch,
-  UselessTextInput,
   Dimensions,
-  KeyboardAvoidingView,
-  Keyboard,
 } from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import RadioForm from 'react-native-simple-radio-button';
 import RNPickerSelect from 'react-native-picker-select';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
-import {
-  responsiveHeight,
-  responsiveWidth,
-  responsiveFontSize
-} from "react-native-responsive-dimensions";
-// import {
-//   InterstitialAd,
-//   RewardedAd,
-//   BannerAd,
-//   TestIds,
-//   AdEventType,
-//   RewardedAdEventType,
-//   BannerAdSize,
-// } from '@react-native-firebase/admob';
-const {windowHidth, windowHeight} = Dimensions.get('window');
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 const Height = Dimensions.get('window').height;
-const Width = Dimensions.get('window').width;
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 150 : 0;
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -84,68 +62,47 @@ export default class Solo_match extends React.Component {
         return;
       }
     }).then(() => {
+      const box = {
+        major: this.state.major,
+        sex: to_sex,
+        deptno: deptno,
+        message: this.state.message,
+        user_key: userkey,
+      };
 
-      /*
-      const heart = {user_key: userkey};
-      fetch(func.api(3001, 'minus_heart'), {
+      fetch(func.api(3003, 'sendMessage'), {
         method: 'post',
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(heart),
+        body: JSON.stringify(box),
       })
         .then((res) => res.json())
         .then((json) => {
-          if (json === false) {
-            //채팅권이 0일 경우
-            alert('채팅권 갯수가 부족합니다! 충전해주세요');
-          } else {
-            //여기서 match page로 올려주면 됩니다.
-            //json.heart 가 감소된 값입니다. 올려줘서 setstate 로 하면 됩니다.
-            */
-            const box = {
-              major: this.state.major,
-              sex: to_sex,
-              deptno: deptno,
-              message: this.state.message,
-              user_key: userkey,
-            };
-
-            fetch(func.api(3001, 'sendMessage'), {
-              method: 'post',
+          console.log(json.user_token);
+          if (json === false) alert('조건에 맞는 사용자가 없습니다.');
+          else if (json === true) alert('메시지를 전송했습니다.');
+          else {
+            alert('메시지를 전송했습니다.');
+            fetch('https://fcm.googleapis.com/fcm/send', {
+              method: 'POST',
               headers: {
                 'content-type': 'application/json',
+                Authorization:
+                  'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
               },
-              body: JSON.stringify(box),
-            })
-              .then((res) => res.json())
-              .then((json) => {
-                console.log(json.user_token);
-                if (json === false) alert('조건에 맞는 사용자가 없습니다.');
-                else if (json === true) alert('메시지를 전송했습니다.');
-                else {
-                  alert('메시지를 전송했습니다.');
-                  fetch('https://fcm.googleapis.com/fcm/send', {
-                    method: 'POST',
-                    headers: {
-                      'content-type': 'application/json',
-                      Authorization:
-                        'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
-                    },
-                    body: JSON.stringify({
-                      to: json.user_token,
-                      notification: {
-                        title: nickname,
-                        body: this.state.message,
-                      },
-                    }),
-                  });
-                }
-              });
-          
+              body: JSON.stringify({
+                to: json.user_token,
+                notification: {
+                  title: nickname,
+                  body: this.state.message,
+                },
+              }),
+            });
+          }
         });
-            }
-       
+    });
+  };
 
   _scrollToInput = (reactNode) => {
     this.scroll.props.scrollToFocusedInput(reactNode);
@@ -174,22 +131,6 @@ export default class Solo_match extends React.Component {
     });
   };
 
-  componentDidMount = () => {
-    // let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
-    //   requestNonPersonalizedAdsOnly: true,
-    //   keywords: ['fashion', 'clothing'],
-    // });
-    // let rewardlListener = rewardAd.onAdEvent((type, error, reward) => {
-    //   if (type === RewardedAdEventType.LOADED) {
-    //     rewardAd.show();
-    //   }
-    // });
-    // rewardAd.load();
-    // return () => {
-    //   rewardlListener = null;
-    // };
-  };
-
   render() {
     return (
       <SafeAreaView style={styles.matching_tab_bg}>
@@ -198,8 +139,7 @@ export default class Solo_match extends React.Component {
           behavior="padding"
           keyboardVerticalOffset={keyboardVerticalOffset}>
           <View
-            style={{display: 'flex', flex: 0.2, height: Height * 0.1}}>
-          </View>
+            style={{display: 'flex', flex: 0.2, height: Height * 0.1}}></View>
           <View style={{display: 'flex', flex: 0.7}}>
             <View
               style={{
@@ -216,7 +156,11 @@ export default class Solo_match extends React.Component {
                   justifyContent: 'center',
                   marginLeft: 40,
                 }}>
-                <Text style={{fontSize: responsiveFontSize(2.3), fontWeight: 'bold'}}>
+                <Text
+                  style={{
+                    fontSize: responsiveFontSize(2.3),
+                    fontWeight: 'bold',
+                  }}>
                   {this.state.sex}에게만
                 </Text>
               </View>
@@ -232,12 +176,7 @@ export default class Solo_match extends React.Component {
                 />
               </View>
             </View>
-            {/* <View>
-              <BannerAd
-                size={BannerAdSize.SMART_BANNER}
-                unitId={TestIds.BANNER}
-              />
-            </View> */}
+
             <View style={{display: 'flex', flex: 0.25, flexDirection: 'row'}}>
               <View
                 style={{
@@ -247,7 +186,11 @@ export default class Solo_match extends React.Component {
                   marginLeft: 40,
                   height: Height * 0.08,
                 }}>
-                <Text style={{fontSize: responsiveFontSize(2.3), fontWeight: 'bold'}}>
+                <Text
+                  style={{
+                    fontSize: responsiveFontSize(2.3),
+                    fontWeight: 'bold',
+                  }}>
                   같은 학과만
                 </Text>
               </View>
@@ -271,7 +214,13 @@ export default class Solo_match extends React.Component {
                   marginLeft: 40,
                   height: Height * 0.04,
                 }}>
-                <Text style={{fontSize: responsiveFontSize(2.3), fontWeight: 'bold'}}>학번</Text>
+                <Text
+                  style={{
+                    fontSize: responsiveFontSize(2.3),
+                    fontWeight: 'bold',
+                  }}>
+                  학번
+                </Text>
               </View>
               <View style={{display: 'flex', flex: 0.6, zIndex: 999}}>
                 <View
@@ -352,7 +301,13 @@ export default class Solo_match extends React.Component {
                   marginLeft: 40,
                   height: Height * 0.05,
                 }}>
-                <Text style={{fontSize: responsiveFontSize(2.3), fontWeight: 'bold'}}>메세지</Text>
+                <Text
+                  style={{
+                    fontSize: responsiveFontSize(2.3),
+                    fontWeight: 'bold',
+                  }}>
+                  메세지
+                </Text>
               </View>
 
               <View

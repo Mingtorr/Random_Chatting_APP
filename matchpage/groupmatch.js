@@ -1,32 +1,14 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import DropDownPicker from 'react-native-dropdown-picker';
-import Icon from 'react-native-vector-icons/Feather';
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   SafeAreaView,
-  Alert,
-  Switch,
   Image,
-  UselessTextInput,
   FlatList,
   Dimensions,
-  Keyboard,
 } from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import RadioForm from 'react-native-simple-radio-button';
-import RNPickerSelect from 'react-native-picker-select';
 import Group_req from './group_req';
 let imagePath = require('./llama.png');
 
@@ -102,14 +84,6 @@ const renderItem = ({item}) => (
         </Text>
       </View>
     </View>
-    {/* <View style={{display:'flex',flex:0.56,flexDirection:'row'}}>
-            
-            <View style={{display:'flex',flex:0.3,justifyContent:'center'}}>
-                <View style={{width:80,height:30,backgroundColor:'red',borderRadius:30,display:'flex',justifyContent:'center',alignItems:'center'}}>
-                <Text style={{fontSize:14,color:'white',fontWeight:'bold',fontFamily:"Jalnan"}}>신청하기</Text>
-                </View>
-            </View>
-        </View> */}
   </View>
 );
 export default class Group_match extends React.Component {
@@ -120,12 +94,12 @@ export default class Group_match extends React.Component {
       modalDisplay: false,
     };
   }
-  modalSwhich = () =>{
+  modalSwhich = () => {
     console.log('모달스위치: ', this.state.modalDisplay);
     this.setState({
-      modalDisplay: !this.state.modalDisplay
-    })
-  }
+      modalDisplay: !this.state.modalDisplay,
+    });
+  };
 
   openmodal = (e) => {
     this.props.shadowSwitch();
@@ -134,32 +108,33 @@ export default class Group_match extends React.Component {
         modalTF: 'flex',
       });
       this.props.shadow();
-      this.modalSwhich()
+      this.modalSwhich();
     } else {
       this.setState({
         modalTF: 'none',
       });
       this.props.shadow();
-      this.modalSwhich()
+      this.modalSwhich();
     }
   };
 
   render() {
     return (
       <SafeAreaView style={styles.matching_tab_bg}>
-        {this.state.modalDisplay
-        ?<View
-          style={{
-            position: 'absolute',
-            zIndex: 2,
-            marginLeft: '5%',
-            marginTop: '15%',
-            display: this.state.modalTF,
-          }}>
-          <Group_req />
-        </View>
-      :<View/>}
-        
+        {this.state.modalDisplay ? (
+          <View
+            style={{
+              position: 'absolute',
+              zIndex: 2,
+              marginLeft: '5%',
+              marginTop: '15%',
+              display: this.state.modalTF,
+            }}>
+            <Group_req />
+          </View>
+        ) : (
+          <View />
+        )}
 
         <View
           style={{

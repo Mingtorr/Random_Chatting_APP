@@ -3,40 +3,26 @@ import {
   SafeAreaView,
   View,
   StyleSheet,
-  Keyboard,
   Text,
   Animated,
   TouchableOpacity,
-  Button,
-  Switch,
 } from 'react-native';
 import {
-  InterstitialAd,
   RewardedAd,
-  BannerAd,
   TestIds,
-  AdEventType,
   RewardedAdEventType,
-  BannerAdSize,
 } from '@react-native-firebase/admob';
 import Solo_match from './solomatch';
 import Group_match from './groupmatch';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions} from 'react-native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  responsiveHeight,
-  responsiveWidth,
-  responsiveFontSize
-} from "react-native-responsive-dimensions";
-// import { Dimensions } from 'react-native';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 const chartHeight = Dimensions.get('window').height;
 const chartWidth = Dimensions.get('window').width;
-
 
 const func = require('../server/api');
 
@@ -49,7 +35,7 @@ export default class match_page extends React.Component {
     super(props);
     this.state = {
       // animatedValue: new Animated.Value(140),
-      animatedValue: new Animated.Value(chartHeight*0.12),
+      animatedValue: new Animated.Value(chartHeight * 0.12),
       // animatedValue: chartHeight*0.12,
       buttonColor1: '#E94e68',
       buttonColor2: 'gray',
@@ -64,8 +50,8 @@ export default class match_page extends React.Component {
       myname: '',
       shadowDisplay: true,
     };
-    console.log('가로',chartHeight);
-    console.log('세로',chartWidth);
+    console.log('가로', chartHeight);
+    console.log('세로', chartWidth);
   }
   componentDidMount = async () => {
     let box;
@@ -85,7 +71,7 @@ export default class match_page extends React.Component {
 
     console.log(box);
 
-    fetch(func.api(3001, 'Heart_number'), {
+    fetch(func.api(3003, 'Heart_number'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
@@ -147,7 +133,7 @@ export default class match_page extends React.Component {
         });
         console.log(box);
 
-        await fetch(func.api(3001, 'Heart_reset'), {
+        await fetch(func.api(3003, 'Heart_reset'), {
           method: 'post',
           headers: {
             'content-type': 'application/json',
@@ -174,12 +160,12 @@ export default class match_page extends React.Component {
       });
     }
   };
-  shadowSwitch =() =>{
+  shadowSwitch = () => {
     console.log('스위치', this.state.shadowDisplay);
     this.setState({
-      shadowDisplay : !this.state.shadowDisplay
-    })
-  }
+      shadowDisplay: !this.state.shadowDisplay,
+    });
+  };
 
   toggleSwitch = () => {
     if (this.state.isEnabled === true) {
@@ -204,7 +190,7 @@ export default class match_page extends React.Component {
     Animated.timing(this.state.animatedValue, {
       duration: 1000,
       // toValue: 140,
-      toValue: chartHeight*0.12,
+      toValue: chartHeight * 0.12,
       useNativeDriver: false,
     }).start();
   };
@@ -215,13 +201,15 @@ export default class match_page extends React.Component {
       buttonColor2: '#E94e68',
       title: '내 채팅방권 개수',
       change: '오픈채팅',
-      div: <Group_match shadow={this.shadow} shadowSwitch = {this.shadowSwitch} />,
+      div: (
+        <Group_match shadow={this.shadow} shadowSwitch={this.shadowSwitch} />
+      ),
       // shadowDisplay: !this.state.shadowDisplay
     });
     Animated.timing(this.state.animatedValue, {
       duration: 1000,
       // toValue: 56,
-      toValue: chartHeight*0,
+      toValue: chartHeight * 0,
       useNativeDriver: false,
     }).start();
   };
@@ -235,9 +223,9 @@ export default class match_page extends React.Component {
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: 'white',
-            height: chartHeight *0.185,
+            height: chartHeight * 0.185,
             // flex: 0.8,
-            width: chartWidth *0.9,
+            width: chartWidth * 0.9,
             top: this.state.animatedValue,
             // top: '10%',
             left: '5%',
@@ -250,40 +238,42 @@ export default class match_page extends React.Component {
             // backgroundColor: 'balck',
             // opacity: 0.2,
           }}>
-          {this.state.CircleTF == 'on' 
-          ? ( <Progress.Circle
+          {this.state.CircleTF == 'on' ? (
+            <Progress.Circle
               size={70}
               indeterminate={true}
               position={'absolute'}
               left={'41%'}
-              top={chartHeight*0.25}
+              top={chartHeight * 0.25}
               color={'red'}
             />
           ) : (
             <View></View>
           )}
-          {this.state.shadowDisplay
-          ?<View/>
-        :<View
-          style={{
-            position: 'absolute',
-            display: this.state.shadowTF,
-            flexDirection: 'column',
-            backgroundColor: 'black',
-            opacity: 0.5,
-            height: chartHeight *0.185,
-            width: chartWidth *0.9,
-            // top: this.state.animatedValue,
-            // left: '5%',
-            zIndex: 1,
-            borderRadius: 15,
-            // shadowColor: '#000000',
-            // shadowOpacity: 0.6,
-            // shadowOffset: {width: 2, height: 2},
-            elevation: 3,
-            // backgroundColor: 'balck',
-            // opacity: 0.2,
-          }}></View>}
+          {this.state.shadowDisplay ? (
+            <View />
+          ) : (
+            <View
+              style={{
+                position: 'absolute',
+                display: this.state.shadowTF,
+                flexDirection: 'column',
+                backgroundColor: 'black',
+                opacity: 0.5,
+                height: chartHeight * 0.185,
+                width: chartWidth * 0.9,
+                // top: this.state.animatedValue,
+                // left: '5%',
+                zIndex: 1,
+                borderRadius: 15,
+                // shadowColor: '#000000',
+                // shadowOpacity: 0.6,
+                // shadowOffset: {width: 2, height: 2},
+                elevation: 3,
+                // backgroundColor: 'balck',
+                // opacity: 0.2,
+              }}></View>
+          )}
 
           <View
             style={{
@@ -341,7 +331,7 @@ export default class match_page extends React.Component {
             <View
               style={{display: 'flex', flex: 0.6, justifyContent: 'center'}}>
               <Text
-              adjustsFontSizeToFit
+                adjustsFontSizeToFit
                 style={{
                   fontSize: responsiveFontSize(2.5),
                   fontWeight: 'bold',
@@ -349,8 +339,12 @@ export default class match_page extends React.Component {
                 }}>
                 {this.state.title}
               </Text>
-              <View style={{marginTop: chartHeight*0.01}}>
-                <Text style={{fontSize: responsiveFontSize(1.5), fontWeight: 'bold'}}>
+              <View style={{marginTop: chartHeight * 0.01}}>
+                <Text
+                  style={{
+                    fontSize: responsiveFontSize(1.5),
+                    fontWeight: 'bold',
+                  }}>
                   하루에 5개씩 지급됩니다!
                 </Text>
               </View>
@@ -391,8 +385,8 @@ export default class match_page extends React.Component {
                 style={styles.linearGradient}
                 style={{
                   // width: 110,
-                  width: chartWidth*0.23,
-                  height: chartHeight*0.055,
+                  width: chartWidth * 0.23,
+                  height: chartHeight * 0.055,
                   backgroundColor: '#E94e68',
                   borderRadius: 10,
                   justifyContent: 'center',
@@ -438,7 +432,7 @@ export default class match_page extends React.Component {
                   width: windowWidth,
                 }}>
                 <View style={{width: windowWidth}}>
-                  <Text style={{height: chartHeight*0.03}}></Text>
+                  <Text style={{height: chartHeight * 0.03}}></Text>
                   <Text
                     adjustsFontSizeToFit
                     style={{
@@ -457,7 +451,7 @@ export default class match_page extends React.Component {
                       color: 'white',
                       textAlign: 'center',
                       // marginTop: '1%',
-                      marginTop: chartHeight*0.01,
+                      marginTop: chartHeight * 0.01,
                     }}>
                     !부적절한 대화나 혐오성 발언은 제재 대상이 될 수 있습니다.
                   </Text>

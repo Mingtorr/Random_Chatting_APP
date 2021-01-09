@@ -3,11 +3,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from './login/login';
 import Signup from './sign_up/sign_up';
-import Signup2 from './sign_up/sign_up2';
 import Signup3 from './sign_up/sign_up3';
 import Main from './main/Main';
 import Match_page from './matchpage/match_page';
-import Groupmatch from './groupmatch/groupmatch';
 import Message from './message/message';
 import Find_idpw from './Find_idpw/Find_idpw';
 import Find_idpw2 from './Find_idpw/Find_idpw2';
@@ -27,25 +25,14 @@ import messaging from '@react-native-firebase/messaging';
 const func = require('./server/api');
 let people = require('./Image/people.png');
 let wesix = require('./Image/wesix.png');
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-  Button,
-  TextInput,
-  Image,
-} from 'react-native';
+import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 
-// const Anisplash = Splash.animate({opacity: "1"}, 500)
 const Stack = createStackNavigator();
 export default class App extends React.Component {
   state = {
-    isLoading: false, //false면 스플래시
-    isLogin: false, // 로그인하면 true로 변경
+    isLoading: false,
+    isLogin: false,
     fisrt_name: 'Login',
     fisrt_components: Login,
     second_name: 'Main',

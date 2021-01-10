@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   Image,
   Switch,
-  Button,
   Platform,
 } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 import {withNavigation} from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
+const func = require('../../server/api');
 
 class Set_alarm extends Component {
   constructor(props) {
@@ -23,7 +23,52 @@ class Set_alarm extends Component {
       isEnabled_two: true,
     };
   }
-  toggleSwitch = () => {
+
+  async componentWillUnmount() {
+    let userkey;
+    await AsyncStorage.getItem('login_user_info', (err, result) => {
+      userkey = JSON.parse(result).user_key;
+    });
+    const box = {userkey: userkey};
+    fetch(func.api(3001, 'get_message_state'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(box),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json === 1)
+          this.setState({
+            isEnabled: true,
+          });
+        else {
+          this.setState({
+            isEnabled: false,
+          });
+        }
+      });
+  }
+  toggleSwitch = async () => {
+    let pid = 0;
+    //0은 false  1은 true
+    if (this.state.isEnabled === false) {
+      pid = 1;
+    }
+    if (!this.state.isEnabled) {
+      await AsyncStorage.getItem('login_user_info', (err, result) => {
+        userkey = JSON.parse(result).user_key;
+      });
+      const box = {userkey: userkey, pid: pid};
+      fetch(func.api(3001, 'reset_token2'), {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(box),
+      });
+    }
     this.setState({
       isEnabled: !this.state.isEnabled,
     });
@@ -84,7 +129,7 @@ class Set_alarm extends Component {
           />
         </View>
         {/* 메세지 수신거부 */}
-        <View style={styles.Msg_alarm}>
+        {/*<View style={styles.Msg_alarm}>
           <Text style={styles.Textmsg_alarm}>메세지 수신 갯수</Text>
           <View style={{width: 150}}>
             <RNPickerSelect
@@ -96,16 +141,15 @@ class Set_alarm extends Component {
               // }}
               onValueChange={(value) => this.setState({receptionnum: value})}
               items={[
-                {label: '무한대', value: '00'},
-                {label: '40개', value: '40'},
-                {label: '35개', value: '35'},
-                {label: '30개', value: '30'},
-                {label: '25개', value: '25'},
                 {label: '20개', value: '20'},
+                {label: '25개', value: '25'},
+                {label: '30개', value: '30'},
+                {label: '35개', value: '35'},
+                {label: '40개', value: '40'},
               ]}
             />
           </View>
-        </View>
+            </View>*/}
         {/* 기존 */}
         {/* <View style={styles.set_alarm_btn}>
           <Text style={{fontFamily: 'Jalnan', marginRight: 50}}>알림</Text>

@@ -10,7 +10,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: '2ajrrhtlvj',
   database: 'mydb',
 });
 
@@ -278,14 +278,13 @@ app.post('/minus_heart', (req, res) => {
     function (err, rows, fileds) {
       if (err) console.log(err);
       else {
-        if (rows[0].user_heart === 0){
-          console.log('1 rows임',rows);
+        if (rows[0].user_heart === 0) {
+          console.log('1 rows임', rows);
           res.send(false);
-          }
-        else {
-          const heart ={
-            heart: rows[0].user_heart - 1
-          }  //이렇게 보내면 안됨
+        } else {
+          const heart = {
+            heart: rows[0].user_heart - 1,
+          }; //이렇게 보내면 안됨
           connection.query(
             'UPDATE user_table SET user_heart = (?) WHERE user_key= (?);',
             [heart.heart, body.user_key],

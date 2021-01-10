@@ -7,14 +7,11 @@ import {
   TouchableOpacity,
   Image,
   Switch,
-  Button,
   Platform,
 } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 import {withNavigation} from 'react-navigation';
-import messaging from '@react-native-firebase/messaging';
-import {fcmService} from '../../push/FCMService';
 import AsyncStorage from '@react-native-community/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 const func = require('../../server/api');
 
@@ -26,44 +23,57 @@ class Set_alarm extends Component {
       receptionnum: '00',
       isEnabled: true,
       isEnabled_two: messaging().isDeviceRegisteredForRemoteMessages,
-      key: '',
-      token: '',
     };
   }
-  async componentWillMount() {
-    AsyncStorage.getItem('login_user_info', (err, result) => {
-      const UserInfo = JSON.parse(result);
-      this.setState({
-        key: UserInfo.user_key,
-      });
+
+  async componentWillUnmount() {
+    let userkey;
+    await AsyncStorage.getItem('login_user_info', (err, result) => {
+      userkey = JSON.parse(result).user_key;
     });
-  }
-  toggleSwitch = async () => {
-    this.setState({
-      isEnabled: !this.state.isEnabled,
-    });
-    // console.log(this.state.isEnabled);
-    if (this.state.isEnabled) {
-      //버튼이 꺼져있을때 true임 ture(버튼ON)에서 눌러서 false(버튼OFF)가 되기 때문에
-      // const token
-      this.setState({token: ''});
-    } else {
-      // this.setState({token: 'true'});
-      this.setState({token: await messaging().getToken()});
-    }
-    const changetoken = {
-      key: this.state.key,
-      token: this.state.token,
-    };
-    fetch(func.api(3009, 'changeToken'), {
+    const box = {userkey: userkey};
+    fetch(func.api(3001, 'get_message_state'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(changetoken),
+      body: JSON.stringify(box),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json === 1)
+          this.setState({
+            isEnabled: true,
+          });
+        else {
+          this.setState({
+            isEnabled: false,
+          });
+        }
+      });
+  }
+  toggleSwitch = async () => {
+    let pid = 0;
+    //0은 false  1은 true
+    if (this.state.isEnabled === false) {
+      pid = 1;
+    }
+    if (!this.state.isEnabled) {
+      await AsyncStorage.getItem('login_user_info', (err, result) => {
+        userkey = JSON.parse(result).user_key;
+      });
+      const box = {userkey: userkey, pid: pid};
+      fetch(func.api(3001, 'reset_token2'), {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(box),
+      });
+    }
+    this.setState({
+      isEnabled: !this.state.isEnabled,
     });
-    console.log(changetoken);
-    // console.log(this.state.token);
   };
   toggleSwitch_two = async () => {
     this.setState({
@@ -94,6 +104,7 @@ class Set_alarm extends Component {
       alert: false,
     });
   };
+
   render() {
     return (
       <SafeAreaView style={styles.Conainer_alarm}>
@@ -134,7 +145,7 @@ class Set_alarm extends Component {
           />
         </View>
         {/* 메세지 수신거부 */}
-        <View style={styles.Msg_alarm}>
+        {/*<View style={styles.Msg_alarm}>
           <Text style={styles.Textmsg_alarm}>메세지 수신 갯수</Text>
           <View style={{width: 150}}>
             <RNPickerSelect
@@ -146,16 +157,15 @@ class Set_alarm extends Component {
               // }}
               onValueChange={(value) => this.setState({receptionnum: value})}
               items={[
-                {label: '무한대', value: '00'},
-                {label: '40개', value: '40'},
-                {label: '35개', value: '35'},
-                {label: '30개', value: '30'},
-                {label: '25개', value: '25'},
                 {label: '20개', value: '20'},
+                {label: '25개', value: '25'},
+                {label: '30개', value: '30'},
+                {label: '35개', value: '35'},
+                {label: '40개', value: '40'},
               ]}
             />
           </View>
-        </View>
+            </View>*/}
         {/* 기존 */}
         {/* <View style={styles.set_alarm_btn}>
           <Text style={{fontFamily: 'Jalnan', marginRight: 50}}>알림</Text>
@@ -200,6 +210,7 @@ class Set_alarm extends Component {
 const styles = StyleSheet.create({
   Container_alarm: {
     display: 'flex',
+    backgroundColor: 'white',
   },
   Header_alarm: {
     height: 50,

@@ -114,7 +114,7 @@ class FCMService {
           onOpenNotification(notification);
           //this.removeDeliveredNotification(notification.notificationId)
         } else {
-          console.log('quit state notification error : ', error);
+          /*console.log('quit state notification error : ', error);*/
         }
       });
 

@@ -43,7 +43,7 @@ export default class App extends React.Component {
     second_components: Bottom,
   };
 
-  async componentWillMount() {
+  componentDidMount = async () => {
     let bool = false;
     await AsyncStorage.getItem('login_onoff_set', (err, result) => {
       if (result !== null) {
@@ -76,8 +76,6 @@ export default class App extends React.Component {
         });
       });
     }
-  }
-  componentDidMount = async () => {
     setTimeout(() => {
       this.setState({isLoading: true});
     }, 1000);
@@ -88,7 +86,7 @@ export default class App extends React.Component {
     function onRegister(token) {}
 
     function onNotification(notify) {
-      console.log('[App] onNotification : notify :', notify);
+      // console.log('[App] onNotification : notify :', notify);
       const options = {
         soundName: 'default',
         playSound: true,

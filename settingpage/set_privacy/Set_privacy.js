@@ -44,7 +44,7 @@ export default class Set_privacy extends Component {
       email: '',
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const UserInfo = JSON.parse(result);
       // console.log('닉네임 : ' + UserInfo.user_nickname);
@@ -819,6 +819,7 @@ export default class Set_privacy extends Component {
 const styles = StyleSheet.create({
   Container_privacy: {
     display: 'flex',
+    backgroundColor:'white'
   },
   Head_setting_privacy: {
     fontSize: 15,

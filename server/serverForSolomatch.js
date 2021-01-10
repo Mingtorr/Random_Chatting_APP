@@ -25,7 +25,7 @@ app.post('/GetMessageRoom', (req, res) => {
   console.log('userkey: ', userKey);
 
   connection.query(
-    `SELECT part.count, part.room_id, part.user_key,part.shownickname, info.user_nickname, info.user_sex 
+    `SELECT part.count, part.room_id, part.user_key,part.shownickname, info.user_nickname, info.user_sex,info.user_token 
   FROM participant as part Join user_table as info on part.user_key= info.user_key  
   where room_id in (SELECT room_id FROM participant WHERE user_key = ?) and part.user_key !=? and part.room_del =0`,
     [userKey, userKey],

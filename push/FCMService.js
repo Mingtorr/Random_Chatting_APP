@@ -40,7 +40,6 @@ class FCMService {
       .getToken()
       .then((fcmToken) => {
         if (fcmToken) {
-          
           onRegister(fcmToken);
         } else {
           console.log('[FCMService] User does not have a device token');
@@ -108,7 +107,7 @@ class FCMService {
           onOpenNotification(notification);
           //this.removeDeliveredNotification(notification.notificationId)
         } else {
-          console.log('quit state notification error : ', error);
+          /*console.log('quit state notification error : ', error);*/
         }
       });
 

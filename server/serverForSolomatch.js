@@ -256,7 +256,6 @@ app.post('/Heart_number', (req, res) => {
     'SELECT user_heart FROM user_table WHERE user_key =(?)',
     [userkey],
     function (err, rows, fields) {
-      console.log(rows[0], 'hi');
       if (rows[0] === undefined) {
         console.log('없는데?');
         res.send(true); //중복 없음 사용가능

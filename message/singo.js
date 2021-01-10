@@ -59,13 +59,12 @@ class Singo extends React.Component {
           */
   }
   singobutton = (e) => {
-    console.log(this.props.route.params.messages);
     console.log(this.props.route.params.touserkey);
     const data = {
       userkey: this.state.userkey,
       touserkey: this.state.touserkey,
       text: this.state.singobody,
-      messages: this.props.route.params.messages,
+      roomid: this.props.route.params.roomid,
     };
     fetch(func.api(3005, 'find_touser'), {
       method: 'post',
@@ -73,10 +72,9 @@ class Singo extends React.Component {
         'content-type': 'application/json',
       },
       body: JSON.stringify(data),
-    }).then(() => {
+    })
       alert('신고완료');
-      this.props.navigation.navigate('MessageCollect');
-    });
+      this.props.navigation.goBack(null);
   };
   handletxt = (e) => {
     this.setState({

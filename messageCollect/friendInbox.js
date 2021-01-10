@@ -283,7 +283,10 @@ export default class FriendInbox extends React.Component {
                 {item.message_body === 'delcode5010' ? (
                   <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
                 ) : (
-                  <Text style={styles.lastChat}>{item.message_body}</Text>
+                  <Text style={styles.lastChat}>
+                    {item.message_body.length >35
+                    ? item.message_body.substr(0,37).padEnd(40, '.')
+                    :item.message_body}</Text>
                 )}
               </View>
             </View>
@@ -331,6 +334,24 @@ export default class FriendInbox extends React.Component {
     );
   }
 }
+
+// function message(message){
+//   render(){
+//     if(message === 'delcode5010'){
+//       return (
+//         <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
+//         );
+//     }else if(message.length > 20){
+//       return(
+//         <Text style={styles.lastChat}>{message.substr(0,20).padEnd(23, '.')}</Text>
+//       );
+//     }else{
+//       return(
+//         <Text style={styles.lastChat}>{message}</Text>
+//       );
+//     }
+//   }
+// }
 
 const styles = StyleSheet.create({
   container: {

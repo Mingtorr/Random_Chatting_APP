@@ -819,6 +819,7 @@ export default class Set_privacy extends Component {
 const styles = StyleSheet.create({
   Container_privacy: {
     display: 'flex',
+    backgroundColor:'white'
   },
   Head_setting_privacy: {
     fontSize: 15,

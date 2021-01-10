@@ -150,6 +150,7 @@ class Set_alarm extends Component {
 const styles = StyleSheet.create({
   Container_alarm: {
     display: 'flex',
+    backgroundColor:'white',
   },
   Header_alarm: {
     height: 50,

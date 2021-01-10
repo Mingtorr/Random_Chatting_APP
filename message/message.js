@@ -23,7 +23,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  AppState
+  AppState,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -66,17 +66,21 @@ class Message extends React.Component {
     };
   }
   _handleAppStateChange = (nextAppState) => {
-    if ( this.state.appState.match(/inactive|background/) && nextAppState === 'active' ) {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
       console.log('App has come to the foreground!');
     } else {
       console.log('App has gone to the background!');
+      socket.emit('roomleave');
       // start your background task here
     }
     this.setState({appState: nextAppState});
   };
   componentWillUnmount() {
     const roomid = this.props.route.params.roomid;
-    socket.emit('roomleave', roomid);
+    socket.emit('roomleave');
   }
   componentDidMount() {
     this.scrolltobottom();
@@ -200,8 +204,25 @@ class Message extends React.Component {
         arrendkey: this.state.arrendkey,
         myshownickname: this.state.myshownickname,
         toshownickname: this.state.toshownickname,
-        tousertoken:this.props.route.params.tousertoken
+        tousertoken: this.props.route.params.tousertoken,
       };
+      if (this.state.roomsockets.length !== 2) {
+        fetch('https://fcm.googleapis.com/fcm/send', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            Authorization:
+              'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
+          },
+          body: JSON.stringify({
+            to: data.tousertoken,
+            notification: {
+              title: data.name,
+              body: data.message,
+            },
+          }),
+        });
+      }
       fetch(func.api(3005, 'save_message'), {
         method: 'post',
         headers: {
@@ -376,7 +397,7 @@ class Message extends React.Component {
   };
   go = () => {
     this.props.navigation.navigate('singo', {
-      roomid :this.props.route.params.roomid,
+      roomid: this.props.route.params.roomid,
       userkey: this.state.userkey,
       touserkey: this.state.touserkey,
     });
@@ -493,7 +514,13 @@ class Message extends React.Component {
               }}
             />
             <TouchableOpacity
-              style={{display: 'flex',width: 35, height: 35, marginTop: 10, marginLeft: 20}}
+              style={{
+                display: 'flex',
+                width: 35,
+                height: 35,
+                marginTop: 10,
+                marginLeft: 20,
+              }}
               onPress={this.sendmessage}>
               <Image
                 style={{width: 35, height: 35}}

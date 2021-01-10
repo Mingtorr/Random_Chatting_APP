@@ -237,21 +237,6 @@ io.on('connection', function (socket) {
     } else {
       //여기에서 메시지 푸시알림
       io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
-      fetch('https://fcm.googleapis.com/fcm/send', {
-                method: 'POST',
-                headers: {
-                  'content-type': 'application/json',
-                  Authorization:
-                    'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
-                },
-                body: JSON.stringify({
-                  to: data.tousertoken,
-                  notification: {
-                    title: data.name,
-                    body: data.message,
-                  },
-                }),
-              });
       connection.query(
         'update participant set count = count + 1 where user_key = ? and room_id = ?',
         [data.touserkey, data.roomid],

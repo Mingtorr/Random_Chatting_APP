@@ -479,7 +479,7 @@ class Message extends React.Component {
               }}
             />
             <TouchableOpacity
-              style={{display: 'flex', marginTop: 10, marginLeft: 20}}
+              style={{display: 'flex',width: 35, height: 35, marginTop: 10, marginLeft: 20}}
               onPress={this.sendmessage}>
               <Image
                 style={{width: 35, height: 35}}

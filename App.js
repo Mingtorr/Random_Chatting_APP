@@ -42,7 +42,7 @@ export default class App extends React.Component {
     second_components: Bottom,
   };
 
-  async componentWillMount() {
+  componentDidMount = async () => {
     let bool = false;
     await AsyncStorage.getItem('login_onoff_set', (err, result) => {
       if (result !== null) {
@@ -75,9 +75,6 @@ export default class App extends React.Component {
         });
       });
     }
-  }
-
-  componentDidMount = async () => {
     setTimeout(() => {
       this.setState({isLoading: true});
     }, 1000);
@@ -104,7 +101,6 @@ export default class App extends React.Component {
     }
     function onOpenNotification(notify) {
       console.log('[App] onOpenNotification : notify :', notify);
-      alert('Open Notification : notify.body :' + notify.body);
     }
     return () => {
       console.log('[App] unRegister');
@@ -123,7 +119,7 @@ export default class App extends React.Component {
                 component={this.state.fisrt_components}
                 options={{headerShown: false}}
               />
-              
+
               <Stack.Screen
                 name={this.state.second_name}
                 component={this.state.second_components}

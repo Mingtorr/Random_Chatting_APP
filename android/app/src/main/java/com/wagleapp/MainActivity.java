@@ -2,6 +2,11 @@ package com.wagleapp;
 
 import com.facebook.react.ReactActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
+import android.os.Bundle;
+
 public class MainActivity extends ReactActivity {
 
   /**
@@ -12,4 +17,20 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "wagleapp";
   }
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+// any other code goes here
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel notificationChannel = new NotificationChannel("500", "MainChannel", NotificationManager.IMPORTANCE_HIGH);
+      notificationChannel.setShowBadge(true);
+      notificationChannel.setDescription("Test Notifications");
+      notificationChannel.enableVibration(true);
+      notificationChannel.enableLights(true);
+      notificationChannel.setVibrationPattern(new long[]{400, 200, 400});
+      //notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+      NotificationManager manager = getSystemService(NotificationManager.class);
+      manager.createNotificationChannel(notificationChannel);
+    }
+  }
+
 }

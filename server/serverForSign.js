@@ -13,7 +13,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: '2ajrrhtlvj',
   database: 'mydb',
 });
 

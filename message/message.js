@@ -79,7 +79,7 @@ class Message extends React.Component {
     socket.emit('roomleave', roomid);
   }
   componentDidMount() {
-    console.log(this.props.route.params);
+    this.scrolltobottom();
     AppState.addEventListener('change', this._handleAppStateChange);
     AsyncStorage.getItem('login_user_info', (err, result) => {
       this.setState({

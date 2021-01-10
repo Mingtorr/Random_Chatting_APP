@@ -32,7 +32,6 @@ export default class FriendInbox extends React.Component {
     };
   }
   componentDidMount() {
-    console.log('1:1');
     socket.on('recieve_messageroom', (data) => {
       const newtime = new Date(data.time2);
 
@@ -153,7 +152,6 @@ export default class FriendInbox extends React.Component {
   deleteRoom = (itemId) => {
     const realtime = timefunc.settime();
     const data = [...this.state.messagesRoom];
-    console.log('필요한 데이터', data);
     const realtime2 = new Date();
     const room_del = {
       roomid: itemId,

@@ -113,7 +113,7 @@ app.post('/Get_Group', (req, res) => {
   connection.query(
     `SELECT Gpart.group_key, Gpart.user_key, Gpart.count, Gmess.group_title, Gmess.group_date 
   FROM group_participant as Gpart join group_table as Gmess on Gpart.group_key = Gmess.group_key
-  WHERE Gpart.group_key in (SELECT Gpart.group_key FROM group_participant as Gpart where user_key =? and Gpart.room_del= 0) and Gpart.room_del= 0 `,
+  WHERE Gpart.group_key in (SELECT Gpart.group_key FROM group_participant as Gpart where user_key =? and Gpart.room_del= 0) and Gpart.room_del= 0`,
     [req.body.userKey],
     function (err, rows, fields) {
       if (err) {
@@ -256,7 +256,6 @@ app.post('/Heart_number', (req, res) => {
     'SELECT user_heart FROM user_table WHERE user_key =(?)',
     [userkey],
     function (err, rows, fields) {
-      console.log(rows[0], 'hi');
       if (rows[0] === undefined) {
         console.log('없는데?');
         res.send(true); //중복 없음 사용가능
@@ -279,12 +278,17 @@ app.post('/minus_heart', (req, res) => {
     function (err, rows, fileds) {
       if (err) console.log(err);
       else {
-        if (rows[0].user_heart === 0) res.send(false);
+        if (rows[0].user_heart === 0){
+          console.log('1 rows임',rows);
+          res.send(false);
+          }
         else {
-          let heart = rows[0].user_heart - 1;
+          const heart ={
+            heart: rows[0].user_heart - 1
+          }  //이렇게 보내면 안됨
           connection.query(
             'UPDATE user_table SET user_heart = (?) WHERE user_key= (?);',
-            [heart, body.user_key],
+            [heart.heart, body.user_key],
             function (err, rows, fileds) {
               if (err) console.log(err);
               else res.send(heart);
@@ -294,7 +298,6 @@ app.post('/minus_heart', (req, res) => {
       }
     },
   );
-  res.send(false);
 });
 
 //=============================================== solopage =================================================================

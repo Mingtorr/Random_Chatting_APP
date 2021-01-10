@@ -25,7 +25,6 @@ export default class Grouproom extends React.Component {
     };
   }
   componentDidMount() {
-    console.log('그룹');
 
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const info = JSON.parse(result);
@@ -45,7 +44,6 @@ export default class Grouproom extends React.Component {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log('구룹fetch안에 내용', this.state.user_Info.user_key);
           json.map((row) => {
             //넘어오는 데이터 예시
             // group_key: 2,
@@ -83,7 +81,7 @@ export default class Grouproom extends React.Component {
             // console.log("room", this.state.messagesRoom);
           });
         })
-        .catch((err) => console.log('err: ', err));
+        .catch((err) => console.log('err1: ', err));
     });
   }
 

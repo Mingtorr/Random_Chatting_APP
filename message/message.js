@@ -362,7 +362,7 @@ class Message extends React.Component {
   };
   go = () => {
     this.props.navigation.navigate('singo', {
-      messages: this.state.arr,
+      roomid :this.props.route.params.roomid,
       userkey: this.state.userkey,
       touserkey: this.state.touserkey,
     });

@@ -12,6 +12,11 @@ import {
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import {withNavigation} from 'react-navigation';
+import messaging from '@react-native-firebase/messaging';
+import {fcmService} from '../../push/FCMService';
+import AsyncStorage from '@react-native-community/async-storage';
+
+const func = require('../../server/api');
 
 class Set_alarm extends Component {
   constructor(props) {
@@ -20,18 +25,64 @@ class Set_alarm extends Component {
       alert: true,
       receptionnum: '00',
       isEnabled: true,
-      isEnabled_two: true,
+      isEnabled_two: messaging().isDeviceRegisteredForRemoteMessages,
+      key: '',
+      token: '',
     };
   }
-  toggleSwitch = () => {
+  async componentWillMount() {
+    AsyncStorage.getItem('login_user_info', (err, result) => {
+      const UserInfo = JSON.parse(result);
+      this.setState({
+        key: UserInfo.user_key,
+      });
+    });
+  }
+  toggleSwitch = async () => {
     this.setState({
       isEnabled: !this.state.isEnabled,
     });
+    // console.log(this.state.isEnabled);
+    if (this.state.isEnabled) {
+      //버튼이 꺼져있을때 true임 ture(버튼ON)에서 눌러서 false(버튼OFF)가 되기 때문에
+      // const token
+      this.setState({token: ''});
+    } else {
+      // this.setState({token: 'true'});
+      this.setState({token: await messaging().getToken()});
+    }
+    const changetoken = {
+      key: this.state.key,
+      token: this.state.token,
+    };
+    fetch(func.api(3009, 'changeToken'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(changetoken),
+    });
+    console.log(changetoken);
+    // console.log(this.state.token);
   };
-  toggleSwitch_two = () => {
+  toggleSwitch_two = async () => {
     this.setState({
       isEnabled_two: !this.state.isEnabled_two,
     });
+    //시발 안드로이드는 true만 반환함
+    if (this.state.isEnabled_two === false) {
+      // const token = await messaging().getToken();
+      // fcmService.registerAppWithFCM();
+      // console.log(token);
+      await messaging().registerDeviceForRemoteMessages();
+      // alert('true');
+      // console.log(messaging().isDeviceRegisteredForRemoteMessages);
+    } else {
+      //구독취소
+      await messaging().unregisterDeviceForRemoteMessages();
+      // alert('falsefalse');
+      // console.log(messaging().isDeviceRegisteredForRemoteMessages);
+    }
   };
   alerton = () => {
     this.setState({
@@ -43,7 +94,6 @@ class Set_alarm extends Component {
       alert: false,
     });
   };
-
   render() {
     return (
       <SafeAreaView style={styles.Conainer_alarm}>

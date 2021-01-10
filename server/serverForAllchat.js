@@ -12,7 +12,7 @@ const io = require('socket.io')(http);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -129,7 +129,7 @@ io.on('connection', function (socket) {
                 };
                 console.log(all_send_message);
                 io.emit('recieve_allchatroom_message', all_send_message);
-      
+
                 console.log('내가 전체 메세지 보냄');
               }
             },
@@ -137,7 +137,7 @@ io.on('connection', function (socket) {
         }
       },
     );
-    })
+  });
 });
 
 http.listen(port, () => {

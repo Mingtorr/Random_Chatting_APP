@@ -1,5 +1,6 @@
 import messaging from '@react-native-firebase/messaging';
 import {Platform} from 'react-native';
+import {NavigationActions} from 'react-navigation';
 
 class FCMService {
   register = (onRegister, onNotification, onOpenNotification) => {
@@ -15,6 +16,7 @@ class FCMService {
     if (Platform.OS === 'ios') {
       // await messaging().registerDeviceForRemoteMessages();
       await messaging().setAutoInitEnabled(true);
+    } else {
     }
   };
 
@@ -40,7 +42,6 @@ class FCMService {
       .getToken()
       .then((fcmToken) => {
         if (fcmToken) {
-          
           onRegister(fcmToken);
         } else {
           console.log('[FCMService] User does not have a device token');
@@ -79,6 +80,9 @@ class FCMService {
     //When the application is running, but in the background
     messaging().onNotificationOpenedApp((remoteMessage) => {
       //?notification 빼야하나 ?
+      ({navigation}) => {
+        navigation.navigate('MessageCollect');
+      };
       console.log(
         '[FCMService] onNotificationOpenApp Notification caused app to open from background',
         remoteMessage,
@@ -86,11 +90,13 @@ class FCMService {
       if (remoteMessage) {
         const notification = remoteMessage.notification;
         onOpenNotification(notification);
+        // console.log(notification);
+        // alert(remoteMessage);
         //this.removeDeliveredNotification(Notification.NotificationId)
       } else {
         console.log('background notification error', error);
       }
-      alert(remoteMessage.body);
+      // alert(remoteMessage.body);
     });
 
     //Check whether an initial notification is available

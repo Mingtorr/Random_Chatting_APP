@@ -34,12 +34,11 @@ class Set_main extends Component {
     const keys = await AsyncStorage.getAllKeys();
     console.log(keys);
     AsyncStorage.removeItem('login_onoff_set', () => {
-      AsyncStorage.removeItem('login_user_info',() =>{
+      AsyncStorage.removeItem('login_user_info', () => {
         console.log('로그아웃'); // User1 출력
-      // console.log(AsyncStorage.getItem('login_onoff'));
+        // console.log(AsyncStorage.getItem('login_onoff'));
         this.props.navigation.navigate('Login');
-      })
-      
+      });
     });
   };
   withdrawal = () => {

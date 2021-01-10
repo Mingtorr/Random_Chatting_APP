@@ -12,7 +12,7 @@ const io = require('socket.io')(http);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -120,17 +120,24 @@ app.post('/find_touser', (req, res) => {
               res.send(false);
             } else {
               const key = rows[0].report_key;
-              console.log(key+'zlzlzlzlzlzlzl');
-              connection.query('SELECT user_table.user_key,user_table.user_nickname,message_table.message_body,message_table.message_key,message_table.message_time FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time asc',
-              [req.body.roomid],function(err,rows,field){
-                rows.map((value,index,arr)=>{
-                  connection.query('insert into Ban_message_table (report_key,ban_message_body,ban_message_sender) values (?,?,?)',[key,value.message_body,value.user_key],function(err,rows,field) {
-                    if(err){
-                      console.log(err);
-                    }            
-                  })
-                })
-              })  
+              console.log(key + 'zlzlzlzlzlzlzl');
+              connection.query(
+                'SELECT user_table.user_key,user_table.user_nickname,message_table.message_body,message_table.message_key,message_table.message_time FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time asc',
+                [req.body.roomid],
+                function (err, rows, field) {
+                  rows.map((value, index, arr) => {
+                    connection.query(
+                      'insert into Ban_message_table (report_key,ban_message_body,ban_message_sender) values (?,?,?)',
+                      [key, value.message_body, value.user_key],
+                      function (err, rows, field) {
+                        if (err) {
+                          console.log(err);
+                        }
+                      },
+                    );
+                  });
+                },
+              );
             }
           },
         );
@@ -231,20 +238,20 @@ io.on('connection', function (socket) {
       //여기에서 메시지 푸시알림
       io.to(JSON.stringify(data.roomid)).emit('recieve_message', messagedata);
       fetch('https://fcm.googleapis.com/fcm/send', {
-                method: 'POST',
-                headers: {
-                  'content-type': 'application/json',
-                  Authorization:
-                    'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
-                },
-                body: JSON.stringify({
-                  to: data.tousertoken,
-                  notification: {
-                    title: data.name,
-                    body: data.message,
-                  },
-                }),
-              });
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          Authorization:
+            'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
+        },
+        body: JSON.stringify({
+          to: data.tousertoken,
+          notification: {
+            title: data.name,
+            body: data.message,
+          },
+        }),
+      });
       connection.query(
         'update participant set count = count + 1 where user_key = ? and room_id = ?',
         [data.touserkey, data.roomid],

@@ -23,6 +23,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  AppState
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -61,13 +62,25 @@ class Message extends React.Component {
       toshownickname: this.props.route.params.toshownickname,
       resultshownickname: 0,
       change: 1,
+      appState: AppState.currentState,
     };
   }
+  _handleAppStateChange = (nextAppState) => {
+    if ( this.state.appState.match(/inactive|background/) && nextAppState === 'active' ) {
+      console.log('App has come to the foreground!');
+    } else {
+      console.log('App has gone to the background!');
+      // start your background task here
+    }
+    this.setState({appState: nextAppState});
+  };
   componentWillUnmount() {
     const roomid = this.props.route.params.roomid;
     socket.emit('roomleave', roomid);
   }
   componentDidMount() {
+    this.scrolltobottom();
+    AppState.addEventListener('change', this._handleAppStateChange);
     AsyncStorage.getItem('login_user_info', (err, result) => {
       this.setState({
         userkey: JSON.parse(result).user_key,
@@ -187,6 +200,7 @@ class Message extends React.Component {
         arrendkey: this.state.arrendkey,
         myshownickname: this.state.myshownickname,
         toshownickname: this.state.toshownickname,
+        tousertoken:this.props.route.params.tousertoken
       };
       fetch(func.api(3005, 'save_message'), {
         method: 'post',
@@ -467,7 +481,7 @@ class Message extends React.Component {
               style={{
                 display: 'flex',
                 height: 30,
-                width: 300,
+                width: '75%',
                 marginTop: 10,
                 marginBottom: 5,
                 backgroundColor: '#dcdcdc82',
@@ -479,7 +493,7 @@ class Message extends React.Component {
               }}
             />
             <TouchableOpacity
-              style={{display: 'flex', marginTop: 10, marginLeft: 20}}
+              style={{display: 'flex',width: 35, height: 35, marginTop: 10, marginLeft: 20}}
               onPress={this.sendmessage}>
               <Image
                 style={{width: 35, height: 35}}

@@ -82,7 +82,8 @@ export default class Solo_match extends React.Component {
           .then((json) => {
             console.log(json.user_token);
             if (json === false) alert('조건에 맞는 사용자가 없습니다.');
-            else if (json === true) alert('메시지를 전송했습니다.');
+            else if (json === true || json === undefined)
+              alert('메시지를 전송했습니다.');
             else {
               alert('메시지를 전송했습니다.');
               fetch('https://fcm.googleapis.com/fcm/send', {

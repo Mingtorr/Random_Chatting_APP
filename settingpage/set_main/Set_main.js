@@ -26,13 +26,28 @@ class Set_main extends Component {
     modalVisible: false,
     key: '',
   };
+
   setModalVisible = (visible) => {
     this.setState({modalVisible: visible});
   };
+
   logout = async () => {
-    // console.log(AsyncStorage.getItem('login_onoff'));
-    const keys = await AsyncStorage.getAllKeys();
-    console.log(keys);
+    let userkey;
+    await AsyncStorage.getItem('login_user_info', (err, result) => {
+      userkey = JSON.parse(result).user_key;
+      const box = {userkey: userkey};
+      fetch(func.api(3001, 'reset_token'), {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(box),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          console.log(json);
+        });
+    });
     AsyncStorage.removeItem('login_onoff_set', () => {
       AsyncStorage.removeItem('login_user_info',() =>{
         console.log('로그아웃'); // User1 출력
@@ -42,6 +57,7 @@ class Set_main extends Component {
       
     });
   };
+
   withdrawal = () => {
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const UserInfo = JSON.parse(result);

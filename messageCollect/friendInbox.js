@@ -283,10 +283,12 @@ export default class FriendInbox extends React.Component {
                 {item.message_body === 'delcode5010' ? (
                   <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
                 ) : (
-                  <Text style={styles.lastChat}>
-                    {item.message_body.length >35
-                    ? item.message_body.substr(0,37).padEnd(40, '.')
-                    :item.message_body}</Text>
+                  <Text>{item.message_body}</Text>
+                  // <Text style={styles.lastChat}>
+                  //   {item.message_body.length >35
+                  //   ? item.message_body.substr(0,37).padEnd(40, '.')
+                  //   :item.message_body}</Text>
+                  // <View/>
                 )}
               </View>
             </View>

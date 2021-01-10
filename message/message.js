@@ -73,14 +73,15 @@ class Message extends React.Component {
       console.log('App has come to the foreground!');
     } else {
       console.log('App has gone to the background!');
-      socket.emit('roomleave');
+      socket.emit('roomleave',roomid);
       // start your background task here
     }
     this.setState({appState: nextAppState});
   };
   componentWillUnmount() {
+    console.log("asdasd");
     const roomid = this.props.route.params.roomid;
-    socket.emit('roomleave');
+    socket.emit('roomleave',roomid);
   }
   componentDidMount() {
     this.scrolltobottom();
@@ -108,6 +109,7 @@ class Message extends React.Component {
     });
     socket.on('roomsockets', (data) => {
       //change roomsockets
+      console.log(data+"실험");
       this.setState({
         roomsockets: data,
       });

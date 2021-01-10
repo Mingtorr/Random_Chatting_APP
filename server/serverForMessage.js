@@ -12,7 +12,7 @@ const io = require('socket.io')(http);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -306,7 +306,7 @@ io.on('connection', function (socket) {
   });
   socket.on('roomleave', (data) => {
     socket.leave(JSON.stringify(data));
-    const ids = io.of('').in('2').allSockets();
+    const ids = io.of('').in(JSON.stringify(data)).allSockets();
     const arr = [];
     ids.then((successMessage) => {
       // successMessage is whatever we passed in the resolve(...) function above.

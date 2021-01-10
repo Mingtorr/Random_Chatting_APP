@@ -24,7 +24,6 @@ app.use(cors());
 app.use(bodyparser.json());
 
 app.post('/Allchatroom_message', (req, res) => {
-  console.log('hi');
   connection.query(
     'SELECT A.allmessage_key, A.allmessage_body, A.allmessage_time, A.user_key, user_table.user_nickname FROM (SELECT * FROM allmessage_table ORDER BY allmessage_key DESC limit 30) A LEFT JOIN user_table ON A.user_key = user_table.user_key ORDER BY allmessage_key ASC',
     function (err, rows, field) {
@@ -129,7 +128,7 @@ io.on('connection', function (socket) {
                 };
                 console.log(all_send_message);
                 io.emit('recieve_allchatroom_message', all_send_message);
-      
+
                 console.log('내가 전체 메세지 보냄');
               }
             },
@@ -137,7 +136,7 @@ io.on('connection', function (socket) {
         }
       },
     );
-    })
+  });
 });
 
 http.listen(port, () => {

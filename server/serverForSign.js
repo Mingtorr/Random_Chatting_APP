@@ -134,25 +134,47 @@ app.post('/login', async function (req, res, next) {
               }
               arr = rows[0];
               connection.query(
-                'UPDATE user_table SET user_token = (?) WHERE user_id= (?)',
-                [body.token, body.id],
+                'select user_pushstate from user_table where user_key= (?);',
+                [arr.user_key],
                 function (err, rows, fields) {
-                  if (err) {
-                    console.log(err);
-                    res.send(err);
+                  if (err) console.log(err);
+                  if (rows[0].user_pushstate === 1) {
+                    connection.query(
+                      'UPDATE user_table SET user_token = (?) WHERE user_id= (?)',
+                      [body.token, body.id],
+                      function (err, rows, fields) {
+                        if (err) {
+                          console.log(err);
+                          res.send(err);
+                        }
+                        connection.query(
+                          'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?)',
+                          [userkey],
+                          function (err, rows, fields) {
+                            if (err) {
+                              console.log(err);
+                              res.send(err);
+                            } else {
+                              res.send(arr);
+                            }
+                          },
+                        );
+                      },
+                    );
+                  } else {
+                    connection.query(
+                      'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?)',
+                      [userkey],
+                      function (err, rows, fields) {
+                        if (err) {
+                          console.log(err);
+                          res.send(err);
+                        } else {
+                          res.send(arr);
+                        }
+                      },
+                    );
                   }
-                  connection.query(
-                    'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?)',
-                    [userkey],
-                    function (err, rows, fields) {
-                      if (err) {
-                        console.log(err);
-                        res.send(err);
-                      } else {
-                        res.send(arr);
-                      }
-                    },
-                  );
                 },
               );
             },
@@ -553,6 +575,69 @@ app.post('/onMain', (req, res) => {
     },
   );
   res.send(true);
+});
+
+// ============================ 로그아웃===============================================
+
+app.post('/reset_token', (req, res) => {
+  let body = req.body;
+  console.log('reset_token');
+  console.log(body);
+  connection.query(
+    'UPDATE user_table SET user_token = (?) WHERE user_key= (?);',
+    [0, body.userkey],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      } else {
+        console.log('asdasd');
+        res.send(true);
+      }
+    },
+  );
+});
+
+app.post('/reset_token2', (req, res) => {
+  let body = req.body;
+  console.log(body);
+  connection.query(
+    'UPDATE user_table SET user_token = (?) WHERE user_key= (?);',
+    [0, body.userkey],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      } else {
+        connection.query(
+          'UPDATE user_table SET user_pushstate = (?) WHERE user_key= (?);',
+          [body.pid, body.userkey],
+          function (err, rows, fields) {
+            if (err) {
+              console.log(err);
+              res.send(false);
+            } else {
+              res.send(true);
+            }
+          },
+        );
+      }
+    },
+  );
+});
+
+app.post('/get_message_state', (req, res) => {
+  let body = req.body;
+  connection.query(
+    'select user_pushstate from user_table where user_key= (?)',
+    [body.userkey],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+      }
+      res.send(rows);
+    },
+  );
 });
 
 http.listen(port, () => {

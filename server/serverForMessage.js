@@ -120,17 +120,24 @@ app.post('/find_touser', (req, res) => {
               res.send(false);
             } else {
               const key = rows[0].report_key;
-              console.log(key+'zlzlzlzlzlzlzl');
-              connection.query('SELECT user_table.user_key,user_table.user_nickname,message_table.message_body,message_table.message_key,message_table.message_time FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time asc',
-              [req.body.roomid],function(err,rows,field){
-                rows.map((value,index,arr)=>{
-                  connection.query('insert into Ban_message_table (report_key,ban_message_body,ban_message_sender) values (?,?,?)',[key,value.message_body,value.user_key],function(err,rows,field) {
-                    if(err){
-                      console.log(err);
-                    }            
-                  })
-                })
-              })  
+              console.log(key + 'zlzlzlzlzlzlzl');
+              connection.query(
+                'SELECT user_table.user_key,user_table.user_nickname,message_table.message_body,message_table.message_key,message_table.message_time FROM user_table,message_table WHERE user_table.user_key = message_table.user_key and message_table.room_id = ? order by message_table.message_time asc',
+                [req.body.roomid],
+                function (err, rows, field) {
+                  rows.map((value, index, arr) => {
+                    connection.query(
+                      'insert into Ban_message_table (report_key,ban_message_body,ban_message_sender) values (?,?,?)',
+                      [key, value.message_body, value.user_key],
+                      function (err, rows, field) {
+                        if (err) {
+                          console.log(err);
+                        }
+                      },
+                    );
+                  });
+                },
+              );
             }
           },
         );

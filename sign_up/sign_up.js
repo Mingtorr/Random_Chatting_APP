@@ -48,10 +48,12 @@ class Sign_up extends React.Component {
 
     if (!this.state.checked_id) {
       alert('아이디 중복검사를 해주세요');
-    } else if (!(this.state.passwd === this.state.passwd2)) {
-      alert('비밀번호가 일지하지 않습니다.');
+    } else if (!(this.state.checking_passwd)) {
+      alert('비밀번호가 일치하지 않습니다');
     } else if (checkpass === '') {
-      alert('비밀번호에 공백은 들어가서는 안됩니다.');
+      alert('비밀번호에 공백은 들어가서는 안됩니다');
+    } else if (!(this.state.nickname_check)){
+      alert('닉네임 중복 검사를 해주세요');
     } else if (!this.state.checked_email) {
       alert('메일 인증을 해주세요');
     } else {
@@ -72,6 +74,7 @@ class Sign_up extends React.Component {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
+            console.log("singup2");
             this.props.navigation.navigate('Signup2', {
               user_id: this.state.id,
             });

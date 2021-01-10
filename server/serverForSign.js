@@ -13,7 +13,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -505,13 +505,13 @@ var mailSender = {
       service: 'gmail',
       port: 465,
       auth: {
-        user: 'wagleemail2@gmail.com',
-        pass: '@emailwagle2',
+        user: 'waglewagle20@gmail.com',
+        pass: 'changwon@0',
       },
     });
     // 메일 옵션
     var mailOptions = {
-      from: 'wagleemail2@gmail.com',
+      from: 'waglewagle20@gmail.com',
       to: param.toEmail, // 수신할 이메일
       subject: param.subject, // 메일 제목
       html: param.html, // 메일 내용

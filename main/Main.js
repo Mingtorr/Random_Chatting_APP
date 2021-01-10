@@ -13,10 +13,13 @@ import {SafeAreaView} from 'react-navigation';
 import Main_Mymessage from './main_mymessage';
 import Main_Yourmessage from './main_yourmessage';
 import AsyncStorage from '@react-native-community/async-storage';
+import {Dimensions} from 'react-native';
 // import { post } from '../server/routes/indexswy';
 const func = require('../server/api');
 import io from 'socket.io-client';
 const socket = io(func.api(3002, ''));
+
+const display_Height = Dimensions.get('window').height;
 
 export default class Main extends Component {
   constructor(props) {
@@ -25,7 +28,7 @@ export default class Main extends Component {
     this.state = {
       value: new Animated.Value(0.2),
       position: new Animated.ValueXY({x: 0, y: 0}),
-      animatedValue: new Animated.Value(500),
+      animatedValue: new Animated.Value(display_Height * 0.85),
       animatedValue_back: new Animated.Value(1),
       // animation: new Animated.Value(0),
       height: 0,
@@ -36,7 +39,6 @@ export default class Main extends Component {
       messages: [],
 
       my_all_message: '',
-      my_all_message_time: '',
 
       scroll_number: 1,
       refreshing: false,
@@ -88,29 +90,30 @@ export default class Main extends Component {
   sendmessage = () => {
     console.log('sendmessage');
 
-    const message_data = {
-      user_key: this.state.user_key,
-      my_all_message: this.state.my_all_message,
-    };
+    // const message_data = {
+    //   user_key: this.state.user_key,
+    //   my_all_message: this.state.my_all_message,
+    // };
 
-    fetch(func.api(3002, 'My_all_message_save'), {
-      method: 'post',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(message_data),
-    });
+    // fetch(func.api(3002, 'My_all_message_save'), {
+    //   method: 'post',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify(message_data),
+    // }).then()
+
     const user_message_data = {
       user_key: this.state.user_key,
       user_nickname: this.state.user_nickname,
       message_body: this.state.my_all_message,
+      allmessage_time : new Date()
     };
-
     console.log(user_message_data);
-    socket.emit('send_allchatroom', user_message_data);
+    socket.emit("send_allchatroom", user_message_data);
 
     this.setState({
-      my_all_message: '',
+      my_all_message: "",
     });
 
     this.scrolltobottom();
@@ -172,8 +175,8 @@ export default class Main extends Component {
             user_key: rows.user_key,
             allmessage_time: rows.allmessage_time,
           };
-          console.log('받아온 데이터');
-          console.log(message_data);
+          // console.log('받아온 데이터');
+          // console.log(message_data);
           this.setState({
             messages: [message_data, ...this.state.messages],
             // refreshing: false
@@ -208,16 +211,17 @@ export default class Main extends Component {
   //     opacity: this.state.value,
   //   };
   // }
-  find_dimesions(layout) {
-    const {x, y, width, height} = layout;
-    // console.log(x);
-    // console.log(y);
-    // console.log(width);
-    // console.log(height);
-    this.setState({
-      animatedValue: new Animated.Value(height),
-    });
-  }
+
+  // find_dimesions(layout) {
+  //   const {x, y, width, height} = layout;
+  //   // console.log(x);
+  //   // console.log(y);
+  //   // console.log(width);
+  //   // console.log(height);
+  //   this.setState({
+  //     animatedValue: new Animated.Value(height),
+  //   });
+  // }
 
   //////////////////////////////////////////////////////////////////////////
 
@@ -306,20 +310,21 @@ export default class Main extends Component {
       <SafeAreaView style={styles.Container_main}>
         <SafeAreaView
           style={styles.Container_main}
-          onLayout={(event) => {
-            this.find_dimesions(event.nativeEvent.layout);
-          }}>
+          // onLayout={(event) => {
+          //   this.find_dimesions(event.nativeEvent.layout);
+          // }}
+          >
           <SafeAreaView
             style={{position: 'absolute', height: '100%', width: '100%'}}>
             <Animated.View style={{flex: 1, opacity: this.state.value}}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{position: 'absolute', marginTop: 7, left: '2%'}}
                 onPress={this.backBtn}>
                 <Image
                   style={{width: 35, height: 35}}
                   source={require('./backbutton.png')}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <View
                 style={{
                   height: 50,

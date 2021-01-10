@@ -63,7 +63,7 @@ export default class match_page extends React.Component {
       chatting: '채팅권 추가',
       title: '내 채팅권 개수',
       isEnabled: false,
-      div: <Solo_match />,
+      div: <Solo_match resetHeart={this.resetHeart}/>,
       shadowTF: 'none',
       CircleTF: 'off',
       Heart: 5,
@@ -92,7 +92,7 @@ export default class match_page extends React.Component {
 
     console.log(box);
 
-    fetch(func.api(3001, 'Heart_number'), {
+    fetch(func.api(3003, 'Heart_number'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
@@ -101,12 +101,18 @@ export default class match_page extends React.Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
+        console.log('하트불러오기',json);
         this.setState({
           Heart: json.user_heart,
         });
       });
   };
+
+  resetHeart=(number)=>{
+    this.setState({
+      Heart:number,
+    })
+  }
 
   startAdmob = async () => {
     this.setState({
@@ -115,7 +121,7 @@ export default class match_page extends React.Component {
 
     let box;
 
-    const rewardAd = RewardedAd.createForAdRequest(unitId, {
+    const rewardAd = RewardedAd.createForAdRequest(adUnitId, {
       requestNonPersonalizedAdsOnly: true,
       keywords: ['fashion', 'clothing'],
     });
@@ -149,7 +155,7 @@ export default class match_page extends React.Component {
         });
         console.log(box);
 
-        await fetch(func.api(3001, 'Heart_reset'), {
+        await fetch(func.api(3003, 'Heart_reset'), {
           method: 'post',
           headers: {
             'content-type': 'application/json',
@@ -201,7 +207,7 @@ export default class match_page extends React.Component {
       buttonColor2: 'gray',
       title: '내 채팅권 개수',
       change: '일반채팅',
-      div: <Solo_match />,
+      div: <Solo_match resetHeart={this.resetHeart}/>,
     });
     // Animated.timing(this.state.animatedValue, {
     //   duration: 1000,

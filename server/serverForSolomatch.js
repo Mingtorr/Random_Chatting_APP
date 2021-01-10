@@ -279,12 +279,17 @@ app.post('/minus_heart', (req, res) => {
     function (err, rows, fileds) {
       if (err) console.log(err);
       else {
-        if (rows[0].user_heart === 0) res.send(false);
+        if (rows[0].user_heart === 0){
+          console.log('1 rows임',rows);
+          res.send(false);
+          }
         else {
-          let heart = rows[0].user_heart - 1;
+          const heart ={
+            heart: rows[0].user_heart - 1
+          }  //이렇게 보내면 안됨
           connection.query(
             'UPDATE user_table SET user_heart = (?) WHERE user_key= (?);',
-            [heart, body.user_key],
+            [heart.heart, body.user_key],
             function (err, rows, fileds) {
               if (err) console.log(err);
               else res.send(heart);
@@ -294,7 +299,6 @@ app.post('/minus_heart', (req, res) => {
       }
     },
   );
-  res.send(false);
 });
 
 //=============================================== solopage =================================================================

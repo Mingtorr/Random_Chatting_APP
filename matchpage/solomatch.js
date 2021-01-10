@@ -61,47 +61,76 @@ export default class Solo_match extends React.Component {
         alert('자신의 학번를 먼저 선택해주세요');
         return;
       }
-    }).then(() => {
-      const box = {
-        major: this.state.major,
-        sex: to_sex,
-        deptno: deptno,
-        message: this.state.message,
-        user_key: userkey,
-      };
+    })
+      .then(() => {
+        const box = {
+          major: this.state.major,
+          sex: to_sex,
+          deptno: deptno,
+          message: this.state.message,
+          user_key: userkey,
+        };
 
-      fetch(func.api(3003, 'sendMessage'), {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(box),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          console.log(json.user_token);
-          if (json === false) alert('조건에 맞는 사용자가 없습니다.');
-          else if (json === true) alert('메시지를 전송했습니다.');
-          else {
-            alert('메시지를 전송했습니다.');
-            fetch('https://fcm.googleapis.com/fcm/send', {
-              method: 'POST',
-              headers: {
-                'content-type': 'application/json',
-                Authorization:
-                  'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
-              },
-              body: JSON.stringify({
-                to: json.user_token,
-                notification: {
-                  title: nickname,
-                  body: this.state.message,
+        fetch(func.api(3003, 'sendMessage'), {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(box),
+        })
+          .then((res) => res.json())
+          .then((json) => {
+            console.log(json.user_token);
+            if (json === false) alert('조건에 맞는 사용자가 없습니다.');
+            else if (json === true) alert('메시지를 전송했습니다.');
+            else {
+              alert('메시지를 전송했습니다.');
+              fetch('https://fcm.googleapis.com/fcm/send', {
+                method: 'POST',
+                headers: {
+                  'content-type': 'application/json',
+                  Authorization:
+                    'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
                 },
-              }),
-            });
-          }
-        });
-    });
+                body: JSON.stringify({
+                  to: json.user_token,
+                  notification: {
+                    title: nickname,
+                    body: this.state.message,
+                  },
+                }),
+              });
+            }
+          });
+      })
+      .then(() => {
+        const box2 = {
+          user_key: userkey,
+        };
+        console.log('마이너스하트패치하기전~~~~~');
+        console.log(' user_key: ' + box2.user_key);
+
+        fetch(func.api(3003, 'minus_heart'), {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(box2),
+        })
+          .then((res) => res.json())
+          .then((json) => {
+            if (json === false) {
+              console.log('쿠폰이 더 없어용');
+              console.log(json);
+            } else {
+              console.log(
+                json.heart,
+                '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+              );
+              this.props.resetHeart(json.heart);
+            }
+          });
+      });
   };
 
   _scrollToInput = (reactNode) => {

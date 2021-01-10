@@ -196,7 +196,7 @@ export default class FriendInbox extends React.Component {
     );
   };
 
-  onpress = (itemId, itemId2, toshownickname) => {
+  onpress = (itemId, itemId2, toshownickname, tousertoken) => {
     const data = [...this.state.messagesRoom];
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
@@ -208,7 +208,7 @@ export default class FriendInbox extends React.Component {
       room_id: itemId,
       user_key: this.state.user_Info.user_key,
     };
-
+    console.log(tousertoken);
     fetch(func.api(3003, 'ChatNumZero'), {
       method: 'post',
       headers: {
@@ -230,6 +230,7 @@ export default class FriendInbox extends React.Component {
           touser: itemId2,
           myshownickname: json.shownickname,
           toshownickname: toshownickname,
+          tousertoken: tousertoken,
         });
       });
   };
@@ -252,7 +253,7 @@ export default class FriendInbox extends React.Component {
         <TouchableOpacity
           onLongPress={() => this.longPressAlert(item.room_id)}
           onPress={() =>
-            this.onpress(item.room_id, item.user_key, item.shownickname)
+            this.onpress(item.room_id, item.user_key, item.shownickname, item.user_token)
           }>
           <View style={styles.messageElem}>
             <LinearGradient

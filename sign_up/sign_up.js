@@ -11,6 +11,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import RadioForm from 'react-native-simple-radio-button';
@@ -47,15 +48,40 @@ class Sign_up extends React.Component {
     checkpass = checkpass.replace(/(\s*)/g, '');
 
     if (!this.state.checked_id) {
-      alert('아이디 중복검사를 해주세요');
+      Alert.alert(
+        "안내",
+        "아이디 중복검사를 해주세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else if (!(this.state.checking_passwd)) {
-      alert('비밀번호가 일치하지 않습니다');
+      Alert.alert(
+        "안내",
+        "비밀번호가 일치하지 않습니다",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else if (checkpass === '') {
-      alert('비밀번호에 공백은 들어가서는 안됩니다');
+      Alert.alert(
+        "안내",
+        "비밀번호에 공백은 들어가서는 안됩니다",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else if (!(this.state.nickname_check)){
-      alert('닉네임 중복 검사를 해주세요');
+      Alert.alert(
+        "안내",
+        "닉네임 중복 검사를 해주세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else if (!this.state.checked_email) {
-      alert('메일 인증을 해주세요');
+      Alert.alert(
+        "안내",
+        "메일 인증을 해주세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else {
       const user_info = {
         id: this.state.id,
@@ -87,10 +113,15 @@ class Sign_up extends React.Component {
     var re = /^[a-zA-Z0-9_]{4,20}$/;
     e.preventDefault();
     if (this.state.email.length === 0) {
-      alert('이메일을 입력해주세요!');
+      Alert.alert(
+        "안내",
+        "이메일을 입력해주세요!",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       return;
     } else if (
-      !this.check(re, this.state.email, '잘못된 형식의 이메일입니다.')
+      !this.check(re, this.state.email, '안내', '잘못된 형식의 이메일입니다')
     ) {
       return;
     } else {
@@ -109,7 +140,12 @@ class Sign_up extends React.Component {
       })
         .then((res) => res.json())
         .then((json) => {
-          alert('인증 메일이 전송되었습니다.');
+          Alert.alert(
+            "안내",
+            "인증 메일이 전송되었습니다",
+            [{text: "OK", style: "OK"}],
+            { cancelable: false }
+          );
           this.setState({
             authNum: json,
           });
@@ -132,24 +168,44 @@ class Sign_up extends React.Component {
   authEmail = (e) => {
     e.preventDefault();
     if (this.state.authCheckNum.length === 0) {
-      alert('인증번호를 입력해주세요');
+      Alert.alert(
+        "안내",
+        "인증번호를 입력해주세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       return;
     }
     if (this.state.authNum.toString() === this.state.authCheckNum.toString()) {
-      alert('인증성공');
+      Alert.alert(
+        "안내",
+        "인증성공",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       this.setState({
         checked_email: true,
       });
     } else {
-      alert('인증실패');
+      Alert.alert(
+        "안내",
+        "인증실패",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     }
   };
 
-  check = (re, what, message) => {
+  check = (re, what, title, message) => {
     if (re.test(what)) {
       return true;
     }
-    alert(message);
+    Alert.alert(
+      title,
+      message,
+      [{text: "OK", style: "OK"}],
+      { cancelable: false }
+    );
     return false;
   };
 
@@ -160,7 +216,7 @@ class Sign_up extends React.Component {
       !this.check(
         re,
         this.state.id,
-        '아이디는 4~12자의 영문 대소문자와 숫자로만 입력가능합니다.',
+        "안내", '아이디는 4~12자의 영문 대소문자와 숫자로만 입력가능합니다.',
       )
     ) {
       return;
@@ -178,12 +234,22 @@ class Sign_up extends React.Component {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            alert('사용가능한 아이디 입니다.');
+            Alert.alert(
+              "안내",
+              "사용 가능한 아이디입니다",
+              [{text: "OK", style: "OK"}],
+              { cancelable: false }
+            );
             this.setState({
               checked_id: true,
             });
           } else {
-            alert('이미 사용중인 아이디 입니다.');
+            Alert.alert(
+              "안내",
+              "이미 사용중인 아이디입니다",
+              [{text: "OK", style: "OK"}],
+              { cancelable: false }
+            );
           }
         });
     }
@@ -196,6 +262,7 @@ class Sign_up extends React.Component {
       !this.check(
         re,
         this.state.nickname,
+        "안내", 
         '닉네임은 2~8자의 영문,한글 ,숫자로만 입력가능합니다.',
       )
     ) {
@@ -215,12 +282,22 @@ class Sign_up extends React.Component {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            alert('사용가능한 닉네임입니다');
+            Alert.alert(
+              "안내",
+              "사용가능한 닉네임입니다",
+              [{text: "OK", style: "OK"}],
+              { cancelable: false }
+            );
             this.setState({
               nickname_check: true,
             });
           } else {
-            alert('이미 사용중인 닉네임입니다');
+            Alert.alert(
+              "안내",
+              "이미 사용중인 닉네임입니다",
+              [{text: "OK", style: "OK"}],
+              { cancelable: false }
+            );
           }
         });
     }
@@ -228,11 +305,26 @@ class Sign_up extends React.Component {
 
   passwdcheck = (e) => {
     if (this.state.passwd.length === 0 || this.state.passwd2.length === 0) {
-      alert('비밀번호를 입력해주세요');
+      Alert.alert(
+        "안내",
+        "비밀번호를 입력해주세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else if (this.state.passwd !== this.state.passwd2) {
-      alert('비밀번호가 일치하지 않습니다.');
+      Alert.alert(
+        "안내",
+        "비밀번호가 일치하지 않습니다",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else if (this.state.passwd === this.state.passwd2) {
-      alert('비밀번호가 일치합니다.');
+      Alert.alert(
+        "안내",
+        "비밀번호가 일치합니다",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       this.setState({
         checking_passwd: true,
       });

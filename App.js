@@ -24,11 +24,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
 const func = require('./server/api');
-let homeimo = require('./Image/homeimo.png');
-let alarmimo = require('./Image/alarmimo.png');
-let mainimo = require('./Image/mainimo.png');
-let msgimo = require('./Image/msgimo.png');
-let setting = require('./Image/setting.png');
+// let homeimo = require('./Image/homeimo.png');
+// let alarmimo = require('./Image/alarmimo.png');
+// let mainimo = require('./Image/mainimo.png');
+// let msgimo = require('./Image/msgimo.png');
+// let setting = require('./Image/setting.png');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 
@@ -231,16 +231,24 @@ function Bottom() {
         component={Main}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({color, size}) => (
-            <Image
-              name="homeimo"
-              color={color}
-              size={size}
-              source={homeimo}
-              style={{marginTop: 15}}
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            let icon;
+            if(focused){
+              icon = require('./Image/homeimo_full.png');
+            }else{
+              icon = require('./Image/homeimo.png');
+            }
+            return <Image
+                      name="homeimo"
+                      color={color}
+                      source={icon}
+                      style={{marginTop: 15, width: 25, height: 25}}
+                    />
+          }
         }}
+        listeners={({navigation}) => ({
+          blur: () => navigation.setParams({screen: undefined}),
+        })}
       />
       {/* 친구들 찾기 */}
       <Tab.Screen
@@ -248,15 +256,20 @@ function Bottom() {
         component={Match_page}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({color, size}) => (
-            <Image
-              name="mainimo"
-              color={color}
-              size={size}
-              source={mainimo}
-              style={{marginTop: 15}}
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            let icon;
+            if(focused){
+              icon = require('./Image/mainimo_full.png');
+            }else{
+              icon = require('./Image/mainimo.png');
+            }
+            return <Image
+                      name="homeimo"
+                      color={color}
+                      source={icon}
+                      style={{marginTop: 15, width: 25, height: 25}}
+                    />
+          }
         }}
       />
       {/* 메세지함 */}
@@ -266,15 +279,20 @@ function Bottom() {
         options={{
           unmountOnBlur: true,
           tabBarLabel: '',
-          tabBarIcon: ({color, size}) => (
-            <Image
-              name="msgimo"
-              color={color}
-              size={size}
-              source={msgimo}
-              style={{marginTop: 15}}
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            let icon;
+            if(focused){
+              icon = require('./Image/msgimo_full.png');
+            }else{
+              icon = require('./Image/msgimo.png');
+            }
+            return <Image
+                      name="homeimo"
+                      color={color}
+                      source={icon}
+                      style={{marginTop: 15, width: 25, height: 25}}
+                    />
+          }
         }}
         listeners={({navigation}) => ({
           blur: () => navigation.setParams({screen: undefined}),
@@ -288,15 +306,21 @@ function Bottom() {
         component={Setmain}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({color, size}) => (
-            <Image
-              name="setting"
-              color={color}
-              size={size}
-              source={setting}
-              style={{marginTop: 15, width: 25, height: 25}}
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            let icon;
+            if(focused){
+              icon = require('./Image/setting.png');
+            }else{
+              icon = require('./Image/alarmimo.png');
+              //setting이미지 만드는중..
+            }
+            return <Image
+                      name="homeimo"
+                      color={color}
+                      source={icon}
+                      style={{marginTop: 15, width: 25, height: 25}}
+                    />
+          }
         }}
       />
     </Tab.Navigator>

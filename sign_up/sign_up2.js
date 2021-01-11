@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  Alert
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
@@ -44,7 +45,12 @@ class Sign_up2 extends React.Component {
         if (json === true) {
           this.props.navigation.navigate('Login');
         } else {
-          alert('회원가입 실패');
+          Alert.alert(
+            "안내",
+            "회원가입 실패",
+            [{text: "OK", style: "OK"}],
+            { cancelable: false }
+          );
         }
       });
   };

@@ -23,12 +23,12 @@ class Set_alarm extends Component {
       receptionnum: '00',
       isEnabled: true,
       isEnabled_two: messaging().isDeviceRegisteredForRemoteMessages,
+      isEnabled_message: false,
     };
   }
 
-  async componentDidmount() {
+  async componentDidMount() {
     let userkey;
-    console.log('hi');
     await AsyncStorage.getItem('login_user_info', (err, result) => {
       userkey = JSON.parse(result).user_key;
     });
@@ -42,14 +42,22 @@ class Set_alarm extends Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
-        if (json === 1)
+        if (json.user_pushstate === 1)
           this.setState({
             isEnabled: true,
           });
         else {
           this.setState({
             isEnabled: false,
+          });
+        }
+        if (json.user_NewMsg === 1) {
+          this.setState({
+            isEnabled_message: true,
+          });
+        } else {
+          this.setState({
+            isEnabled_message: false,
           });
         }
       });
@@ -61,7 +69,6 @@ class Set_alarm extends Component {
     if (this.state.isEnabled === false) {
       pid = 1;
     }
-    console.log(pid);
     await AsyncStorage.getItem('login_user_info', (err, result) => {
       userkey = JSON.parse(result).user_key;
     });
@@ -73,9 +80,30 @@ class Set_alarm extends Component {
       },
       body: JSON.stringify(box),
     }).then(() => {
-      console.log('end');
       this.setState({
         isEnabled: !this.state.isEnabled,
+      });
+    });
+  };
+  toggleSwitch3 = async () => {
+    let pid = 0;
+    //0은 false  1은 true
+    if (this.state.isEnabled_message === false) {
+      pid = 1;
+    }
+    await AsyncStorage.getItem('login_user_info', (err, result) => {
+      userkey = JSON.parse(result).user_key;
+    });
+    const box = {userkey: userkey, pid: pid};
+    fetch(func.api(3001, 'reset_token3'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(box),
+    }).then(() => {
+      this.setState({
+        isEnabled_message: !this.state.isEnabled_message,
       });
     });
   };
@@ -150,6 +178,16 @@ class Set_alarm extends Component {
             onValueChange={this.toggleSwitch_two}
             value={this.state.isEnabled_two}
             thumbColor={this.state.isEnabled_two ? 'white' : '#f4f3f4'}
+          />
+        </View>
+        <View style={styles.Msg_alarm}>
+          <Text style={styles.Textmsg_alarm}>새로운 메시지 받지 않기</Text>
+          <Switch
+            trackColor={{false: '#767577', true: '#f05052'}}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={this.toggleSwitch3}
+            value={this.state.isEnabled_message}
+            thumbColor={this.state.isEnabled ? 'white' : '#f4f3f4'}
           />
         </View>
         {/* 메세지 수신거부 */}

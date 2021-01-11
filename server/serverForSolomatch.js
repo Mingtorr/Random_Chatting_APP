@@ -10,7 +10,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: '2ajrrhtlvj',
   database: 'mydb',
 });
 
@@ -310,7 +310,7 @@ app.post('/sendMessage', (req, res) => {
     if (body.major !== '') {
       //같은 학과 학번을 선택
       connection.query(
-        'select u.user_key, u.token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and  u.user_deptno=(?) and u.user_stdno= (?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        'select u.user_key, u.token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and  u.user_deptno=(?) and u.user_stdno= (?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.deptno, body.major, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
@@ -331,7 +331,7 @@ app.post('/sendMessage', (req, res) => {
     } else {
       //같은 학과선택 학번은 선택x
       connection.query(
-        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and  u.user_sex=(?) and u.user_deptno=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and  u.user_sex=(?) and u.user_deptno=(?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.deptno, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
@@ -351,7 +351,7 @@ app.post('/sendMessage', (req, res) => {
       //같은 학과 선택x 학번은 선택
       console.log('hihi');
       connection.query(
-        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and u.user_stdno=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and u.user_stdno=(?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.major, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
@@ -367,7 +367,7 @@ app.post('/sendMessage', (req, res) => {
       );
     } else {
       connection.query(
-        'select u.user_key, u.user_token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        'select u.user_key, u.user_token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.user_key],
         async function (err, rows, fields) {
           console.log(rows);

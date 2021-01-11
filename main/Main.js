@@ -59,7 +59,7 @@ export default class Main extends Component {
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(post),
+      body: JSON.stringify(),
     })
       .then((res) => res.json())
       .then((json) => {
@@ -264,7 +264,7 @@ export default class Main extends Component {
       if (this.flatlist_ref !== null && this.flatlist_ref.current !== null) {
         this.flatlist_ref.current.scrollToEnd({animated: false});
       }
-    }, 400);
+    }, 600);
   };
 
   // _scrollEnd = (e) => {
@@ -337,7 +337,7 @@ export default class Main extends Component {
                   onPress={this.sendmessage}>
                   <Image
                     style={{width: 35, height: 35}}
-                    source={require('./send_button.png')}
+                    source={require('./send6.png')}
                   />
                 </TouchableOpacity>
               </View>

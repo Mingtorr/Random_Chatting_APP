@@ -234,16 +234,15 @@ function Bottom() {
           tabBarIcon: ({focused, color, size}) => {
             let icon;
             if(focused){
-              icon = require('./Image/homeimo.png');
+              icon = require('./Image/homeimo_full.png');
             }else{
-              icon = require('./Image/alarmimo.png');
+              icon = require('./Image/homeimo.png');
             }
             return <Image
                       name="homeimo"
                       color={color}
-                      size={size}
                       source={icon}
-                      style={{marginTop: 15}}
+                      style={{marginTop: 15, width: 25, height: 25}}
                     />
           }
         }}
@@ -260,16 +259,15 @@ function Bottom() {
           tabBarIcon: ({focused, color, size}) => {
             let icon;
             if(focused){
-              icon = require('./Image/mainimo.png');
+              icon = require('./Image/mainimo_full.png');
             }else{
-              icon = require('./Image/alarmimo.png');
+              icon = require('./Image/mainimo.png');
             }
             return <Image
                       name="homeimo"
                       color={color}
-                      size={size}
                       source={icon}
-                      style={{marginTop: 15}}
+                      style={{marginTop: 15, width: 25, height: 25}}
                     />
           }
         }}
@@ -284,16 +282,15 @@ function Bottom() {
           tabBarIcon: ({focused, color, size}) => {
             let icon;
             if(focused){
-              icon = require('./Image/msgimo.png');
+              icon = require('./Image/msgimo_full.png');
             }else{
-              icon = require('./Image/alarmimo.png');
+              icon = require('./Image/msgimo.png');
             }
             return <Image
                       name="homeimo"
                       color={color}
-                      size={size}
                       source={icon}
-                      style={{marginTop: 15}}
+                      style={{marginTop: 15, width: 25, height: 25}}
                     />
           }
         }}
@@ -315,13 +312,13 @@ function Bottom() {
               icon = require('./Image/setting.png');
             }else{
               icon = require('./Image/alarmimo.png');
+              //setting이미지 만드는중..
             }
             return <Image
                       name="homeimo"
                       color={color}
-                      size={size}
                       source={icon}
-                      style={{marginTop: 15}}
+                      style={{marginTop: 15, width: 25, height: 25}}
                     />
           }
         }}

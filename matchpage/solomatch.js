@@ -36,9 +36,6 @@ export default class Solo_match extends React.Component {
     let deptno = '';
     let userkey = '';
     let nickname;
-    this.setState({
-      message : "",
-    })
     if (this.state.message === '') {
       alert('전송할 메시지를 입력하세요');
       return;
@@ -101,10 +98,13 @@ export default class Solo_match extends React.Component {
               .then((json) => {
                 console.log(json.user_token);
                 if (json === false) alert('조건에 맞는 사용자가 없습니다.');
-                else if (json === true || json === undefined || json === 0)
+                else if (json === true || json === undefined || json === 0) {
+                  this.setState({
+                    message: '',
+                  });
                   alert('메시지를 전송했습니다.');
-                else {
-                  alert('메시지를 전송했습니다.');
+                } else {
+                  console.log(json);
                   fetch('https://fcm.googleapis.com/fcm/send', {
                     method: 'POST',
                     headers: {
@@ -115,7 +115,7 @@ export default class Solo_match extends React.Component {
                     body: JSON.stringify({
                       to: json.user_token,
                       notification: {
-                        title: nickname+"님이 메세지를 보냈습니다.",
+                        title: nickname + '님이 메세지를 보냈습니다.',
                         body: this.state.message,
                         android_channel_id: 'test - channel',
                         sound: 'default',
@@ -124,6 +124,10 @@ export default class Solo_match extends React.Component {
                       priority: 'high',
                     }),
                   });
+                  this.setState({
+                    message: '',
+                  });
+                  alert('메시지를 전송했습니다.');
                 }
               });
           }

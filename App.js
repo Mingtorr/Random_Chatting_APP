@@ -24,10 +24,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
 const func = require('./server/api');
-let homeimo = require('./Image/homeimo.png');
-let alarmimo = require('./Image/alarmimo.png');
-let mainimo = require('./Image/mainimo.png');
-let msgimo = require('./Image/msgimo.png');
+// let homeimo = require('./Image/homeimo.png');
+// let alarmimo = require('./Image/alarmimo.png');
+// let mainimo = require('./Image/mainimo.png');
+// let msgimo = require('./Image/msgimo.png');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 
@@ -224,16 +224,25 @@ function Bottom() {
         component={Main}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({color, size}) => (
-            <Image
-              name="homeimo"
-              color={color}
-              size={size}
-              source={homeimo}
-              style={{marginTop: 15}}
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            let icon;
+            if(focused){
+              icon = require('./Image/homeimo.png');
+            }else{
+              icon = require('./Image/alarmimo.png');
+            }
+            return <Image
+                      name="homeimo"
+                      color={color}
+                      size={size}
+                      source={icon}
+                      style={{marginTop: 15}}
+                    />
+          }
         }}
+        listeners={({navigation}) => ({
+          blur: () => navigation.setParams({screen: undefined}),
+        })}
       />
       {/* 친구들 찾기 */}
       <Tab.Screen
@@ -241,15 +250,21 @@ function Bottom() {
         component={Match_page}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({color, size}) => (
-            <Image
-              name="mainimo"
-              color={color}
-              size={size}
-              source={mainimo}
-              style={{marginTop: 15}}
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            let icon;
+            if(focused){
+              icon = require('./Image/mainimo.png');
+            }else{
+              icon = require('./Image/alarmimo.png');
+            }
+            return <Image
+                      name="homeimo"
+                      color={color}
+                      size={size}
+                      source={icon}
+                      style={{marginTop: 15}}
+                    />
+          }
         }}
       />
       {/* 메세지함 */}
@@ -259,15 +274,21 @@ function Bottom() {
         options={{
           unmountOnBlur: true,
           tabBarLabel: '',
-          tabBarIcon: ({color, size}) => (
-            <Image
-              name="msgimo"
-              color={color}
-              size={size}
-              source={msgimo}
-              style={{marginTop: 15}}
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            let icon;
+            if(focused){
+              icon = require('./Image/msgimo.png');
+            }else{
+              icon = require('./Image/alarmimo.png');
+            }
+            return <Image
+                      name="homeimo"
+                      color={color}
+                      size={size}
+                      source={icon}
+                      style={{marginTop: 15}}
+                    />
+          }
         }}
         listeners={({navigation}) => ({
           blur: () => navigation.setParams({screen: undefined}),
@@ -281,15 +302,21 @@ function Bottom() {
         component={Setmain}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({color, size}) => (
-            <Image
-              name="alarmimo"
-              color={color}
-              size={size}
-              source={alarmimo}
-              style={{marginTop: 15}}
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            let icon;
+            if(focused){
+              icon = require('./Image/alarmimo.png');
+            }else{
+              icon = require('./Image/alarmimo.png');
+            }
+            return <Image
+                      name="homeimo"
+                      color={color}
+                      size={size}
+                      source={icon}
+                      style={{marginTop: 15}}
+                    />
+          }
         }}
       />
     </Tab.Navigator>

@@ -23,7 +23,7 @@ export default class Main_Mymessage extends React.Component {
         <View
           style={{
             display: 'flex',
-            backgroundColor: '#eaeaea',
+            backgroundColor: '#eb6c63',
             marginRight: 16,
             maxWidth: '70%',
             paddingLeft: 20,
@@ -32,7 +32,7 @@ export default class Main_Mymessage extends React.Component {
             paddingTop: 10,
             borderRadius: 28,
           }}>
-          <Text style={{fontSize: 18}}>{this.props.message}</Text>
+          <Text style={{color:'white', fontSize: 18}}>{this.props.message}</Text>
         </View>
       </View>
     );

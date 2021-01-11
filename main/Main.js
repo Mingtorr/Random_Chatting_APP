@@ -53,7 +53,7 @@ export default class Main extends Component {
       this.setState({user_nickname: user_info.user_nickname});
     });
 
-    console.log('allchatroom_message');
+    // console.log('allchatroom_message');
     fetch(func.api(3002, 'Allchatroom_message'), {
       method: 'post',
       headers: {
@@ -78,8 +78,8 @@ export default class Main extends Component {
       });
 
     socket.on('recieve_allchatroom_message', (data) => {
-      console.log('받은 데이터');
-      console.log(data);
+      // console.log('받은 데이터');
+      // console.log(data);
       this.setState({
         messages: [...this.state.messages, data],
       });
@@ -88,28 +88,20 @@ export default class Main extends Component {
   }
 
   sendmessage = () => {
-    console.log('sendmessage');
+    // console.log('sendmessage');
 
-    // const message_data = {
-    //   user_key: this.state.user_key,
-    //   my_all_message: this.state.my_all_message,
-    // };
-
-    // fetch(func.api(3002, 'My_all_message_save'), {
-    //   method: 'post',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify(message_data),
-    // }).then()
-
+    if (this.state.my_all_message.trim() === '') {
+      this.setState({
+        my_all_message: '',
+      });
+    } else {
     const user_message_data = {
       user_key: this.state.user_key,
       user_nickname: this.state.user_nickname,
       message_body: this.state.my_all_message,
       allmessage_time : new Date()
     };
-    console.log(user_message_data);
+    // console.log(user_message_data);
     socket.emit("send_allchatroom", user_message_data);
 
     this.setState({
@@ -117,12 +109,13 @@ export default class Main extends Component {
     });
 
     this.scrolltobottom();
+    }
   };
 
   ///////////////////////////////////////////////////////////////////////////////
 
   allchatroom_message = (e) => {
-    console.log('allchatroom');
+    // console.log('allchatroom');
 
     const startAnimation1 = Animated.timing(this.state.animatedValue, {
       toValue: 0,
@@ -156,8 +149,8 @@ export default class Main extends Component {
       scroll_number: this.state.scroll_number,
     };
 
-    console.log('스크롤 데이터');
-    console.log(scroll_data);
+    // console.log('스크롤 데이터');
+    // console.log(scroll_data);
     fetch(func.api(3002, 'Infinite_scroll'), {
       method: 'post',
       headers: {
@@ -231,47 +224,24 @@ export default class Main extends Component {
     let send_time_minute = send_time.getMinutes(); //+9
     let message_time = '';
 
-    if (send_time_hour + 9 == 12) {
+    if (send_time_hour == 12) {
       if (send_time_minute < 10) {
-        message_time =
-          '오후 ' +
-          JSON.stringify(send_time_hour + 9) +
-          ':0' +
-          JSON.stringify(send_time_minute);
+        message_time = '오후 ' + JSON.stringify(send_time_hour) + ':0' + JSON.stringify(send_time_minute);
       } else if (send_time_minute > 10) {
         message_time =
-          '오후 ' +
-          JSON.stringify(send_time_hour + 9) +
-          ':' +
-          JSON.stringify(send_time_minute);
+          '오후 ' + JSON.stringify(send_time_hour) + ':' + JSON.stringify(send_time_minute);
       }
-    } else if ((send_time_hour + 9) % 24 < 12) {
+    } else if (send_time_hour < 12) {
       if (send_time_minute < 10) {
-        message_time =
-          '오전 ' +
-          JSON.stringify((send_time_hour + 9) % 24) +
-          ':0' +
-          JSON.stringify(send_time_minute);
+        message_time = '오전 ' + JSON.stringify(send_time_hour) + ':0' + JSON.stringify(send_time_minute);
       } else if (send_time_minute > 10) {
-        message_time =
-          '오전 ' +
-          JSON.stringify((send_time_hour + 9) % 24) +
-          ':' +
-          JSON.stringify(send_time_minute);
+        message_time = '오전 ' + JSON.stringify(send_time_hour) + ':' + JSON.stringify(send_time_minute);
       }
-    } else if ((send_time_hour + 9) % 24 > 12) {
+    } else if (send_time_hour > 12) {
       if (send_time_minute < 10) {
-        message_time =
-          '오후 ' +
-          JSON.stringify(((send_time_hour + 9) % 24) - 12) +
-          ':0' +
-          JSON.stringify(send_time_minute);
+        message_time = '오후 ' + JSON.stringify(send_time_hour - 12) + ':0' + JSON.stringify(send_time_minute);
       } else if (send_time_minute > 10) {
-        message_time =
-          '오후 ' +
-          JSON.stringify(((send_time_hour + 9) % 24) - 12) +
-          ':' +
-          JSON.stringify(send_time_minute);
+        message_time = '오후 ' + JSON.stringify(send_time_hour - 12) + ':' + JSON.stringify(send_time_minute);
       }
     }
 
@@ -293,26 +263,23 @@ export default class Main extends Component {
       if (this.flatlist_ref !== null && this.flatlist_ref.current !== null) {
         this.flatlist_ref.current.scrollToEnd({animated: false});
       }
-    }, 1000);
+    }, 400);
   };
 
   // _scrollEnd = (e) => {
   //   this.flatlist_ref.current.scrollToEnd({animated: false});
   // }
 
-  backBtn = (e) => {
-    e.preventDefault();
-    this.props.navigation.navigate('Main');
-  };
+  // backBtn = (e) => {
+  //   e.preventDefault();
+  //   this.props.navigation.navigate('Main');
+  // };
 
   render() {
     return (
       <SafeAreaView style={styles.Container_main}>
         <SafeAreaView
           style={styles.Container_main}
-          // onLayout={(event) => {
-          //   this.find_dimesions(event.nativeEvent.layout);
-          // }}
           >
           <SafeAreaView
             style={{position: 'absolute', height: '100%', width: '100%'}}>
@@ -369,7 +336,7 @@ export default class Main extends Component {
                   onPress={this.sendmessage}>
                   <Image
                     style={{width: 35, height: 35}}
-                    source={require('./sendmessage.png')}
+                    source={require('./send_button.png')}
                   />
                 </TouchableOpacity>
               </View>
@@ -453,14 +420,16 @@ const styles = StyleSheet.create({
   text_input_bg: {},
   text_input: {
     display: 'flex',
-    height: 35,
-    width: 330,
-    marginTop: 5,
+    height: 30,
+    width: '75%',
+    marginTop: 10,
     marginBottom: 5,
     backgroundColor: '#dcdcdc82',
     borderRadius: 24,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   text_input_image: {
     display: 'flex',

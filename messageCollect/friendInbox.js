@@ -274,7 +274,7 @@ export default class FriendInbox extends React.Component {
             <View style={styles.messageInfo}>
               <View style={styles.messageHead}>
                 {item.shownickname === 0 ? (
-                  <Text style={styles.nickName}>알수없음</Text>
+                  <Text style={styles.nickName2}>답장을 기다리고 있습니다.</Text>
                 ) : (
                   <Text style={styles.nickName}>{item.user_nickname}</Text>
                 )}
@@ -283,11 +283,11 @@ export default class FriendInbox extends React.Component {
                 {item.message_body === 'delcode5010' ? (
                   <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
                 ) : (
-                  <Text>{item.message_body}</Text>
-                  // <Text style={styles.lastChat}>
-                  //   {item.message_body.length >35
-                  //   ? item.message_body.substr(0,37).padEnd(40, '.')
-                  //   :item.message_body}</Text>
+                  // <Text>{item.message_body}</Text>
+                  <Text style={styles.lastChat}>
+                    {item.message_body.length >35
+                    ? item.message_body.substr(0,37).padEnd(40, '.')
+                    :item.message_body}</Text>
                   // <View/>
                 )}
               </View>
@@ -386,6 +386,10 @@ const styles = StyleSheet.create({
   messageHead: {},
   nickName: {
     fontSize: 18,
+  },
+  nickName2: {
+    fontSize: 18,
+    color:'#f7b2b2'
   },
   lastChat: {
     color: 'gray',

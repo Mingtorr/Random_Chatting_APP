@@ -132,6 +132,7 @@ export default class match_page extends React.Component {
         console.log('동영상을 불러오는 중 오류가 발생했어요', error);
         this.setState({
           CircleTF: 'off', //프로그래스 끄기
+          Heart: 5,
         });
         const box = {
           userkey: this.state.userkey,

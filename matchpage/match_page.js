@@ -241,17 +241,28 @@ export default class match_page extends React.Component {
     // }).start();
   };
   startAnimationR = () => {
-    this.setState({
-      chatting: '과팅권 추가',
-      buttonColor1: 'gray',
-      buttonColor2: '#E94e68',
-      title: '내 채팅방권 개수',
-      change: '오픈채팅',
-      div: (
-        <Group_match shadow={this.shadow} shadowSwitch={this.shadowSwitch} />
-      ),
-      // shadowDisplay: !this.state.shadowDisplay
-    });
+
+    Alert.alert(
+      '출시 준비 중',
+      '개발 중입니다. 기다려 주세요',
+      [
+        {text: '확인', style: 'cancel'}, // 화살표 함수로 바인딩 대체
+      ],
+      {cancelable: false},
+    );
+
+    ////////출시예정/////////
+    // this.setState({
+    //   chatting: '과팅권 추가',
+    //   buttonColor1: 'gray',
+    //   buttonColor2: '#E94e68',
+    //   title: '내 채팅방권 개수',
+    //   change: '오픈채팅',
+    //   div: (
+    //     <Group_match shadow={this.shadow} shadowSwitch={this.shadowSwitch} />
+    //   ),
+    //   // shadowDisplay: !this.state.shadowDisplay
+    // });
     // Animated.timing(this.state.animatedValue, {
     //   duration: 1000,
     //   // toValue: 56,
@@ -259,6 +270,24 @@ export default class match_page extends React.Component {
     //   useNativeDriver: false,
     // }).start();
   };
+  egg =() =>{
+    Alert.alert(
+      '★★개발자 애인구함★★',
+      `       A____A
+      |・ㅅ・|
+      |っ　ｃ|
+      |　　　|
+      |　　　|
+      |　　　|
+      |　　　|
+      |　　　|
+      U￣￣U`,
+      [
+        {text: '확인', style: 'cancel'}, // 화살표 함수로 바인딩 대체
+      ],
+      {cancelable: false},
+    );
+  }
   render() {
     const windowWidth = Dimensions.get('window').width;
     return (
@@ -354,6 +383,7 @@ export default class match_page extends React.Component {
             <View style={{marginBottom: 10, justifyContent: 'center'}}>
               <TouchableOpacity
                 onPress={this.startAnimationR}
+                onLongPress={this.egg}
                 style={{
                   display: 'flex',
                   justifyContent: 'center',

@@ -36,6 +36,9 @@ export default class Solo_match extends React.Component {
     let deptno = '';
     let userkey = '';
     let nickname;
+    this.setState({
+      message : "",
+    })
     if (this.state.message === '') {
       alert('전송할 메시지를 입력하세요');
       return;

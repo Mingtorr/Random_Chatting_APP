@@ -143,22 +143,23 @@ class Message extends React.Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        json.map((value, index) => {
-          const realtime = timefunc.settime2(value.message_time);
-          const row = {
-            key: value.message_key,
-            name: value.user_nickname,
-            message: value.message_body,
-            sendid: value.user_key,
-            time: realtime,
-          };
-          this.setState({
-            arr: [...this.state.arr, row],
-          });
-          this.setState({
-            arrendkey: this.state.arr[this.state.arr.length - 1].key,
-          });
-          /*
+        if (json !== undefined) {
+          json.map((value, index) => {
+            const realtime = timefunc.settime2(value.message_time);
+            const row = {
+              key: value.message_key,
+              name: value.user_nickname,
+              message: value.message_body,
+              sendid: value.user_key,
+              time: realtime,
+            };
+            this.setState({
+              arr: [...this.state.arr, row],
+            });
+            this.setState({
+              arrendkey: this.state.arr[this.state.arr.length - 1].key,
+            });
+            /*
       if(this.state.arr.length >20){
         this.setState({
           start:this.state.arr.length-20
@@ -169,7 +170,8 @@ class Message extends React.Component {
         },this.scrolltobottom())
       }
       */
-        });
+          });
+        }
       });
     /*
     if(this.state.arr.length>20){
@@ -285,19 +287,20 @@ class Message extends React.Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        json.map((value, index) => {
-          const realtime = timefunc.settime2(value.message_time);
-          const row = {
-            key: value.message_key,
-            name: value.user_nickname,
-            message: value.message_body,
-            sendid: value.user_key,
-            time: realtime,
-          };
-          this.setState({
-            arr: [row, ...this.state.arr],
-          });
-          /*
+        if (json !== undefined) {
+          json.map((value, index) => {
+            const realtime = timefunc.settime2(value.message_time);
+            const row = {
+              key: value.message_key,
+              name: value.user_nickname,
+              message: value.message_body,
+              sendid: value.user_key,
+              time: realtime,
+            };
+            this.setState({
+              arr: [row, ...this.state.arr],
+            });
+            /*
       if(this.state.arr.length >20){
         this.setState({
           start:this.state.arr.length-20
@@ -307,10 +310,11 @@ class Message extends React.Component {
           start:0
         },this.scrolltobottom())
       }*/
-        });
-        this.setState({
-          change: this.state.change + 1,
-        });
+          });
+          this.setState({
+            change: this.state.change + 1,
+          });
+        }
       });
     /*
   console.log(this.state.start);

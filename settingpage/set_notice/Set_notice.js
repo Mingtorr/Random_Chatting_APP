@@ -23,23 +23,25 @@ export default class Set_notice extends Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        json.map((rows) => {
-          const newdate = new Date(rows.notice_date);
-          var month = newdate.getMonth() + 1;
-          var day = newdate.getDate();
-          var noticeday = [month, day].join('/');
-          const newrow = {
-            title: rows.notice_body,
-            date: noticeday,
-          };
-          console.log(newrow);
-          this.setState({
-            notices: [...this.state.notices, newrow],
-          });
-          // console.log(this.state.notices);
+        if (json !== undefined) {
+          json.map((rows) => {
+            const newdate = new Date(rows.notice_date);
+            var month = newdate.getMonth() + 1;
+            var day = newdate.getDate();
+            var noticeday = [month, day].join('/');
+            const newrow = {
+              title: rows.notice_body,
+              date: noticeday,
+            };
+            console.log(newrow);
+            this.setState({
+              notices: [...this.state.notices, newrow],
+            });
+            // console.log(this.state.notices);
 
-          return null;
-        });
+            return null;
+          });
+        }
       });
   }
   render() {

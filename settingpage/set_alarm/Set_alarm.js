@@ -26,8 +26,9 @@ class Set_alarm extends Component {
     };
   }
 
-  async componentWillUnmount() {
+  async componentDidmount() {
     let userkey;
+    console.log('hi');
     await AsyncStorage.getItem('login_user_info', (err, result) => {
       userkey = JSON.parse(result).user_key;
     });
@@ -41,6 +42,7 @@ class Set_alarm extends Component {
     })
       .then((res) => res.json())
       .then((json) => {
+        console.log(json);
         if (json === 1)
           this.setState({
             isEnabled: true,
@@ -52,29 +54,32 @@ class Set_alarm extends Component {
         }
       });
   }
+
   toggleSwitch = async () => {
     let pid = 0;
     //0은 false  1은 true
     if (this.state.isEnabled === false) {
       pid = 1;
     }
-    if (!this.state.isEnabled) {
-      await AsyncStorage.getItem('login_user_info', (err, result) => {
-        userkey = JSON.parse(result).user_key;
+    console.log(pid);
+    await AsyncStorage.getItem('login_user_info', (err, result) => {
+      userkey = JSON.parse(result).user_key;
+    });
+    const box = {userkey: userkey, pid: pid};
+    fetch(func.api(3001, 'reset_token2'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(box),
+    }).then(() => {
+      console.log('end');
+      this.setState({
+        isEnabled: !this.state.isEnabled,
       });
-      const box = {userkey: userkey, pid: pid};
-      fetch(func.api(3001, 'reset_token2'), {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(box),
-      });
-    }
-    this.setState({
-      isEnabled: !this.state.isEnabled,
     });
   };
+
   toggleSwitch_two = async () => {
     this.setState({
       isEnabled_two: !this.state.isEnabled_two,

@@ -238,10 +238,10 @@ app.post('/heart_reset', (req, res) => {
     function (err, result) {
       if (err) {
         console.log(err);
-        res.send(false)
+        res.send(false);
       } else {
         console.log('success');
-        res.send(true)
+        res.send(true);
       }
     },
   );
@@ -374,18 +374,19 @@ app.post('/sendMessage', (req, res) => {
           if (rows === undefined) {
             console.log('쓰레기 유저에게 전송 sex=2인 사람');
             //mkroom(rows[0].user_key, body.user_key, body.message);
-            await sending1(body.user_key, body.message);
+            if (body.sex === 0) await sending0(body.user_key, body.message);
+            else await sending1(body.user_key, body.message);
             res.send(true);
           } else {
             // 전송할 유저 찾음
             let bool = await checkroom(rows, body.user_key, body.message);
             console.log(bool);
             if (bool === false) {
-              await sending1(body.user_key, body.message);
+              if (body.sex === 0) await sending0(body.user_key, body.message);
+              else await sending1(body.user_key, body.message);
               console.log('end');
               res.send(true);
             } else {
-              console.log('eeeeeeeeee');
               console.log(rows[bool]);
               res.send(rows[bool]);
             }
@@ -463,6 +464,47 @@ async function checkroom(row, user_key, message) {
   });
   console.log(bool);
   return bool;
+}
+
+async function sending0(user_key, message) {
+  let room_key = 0;
+  await new Promise((resolve) => {
+    connection.query(
+      'INSERT INTO messageroom_table (room_mode) values(1);', // 방만들기
+      function (err, rows, fields) {
+        if (err) console.log(err);
+        else {
+          console.log(rows.insertId); //추가한 방번호pk
+          console.log('쓰레기에 전송');
+          room_key = rows.insertId;
+          connection.query(
+            'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
+            [room_key, 0, 0, 0, 0],
+            function (err, rows, fields) {
+              if (err) console.log(err);
+              connection.query(
+                'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
+                [room_key, user_key, 0, 0, 1],
+                function (err, rows, fields) {
+                  if (err) console.log(err);
+                  connection.query(
+                    'INSERT INTO message_table (room_id,user_key,message_body) values(?,?,?);',
+                    [room_key, user_key, message],
+                    function (err, rows, fields) {
+                      if (err) console.log(err);
+                      console.log('매칭 완료');
+                      resolve();
+                    },
+                  );
+                },
+              );
+            },
+          );
+        }
+      },
+    );
+  });
+  return;
 }
 
 async function sending1(user_key, message) {

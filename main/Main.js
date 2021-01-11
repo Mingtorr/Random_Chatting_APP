@@ -63,20 +63,22 @@ export default class Main extends Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        json.map((rows, index) => {
-          const message_data = {
-            key: rows.allmessage_key,
-            message_body: rows.allmessage_body,
-            user_nickname: rows.user_nickname,
-            user_key: rows.user_key,
-            allmessage_time: rows.allmessage_time,
-          };
-          this.setState({
-            messages: [...this.state.messages, message_data],
+        if (json !== undefined) {
+          json.map((rows, index) => {
+            const message_data = {
+              key: rows.allmessage_key,
+              message_body: rows.allmessage_body,
+              user_nickname: rows.user_nickname,
+              user_key: rows.user_key,
+              allmessage_time: rows.allmessage_time,
+            };
+            this.setState({
+              messages: [...this.state.messages, message_data],
+            });
+
+            this.scrolltobottom();
           });
-          
-          this.scrolltobottom();
-        });
+        }
       });
 
     socket.on('recieve_allchatroom_message', (data) => {
@@ -97,20 +99,20 @@ export default class Main extends Component {
         my_all_message: '',
       });
     } else {
-    const user_message_data = {
-      user_key: this.state.user_key,
-      user_nickname: this.state.user_nickname,
-      message_body: this.state.my_all_message,
-      allmessage_time: new Date(),
-    };
-    // console.log(user_message_data);
-    socket.emit("send_allchatroom", user_message_data);
+      const user_message_data = {
+        user_key: this.state.user_key,
+        user_nickname: this.state.user_nickname,
+        message_body: this.state.my_all_message,
+        allmessage_time: new Date(),
+      };
+      // console.log(user_message_data);
+      socket.emit('send_allchatroom', user_message_data);
 
-    this.setState({
-      my_all_message: '',
-    });
+      this.setState({
+        my_all_message: '',
+      });
 
-    this.scrolltobottom();
+      this.scrolltobottom();
     }
   };
 
@@ -162,25 +164,27 @@ export default class Main extends Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        json.map((rows, index) => {
-          const message_data = {
-            key: rows.allmessage_key,
-            message_body: rows.allmessage_body,
-            user_nickname: rows.user_nickname,
-            user_key: rows.user_key,
-            allmessage_time: rows.allmessage_time,
-          };
-          // console.log('받아온 데이터');
-          // console.log(message_data);
-          this.setState({
-            messages: [message_data, ...this.state.messages],
-            // refreshing: false
+        if (json !== undefined) {
+          json.map((rows, index) => {
+            const message_data = {
+              key: rows.allmessage_key,
+              message_body: rows.allmessage_body,
+              user_nickname: rows.user_nickname,
+              user_key: rows.user_key,
+              allmessage_time: rows.allmessage_time,
+            };
+            // console.log('받아온 데이터');
+            // console.log(message_data);
+            this.setState({
+              messages: [message_data, ...this.state.messages],
+              // refreshing: false
+            });
           });
-        });
 
-        this.setState({
-          scroll_number: this.state.scroll_number + 1,
-        });
+          this.setState({
+            scroll_number: this.state.scroll_number + 1,
+          });
+        }
       });
   };
 
@@ -228,22 +232,45 @@ export default class Main extends Component {
 
     if (send_time_hour == 12) {
       if (send_time_minute < 10) {
-        message_time = '오후 ' + JSON.stringify(send_time_hour) + ':0' + JSON.stringify(send_time_minute);
+        message_time =
+          '오후 ' +
+          JSON.stringify(send_time_hour) +
+          ':0' +
+          JSON.stringify(send_time_minute);
       } else if (send_time_minute > 10) {
         message_time =
-          '오후 ' + JSON.stringify(send_time_hour) + ':' + JSON.stringify(send_time_minute);
+          '오후 ' +
+          JSON.stringify(send_time_hour) +
+          ':' +
+          JSON.stringify(send_time_minute);
       }
     } else if (send_time_hour < 12) {
       if (send_time_minute < 10) {
-        message_time = '오전 ' + JSON.stringify(send_time_hour) + ':0' + JSON.stringify(send_time_minute);
+        message_time =
+          '오전 ' +
+          JSON.stringify(send_time_hour) +
+          ':0' +
+          JSON.stringify(send_time_minute);
       } else if (send_time_minute > 10) {
-        message_time = '오전 ' + JSON.stringify(send_time_hour) + ':' + JSON.stringify(send_time_minute);
+        message_time =
+          '오전 ' +
+          JSON.stringify(send_time_hour) +
+          ':' +
+          JSON.stringify(send_time_minute);
       }
     } else if (send_time_hour > 12) {
       if (send_time_minute < 10) {
-        message_time = '오후 ' + JSON.stringify(send_time_hour - 12) + ':0' + JSON.stringify(send_time_minute);
+        message_time =
+          '오후 ' +
+          JSON.stringify(send_time_hour - 12) +
+          ':0' +
+          JSON.stringify(send_time_minute);
       } else if (send_time_minute > 10) {
-        message_time = '오후 ' + JSON.stringify(send_time_hour - 12) + ':' + JSON.stringify(send_time_minute);
+        message_time =
+          '오후 ' +
+          JSON.stringify(send_time_hour - 12) +
+          ':' +
+          JSON.stringify(send_time_minute);
       }
     }
 
@@ -280,9 +307,7 @@ export default class Main extends Component {
   render() {
     return (
       <SafeAreaView style={styles.Container_main}>
-        <SafeAreaView
-          style={styles.Container_main}
-          >
+        <SafeAreaView style={styles.Container_main}>
           <SafeAreaView
             style={{position: 'absolute', height: '100%', width: '100%'}}>
             <Animated.View style={{flex: 1, opacity: this.state.value}}>

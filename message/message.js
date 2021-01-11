@@ -35,7 +35,7 @@ const timefunc = require('./timefunction');
 
 import AsyncStorage from '@react-native-community/async-storage';
 
-const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 15;
+const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 30;
 const socket = io(func.api(3005, ''));
 
 class Message extends React.Component {
@@ -254,7 +254,7 @@ class Message extends React.Component {
       if (this.scrollViewRef !== null && this.scrollViewRef.current !== null) {
         this.scrollViewRef.current.scrollToEnd({animated: false});
       }
-    }, 400);
+    }, 900);
   };
   scrolltomessage = () => {
     /*
@@ -436,7 +436,7 @@ class Message extends React.Component {
                 onPress={this.back}>
                 <Image
                   style={{width: 20, height: 20}}
-                  source={require('./back.png')}
+                  source={require('./back2.png')}
                 />
               </TouchableOpacity>
             </View>
@@ -450,8 +450,8 @@ class Message extends React.Component {
               {this.state.toshownickname === 0 &&
               this.state.resultshownickname === 0 ? (
                 <Text
-                  style={{color: 'black', fontSize: 17, fontWeight: 'bold'}}>
-                  알수없음
+                  style={{color: 'gray', fontSize: 17, fontWeight: 'bold'}}>
+                  답장을 기다리고 있습니다.
                 </Text>
               ) : (
                 <Text
@@ -469,13 +469,13 @@ class Message extends React.Component {
               }}>
               <TouchableOpacity style={{display: 'flex'}} onPress={this.go}>
                 <Image
-                  style={{width: 40, height: 40}}
-                  source={require('./megaphone.png')}
+                  style={{width: 30, height: 30}}
+                  source={require('./singo.png')}
                 />
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{display: 'flex', flex: 0.93, backgroundColor: 'white'}}>
+          <View style={{display: 'flex', flex: 0.97, backgroundColor: 'white'}}>
             <FlatList
               ref={this.scrollViewRef}
               keyExtractor={(item) => item.key.toString()}
@@ -488,11 +488,11 @@ class Message extends React.Component {
           <View
             style={{
               display: 'flex',
-              flex: 0.06,
+              height: 50,
               backgroundColor: 'white',
               flexDirection: 'row',
               justifyContent: 'center',
-              marginBottom: 20,
+              marginBottom: 0,
             }}>
             <TextInput
               value={this.state.text}
@@ -526,7 +526,7 @@ class Message extends React.Component {
               onPress={this.sendmessage}>
               <Image
                 style={{width: 35, height: 35}}
-                source={require('./send.png')}
+                source={require('./send6.png')}
               />
             </TouchableOpacity>
           </View>

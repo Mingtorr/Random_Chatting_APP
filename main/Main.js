@@ -75,6 +75,7 @@ export default class Main extends Component {
             messages: [...this.state.messages, message_data],
           });
         });
+        this.scrolltobottom();
       });
 
     socket.on('recieve_allchatroom_message', (data) => {

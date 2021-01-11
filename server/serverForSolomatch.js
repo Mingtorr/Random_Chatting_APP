@@ -238,8 +238,10 @@ app.post('/heart_reset', (req, res) => {
     function (err, result) {
       if (err) {
         console.log(err);
+        res.send(false)
       } else {
         console.log('success');
+        res.send(true)
       }
     },
   );

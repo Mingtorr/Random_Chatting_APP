@@ -85,20 +85,7 @@ export default class App extends React.Component {
 
     function onRegister(token) {}
 
-    function onNotification(notify) {
-      console.log('[App] onNotification : notify :', notify);
-      const options = {
-        soundName: 'default',
-        playSound: true,
-      };
-      localNotificationService.showNotification(
-        0,
-        notify.title,
-        notify.body,
-        notify,
-        options,
-      );
-    }
+    function onNotification(notify) {}
     function onOpenNotification(notify) {
       console.log('[App] onOpenNotification : notify :', notify);
     }

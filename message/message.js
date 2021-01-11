@@ -219,7 +219,7 @@ class Message extends React.Component {
           body: JSON.stringify({
             to: data.tousertoken,
             notification: {
-              title: data.name,
+              title: data.name+"님이 메세지를 보냈습니다.",
               body: data.message,
               android_channel_id: '500',
             },

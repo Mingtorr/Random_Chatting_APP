@@ -23,7 +23,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  AppState
+  AppState,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -35,7 +35,7 @@ const timefunc = require('./timefunction');
 
 import AsyncStorage from '@react-native-community/async-storage';
 
-const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 15;
+const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 30;
 const socket = io(func.api(3005, ''));
 
 class Message extends React.Component {
@@ -66,15 +66,20 @@ class Message extends React.Component {
     };
   }
   _handleAppStateChange = (nextAppState) => {
-    if ( this.state.appState.match(/inactive|background/) && nextAppState === 'active' ) {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
       console.log('App has come to the foreground!');
     } else {
       console.log('App has gone to the background!');
+      socket.emit('roomleave', roomid);
       // start your background task here
     }
     this.setState({appState: nextAppState});
   };
   componentWillUnmount() {
+    console.log('asdasd');
     const roomid = this.props.route.params.roomid;
     socket.emit('roomleave', roomid);
   }
@@ -104,6 +109,7 @@ class Message extends React.Component {
     });
     socket.on('roomsockets', (data) => {
       //change roomsockets
+      console.log(data + '실험');
       this.setState({
         roomsockets: data,
       });
@@ -200,8 +206,27 @@ class Message extends React.Component {
         arrendkey: this.state.arrendkey,
         myshownickname: this.state.myshownickname,
         toshownickname: this.state.toshownickname,
-        tousertoken:this.props.route.params.tousertoken
+        tousertoken: this.props.route.params.tousertoken,
       };
+      if (this.state.roomsockets.length !== 2) {
+        fetch('https://fcm.googleapis.com/fcm/send', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            Authorization:
+              'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
+          },
+          body: JSON.stringify({
+            to: data.tousertoken,
+            notification: {
+              title: data.name,
+              body: data.message,
+              android_channel_id: '500',
+            },
+            priority: 'high',
+          }),
+        });
+      }
       fetch(func.api(3005, 'save_message'), {
         method: 'post',
         headers: {
@@ -231,7 +256,7 @@ class Message extends React.Component {
       if (this.scrollViewRef !== null && this.scrollViewRef.current !== null) {
         this.scrollViewRef.current.scrollToEnd({animated: false});
       }
-    }, 400);
+    }, 900);
   };
   scrolltomessage = () => {
     /*
@@ -376,7 +401,7 @@ class Message extends React.Component {
   };
   go = () => {
     this.props.navigation.navigate('singo', {
-      roomid :this.props.route.params.roomid,
+      roomid: this.props.route.params.roomid,
       userkey: this.state.userkey,
       touserkey: this.state.touserkey,
     });
@@ -413,7 +438,7 @@ class Message extends React.Component {
                 onPress={this.back}>
                 <Image
                   style={{width: 20, height: 20}}
-                  source={require('./back.png')}
+                  source={require('./back2.png')}
                 />
               </TouchableOpacity>
             </View>
@@ -427,8 +452,8 @@ class Message extends React.Component {
               {this.state.toshownickname === 0 &&
               this.state.resultshownickname === 0 ? (
                 <Text
-                  style={{color: 'black', fontSize: 17, fontWeight: 'bold'}}>
-                  알수없음
+                  style={{color: 'gray', fontSize: 17, fontWeight: 'bold'}}>
+                  답장을 기다리고 있습니다.
                 </Text>
               ) : (
                 <Text
@@ -446,13 +471,13 @@ class Message extends React.Component {
               }}>
               <TouchableOpacity style={{display: 'flex'}} onPress={this.go}>
                 <Image
-                  style={{width: 40, height: 40}}
-                  source={require('./megaphone.png')}
+                  style={{width: 30, height: 30}}
+                  source={require('./singo.png')}
                 />
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{display: 'flex', flex: 0.93, backgroundColor: 'white'}}>
+          <View style={{display: 'flex', flex: 0.97, backgroundColor: 'white'}}>
             <FlatList
               ref={this.scrollViewRef}
               keyExtractor={(item) => item.key.toString()}
@@ -465,11 +490,11 @@ class Message extends React.Component {
           <View
             style={{
               display: 'flex',
-              flex: 0.06,
+              height: 50,
               backgroundColor: 'white',
               flexDirection: 'row',
               justifyContent: 'center',
-              marginBottom: 20,
+              marginBottom: 0,
             }}>
             <TextInput
               value={this.state.text}
@@ -493,11 +518,17 @@ class Message extends React.Component {
               }}
             />
             <TouchableOpacity
-              style={{display: 'flex',width: 35, height: 35, marginTop: 10, marginLeft: 20}}
+              style={{
+                display: 'flex',
+                width: 35,
+                height: 35,
+                marginTop: 10,
+                marginLeft: 20,
+              }}
               onPress={this.sendmessage}>
               <Image
                 style={{width: 35, height: 35}}
-                source={require('./send.png')}
+                source={require('./send6.png')}
               />
             </TouchableOpacity>
           </View>

@@ -59,7 +59,7 @@ export default class Main extends Component {
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(),
+      body: JSON.stringify(post),
     })
       .then((res) => res.json())
       .then((json) => {
@@ -99,13 +99,13 @@ export default class Main extends Component {
       user_key: this.state.user_key,
       user_nickname: this.state.user_nickname,
       message_body: this.state.my_all_message,
-      allmessage_time : new Date()
+      allmessage_time: new Date(),
     };
     // console.log(user_message_data);
     socket.emit("send_allchatroom", user_message_data);
 
     this.setState({
-      my_all_message: "",
+      my_all_message: '',
     });
 
     this.scrolltobottom();

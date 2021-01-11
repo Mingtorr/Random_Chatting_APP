@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
-const port = 3003;
+const port = 3009;
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const mysql = require('mysql');
 const nodemailer = require('nodemailer');
 //salt 암호화 모듈
 const crypto = require('crypto');
+const {connect} = require('http2');
 // nodemailer 모듈 요청
 var http = require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -14,7 +15,7 @@ const io = require('socket.io')(http);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -37,6 +38,22 @@ app.post('/Notice', (req, res) => {
       res.send(rows);
     }
   });
+});
+//token변경
+app.post('/changeToken', (req, res) => {
+  const key = req.body.key;
+  const token = req.body.token;
+  connection.query(
+    'UPDATE user_table SET user_token = (?) WHERE user_key= (?)',
+    [token, key],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('change token complete');
+      }
+    },
+  );
 });
 
 io.on('connection', function (socket) {});

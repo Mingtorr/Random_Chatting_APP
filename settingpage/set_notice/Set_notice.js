@@ -12,7 +12,7 @@ export default class Set_notice extends Component {
       notices: [],
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     const post = {};
     fetch(func.api(3003, 'notice'), {
       method: 'post',
@@ -60,7 +60,6 @@ export default class Set_notice extends Component {
             />
           );
         })}
-        <Noticepush content="실험용" date="1/6" />
       </SafeAreaView>
     );
   }

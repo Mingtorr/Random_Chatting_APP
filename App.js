@@ -230,6 +230,7 @@ function Bottom() {
         name="Man"
         component={Main}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: '',
           tabBarIcon: ({focused, color, size}) => {
             let icon;

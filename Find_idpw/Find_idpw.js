@@ -25,11 +25,16 @@ class Find_idpw extends React.Component {
     };
   }
 
-  check = (re, what, message) => {
+  check = (re, what, title, message) => {
     if (re.test(what)) {
       return true;
     }
-    alert(message);
+    Alert.alert(
+      title,
+      message,
+      [{text: "OK", style: "OK"}],
+      { cancelable: false }
+    );
     return false;
   };
 
@@ -42,10 +47,15 @@ class Find_idpw extends React.Component {
     var re = /^[a-zA-Z0-9_]{4,20}$/;
     e.preventDefault();
     if (this.state.email.length === 0) {
-      alert('이메일을 입력해주세요!');
+      Alert.alert(
+        "안내",
+        "이메일을 입력해주세요!",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       return;
     } else if (
-      !this.check(re, this.state.email, '잘못된 형식의 이메일입니다.')
+      !this.check(re, this.state.email, "안내", '잘못된 형식의 이메일입니다.')
     ) {
       return;
     } else {
@@ -65,12 +75,22 @@ class Find_idpw extends React.Component {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            alert('인증 메일이 전송되었습니다.');
+            Alert.alert(
+              "안내",
+              "인증 메일이 전송되었습니다",
+              [{text: "OK", style: "OK"}],
+              { cancelable: false }
+            );
             this.setState({
               authNum: json,
             });
           } else {
-            alert('가입된 이메일이 없습니다.');
+            Alert.alert(
+              "안내",
+              "가입된 이메일이 없습니다",
+              [{text: "OK", style: "OK"}],
+              { cancelable: false }
+            );
           }
         });
     }
@@ -79,16 +99,31 @@ class Find_idpw extends React.Component {
   authEmail = (e) => {
     e.preventDefault();
     if (this.state.authCheckNum.length === 0) {
-      alert('인증번호를 입력해주세요');
+      Alert.alert(
+        "안내",
+        "인증번호를 입력해주세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       return;
     }
     if (this.state.authNum.toString() === this.state.authCheckNum.toString()) {
-      alert('인증성공');
+      Alert.alert(
+        "안내",
+        "인증성공",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       this.setState({
         checked_email: true,
       });
     } else {
-      alert('인증실패');
+      Alert.alert(
+        "안내",
+        "인증실패",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     }
   };
 
@@ -96,7 +131,12 @@ class Find_idpw extends React.Component {
     e.preventDefault();
 
     if (!this.state.checked_email) {
-      alert('메일 인증을 해주세요');
+      Alert.alert(
+        "안내",
+        "메인 인증을 해주세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else {
       const find_idpw = {
         email: this.state.email,

@@ -24,9 +24,19 @@ class Find_idpw2 extends React.Component {
 
   changeBtn = (e) => {
     if (this.state.pw1.length === 0 || this.state.pw2.length === 0) {
-      alert('비밀번호를 입력해주세요');
+      Alert.alert(
+        "안내",
+        "비밀번호를 입력해주세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else if (this.state.pw1 !== this.state.pw2) {
-      alert('비밀번호가 일치하지 않습니다.');
+      Alert.alert(
+        "안내",
+        "비밀번호가 일치하지 않습니다",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else if (this.state.pw1 === this.state.pw2) {
       const user_info = {
         user_id: this.props.route.params.user_id,
@@ -45,7 +55,12 @@ class Find_idpw2 extends React.Component {
           if (json === true) {
             this.props.navigation.navigate('Login');
           } else {
-            alert('비밀번호 수정 실패');
+            Alert.alert(
+              "안내",
+              "비밀번호 수정 실패",
+              [{text: "OK", style: "OK"}],
+              { cancelable: false }
+            );
           }
         });
     }

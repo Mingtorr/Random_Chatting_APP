@@ -66,6 +66,7 @@ class Message extends React.Component {
     };
   }
   _handleAppStateChange = (nextAppState) => {
+    const roomid = this.props.route.params.roomid;
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
@@ -219,7 +220,7 @@ class Message extends React.Component {
           body: JSON.stringify({
             to: data.tousertoken,
             notification: {
-              title: data.name,
+              title: data.name + '님이 메세지를 보냈습니다.',
               body: data.message,
               android_channel_id: '500',
             },
@@ -451,8 +452,7 @@ class Message extends React.Component {
               }}>
               {this.state.toshownickname === 0 &&
               this.state.resultshownickname === 0 ? (
-                <Text
-                  style={{color: 'gray', fontSize: 17, fontWeight: 'bold'}}>
+                <Text style={{color: 'gray', fontSize: 17, fontWeight: 'bold'}}>
                   답장을 기다리고 있습니다.
                 </Text>
               ) : (

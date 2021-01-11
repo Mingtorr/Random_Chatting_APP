@@ -12,7 +12,7 @@ const io = require('socket.io')(http);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: 'snsk3779@',
   database: 'mydb',
 });
 

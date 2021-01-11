@@ -115,7 +115,7 @@ export default class Solo_match extends React.Component {
                     body: JSON.stringify({
                       to: json.user_token,
                       notification: {
-                        title: nickname,
+                        title: nickname+"님이 메세지를 보냈습니다.",
                         body: this.state.message,
                         android_channel_id: 'test - channel',
                         sound: 'default',

@@ -85,21 +85,7 @@ export default class App extends React.Component {
     await messaging().subscribeToTopic('notices');
     function onRegister(token) {}
 
-    function onNotification(notify) {
-      // console.log('[App] onNotification : notify :', notify);
-      const options = {
-        soundName: 'default',
-        playSound: true,
-      };
-      localNotificationService.showNotification(
-        0,
-        notify.title,
-        notify.body,
-        notify,
-        options,
-      );
-    }
-
+    function onNotification(notify) {}
     function onOpenNotification(notify) {
       // this.setState({
       //   fisrt_name: 'Setting',
@@ -234,18 +220,20 @@ function Bottom() {
           tabBarLabel: '',
           tabBarIcon: ({focused, color, size}) => {
             let icon;
-            if(focused){
+            if (focused) {
               icon = require('./Image/homeimo_full.png');
-            }else{
+            } else {
               icon = require('./Image/homeimo.png');
             }
-            return <Image
-                      name="homeimo"
-                      color={color}
-                      source={icon}
-                      style={{marginTop: 15, width: 25, height: 25}}
-                    />
-          }
+            return (
+              <Image
+                name="homeimo"
+                color={color}
+                source={icon}
+                style={{marginTop: 15, width: 25, height: 25}}
+              />
+            );
+          },
         }}
         listeners={({navigation}) => ({
           blur: () => navigation.setParams({screen: undefined}),
@@ -259,18 +247,20 @@ function Bottom() {
           tabBarLabel: '',
           tabBarIcon: ({focused, color, size}) => {
             let icon;
-            if(focused){
+            if (focused) {
               icon = require('./Image/mainimo_full.png');
-            }else{
+            } else {
               icon = require('./Image/mainimo.png');
             }
-            return <Image
-                      name="homeimo"
-                      color={color}
-                      source={icon}
-                      style={{marginTop: 15, width: 25, height: 25}}
-                    />
-          }
+            return (
+              <Image
+                name="homeimo"
+                color={color}
+                source={icon}
+                style={{marginTop: 15, width: 25, height: 25}}
+              />
+            );
+          },
         }}
       />
       {/* 메세지함 */}
@@ -282,18 +272,20 @@ function Bottom() {
           tabBarLabel: '',
           tabBarIcon: ({focused, color, size}) => {
             let icon;
-            if(focused){
+            if (focused) {
               icon = require('./Image/msgimo_full.png');
-            }else{
+            } else {
               icon = require('./Image/msgimo.png');
             }
-            return <Image
-                      name="homeimo"
-                      color={color}
-                      source={icon}
-                      style={{marginTop: 15, width: 25, height: 25}}
-                    />
-          }
+            return (
+              <Image
+                name="homeimo"
+                color={color}
+                source={icon}
+                style={{marginTop: 15, width: 25, height: 25}}
+              />
+            );
+          },
         }}
         listeners={({navigation}) => ({
           blur: () => navigation.setParams({screen: undefined}),
@@ -309,19 +301,21 @@ function Bottom() {
           tabBarLabel: '',
           tabBarIcon: ({focused, color, size}) => {
             let icon;
-            if(focused){
+            if (focused) {
               icon = require('./Image/setting.png');
-            }else{
+            } else {
               icon = require('./Image/alarmimo.png');
               //setting이미지 만드는중..
             }
-            return <Image
-                      name="homeimo"
-                      color={color}
-                      source={icon}
-                      style={{marginTop: 15, width: 25, height: 25}}
-                    />
-          }
+            return (
+              <Image
+                name="homeimo"
+                color={color}
+                source={icon}
+                style={{marginTop: 15, width: 25, height: 25}}
+              />
+            );
+          },
         }}
       />
     </Tab.Navigator>

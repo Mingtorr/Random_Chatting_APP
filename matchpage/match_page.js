@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Button,
   Switch,
+  Alert
 } from 'react-native';
 import {
   InterstitialAd,
@@ -129,6 +130,29 @@ export default class match_page extends React.Component {
     let rewardlListener = rewardAd.onAdEvent(async (type, error, reward) => {
       if (error) {
         console.log('동영상을 불러오는 중 오류가 발생했어요', error);
+        this.setState({
+          CircleTF: 'off', //프로그래스 끄기
+        });
+        const box = {
+          userkey: this.state.userkey,
+          myname: this.state.myname,
+        }
+        Alert.alert(
+          '광고 오류',
+          '광고를 불러오는데 실패했어요',
+          [
+            {text: '확인', style: 'cancel'}, // 화살표 함수로 바인딩 대체
+          ],
+          {cancelable: false},
+        );
+
+        fetch(func.api(3003, 'Heart_reset'), {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(box),
+        });
       }
       if (type === RewardedAdEventType.LOADED) {
         rewardAd.show();

@@ -54,12 +54,13 @@ export default class Main extends Component {
     });
 
     console.log('allchatroom_message');
+    const post = {};
     fetch(func.api(3002, 'Allchatroom_message'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(),
+      body: JSON.stringify(post),
     })
       .then((res) => res.json())
       .then((json) => {
@@ -107,13 +108,13 @@ export default class Main extends Component {
       user_key: this.state.user_key,
       user_nickname: this.state.user_nickname,
       message_body: this.state.my_all_message,
-      allmessage_time : new Date()
+      allmessage_time: new Date(),
     };
     console.log(user_message_data);
-    socket.emit("send_allchatroom", user_message_data);
+    socket.emit('send_allchatroom', user_message_data);
 
     this.setState({
-      my_all_message: "",
+      my_all_message: '',
     });
 
     this.scrolltobottom();
@@ -313,7 +314,7 @@ export default class Main extends Component {
           // onLayout={(event) => {
           //   this.find_dimesions(event.nativeEvent.layout);
           // }}
-          >
+        >
           <SafeAreaView
             style={{position: 'absolute', height: '100%', width: '100%'}}>
             <Animated.View style={{flex: 1, opacity: this.state.value}}>

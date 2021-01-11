@@ -28,6 +28,7 @@ let homeimo = require('./Image/homeimo.png');
 let alarmimo = require('./Image/alarmimo.png');
 let mainimo = require('./Image/mainimo.png');
 let msgimo = require('./Image/msgimo.png');
+let setting = require('./Image/setting.png');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 
@@ -42,7 +43,7 @@ export default class App extends React.Component {
     second_components: Bottom,
   };
 
-  async componentWillMount() {
+  componentDidMount = async () => {
     let bool = false;
     await AsyncStorage.getItem('login_onoff_set', (err, result) => {
       if (result !== null) {
@@ -75,21 +76,17 @@ export default class App extends React.Component {
         });
       });
     }
-  }
-
-  componentDidMount = async () => {
     setTimeout(() => {
       this.setState({isLoading: true});
     }, 1000);
-
     fcmService.registerAppWithFCM();
     fcmService.register(onRegister, onNotification, onOpenNotification);
     localNotificationService.configure(onOpenNotification);
-
+    await messaging().subscribeToTopic('notices');
     function onRegister(token) {}
 
     function onNotification(notify) {
-      console.log('[App] onNotification : notify :', notify);
+      // console.log('[App] onNotification : notify :', notify);
       const options = {
         soundName: 'default',
         playSound: true,
@@ -102,9 +99,19 @@ export default class App extends React.Component {
         options,
       );
     }
+
     function onOpenNotification(notify) {
-      console.log('[App] onOpenNotification : notify :', notify);
-      alert('Open Notification : notify.body :' + notify.body);
+      // this.setState({
+      //   fisrt_name: 'Setting',
+      //   fisrt_components: Bottom,
+      // });
+      // () => {
+      // navigation.navigate('Setting');
+      // };
+      // alert('test');
+      // console.log('[App] onOpenNotification : notify :', notify);
+      // alert('Open Notification : notify.title :' + notify.title);
+      // alert('Open Notification : notify.body :' + notify.body);
     }
     return () => {
       console.log('[App] unRegister');
@@ -123,7 +130,7 @@ export default class App extends React.Component {
                 component={this.state.fisrt_components}
                 options={{headerShown: false}}
               />
-              
+
               <Stack.Screen
                 name={this.state.second_name}
                 component={this.state.second_components}
@@ -283,11 +290,11 @@ function Bottom() {
           tabBarLabel: '',
           tabBarIcon: ({color, size}) => (
             <Image
-              name="alarmimo"
+              name="setting"
               color={color}
               size={size}
-              source={alarmimo}
-              style={{marginTop: 15}}
+              source={setting}
+              style={{marginTop: 15, width: 25, height: 25}}
             />
           ),
         }}

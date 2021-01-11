@@ -114,7 +114,11 @@ export default class Solo_match extends React.Component {
                       notification: {
                         title: nickname,
                         body: this.state.message,
+                        android_channel_id: 'test - channel',
+                        sound: 'default',
+                        android_channel_id: '500',
                       },
+                      priority: 'high',
                     }),
                   });
                 }

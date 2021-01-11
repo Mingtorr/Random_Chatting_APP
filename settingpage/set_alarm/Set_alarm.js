@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
+import messaging from '@react-native-firebase/messaging';
+
 const func = require('../../server/api');
 
 class Set_alarm extends Component {
@@ -20,7 +22,7 @@ class Set_alarm extends Component {
       alert: true,
       receptionnum: '00',
       isEnabled: true,
-      isEnabled_two: true,
+      isEnabled_two: messaging().isDeviceRegisteredForRemoteMessages,
     };
   }
 
@@ -73,10 +75,27 @@ class Set_alarm extends Component {
       isEnabled: !this.state.isEnabled,
     });
   };
-  toggleSwitch_two = () => {
+  toggleSwitch_two = async () => {
     this.setState({
       isEnabled_two: !this.state.isEnabled_two,
     });
+    //시발 안드로이드는 true만 반환함
+    if (this.state.isEnabled_two === false) {
+      //특정 토픽 구독 시작 (안드도 됨)
+      await messaging().subscribeToTopic('notices');
+      // console.log(token);
+      //구독 시작
+      await messaging().registerDeviceForRemoteMessages();
+      // alert('true');
+      // console.log(messaging().isDeviceRegisteredForRemoteMessages);
+    } else {
+      //특정 토픽 구독 취소(안드도됨!)
+      await messaging().unsubscribeFromTopic('notices');
+      //구독취소
+      await messaging().unregisterDeviceForRemoteMessages();
+      // alert('falsefalse');
+      // console.log(messaging().isDeviceRegisteredForRemoteMessages);
+    }
   };
   alerton = () => {
     this.setState({
@@ -194,7 +213,7 @@ class Set_alarm extends Component {
 const styles = StyleSheet.create({
   Container_alarm: {
     display: 'flex',
-    backgroundColor:'white',
+    backgroundColor: 'white',
   },
   Header_alarm: {
     height: 50,

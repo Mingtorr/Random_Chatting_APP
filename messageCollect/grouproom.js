@@ -82,7 +82,7 @@ export default class Grouproom extends React.Component {
             });
           }
         })
-        .catch((err) => console.log('err1: ', err));
+        .catch((err) => console.log('err그룹: ', err));
     });
   }
 

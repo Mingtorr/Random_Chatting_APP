@@ -96,32 +96,34 @@ export default class FriendInbox extends React.Component {
       })
         .then((res) => res.json())
         .then((json) => {
-          json.map((row) => {
-            const newtime = new Date(row.message_time);
-            let year = newtime.getFullYear();
-            let month = newtime.getMonth() + 1;
-            let day = newtime.getDate();
-            let hour = newtime.getHours();
-            let min = newtime.getMinutes();
-            const newrow = row;
-            newrow.year = year;
-            if (hour > 12) {
-              newrow.ampm = '오후';
-              newrow.hour = hour - 12;
-            } else {
-              newrow.ampm = '오전';
-              newrow.hour = hour;
-            }
-            newrow.month = month;
-            newrow.day = day;
-            newrow.min = min;
-            console.log('new' + JSON.stringify(newrow));
+          if (json !== undefined) {
+            json.map((row) => {
+              const newtime = new Date(row.message_time);
+              let year = newtime.getFullYear();
+              let month = newtime.getMonth() + 1;
+              let day = newtime.getDate();
+              let hour = newtime.getHours();
+              let min = newtime.getMinutes();
+              const newrow = row;
+              newrow.year = year;
+              if (hour > 12) {
+                newrow.ampm = '오후';
+                newrow.hour = hour - 12;
+              } else {
+                newrow.ampm = '오전';
+                newrow.hour = hour;
+              }
+              newrow.month = month;
+              newrow.day = day;
+              newrow.min = min;
+              console.log('new' + JSON.stringify(newrow));
 
-            this.setState({
-              messagesRoom: [...this.state.messagesRoom, newrow],
+              this.setState({
+                messagesRoom: [...this.state.messagesRoom, newrow],
+              });
+              // console.log("room", this.state.messagesRoom);
             });
-            // console.log("room", this.state.messagesRoom);
-          });
+          }
         })
         .catch((err) => console.log('err: ', err));
     });
@@ -253,7 +255,12 @@ export default class FriendInbox extends React.Component {
         <TouchableOpacity
           onLongPress={() => this.longPressAlert(item.room_id)}
           onPress={() =>
-            this.onpress(item.room_id, item.user_key, item.shownickname, item.user_token)
+            this.onpress(
+              item.room_id,
+              item.user_key,
+              item.shownickname,
+              item.user_token,
+            )
           }>
           <View style={styles.messageElem}>
             <LinearGradient
@@ -274,7 +281,9 @@ export default class FriendInbox extends React.Component {
             <View style={styles.messageInfo}>
               <View style={styles.messageHead}>
                 {item.shownickname === 0 ? (
-                  <Text style={styles.nickName2}>답장을 기다리고 있습니다.</Text>
+                  <Text style={styles.nickName2}>
+                    답장을 기다리고 있습니다.
+                  </Text>
                 ) : (
                   <Text style={styles.nickName}>{item.user_nickname}</Text>
                 )}
@@ -285,9 +294,10 @@ export default class FriendInbox extends React.Component {
                 ) : (
                   // <Text>{item.message_body}</Text>
                   <Text style={styles.lastChat}>
-                    {item.message_body.length >35
-                    ? item.message_body.substr(0,37).padEnd(40, '.')
-                    :item.message_body}</Text>
+                    {item.message_body.length > 35
+                      ? item.message_body.substr(0, 37).padEnd(40, '.')
+                      : item.message_body}
+                  </Text>
                   // <View/>
                 )}
               </View>
@@ -389,7 +399,7 @@ const styles = StyleSheet.create({
   },
   nickName2: {
     fontSize: 18,
-    color:'#f7b2b2'
+    color: '#f7b2b2',
   },
   lastChat: {
     color: 'gray',

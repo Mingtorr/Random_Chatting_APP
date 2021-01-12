@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Button,
   Switch,
-  Alert
+  Alert,
 } from 'react-native';
 import {
   InterstitialAd,
@@ -64,7 +64,7 @@ export default class match_page extends React.Component {
       chatting: '채팅권 추가',
       title: '내 채팅권 개수',
       isEnabled: false,
-      div: <Solo_match resetHeart={this.resetHeart}/>,
+      div: <Solo_match resetHeart={this.resetHeart} />,
       shadowTF: 'none',
       CircleTF: 'off',
       Heart: 5,
@@ -102,18 +102,18 @@ export default class match_page extends React.Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log('하트불러오기',json);
+        console.log('하트불러오기', json);
         this.setState({
           Heart: json.user_heart,
         });
       });
   };
 
-  resetHeart=(number)=>{
+  resetHeart = (number) => {
     this.setState({
-      Heart:number,
-    })
-  }
+      Heart: number,
+    });
+  };
 
   startAdmob = async () => {
     this.setState({
@@ -137,7 +137,7 @@ export default class match_page extends React.Component {
         const box = {
           userkey: this.state.userkey,
           myname: this.state.myname,
-        }
+        };
         Alert.alert(
           '광고 오류',
           '광고를 불러오는데 실패했어요',
@@ -232,7 +232,7 @@ export default class match_page extends React.Component {
       buttonColor2: 'gray',
       title: '내 채팅권 개수',
       change: '일반채팅',
-      div: <Solo_match resetHeart={this.resetHeart}/>,
+      div: <Solo_match resetHeart={this.resetHeart} />,
     });
     // Animated.timing(this.state.animatedValue, {
     //   duration: 1000,
@@ -242,7 +242,6 @@ export default class match_page extends React.Component {
     // }).start();
   };
   startAnimationR = () => {
-
     Alert.alert(
       '출시 준비 중',
       '개발 중입니다. 기다려 주세요',
@@ -271,7 +270,7 @@ export default class match_page extends React.Component {
     //   useNativeDriver: false,
     // }).start();
   };
-  egg =() =>{
+  egg = () => {
     Alert.alert(
       '★★개발자 애인구함★★',
       `       A____A
@@ -288,7 +287,7 @@ export default class match_page extends React.Component {
       ],
       {cancelable: false},
     );
-  }
+  };
   render() {
     const windowWidth = Dimensions.get('window').width;
     return (

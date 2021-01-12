@@ -626,10 +626,26 @@ app.post('/reset_token2', (req, res) => {
   );
 });
 
+app.post('/reset_token3', (req, res) => {
+  let body = req.body;
+  console.log(body);
+  connection.query(
+    'UPDATE user_table SET user_NewMsg = (?) WHERE user_key= (?);',
+    [body.pid, body.userkey],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      }
+      res.send(true);
+    },
+  );
+});
+
 app.post('/get_message_state', (req, res) => {
   let body = req.body;
   connection.query(
-    'select user_pushstate from user_table where user_key= (?)',
+    'select user_pushstate,user_NewMsg from user_table where user_key= (?)',
     [body.userkey],
     function (err, rows, fields) {
       if (err) {

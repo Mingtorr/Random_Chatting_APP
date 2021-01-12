@@ -238,10 +238,10 @@ app.post('/heart_reset', (req, res) => {
     function (err, result) {
       if (err) {
         console.log(err);
-        res.send(false)
+        res.send(false);
       } else {
         console.log('success');
-        res.send(true)
+        res.send(true);
       }
     },
   );
@@ -310,7 +310,7 @@ app.post('/sendMessage', (req, res) => {
     if (body.major !== '') {
       //같은 학과 학번을 선택
       connection.query(
-        'select u.user_key, u.token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and  u.user_deptno=(?) and u.user_stdno= (?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        'select u.user_key, u.token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and  u.user_deptno=(?) and u.user_stdno= (?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.deptno, body.major, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
@@ -331,7 +331,7 @@ app.post('/sendMessage', (req, res) => {
     } else {
       //같은 학과선택 학번은 선택x
       connection.query(
-        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and  u.user_sex=(?) and u.user_deptno=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and  u.user_sex=(?) and u.user_deptno=(?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.deptno, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
@@ -351,7 +351,7 @@ app.post('/sendMessage', (req, res) => {
       //같은 학과 선택x 학번은 선택
       console.log('hihi');
       connection.query(
-        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and u.user_stdno=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and u.user_stdno=(?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.major, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
@@ -367,25 +367,26 @@ app.post('/sendMessage', (req, res) => {
       );
     } else {
       connection.query(
-        'select u.user_key, u.user_token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and not u.user_key=(?) group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
+        'select u.user_key, u.user_token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.user_key],
         async function (err, rows, fields) {
           console.log(rows);
           if (rows === undefined) {
             console.log('쓰레기 유저에게 전송 sex=2인 사람');
             //mkroom(rows[0].user_key, body.user_key, body.message);
-            await sending1(body.user_key, body.message);
+            if (body.sex === 0) await sending0(body.user_key, body.message);
+            else await sending1(body.user_key, body.message);
             res.send(true);
           } else {
             // 전송할 유저 찾음
             let bool = await checkroom(rows, body.user_key, body.message);
             console.log(bool);
             if (bool === false) {
-              await sending1(body.user_key, body.message);
+              if (body.sex === 0) await sending0(body.user_key, body.message);
+              else await sending1(body.user_key, body.message);
               console.log('end');
               res.send(true);
             } else {
-              console.log('eeeeeeeeee');
               console.log(rows[bool]);
               res.send(rows[bool]);
             }
@@ -463,6 +464,47 @@ async function checkroom(row, user_key, message) {
   });
   console.log(bool);
   return bool;
+}
+
+async function sending0(user_key, message) {
+  let room_key = 0;
+  await new Promise((resolve) => {
+    connection.query(
+      'INSERT INTO messageroom_table (room_mode) values(1);', // 방만들기
+      function (err, rows, fields) {
+        if (err) console.log(err);
+        else {
+          console.log(rows.insertId); //추가한 방번호pk
+          console.log('쓰레기에 전송');
+          room_key = rows.insertId;
+          connection.query(
+            'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
+            [room_key, 0, 0, 0, 0],
+            function (err, rows, fields) {
+              if (err) console.log(err);
+              connection.query(
+                'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
+                [room_key, user_key, 0, 0, 1],
+                function (err, rows, fields) {
+                  if (err) console.log(err);
+                  connection.query(
+                    'INSERT INTO message_table (room_id,user_key,message_body) values(?,?,?);',
+                    [room_key, user_key, message],
+                    function (err, rows, fields) {
+                      if (err) console.log(err);
+                      console.log('매칭 완료');
+                      resolve();
+                    },
+                  );
+                },
+              );
+            },
+          );
+        }
+      },
+    );
+  });
+  return;
 }
 
 async function sending1(user_key, message) {

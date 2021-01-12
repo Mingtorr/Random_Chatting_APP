@@ -10,7 +10,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -19,6 +19,21 @@ connection.connect();
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(cors());
 app.use(bodyparser.json());
+
+app.post('/receptionOnOff', (req, res) =>{
+  console.log('알림 설정', req.body);
+
+  connection.query('UPDATE participant SET reception = ? WHERE room_id = ? and user_key = ?',
+  [req.body.reception, req.body.roomid, req.body.userkey],
+  function(err, rows, fields){
+    if(err){
+      console.log(err);
+      res.send(false)
+    }else{
+      res.send(true);
+    }
+  })
+})
 
 app.post('/GetMessageRoom', (req, res) => {
   const userKey = req.body.userKey;
@@ -49,6 +64,7 @@ app.post('/GetMessageRoom', (req, res) => {
             function (err, rows, fields) {
               if (err) {
                 console.log('라스트 메시지 에러', err);
+                res.send(false);
               } else {
                 const bodyTime = rows;
 
@@ -57,14 +73,15 @@ app.post('/GetMessageRoom', (req, res) => {
                   message.push({...info, ...bodyTime[index]});
                 });
                 connection.query(
-                  'SELECT count FROM participant where user_key = ?',
+                  'SELECT count, reception FROM participant where user_key = ?',
                   [userKey],
                   function (err, rows, fields) {
+                    // console.log('rororo' , rows);
                     const mess = [];
                     message.map((info, index) => {
                       mess.push({...info, ...rows[index]});
                     });
-                    console.log('asdfasdafsd', mess);
+                    // console.log('reception', mess);
                     res.send(mess);
                   },
                 );

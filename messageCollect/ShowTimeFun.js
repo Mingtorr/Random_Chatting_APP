@@ -26,7 +26,7 @@ export default class ShowTimeFun extends React.Component {
         </View>
       );
     } else {
-      if (this.props.item.min > 10) {
+      if (this.props.item.min > 9) {
         return (
           <View>
             <Text style={styles.timeFont}>

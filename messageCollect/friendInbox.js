@@ -247,7 +247,7 @@ export default class FriendInbox extends React.Component {
           myshownickname: json.shownickname,
           toshownickname: toshownickname,
           tousertoken: tousertoken,
-          toreception: toreception, // 1: 수신동의 0:수신거부
+          reception: toreception, // 1: 수신동의 0:수신거부
         });
       });
   };
@@ -323,7 +323,7 @@ export default class FriendInbox extends React.Component {
                 <Text style ={styles.modalTitle}>방 설정</Text>
                 
                 <TouchableOpacity style = {styles.modalTouch} 
-                  onPress= {() => {this.receptionOnOff(item.room_id, item.toreception)}}>
+                  onPress= {() => {this.receptionOnOff(item.room_id, item.reception)}}>
                   {item.reception === 1
                   ?(<Text style = {styles.modalText}>채팅방 알림 끄기</Text>)
                     :(<Text style = {styles.modalText}>채팅방 알림 켜기</Text>)

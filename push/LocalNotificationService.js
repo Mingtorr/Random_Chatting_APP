@@ -13,6 +13,13 @@ class LocalNotificationService {
       },
       onNotification: function (notification) {
         console.log('[LocalNotificationService] onNotification ', notification);
+        PushNotificationIOS.addNotificationRequest({
+          id: 'test-2',
+          title: notification.title,
+          body: notification.message,
+          category: 'test',
+          threadId: 'thread-id',
+        });
         if (!notification?.data) {
           return;
         }

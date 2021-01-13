@@ -93,8 +93,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   NSMutableDictionary *userData= [NSMutableDictionary dictionaryWithDictionary:response.notification.request.content.userInfo];
   [userData setObject:@(1)forKey: @"openInForeground"];
   [RNCPushNotificationIOS didReceiveRemoteNotification:userData];
+  [RNCPushNotificationIOS didReceiveNotificationResponse:response];
   completionHandler();
-//  [RNCPushNotificationIOS didReceiveNotificationResponse:response];
+ 
 }
 //Called when a notification is delivered to a foreground app.
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler

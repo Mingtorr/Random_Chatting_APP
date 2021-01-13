@@ -63,6 +63,7 @@ class Message extends React.Component {
       resultshownickname: 0,
       change: 1,
       appState: AppState.currentState,
+      reception:this.props.route.params.reception,
     };
   }
   _handleAppStateChange = (nextAppState) => {
@@ -85,6 +86,7 @@ class Message extends React.Component {
     socket.emit('roomleave', roomid);
   }
   componentDidMount() {
+    console.log(this.props.route.params);
     this.scrolltobottom();
     AppState.addEventListener('change', this._handleAppStateChange);
     AsyncStorage.getItem('login_user_info', (err, result) => {
@@ -92,6 +94,7 @@ class Message extends React.Component {
         userkey: JSON.parse(result).user_key,
         myname: JSON.parse(result).user_nickname,
         myshownickname: this.props.route.params.myshownickname,
+        recpetion:this.props.route.params.recpetion
       });
     });
     const data = {
@@ -102,6 +105,12 @@ class Message extends React.Component {
       touser: this.state.touserkey,
     };
     socket.emit('roomjoin', data); //방참가
+    socket.on('receptionrecieve',(data)=>{
+      console.log(JSON.stringify(data)+"미낭ㅁ나ㅣㅓㅇ마ㅣ너아ㅣㅁ넝");
+      this.setState({
+        reception:data.reception
+      })
+    })
     socket.on('socketid', (data) => {
       //my socketid
       this.setState({
@@ -190,6 +199,7 @@ class Message extends React.Component {
   }
 
   sendmessage = () => {
+    console.log("상대방의 리셉션"+this.state.reception);
     if (this.state.text.trim() === '') {
       this.setState({
         text: '',
@@ -211,7 +221,8 @@ class Message extends React.Component {
         toshownickname: this.state.toshownickname,
         tousertoken: this.props.route.params.tousertoken,
       };
-      if (this.state.roomsockets.length !== 2) {
+      if (this.state.roomsockets.length !== 2&&this.state.reception === 1) {
+        console.log("상대방에게 푸시알림 전송");
         fetch('https://fcm.googleapis.com/fcm/send', {
           method: 'POST',
           headers: {

@@ -278,6 +278,7 @@ export default class FriendInbox extends React.Component {
           roomid === info.room_id ? {...info, reception: 0} : info,
         ),
       });
+      socket.emit('reception',({roomid : roomid,reception:0}))
       userkey.reception = 0;
     } else{
       this.setState({
@@ -285,6 +286,7 @@ export default class FriendInbox extends React.Component {
           roomid === info.room_id ? {...info, reception: 1} : info,
         ),
       });
+      socket.emit('reception',({roomid : roomid,reception:1}))
       userkey.reception =1;
     }
     

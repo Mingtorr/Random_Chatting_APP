@@ -10,7 +10,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -40,9 +40,9 @@ app.post('/GetMessageRoom', (req, res) => {
   console.log('userkey: ', userKey);
 
   connection.query(
-    `SELECT part.count, part.room_id, part.user_key,part.shownickname, info.user_nickname, info.user_sex,info.user_token 
-  FROM participant as part Join user_table as info on part.user_key= info.user_key  
-  where room_id in (SELECT room_id FROM participant WHERE user_key = ?) and part.user_key !=? and part.room_del =0`,
+    `SELECT part.count, part.room_id, part.user_key,part.shownickname, part.reception as toreception, info.user_nickname, info.user_sex,info.user_token 
+    FROM participant as part Join user_table as info on part.user_key= info.user_key  
+    where room_id in (SELECT room_id FROM participant WHERE user_key = ?) and part.user_key !=? and part.room_del =0`,
     [userKey, userKey],
     function (err, rows, fields) {
       if (err) {
@@ -50,6 +50,7 @@ app.post('/GetMessageRoom', (req, res) => {
         res.send(false);
       } else {
         const roomarr = [];
+        console.log('test', rows);
         rows.map((v, i, n) => {
           roomarr.push(v.room_id);
         });
@@ -76,12 +77,12 @@ app.post('/GetMessageRoom', (req, res) => {
                   'SELECT count, reception FROM participant where user_key = ?',
                   [userKey],
                   function (err, rows, fields) {
-                    // console.log('rororo' , rows);
+                    console.log('rororo' , rows);
                     const mess = [];
                     message.map((info, index) => {
                       mess.push({...info, ...rows[index]});
                     });
-                    // console.log('reception', mess);
+                    console.log('reception최종', mess);
                     res.send(mess);
                   },
                 );

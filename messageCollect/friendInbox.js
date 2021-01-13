@@ -212,7 +212,7 @@ export default class FriendInbox extends React.Component {
     );
   };
 
-  onpress = (itemId, itemId2, toshownickname, tousertoken, reception) => {
+  onpress = (itemId, itemId2, toshownickname, tousertoken, toreception) => {
     const data = [...this.state.messagesRoom];
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
@@ -247,7 +247,7 @@ export default class FriendInbox extends React.Component {
           myshownickname: json.shownickname,
           toshownickname: toshownickname,
           tousertoken: tousertoken,
-          reception: reception, // 1: 수신동의 0:수신거부
+          toreception: toreception, // 1: 수신동의 0:수신거부
         });
       });
   };
@@ -342,7 +342,7 @@ export default class FriendInbox extends React.Component {
           // onLongPress={() => this.longPressAlert(item.room_id)}
           onLongPress={() => this.setModalVisible(true, item.room_id)}
           onPress={() =>
-            this.onpress(item.room_id, item.user_key, item.shownickname, item.user_token, item.reception)
+            this.onpress(item.room_id, item.user_key, item.shownickname, item.user_token, item.toreception)
           }>
           <View style={styles.messageElem}>
             <LinearGradient

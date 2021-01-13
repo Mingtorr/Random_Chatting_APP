@@ -278,7 +278,7 @@ export default class FriendInbox extends React.Component {
           roomid === info.room_id ? {...info, reception: 0} : info,
         ),
       });
-      socket.emit('reception',({roomid : roomid,reception:0}))
+      socket.emit('reception',({roomid : roomid, reception:0}))
       userkey.reception = 0;
     } else{
       this.setState({
@@ -286,7 +286,7 @@ export default class FriendInbox extends React.Component {
           roomid === info.room_id ? {...info, reception: 1} : info,
         ),
       });
-      socket.emit('reception',({roomid : roomid,reception:1}))
+      socket.emit('reception',({roomid : roomid, reception:1}))
       userkey.reception =1;
     }
     
@@ -323,7 +323,7 @@ export default class FriendInbox extends React.Component {
                 <Text style ={styles.modalTitle}>방 설정</Text>
                 
                 <TouchableOpacity style = {styles.modalTouch} 
-                  onPress= {() => {this.receptionOnOff(item.room_id, item.reception)}}>
+                  onPress= {() => {this.receptionOnOff(item.room_id, item.toreception)}}>
                   {item.reception === 1
                   ?(<Text style = {styles.modalText}>채팅방 알림 끄기</Text>)
                     :(<Text style = {styles.modalText}>채팅방 알림 켜기</Text>)

@@ -10,7 +10,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
 
@@ -19,6 +19,24 @@ connection.connect();
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(cors());
 app.use(bodyparser.json());
+
+app.post('/Getnotice', (req, res) => {
+  console.log(req.body);
+  console.log('sex');
+  connection.query('SELECT * FROM notice', function (
+    err,
+    rows,
+    fields,
+  ) {
+    if (err) {
+      console.log(err);
+      res.send(false);
+    } else {
+      console.log(rows);
+      res.send(rows[0]);
+    }
+  });
+});
 
 app.post('/receptionOnOff', (req, res) =>{
   console.log('알림 설정', req.body);

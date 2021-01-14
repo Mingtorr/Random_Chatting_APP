@@ -31,6 +31,7 @@ const func = require('./server/api');
 // let setting = require('./Image/setting.png');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
+import Noticepush from './settingpage/set_notice/noticepush'
 
 const Stack = createStackNavigator();
 export default class App extends React.Component {
@@ -179,6 +180,11 @@ export default class App extends React.Component {
                 name="Set_notice"
                 component={Set_notice}
                 options={{headerShown: false}}
+              />
+              <Stack.Screen
+              name="noticepush"
+              component={Noticepush}
+              options={{headerShown: false}}
               />
               <Stack.Screen
                 name="singo"

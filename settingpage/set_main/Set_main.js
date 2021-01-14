@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor : 'white',
     borderBottomWidth: 1,
     borderBottomColor: 'lightgray',
   },

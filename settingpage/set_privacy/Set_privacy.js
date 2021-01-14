@@ -37,9 +37,8 @@ export default class Set_privacy extends Component {
       stdno: '',
       studno: '',
       major: '',
-      checked_id: false,
+
       checking_passwd: false,
-      nickname_check: false,
       realpass: '',
       email: '',
     };
@@ -87,7 +86,71 @@ export default class Set_privacy extends Component {
     return false;
   };
   // 아이디 중복검사
-  checkId = (e) => {
+  // checkId = (e) => {
+  //   e.preventDefault();
+  //   var re = /^[a-zA-Z0-9]{4,12}$/; //아이디는 4~12자의 영문 대소문자와 숫자로만 입력
+  //   if (
+  //     !this.check(
+  //       re,
+  //       this.state.id,
+  //       '아이디는 4~12자의 영문 대소문자와 숫자로만 입력가능합니다.',
+  //     )
+  //   ) {
+  //     return;
+  //   } else {
+  //     const checkId = {
+  //       id: this.state.id,
+  //     };
+  //     fetch(func.api(3001, 'CheckId'), {
+  //       method: 'post',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //       },
+  //       body: JSON.stringify(checkId),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((json) => {
+  //         if (json) {
+  //           alert('사용가능한 아이디 입니다.');
+  //           this.setState({
+  //             checked_id: true,
+  //           });
+  //         } else {
+  //           alert('이미 사용중인 아이디 입니다.');
+  //         }
+  //       });
+  //   }
+  // };
+  // // 아이디 변경
+  // changeId = (e) => {
+  //   e.preventDefault();
+  //   const changeId = {
+  //     key: this.state.key,
+  //     id: this.state.id,
+  //   };
+  //   fetch(func.api(3001, 'ChangeId'), {
+  //     method: 'post',
+  //     headers: {
+  //       'content-type': 'application/json',
+  //     },
+  //     body: JSON.stringify(changeId),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((json) => {
+  //       if (json) {
+  //         alert('아이디가 변경되었습니다. 다시 로그인해주세요.');
+  //         this.setState({
+  //           checked_id: false,
+  //         });
+  //         AsyncStorage.clear();
+  //         this.props.navigation.navigate('Login');
+  //       } else {
+  //         alert('id 변경 실패 버그 신고');
+  //       }
+  //     });
+  // };
+
+  check_changeid = (e) => {
     e.preventDefault();
     var re = /^[a-zA-Z0-9]{4,12}$/; //아이디는 4~12자의 영문 대소문자와 숫자로만 입력
     if (
@@ -99,56 +162,28 @@ export default class Set_privacy extends Component {
     ) {
       return;
     } else {
-      const checkId = {
+      const changeId = {
+        key: this.state.key,
         id: this.state.id,
       };
-      fetch(func.api(3001, 'CheckId'), {
+      fetch(func.api(3001, 'ChangeId'), {
         method: 'post',
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(checkId),
+        body: JSON.stringify(changeId),
       })
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            alert('사용가능한 아이디 입니다.');
-            this.setState({
-              checked_id: true,
-            });
+            alert('아이디가 변경되었습니다. 다시 로그인해주세요.');
+            AsyncStorage.clear();
+            this.props.navigation.navigate('Login');
           } else {
             alert('이미 사용중인 아이디 입니다.');
           }
         });
     }
-  };
-  // 아이디 변경
-  changeId = (e) => {
-    e.preventDefault();
-    const changeId = {
-      key: this.state.key,
-      id: this.state.id,
-    };
-    fetch(func.api(3001, 'ChangeId'), {
-      method: 'post',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(changeId),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json) {
-          alert('아이디가 변경되었습니다. 다시 로그인해주세요.');
-          this.setState({
-            checked_id: false,
-          });
-          AsyncStorage.clear();
-          this.props.navigation.navigate('Login');
-        } else {
-          alert('id 변경 실패 버그 신고');
-        }
-      });
   };
   // 비밀번호 일치 검사
   passwdcheck = (e) => {
@@ -189,8 +224,8 @@ export default class Set_privacy extends Component {
         }
       });
   };
-  //닉네임 중복검사
-  nickNamecheck = (e) => {
+
+  nickname_check_change = (e) => {
     var re = /^[a-zA-Z0-9가-힣]{2,8}$/;
     // console.log(this.state.nickname);
     // console.log('남자임');
@@ -203,67 +238,106 @@ export default class Set_privacy extends Component {
     ) {
       return;
     } else {
-      const Nickname = {
+      const nickname_info = {
+        key: this.state.key,
         nickname: this.state.nickname,
       };
-      fetch(func.api(3001, 'CheckNickname'), {
+      fetch(func.api(3001, 'ChangeNickname'), {
         method: 'post',
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(Nickname),
+        body: JSON.stringify(nickname_info),
       })
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            alert('사용가능한 닉네임입니다');
-            this.setState({
-              nickname_check: true,
-            });
+            alert('닉네임이 변경되었습니다.');
+            AsyncStorage.setItem('login_user_info',JSON.stringify({
+                user_nickname: this.state.nickname,
+              }),
+            );
           } else {
             alert('이미 사용중인 닉네임입니다');
           }
         });
     }
-  };
-  //닉네임 바꾸기
-  changenickname = (e) => {
-    e.preventDefault();
-    const changenickname = {
-      key: this.state.key,
-      nickname: this.state.nickname,
-    };
-    fetch(func.api(3001, 'ChangeNickname'), {
-      method: 'post',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(changenickname),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json) {
-          alert('닉네임이 변경되었습니다.');
-          this.setState({
-            nickname_check: false,
-          });
-        } else {
-          alert('nickname 변경 실패 버그 신고');
-        }
-      });
-    AsyncStorage.setItem(
-      'login_user_info',
-      JSON.stringify({
-        user_nickname: this.state.nickname,
-        user_key: this.state.key,
-        user_id: this.state.id,
-        user_sex: this.state.sex,
-        user_email: this.state.email,
-        user_deptno: this.state.deptno,
-        user_stdno: this.state.stdno,
-      }),
-    );
-  };
+  }
+  //닉네임 중복검사
+  // nickNamecheck = (e) => {
+  //   var re = /^[a-zA-Z0-9가-힣]{2,8}$/;
+  //   // console.log(this.state.nickname);
+  //   // console.log('남자임');
+  //   if (
+  //     !this.check(
+  //       re,
+  //       this.state.nickname,
+  //       '닉네임은 2~8자의 영문, 한글 ,숫자로만 입력가능합니다.',
+  //     )
+  //   ) {
+  //     return;
+  //   } else {
+  //     const Nickname = {
+  //       nickname: this.state.nickname,
+  //     };
+  //     fetch(func.api(3001, 'CheckNickname'), {
+  //       method: 'post',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //       },
+  //       body: JSON.stringify(Nickname),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((json) => {
+  //         if (json) {
+  //           alert('사용가능한 닉네임입니다');
+  //           this.setState({
+  //             nickname_check: true,
+  //           });
+  //         } else {
+  //           alert('이미 사용중인 닉네임입니다');
+  //         }
+  //       });
+  //   }
+  // };
+  // //닉네임 바꾸기
+  // changenickname = (e) => {
+  //   e.preventDefault();
+  //   const changenickname = {
+  //     key: this.state.key,
+  //     nickname: this.state.nickname,
+  //   };
+  //   fetch(func.api(3001, 'ChangeNickname'), {
+  //     method: 'post',
+  //     headers: {
+  //       'content-type': 'application/json',
+  //     },
+  //     body: JSON.stringify(changenickname),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((json) => {
+  //       if (json) {
+  //         alert('닉네임이 변경되었습니다.');
+  //         this.setState({
+  //           nickname_check: false,
+  //         });
+  //       } else {
+  //         alert('nickname 변경 실패 버그 신고');
+  //       }
+  //     });
+  //   AsyncStorage.setItem(
+  //     'login_user_info',
+  //     JSON.stringify({
+  //       user_nickname: this.state.nickname,
+  //       user_key: this.state.key,
+  //       user_id: this.state.id,
+  //       user_sex: this.state.sex,
+  //       user_email: this.state.email,
+  //       user_deptno: this.state.deptno,
+  //       user_stdno: this.state.stdno,
+  //     }),
+  //   );
+  // };
   //학과 설정
   setdeptno = (e) => {
     e.preventDefault();
@@ -373,10 +447,23 @@ export default class Set_privacy extends Component {
                         id="id"
                         value={this.state.id}
                         onChangeText={(text) =>
-                          this.setState({id: text, checked_id: false})
+                          this.setState({id: text})
                         }
                       />
-                      {this.state.checked_id === false ? (
+                        <TouchableOpacity
+                          style={styles.Btn_privacy}
+                          onPress={this.check_changeid}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            변경하기
+                          </Text>
+                        </TouchableOpacity>
+
+                      {/* {this.state.checked_id === false ? (
                         <TouchableOpacity
                           style={styles.Btn_privacy}
                           onPress={this.checkId}>
@@ -402,7 +489,7 @@ export default class Set_privacy extends Component {
                             변경하기
                           </Text>
                         </TouchableOpacity>
-                      )}
+                      )} */}
                     </View>
                   </View>
                   {/* 비번 */}
@@ -505,7 +592,36 @@ export default class Set_privacy extends Component {
                     )}
                   </View>
                   {/* 닉네임 */}
-                  {this.state.nickname_check === false ? (
+                  <View style={styles.Id_privacy}>
+                      <Text style={styles.Textid_privacy}>닉네임</Text>
+                      <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <TextInput
+                          style={styles.Id_input_privacy}
+                          id="nickname"
+                          name="nickname"
+                          value={this.state.nickname}
+                          onChangeText={(text) =>
+                            this.setState({
+                              nickname: text,
+                            })
+                          }
+                        />
+                        <TouchableOpacity
+                          style={styles.Btn_privacy}
+                          onPress={this.nickname_check_change}>
+                          <Text
+                            style={{
+                              color: 'gray',
+                              fontFamily: 'Jalnan',
+                              fontSize: 15,
+                            }}>
+                            변경하기
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+
+                  {/* {this.state.nickname_check === false ? (
                     <View style={styles.Id_privacy}>
                       <Text style={styles.Textid_privacy}>닉네임</Text>
                       <View style={{display: 'flex', flexDirection: 'row'}}>
@@ -562,7 +678,7 @@ export default class Set_privacy extends Component {
                         </TouchableOpacity>
                       </View>
                     </View>
-                  )}
+                  )} */}
                   {/* <View style={styles.Id_privacy}>
                   <Text style={styles.Textid_privacy}>비밀번호 인증</Text>
                   <View style={{display: 'flex', flexDirection: 'row'}}>

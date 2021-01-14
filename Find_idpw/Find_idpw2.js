@@ -8,6 +8,7 @@ import {
   Image,
   SafeAreaView,
   Keyboard,
+  Alert
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {withNavigation} from 'react-navigation';

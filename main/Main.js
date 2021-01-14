@@ -32,6 +32,7 @@ export default class Main extends Component {
       animatedValue_back: new Animated.Value(1),
       // animation: new Animated.Value(0),
       height: 0,
+      allchatroom_animate_boolean: false,
 
       user_key: '',
       user_nickname: '',
@@ -134,6 +135,12 @@ export default class Main extends Component {
     Animated.parallel([startAnimation1, startAnimation2]).start();
 
     this._fadeIn();
+
+    setTimeout(() => {
+      this.setState({
+        allchatroom_animate_boolean: true
+      });
+    }, 300);
   };
 
   _fadeIn() {
@@ -246,9 +253,9 @@ export default class Main extends Component {
         message_time = '오후 ' + JSON.stringify(send_time_hour - 12) + ':' + JSON.stringify(send_time_minute);
       }
     }
-
+    
     if (item.user_nickname === this.state.user_nickname) {
-      return <Main_Mymessage message={item.message_body} time={message_time} />;
+      return <Main_Mymessage message={item.message_body} time={message_time} animate_boolean={this.state.allchatroom_animate_boolean}/>;
     } else {
       return (
         <Main_Yourmessage
@@ -331,6 +338,7 @@ export default class Main extends Component {
                   onChangeText={(text) => this.setState({my_all_message: text})}
                   onFocus={this.scrolltobottom}
                   onTouchStart={this.scrolltobottom}
+                  editable= {this.state.allchatroom_animate_boolean ? true : false}
                   style={styles.text_input}
                 />
                 <TouchableOpacity
@@ -361,7 +369,7 @@ export default class Main extends Component {
                 <Text
                   style={{
                     fontSize: 40,
-                    color: '#f05052',
+                    color: '#eb6c63',
                     fontFamily: 'Jalnan',
                   }}>
                   와글 와글
@@ -369,11 +377,11 @@ export default class Main extends Component {
               </View>
               <View style={{alignItems: 'center'}}>
                 <Text
-                  style={{fontSize: 18, color: '#f05052', fontWeight: 'bold'}}>
+                  style={{fontSize: 18, color: '#eb6c63', fontWeight: 'bold'}}>
                   다른학과 사람들과 친해질 수 있는
                 </Text>
                 <Text
-                  style={{fontSize: 18, color: '#f05052', fontWeight: 'bold'}}>
+                  style={{fontSize: 18, color: '#eb6c63', fontWeight: 'bold'}}>
                   최고의 방법
                 </Text>
               </View>
@@ -386,7 +394,7 @@ export default class Main extends Component {
               }}>
               <TouchableOpacity
                 style={{
-                  backgroundColor: '#f05052',
+                  backgroundColor: '#eb6c63',
                   paddingLeft: 40,
                   paddingRight: 40,
                   paddingBottom: 13,

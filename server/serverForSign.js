@@ -13,9 +13,10 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: 'root',
   database: 'mydb',
 });
+//snsk3779@
 
 connection.connect();
 //bodyparser및 cors 사용
@@ -297,19 +298,32 @@ app.post('/withdrawal', (req, res) => {
 });
 //아이디 변경
 app.post('/ChangeId', (req, res) => {
-  const changeId = req.body.id;
   const key = req.body.key;
-  // console.log(ChangeId);
+  const id = req.body.id;
+
+  // console.log(checkId);
   connection.query(
-    'UPDATE user_table SET user_id = (?) WHERE user_key =(?)',
-    [changeId, key],
+    'SELECT user_id FROM user_table WHERE user_id =(?)',
+    [id],
     function (err, rows, fields) {
-      if (err) {
-        console.log('changeid error' + err);
-        res.send(false);
+      if (rows[0] === undefined) {
+        console.log('아이디 중복 없음');
+        connection.query(
+          'UPDATE user_table SET user_id = (?) WHERE user_key =(?)',
+          [id, key],
+          function (err, rows, fields) {
+            if (err) {
+              console.log('changeid error' + err);
+              res.send(false);
+            } else {
+              console.log('changed ok');
+              res.send(true);
+            }
+          },
+        );
       } else {
-        console.log('changed good');
-        res.send(true);
+        console.log('아이디 중복');
+        res.send(false); // 중복 있음 사용안됨
       }
     },
   );
@@ -341,19 +355,31 @@ app.post('/ChangePass', async function (req, res, next) {
 });
 //닉네임 변경
 app.post('/ChangeNickname', (req, res) => {
-  const changenickname = req.body.nickname;
+  const nickname = req.body.nickname;
   const key = req.body.key;
-  // console.log(ChangeId);
-  connection.query(
-    'UPDATE user_table SET user_nickname = (?) WHERE user_key =(?)',
-    [changenickname, key],
+  // console.log(req.body);
+  connection.query('SELECT * FROM user_table WHERE user_nickname = (?)', [nickname],
     function (err, rows, fields) {
       if (err) {
-        console.log('changenick error' + err);
+        console.log(err);
         res.send(false);
+      }
+      if (rows[0] === undefined) {
+        // console.log('CheckNickname true');
+        connection.query('UPDATE user_table SET user_nickname = (?) WHERE user_key =(?)',
+          [nickname, key], function (err, rows, fields) {
+            if (err) {
+              console.log('닉네임 변경 에러' + err);
+              res.send(false);
+            } else {
+              console.log('닉네임 변경');
+              res.send(true);
+            }
+          },
+        );
       } else {
-        console.log('changnickname good');
-        res.send(true);
+        console.log('CheckNickname false');
+        res.send(false); //중복 있음 사용 불가능
       }
     },
   );

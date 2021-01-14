@@ -8,6 +8,7 @@ import {
   Image,
   SafeAreaView,
   Keyboard,
+  Alert
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {withNavigation} from 'react-navigation';
@@ -44,7 +45,7 @@ class Find_idpw extends React.Component {
   };
 
   sendEmail = (e) => {
-    var re = /^[a-zA-Z0-9_]{4,20}$/;
+    var re = /^[a-zA-Z0-9_]{1,20}$/;
     e.preventDefault();
     if (this.state.email.length === 0) {
       Alert.alert(
@@ -84,6 +85,7 @@ class Find_idpw extends React.Component {
             this.setState({
               authNum: json,
             });
+            console.log(this.state.authNum)
           } else {
             Alert.alert(
               "안내",

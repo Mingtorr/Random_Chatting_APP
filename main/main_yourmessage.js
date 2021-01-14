@@ -54,7 +54,7 @@ export default class Main_Yourmessage extends React.Component {
             <View
               style={{
                 display: 'flex',
-                backgroundColor: '#eaeaea',
+                backgroundColor: '#c7d9ff',
                 marginRight: 10,
                 marginLeft: 16,
                 maxWidth: '70%',

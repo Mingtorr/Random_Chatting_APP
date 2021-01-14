@@ -110,7 +110,7 @@ class Sign_up extends React.Component {
   };
 
   sendEmail = (e) => {
-    var re = /^[a-zA-Z0-9_]{4,20}$/;
+    var re = /^[a-zA-Z0-9_]{1,20}$/;
     e.preventDefault();
     if (this.state.email.length === 0) {
       Alert.alert(
@@ -151,11 +151,21 @@ class Sign_up extends React.Component {
           });
           console.log('인증번호', this.state.authNum);
 
-          //테스트 (메일인증x)
+          // 테스트 (메일인증x)
           // if (json === true) {
-          //   alert("이미 가입된 메일입니다.");
+          //   Alert.alert(
+          //     "안내",
+          //     "이미 가입된 메일입니다",
+          //     [{text: "OK", style: "OK"}],
+          //     { cancelable: false }
+          //   );
           // } else {
-          //   alert("인증 메일이 전송되었습니다.");
+          //   Alert.alert(
+          //     "안내",
+          //     "인증 메일이 전송되었습니다",
+          //     [{text: "OK", style: "OK"}],
+          //     { cancelable: false }
+          //   );
           //   this.setState({
           //     authNum: json,
           //   });
@@ -271,7 +281,7 @@ class Sign_up extends React.Component {
       const box = {
         nickname: this.state.nickname,
       };
-      console.log(box);
+      // console.log(box);
       fetch(func.api(3001, 'CheckNickname'), {
         method: 'post',
         headers: {

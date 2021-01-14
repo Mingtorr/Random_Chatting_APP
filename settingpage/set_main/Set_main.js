@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {withNavigation} from 'react-navigation';
+import { CommonActions } from "@react-navigation/native";
 let imagePath = require('./info.png');
 let avatar = require('./avatar.png');
 let question = require('./question.png');
@@ -48,11 +49,20 @@ class Set_main extends Component {
           console.log(json);
         });
     });
+
     AsyncStorage.removeItem('login_onoff_set', () => {
       AsyncStorage.removeItem('login_user_info', () => {
         console.log('로그아웃'); // User1 출력
         // console.log(AsyncStorage.getItem('login_onoff'));
-        this.props.navigation.navigate('Login');
+        // this.props.navigation.navigate('Login');
+        this.props.navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              {name: 'Login'},
+            ],
+   })
+        );
       });
     });
   };

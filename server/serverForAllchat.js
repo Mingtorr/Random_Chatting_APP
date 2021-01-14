@@ -4,11 +4,13 @@ const port = 3002;
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const mysql = require('mysql');
+
+
+
 // nodemailer 모듈 요청
 
 var http = require('http').createServer(app);
 const io = require('socket.io')(http);
-
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',

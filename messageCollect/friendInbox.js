@@ -8,16 +8,22 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
+  TouchableWithoutFeedback
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import io from 'socket.io-client';
 import LinearGradient from 'react-native-linear-gradient';
 import ShowTimeFun from './ShowTimeFun';
+import Modal from "react-native-modal";
+import {Dimensions} from 'react-native';
 
+const chartHeight = Dimensions.get('window').height;
+const chartWidth = Dimensions.get('window').width;
 const func = require('../server/api');
 const timefunc = require('../message/timefunction');
 
 const socket = io(func.api(3005, ''));
+
 export default class FriendInbox extends React.Component {
   constructor(props) {
     super(props);
@@ -29,6 +35,7 @@ export default class FriendInbox extends React.Component {
       ids: [],
       day: today.getDate(),
       year: today.getFullYear(),
+      // modalVisible: false,
     };
   }
   componentDidMount() {
@@ -62,6 +69,14 @@ export default class FriendInbox extends React.Component {
         ),
       });
     });
+    socket.on('receptionrecieve',(data)=>{
+      const room = [...this.state.messagesRoom];
+      this.setState({
+        messagesRoom: room.map((info) =>
+          data.roomid === info.room_id ? {...info, toreception: data.reception} : info,
+        ),
+      });
+    })
     socket.on('recieve_ChatNum', (data) => {
       const room = [...this.state.messagesRoom];
       this.setState({
@@ -105,6 +120,7 @@ export default class FriendInbox extends React.Component {
             let min = newtime.getMinutes();
             const newrow = row;
             newrow.year = year;
+            newrow.modalVisible = false;
             if (hour > 12) {
               newrow.ampm = '오후';
               newrow.hour = hour - 12;
@@ -117,20 +133,28 @@ export default class FriendInbox extends React.Component {
             newrow.min = min;
             console.log('new' + JSON.stringify(newrow));
 
-            this.setState({
-              messagesRoom: [...this.state.messagesRoom, newrow],
+              this.setState({
+                messagesRoom: [...this.state.messagesRoom, newrow],
+              });
+              // console.log("room", this.state.messagesRoom);
             });
-            // console.log("room", this.state.messagesRoom);
-          });
-        })
-        .catch((err) => console.log('err: ', err));
-    });
-  }
+        }).catch((err) => console.log('err: ', err));
+      })
+    }
 
   isChecked = (itemId) => {
     const isThere = this.state.ids.includes(itemId);
 
     return isThere;
+  };
+
+  setModalVisible = (bool, room_id) =>{
+    const data = [...this.state.messagesRoom]
+    this.setState({
+      messagesRoom: data.map((info) =>
+        room_id === info.room_id ? {...info, modalVisible: bool} : info,
+      ),
+    })
   };
 
   toggleChecked = (itemId) => {
@@ -176,7 +200,7 @@ export default class FriendInbox extends React.Component {
       messagesRoom: data.filter((info) => info.room_id !== itemId),
     });
   };
-
+  // 모달 추가로 사용안함//////////////
   longPressAlert = (itemId) => {
     const key = {
       key: 1,
@@ -196,7 +220,7 @@ export default class FriendInbox extends React.Component {
     );
   };
 
-  onpress = (itemId, itemId2, toshownickname, tousertoken) => {
+  onpress = (itemId, itemId2, toshownickname, tousertoken, toreception) => {
     const data = [...this.state.messagesRoom];
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
@@ -231,6 +255,7 @@ export default class FriendInbox extends React.Component {
           myshownickname: json.shownickname,
           toshownickname: toshownickname,
           tousertoken: tousertoken,
+          reception: toreception, // 1: 수신동의 0:수신거부
         });
       });
   };
@@ -247,13 +272,85 @@ export default class FriendInbox extends React.Component {
     console.log(data);
   };
 
+  receptionOnOff = (roomid, reception, touserkey) =>{
+    const data = [...this.state.messagesRoom];
+    //클릭시 새로운 메시지 표시 삭제
+    const userkey ={
+      userkey: this.state.user_Info.user_key,
+      roomid: roomid,
+      reception : null,
+    }
+    if(reception===1){ //알람 켜진상태
+      this.setState({
+        messagesRoom: data.map((info) =>
+          roomid === info.room_id ? {...info, reception: 0} : info,
+        ),
+      });
+      socket.emit('reception',({roomid : roomid, reception:0, touserkey:touserkey}))
+      userkey.reception = 0;
+    } else{
+      this.setState({
+        messagesRoom: data.map((info) =>
+          roomid === info.room_id ? {...info, reception: 1} : info,
+        ),
+      });
+      socket.emit('reception',({roomid : roomid, reception:1, touserkey:touserkey}))
+      userkey.reception =1;
+    }
+    
+    fetch(func.api(3003, 'receptionOnOff'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(userkey),
+    }).then((res) => res.json())
+    .then((json) =>{
+      if(json){
+        alert('알람이 설정되었습니다.')
+        this.setModalVisible(false, roomid)
+      }else{
+        console.log('알람꺼짐 버그');
+      }
+    })
+  }
+
   renderItem = ({item}) => {
     return (
       <SafeAreaView style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={item.modalVisible}
+          onRequestClose={() => { this.setModalVisible(false, item.room_id) } }
+        >
+          
+          <TouchableWithoutFeedback style={styles.centeredView} onPress={() => {this.setModalVisible(false, item.room_id)}}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style ={styles.modalTitle}>방 설정</Text>
+                
+                <TouchableOpacity style = {styles.modalTouch} 
+                  onPress= {() => {this.receptionOnOff(item.room_id, item.reception , item.user_key)}}>
+                  {item.reception === 1
+                  ?(<Text style = {styles.modalText}>채팅방 알림 끄기</Text>)
+                    :(<Text style = {styles.modalText}>채팅방 알림 켜기</Text>)
+                  }
+                </TouchableOpacity>
+
+                <TouchableOpacity style = {styles.modalTouch} onPress = {() => this.longPressAlert(item.room_id)}>
+                  <Text style = {styles.modalText}>나가기</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+
         <TouchableOpacity
-          onLongPress={() => this.longPressAlert(item.room_id)}
+          // onLongPress={() => this.longPressAlert(item.room_id)}
+          onLongPress={() => this.setModalVisible(true, item.room_id)}
           onPress={() =>
-            this.onpress(item.room_id, item.user_key, item.shownickname, item.user_token)
+            this.onpress(item.room_id, item.user_key, item.shownickname, item.user_token, item.toreception)
           }>
           <View style={styles.messageElem}>
             <LinearGradient
@@ -274,10 +371,15 @@ export default class FriendInbox extends React.Component {
             <View style={styles.messageInfo}>
               <View style={styles.messageHead}>
                 {item.shownickname === 0 ? (
-                  <Text style={styles.nickName2}>답장을 기다리고 있습니다.</Text>
+                  <Text style={styles.nickName2}>
+                    답장을 기다리고 있습니다.
+                  </Text>
                 ) : (
                   <Text style={styles.nickName}>{item.user_nickname}</Text>
                 )}
+                {item.reception ===1 // 1켜기 0 끄기
+                ? <Text>동의</Text>
+                : <Text>거부</Text>}
               </View>
               <View style={styles.messageLastChat}>
                 {item.message_body === 'delcode5010' ? (
@@ -285,9 +387,10 @@ export default class FriendInbox extends React.Component {
                 ) : (
                   // <Text>{item.message_body}</Text>
                   <Text style={styles.lastChat}>
-                    {item.message_body.length >35
-                    ? item.message_body.substr(0,37).padEnd(40, '.')
-                    :item.message_body}</Text>
+                    {item.message_body.length > 35
+                      ? item.message_body.substr(0, 37).padEnd(40, '.')
+                      : item.message_body}
+                  </Text>
                   // <View/>
                 )}
               </View>
@@ -337,24 +440,6 @@ export default class FriendInbox extends React.Component {
   }
 }
 
-// function message(message){
-//   render(){
-//     if(message === 'delcode5010'){
-//       return (
-//         <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
-//         );
-//     }else if(message.length > 20){
-//       return(
-//         <Text style={styles.lastChat}>{message.substr(0,20).padEnd(23, '.')}</Text>
-//       );
-//     }else{
-//       return(
-//         <Text style={styles.lastChat}>{message}</Text>
-//       );
-//     }
-//   }
-// }
-
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -389,7 +474,7 @@ const styles = StyleSheet.create({
   },
   nickName2: {
     fontSize: 18,
-    color:'#f7b2b2'
+    color: '#f7b2b2',
   },
   lastChat: {
     color: 'gray',
@@ -449,4 +534,54 @@ const styles = StyleSheet.create({
   isNewBack: {
     backgroundColor: '#f29b8a',
   },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+    // backgroundColor:'red'
+  },
+  modalView: {
+    // flex: 0.5,
+    height: chartHeight*0.2,
+    width: chartWidth*0.6,
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    paddingTop: 20,
+    paddingLeft: 30,
+    // alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalTitle:{
+    fontSize:18,
+    fontWeight: 'bold',
+    marginBottom: 15
+  },
+  modalTouch: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  modalText:{
+    fontSize: 16,
+  }
 });

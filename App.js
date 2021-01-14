@@ -83,7 +83,9 @@ export default class App extends React.Component {
     fcmService.register(onRegister, onNotification, onOpenNotification);
     localNotificationService.configure(onOpenNotification);
     await messaging().subscribeToTopic('notices');
-    function onRegister(token) {}
+    function onRegister(token) {
+      console.log(token);
+    }
 
     function onNotification(notify) {}
     function onOpenNotification(notify) {

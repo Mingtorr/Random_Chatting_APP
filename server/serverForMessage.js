@@ -148,6 +148,10 @@ app.post('/find_touser', (req, res) => {
 
 io.on('connection', function (socket) {
   console.log(socket.id);
+  socket.on('reception',(data)=>{
+    io.to(JSON.stringify(data.roomid)).emit('receptionrecieve',{reception:data.reception});
+    io.to(JSON.stringify(data.touserkey)+ 'user').emit('receptionrecieve',{roomid:data.roomid, reception:data.reception});
+  })
   socket.on('groupleave', (data) => {
     socket.leave(data.roomkey + 'group');
     var roomCount = io.sockets.adapter.rooms;

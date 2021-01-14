@@ -100,7 +100,6 @@ app.post('/Signup2', async function (req, res, next) {
     },
   );
 });
-
 //로그인 salt 적용
 app.post('/login', async function (req, res, next) {
   console.log('login');
@@ -135,47 +134,25 @@ app.post('/login', async function (req, res, next) {
               }
               arr = rows[0];
               connection.query(
-                'select user_pushstate from user_table where user_key= (?);',
-                [arr.user_key],
+                'UPDATE user_table SET user_token = (?) WHERE user_id= (?) and user_pushstate=1',
+                [body.token, body.id],
                 function (err, rows, fields) {
-                  if (err) console.log(err);
-                  if (rows[0].user_pushstate === 1) {
-                    connection.query(
-                      'UPDATE user_table SET user_token = (?) WHERE user_id= (?)',
-                      [body.token, body.id],
-                      function (err, rows, fields) {
-                        if (err) {
-                          console.log(err);
-                          res.send(err);
-                        }
-                        connection.query(
-                          'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?)',
-                          [userkey],
-                          function (err, rows, fields) {
-                            if (err) {
-                              console.log(err);
-                              res.send(err);
-                            } else {
-                              res.send(arr);
-                            }
-                          },
-                        );
-                      },
-                    );
-                  } else {
-                    connection.query(
-                      'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?)',
-                      [userkey],
-                      function (err, rows, fields) {
-                        if (err) {
-                          console.log(err);
-                          res.send(err);
-                        } else {
-                          res.send(arr);
-                        }
-                      },
-                    );
+                  if (err) {
+                    console.log(err);
+                    res.send(err);
                   }
+                  connection.query(
+                    'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?) user_pushstate=1',
+                    [userkey],
+                    function (err, rows, fields) {
+                      if (err) {
+                        console.log(err);
+                        res.send(err);
+                      } else {
+                        res.send(arr);
+                      }
+                    },
+                  );
                 },
               );
             },
@@ -652,10 +629,26 @@ app.post('/reset_token2', (req, res) => {
   );
 });
 
+app.post('/reset_token3', (req, res) => {
+  let body = req.body;
+  console.log(body);
+  connection.query(
+    'UPDATE user_table SET user_NewMsg = (?) WHERE user_key= (?);',
+    [body.pid, body.userkey],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      }
+      res.send(true);
+    },
+  );
+});
+
 app.post('/get_message_state', (req, res) => {
   let body = req.body;
   connection.query(
-    'select user_pushstate from user_table where user_key= (?)',
+    'select user_pushstate,user_NewMsg from user_table where user_key= (?)',
     [body.userkey],
     function (err, rows, fields) {
       if (err) {

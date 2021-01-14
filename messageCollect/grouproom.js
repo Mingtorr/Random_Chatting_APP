@@ -25,7 +25,6 @@ export default class Grouproom extends React.Component {
     };
   }
   componentDidMount() {
-
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const info = JSON.parse(result);
       this.setState({
@@ -44,44 +43,46 @@ export default class Grouproom extends React.Component {
       })
         .then((res) => res.json())
         .then((json) => {
-          json.map((row) => {
-            //넘어오는 데이터 예시
-            // group_key: 2,
-            // user_key: [ 2, 3 ],
-            // count: 0,
-            // group_title: ,
-            // group_date: ,
-            // group_message_body: ,
-            // group_message_time:
-            console.log('row:' + JSON.stringify(row));
-            const newtime = new Date(row.group_message_time);
-            let year = newtime.getFullYear();
-            let month = newtime.getMonth() + 1;
-            let day = newtime.getDate();
-            let hour = newtime.getHours();
-            let min = newtime.getMinutes();
+          if (json !== undefined) {
+            json.map((row) => {
+              //넘어오는 데이터 예시
+              // group_key: 2,
+              // user_key: [ 2, 3 ],
+              // count: 0,
+              // group_title: ,
+              // group_date: ,
+              // group_message_body: ,
+              // group_message_time:
+              console.log('row:' + JSON.stringify(row));
+              const newtime = new Date(row.group_message_time);
+              let year = newtime.getFullYear();
+              let month = newtime.getMonth() + 1;
+              let day = newtime.getDate();
+              let hour = newtime.getHours();
+              let min = newtime.getMinutes();
 
-            const newrow = row;
-            newrow.year = year;
-            if (hour > 12) {
-              newrow.ampm = '오후';
-              newrow.hour = hour - 12;
-            } else {
-              newrow.ampm = '오전';
-              newrow.hour = hour;
-            }
-            newrow.month = month;
-            newrow.day = day;
-            newrow.min = min;
-            console.log('new' + JSON.stringify(newrow));
+              const newrow = row;
+              newrow.year = year;
+              if (hour > 12) {
+                newrow.ampm = '오후';
+                newrow.hour = hour - 12;
+              } else {
+                newrow.ampm = '오전';
+                newrow.hour = hour;
+              }
+              newrow.month = month;
+              newrow.day = day;
+              newrow.min = min;
+              console.log('new' + JSON.stringify(newrow));
 
-            this.setState({
-              grouproom: [...this.state.grouproom, newrow],
+              this.setState({
+                grouproom: [...this.state.grouproom, newrow],
+              });
+              // console.log("room", this.state.messagesRoom);
             });
-            // console.log("room", this.state.messagesRoom);
-          });
+          }
         })
-        .catch((err) => console.log('err1: ', err));
+        .catch((err) => console.log('err그룹: ', err));
     });
   }
 

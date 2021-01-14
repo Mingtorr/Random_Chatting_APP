@@ -147,7 +147,7 @@ class Login extends React.Component {
                     />
                   </View>
                   <View style={styles.slide2}>
-                    <Text style={styles.swiper_text}>창원대</Text>
+                    <Text style={styles.swiper_text}>실친구함 친구구함</Text>
                     <Text style={styles.swiper_text}>창원대</Text>
                     <Image
                       style={styles.swiper_image}
@@ -156,7 +156,7 @@ class Login extends React.Component {
                     />
                   </View>
                   <View style={styles.slide3}>
-                    <Text style={styles.swiper_text}>와글와글</Text>
+                    <Text style={styles.swiper_text}>내 손 안에 작은 학교</Text>
                     <Text style={styles.swiper_text}>와글와글</Text>
                     <Image
                       style={styles.swiper_image}

@@ -20,42 +20,26 @@ app.use(bodyparser.urlencoded({extended: false}));
 app.use(cors());
 app.use(bodyparser.json());
 
-app.post('/Getnotice', (req, res) => {
-  console.log(req.body);
-  console.log('sex');
-  connection.query('SELECT * FROM notice', function (
-    err,
-    rows,
-    fields,
-  ) {
-    if (err) {
-      console.log(err);
-      res.send(false);
-    } else {
-      console.log(rows);
-      res.send(rows[0]);
-    }
-  });
+app.post('/receptionOnOff', (req, res) => {
+  // console.log('알림 설정', req.body);
+
+  connection.query(
+    'UPDATE participant SET reception = ? WHERE room_id = ? and user_key = ?',
+    [req.body.reception, req.body.roomid, req.body.userkey],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      } else {
+        res.send(true);
+      }
+    },
+  );
 });
-
-app.post('/receptionOnOff', (req, res) =>{
-  console.log('알림 설정', req.body);
-
-  connection.query('UPDATE participant SET reception = ? WHERE room_id = ? and user_key = ?',
-  [req.body.reception, req.body.roomid, req.body.userkey],
-  function(err, rows, fields){
-    if(err){
-      console.log(err);
-      res.send(false)
-    }else{
-      res.send(true);
-    }
-  })
-})
 
 app.post('/GetMessageRoom', (req, res) => {
   const userKey = req.body.userKey;
-  console.log('userkey: ', userKey);
+  // console.log('userkey: ', userKey);
 
   connection.query(
     `SELECT part.count, part.room_id, part.user_key,part.shownickname, part.reception as toreception, info.user_nickname, info.user_sex,info.user_token 
@@ -68,7 +52,7 @@ app.post('/GetMessageRoom', (req, res) => {
         res.send(false);
       } else {
         const roomarr = [];
-        console.log('test', rows);
+        // console.log('test', rows);
         rows.map((v, i, n) => {
           roomarr.push(v.room_id);
         });
@@ -95,12 +79,12 @@ app.post('/GetMessageRoom', (req, res) => {
                   'SELECT count, reception FROM participant where user_key = ?',
                   [userKey],
                   function (err, rows, fields) {
-                    console.log('rororo' , rows);
+                    // console.log('rororo', rows);
                     const mess = [];
                     message.map((info, index) => {
                       mess.push({...info, ...rows[index]});
                     });
-                    console.log('reception최종', mess);
+                    // console.log('reception최종', mess);
                     res.send(mess);
                   },
                 );
@@ -122,7 +106,7 @@ app.post('/getshownickname', (req, res) => {
         res.send(false);
       } else {
         if (rows[0] != undefined) {
-          console.log('DLDDLDDLDLD' + JSON.stringify(rows[0]));
+          // console.log('DLDDLDDLDLD' + JSON.stringify(rows[0]));
           res.send(rows[0]);
         }
       }
@@ -144,7 +128,7 @@ app.post('/ChatNumZero', (req, res) => {
 });
 
 app.post('/Get_Group', (req, res) => {
-  console.log('그룹');
+  // console.log('그룹');
 
   connection.query(
     `SELECT Gpart.group_key, Gpart.user_key, Gpart.count, Gmess.group_title, Gmess.group_date 
@@ -156,7 +140,7 @@ app.post('/Get_Group', (req, res) => {
         console.log(err);
         res.send(false);
       } else {
-        console.log('그룹', rows);
+        // console.log('그룹', rows);
         if (rows[0] === undefined) {
           res.send(false);
         } else {
@@ -219,8 +203,8 @@ app.post('/Get_Group', (req, res) => {
           group_room.map((v, i, n) => {
             group_key.push(v.group_key);
           });
-          console.log('그룹키: ', group_key);
-          console.log('그룹데이터', group_room);
+          // console.log('그룹키: ', group_key);
+          // console.log('그룹데이터', group_room);
           connection.query(
             `SELECT TB.group_message_body, TB.group_message_time 
         FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY group_key order by group_message_time desc)
@@ -246,7 +230,7 @@ app.post('/Get_Group', (req, res) => {
 });
 
 app.post('/DelGroupRoom', (req, res) => {
-  console.log('그룹삭제', req.body);
+  // console.log('그룹삭제', req.body);
   connection.query(
     `
     UPDATE group_participant SET room_del = 1 WHERE group_key = ? and user_key = ?`,
@@ -262,11 +246,11 @@ app.post('/DelGroupRoom', (req, res) => {
 //---------------------------------------------------------
 
 app.post('/heart_reset', (req, res) => {
-  console.log('his');
+  // console.log('his');
   let userkey = req.body.userkey;
   let myname = req.body.myname;
   let five = 5;
-  console.log(req.body, userkey, myname);
+  // console.log(req.body, userkey, myname);
 
   connection.query(
     'UPDATE user_table SET user_heart = (?) WHERE user_key = (?)',
@@ -276,7 +260,7 @@ app.post('/heart_reset', (req, res) => {
         console.log(err);
         res.send(false);
       } else {
-        console.log('success');
+        // console.log('success');
         res.send(true);
       }
     },
@@ -285,20 +269,20 @@ app.post('/heart_reset', (req, res) => {
 });
 
 app.post('/Heart_number', (req, res) => {
-  console.log('his');
+  // console.log('his');
   let userkey = req.body.userkey;
   let myname = req.body.myname;
-  console.log(req.body, userkey, myname);
+  // console.log(req.body, userkey, myname);
 
   connection.query(
     'SELECT user_heart FROM user_table WHERE user_key =(?)',
     [userkey],
     function (err, rows, fields) {
       if (rows[0] === undefined) {
-        console.log('없는데?');
+        // console.log('없는데?');
         res.send(true); //중복 없음 사용가능
       } else {
-        console.log('있다');
+        // console.log('있다');
         res.send(rows[0]); // 중복 있음 사용안됨
       }
     },
@@ -309,7 +293,7 @@ app.post('/Heart_number', (req, res) => {
 
 app.post('/minus_heart', (req, res) => {
   let body = req.body;
-  console.log(body);
+  // console.log(body);
   connection.query(
     'select user_heart from user_table where user_key=(?);',
     [body.user_key],
@@ -317,7 +301,7 @@ app.post('/minus_heart', (req, res) => {
       if (err) console.log(err);
       else {
         if (rows[0].user_heart === 0) {
-          console.log('1 rows임', rows);
+          // console.log('1 rows임', rows);
           res.send(false);
         } else {
           const heart = {
@@ -341,7 +325,7 @@ app.post('/minus_heart', (req, res) => {
 
 app.post('/sendMessage', (req, res) => {
   let body = req.body;
-  console.log(body);
+  // console.log(body);
   if (body.deptno !== '') {
     if (body.major !== '') {
       //같은 학과 학번을 선택
@@ -350,7 +334,7 @@ app.post('/sendMessage', (req, res) => {
         [body.sex, body.deptno, body.major, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
-            console.log('전송할 유저 없음0');
+            // console.log('전송할 유저 없음0');
             res.send(false);
           } else {
             // 전송할 유저 찾음
@@ -358,7 +342,7 @@ app.post('/sendMessage', (req, res) => {
             if (bool === false) {
               res.send(false);
             } else {
-              console.log(rows[bool]);
+              // console.log(rows[bool]);
               res.send(rows[bool]);
             }
           }
@@ -371,7 +355,7 @@ app.post('/sendMessage', (req, res) => {
         [body.sex, body.deptno, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
-            console.log('전송할 유저 없음1');
+            // console.log('전송할 유저 없음1');
             res.send(false);
           } else {
             // 전송할 유저 찾음
@@ -385,14 +369,14 @@ app.post('/sendMessage', (req, res) => {
   } else {
     if (body.major !== '') {
       //같은 학과 선택x 학번은 선택
-      console.log('hihi');
+      // console.log('hihi');
       connection.query(
         'select u.user_key from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and u.user_stdno=(?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.major, body.user_key],
         async function (err, rows, fields) {
           if (rows[0] === undefined) {
             res.send(false);
-            console.log('전송할 유저 없음2');
+            // console.log('전송할 유저 없음2');
           } else {
             // 전송할 유저 찾음
             let bool = await checkroom(rows, body.user_key, body.message);
@@ -406,9 +390,9 @@ app.post('/sendMessage', (req, res) => {
         'select u.user_key, u.user_token from user_table u LEFT OUTER JOIN participant p on u.user_key= p.user_key where u.user_connection_time > (NOW() - INTERVAL 15 DAY) and u.user_sex=(?) and not u.user_key=(?) and not u.user_NewMsg =1 group by u.user_key having count(u.user_key)<20 order by count(u.user_key);',
         [body.sex, body.user_key],
         async function (err, rows, fields) {
-          console.log(rows);
+          // console.log(rows);
           if (rows === undefined) {
-            console.log('쓰레기 유저에게 전송 sex=2인 사람');
+            // console.log('쓰레기 유저에게 전송 sex=2인 사람');
             //mkroom(rows[0].user_key, body.user_key, body.message);
             if (body.sex === 0) await sending0(body.user_key, body.message);
             else await sending1(body.user_key, body.message);
@@ -416,14 +400,14 @@ app.post('/sendMessage', (req, res) => {
           } else {
             // 전송할 유저 찾음
             let bool = await checkroom(rows, body.user_key, body.message);
-            console.log(bool);
+            // console.log(bool);
             if (bool === false) {
               if (body.sex === 0) await sending0(body.user_key, body.message);
               else await sending1(body.user_key, body.message);
-              console.log('end');
+              // console.log('end');
               res.send(true);
             } else {
-              console.log(rows[bool]);
+              // console.log(rows[bool]);
               res.send(rows[bool]);
             }
           }
@@ -460,13 +444,13 @@ async function checkroom(row, user_key, message) {
         bool = false;
         resolve();
       } else {
-        console.log('받는사람: ' + row[res].user_key);
+        // console.log('받는사람: ' + row[res].user_key);
         connection.query(
           'INSERT INTO messageroom_table (room_mode) values(1);', // 방만들기
           function (err, rows, fields) {
             if (err) console.log(err);
             else {
-              console.log(rows.insertId); //추가한 방번호pk
+              // console.log(rows.insertId); //추가한 방번호pk
               room_key = rows.insertId;
               connection.query(
                 'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
@@ -483,7 +467,7 @@ async function checkroom(row, user_key, message) {
                         [room_key, user_key, message],
                         function (err, rows, fields) {
                           if (err) console.lo(err);
-                          console.log('매칭 완료');
+                          // console.log('매칭 완료');
                           bool = res;
                           resolve();
                         },
@@ -498,7 +482,7 @@ async function checkroom(row, user_key, message) {
       }
     });
   });
-  console.log(bool);
+  // console.log(bool);
   return bool;
 }
 
@@ -510,8 +494,8 @@ async function sending0(user_key, message) {
       function (err, rows, fields) {
         if (err) console.log(err);
         else {
-          console.log(rows.insertId); //추가한 방번호pk
-          console.log('쓰레기에 전송');
+          // console.log(rows.insertId); //추가한 방번호pk
+          // console.log('쓰레기에 전송');
           room_key = rows.insertId;
           connection.query(
             'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
@@ -528,7 +512,7 @@ async function sending0(user_key, message) {
                     [room_key, user_key, message],
                     function (err, rows, fields) {
                       if (err) console.log(err);
-                      console.log('매칭 완료');
+                      // console.log('매칭 완료');
                       resolve();
                     },
                   );
@@ -551,8 +535,8 @@ async function sending1(user_key, message) {
       function (err, rows, fields) {
         if (err) console.log(err);
         else {
-          console.log(rows.insertId); //추가한 방번호pk
-          console.log('쓰레기에 전송');
+          // console.log(rows.insertId); //추가한 방번호pk
+          // console.log('쓰레기에 전송');
           room_key = rows.insertId;
           connection.query(
             'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
@@ -569,7 +553,7 @@ async function sending1(user_key, message) {
                     [room_key, user_key, message],
                     function (err, rows, fields) {
                       if (err) console.log(err);
-                      console.log('매칭 완료');
+                      // console.log('매칭 완료');
                       resolve();
                     },
                   );

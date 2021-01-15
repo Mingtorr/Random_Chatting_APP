@@ -26,16 +26,16 @@ app.use(bodyparser.json());
 
 app.post('/CheckId', (req, res) => {
   const checkId = req.body.id;
-  console.log(checkId);
+  // console.log(checkId);
   connection.query(
     'SELECT user_id FROM user_table WHERE user_id =(?)',
     [checkId],
     function (err, rows, fields) {
       if (rows[0] === undefined) {
-        console.log('CheckId true');
+        // console.log('CheckId true');
         res.send(true); //중복 없음 사용가능
       } else {
-        console.log('CheckId false');
+        // console.log('CheckId false');
         res.send(false); // 중복 있음 사용안됨
       }
     },
@@ -51,7 +51,7 @@ app.post('/Signup', async function (req, res, next) {
     .createHash('sha512')
     .update(inputPassword + salt)
     .digest('hex');
-  console.log(req.body);
+  // console.log(req.body);
   connection.query(
     'INSERT INTO user_table (user_id, user_salt, user_passwd, user_sex, user_nickname, user_email) values (?,?,?,?,?,?)',
     [body.id, salt, hashPassword, body.sex, body.nickname, body.email],
@@ -60,7 +60,7 @@ app.post('/Signup', async function (req, res, next) {
         console.log('sign_up error', err);
         res.send(false);
       } else {
-        console.log('sign_up ok');
+        // console.log('sign_up ok');
         res.send(true);
       }
     },
@@ -102,7 +102,7 @@ app.post('/Signup2', async function (req, res, next) {
 });
 //로그인 salt 적용
 app.post('/login', async function (req, res, next) {
-  console.log('login');
+  // console.log('login');
   let body = req.body;
   let userkey;
   let arr;
@@ -142,7 +142,7 @@ app.post('/login', async function (req, res, next) {
                     res.send(err);
                   }
                   connection.query(
-                    'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?) user_pushstate=1',
+                    'UPDATE user_table SET user_connection_time = Now() WHERE user_key= (?) and user_pushstate=1',
                     [userkey],
                     function (err, rows, fields) {
                       if (err) {
@@ -168,7 +168,7 @@ app.post('/login', async function (req, res, next) {
 
 app.post('/CheckNickname', (req, res) => {
   const nickname = req.body.nickname;
-  console.log(req.body);
+  // console.log(req.body);
   connection.query(
     'SELECT * FROM user_table WHERE user_nickname = (?)',
     [nickname],
@@ -178,10 +178,10 @@ app.post('/CheckNickname', (req, res) => {
         res.send(false);
       }
       if (rows[0] === undefined) {
-        console.log('CheckNickname true');
+        // console.log('CheckNickname true');
         res.send(true); //중복 없음 사용 가능
       } else {
-        console.log('CheckNickname false');
+        // console.log('CheckNickname false');
         res.send(false); //중복 있음 사용 불가능
       }
     },
@@ -195,16 +195,16 @@ app.post('/Find_idpw', (req, res) => {
     'SELECT user_id FROM user_table WHERE user_email = (?); ',
     [email],
     function (err, rows, result) {
-      console.log(rows[0]);
+      // console.log(rows[0]);
       if (err) {
         console.log(err);
         res.send(false);
       }
       if (rows[0] === undefined) {
-        console.log('다음x');
+        // console.log('다음x');
         res.send(false);
       } else {
-        console.log('다음o');
+        // console.log('다음o');
         res.send(rows[0]);
       }
     },
@@ -225,10 +225,10 @@ app.post('/Find_idpw2', (req, res) => {
     [salt, hashPassword, id],
     function (err, rows, result) {
       if (err) {
-        console.log('변경x');
+        // console.log('변경x');
         res.send(false);
       } else {
-        console.log('변경o');
+        // console.log('변경o');
         res.send(true);
       }
     },
@@ -249,7 +249,7 @@ app.post('/call', (req, res) => {
       } else {
         // console.log('call good');
         res.send(rows[0]);
-        console.log(rows);
+        // console.log(rows);
       }
     },
   );
@@ -266,7 +266,7 @@ app.post('/withdrawal', (req, res) => {
         console.log('withdrawal fail');
         res.send(false);
       } else {
-        console.log('withdrawal good');
+        // console.log('withdrawal good');
         // console.log(rows);
         res.send(true);
       }
@@ -284,7 +284,7 @@ app.post('/ChangeId', (req, res) => {
     [id],
     function (err, rows, fields) {
       if (rows[0] === undefined) {
-        console.log('아이디 중복 없음');
+        // console.log('아이디 중복 없음');
         connection.query(
           'UPDATE user_table SET user_id = (?) WHERE user_key =(?)',
           [id, key],
@@ -293,7 +293,7 @@ app.post('/ChangeId', (req, res) => {
               console.log('changeid error' + err);
               res.send(false);
             } else {
-              console.log('changed ok');
+              // console.log('changed ok');
               res.send(true);
             }
           },
@@ -324,7 +324,7 @@ app.post('/ChangePass', async function (req, res, next) {
         console.log('change passwd error', err);
         res.send(false);
       } else {
-        console.log('change passwd ok');
+        // console.log('change passwd ok');
         res.send(true);
       }
     },
@@ -335,7 +335,9 @@ app.post('/ChangeNickname', (req, res) => {
   const nickname = req.body.nickname;
   const key = req.body.key;
   // console.log(req.body);
-  connection.query('SELECT * FROM user_table WHERE user_nickname = (?)', [nickname],
+  connection.query(
+    'SELECT * FROM user_table WHERE user_nickname = (?)',
+    [nickname],
     function (err, rows, fields) {
       if (err) {
         console.log(err);
@@ -343,19 +345,21 @@ app.post('/ChangeNickname', (req, res) => {
       }
       if (rows[0] === undefined) {
         // console.log('CheckNickname true');
-        connection.query('UPDATE user_table SET user_nickname = (?) WHERE user_key =(?)',
-          [nickname, key], function (err, rows, fields) {
+        connection.query(
+          'UPDATE user_table SET user_nickname = (?) WHERE user_key =(?)',
+          [nickname, key],
+          function (err, rows, fields) {
             if (err) {
               console.log('닉네임 변경 에러' + err);
               res.send(false);
             } else {
-              console.log('닉네임 변경');
+              // console.log('닉네임 변경');
               res.send(true);
             }
           },
         );
       } else {
-        console.log('CheckNickname false');
+        // console.log('CheckNickname false');
         res.send(false); //중복 있음 사용 불가능
       }
     },
@@ -392,7 +396,7 @@ app.post('/Setstdno', (req, res) => {
         console.log('setstdno error' + err);
         res.send(false);
       } else {
-        console.log('setstdno good');
+        // console.log('setstdno good');
         res.send(true);
       }
     },
@@ -404,7 +408,7 @@ app.post('/Sendmail', (req, res) => {
   if (authNum > 1000000) {
     authNum = authNum - 100000;
   }
-  console.log(authNum);
+  // console.log(authNum);
   let emailParam = {
     toEmail: email + '@changwon.ac.kr', //@changwon.ac.kr
     subject: '와글와글 회원가입 인증 메일입니다.',
@@ -442,7 +446,7 @@ app.post('/Sendmail', (req, res) => {
     'SELECT user_email FROM user_table WHERE user_email = (?)',
     [email],
     function (err, rows, fields) {
-      console.log('발송');
+      // console.log('발송');
       mailSender.sendGmail(emailParam);
       res.send(authNum.toString());
     },
@@ -462,7 +466,7 @@ app.post('/Sendmail2', (req, res) => {
     [email],
     function (err, rows, result) {
       if (rows[0] !== undefined) {
-        console.log(rows[0]);
+        // console.log(rows[0]);
         const user_id = {
           id: rows[0].user_id,
         };
@@ -497,12 +501,12 @@ app.post('/Sendmail2', (req, res) => {
         </div>
       </body>`,
         };
-        console.log('발송');
+        // console.log('발송');
         mailSender.sendGmail(emailParam2);
         res.send(authNum.toString());
         //가입된 메일이 있음
       } else {
-        console.log('미발송');
+        // console.log('미발송');
         res.send(false);
       }
     },
@@ -546,7 +550,7 @@ var mailSender = {
       if (error) {
         console.log(error);
       } else {
-        console.log('Email sent: ' + info.response);
+        // console.log('Email sent: ' + info.response);
       }
     });
   },
@@ -555,7 +559,7 @@ var mailSender = {
 //=============================================== 첫 접속하기 =================================================================
 app.post('/onMain', (req, res) => {
   let body = req.body;
-  console.log(body);
+  // console.log(body);
   connection.query(
     'UPDATE user_table SET user_token = (?) WHERE user_key= (?);',
     [body.token, body.user_key],
@@ -584,8 +588,8 @@ app.post('/onMain', (req, res) => {
 
 app.post('/reset_token', (req, res) => {
   let body = req.body;
-  console.log('reset_token');
-  console.log(body);
+  // console.log('reset_token');
+  // console.log(body);
   connection.query(
     'UPDATE user_table SET user_token = (?) WHERE user_key= (?);',
     [0, body.userkey],
@@ -594,7 +598,7 @@ app.post('/reset_token', (req, res) => {
         console.log(err);
         res.send(false);
       } else {
-        console.log('asdasd');
+        // console.log('asdasd');
         res.send(true);
       }
     },
@@ -603,7 +607,7 @@ app.post('/reset_token', (req, res) => {
 
 app.post('/reset_token2', (req, res) => {
   let body = req.body;
-  console.log(body);
+  // console.log(body);
   connection.query(
     'UPDATE user_table SET user_token = (?) WHERE user_key= (?);',
     [0, body.userkey],
@@ -631,7 +635,7 @@ app.post('/reset_token2', (req, res) => {
 
 app.post('/reset_token3', (req, res) => {
   let body = req.body;
-  console.log(body);
+  // console.log(body);
   connection.query(
     'UPDATE user_table SET user_NewMsg = (?) WHERE user_key= (?);',
     [body.pid, body.userkey],

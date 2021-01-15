@@ -43,7 +43,7 @@ function delete_room() {
                     function (err, rows, fields) {
                       if (err) console.log(err);
                       else {
-                        console.log('24시간 이상 연락 없는 방 삭제처리 완료');
+                        // console.log('24시간 이상 연락 없는 방 삭제처리 완료');
                       }
                     },
                   );
@@ -59,7 +59,7 @@ function delete_room() {
 
 function test() {
   var date = moment().format('hh');
-  console.log(date);
+  // console.log(date);
   clearInterval(interval);
   delete_room();
   interval = setInterval(test, 1000 * 60);

@@ -27,18 +27,14 @@ app.use(bodyparser.json());
 
 //공지사항
 app.post('/Getnotice', (req, res) => {
-  console.log(req.body);
-  console.log('sex');
-  connection.query('SELECT * FROM notice',[], function (
-    err,
-    rows,
-    fields,
-  ) {
+  // console.log(req.body);
+  // console.log('sex');
+  connection.query('SELECT * FROM notice', [], function (err, rows, fields) {
     if (err) {
       console.log(err);
       res.send(false);
     } else {
-      console.log(rows);
+      // console.log(rows);
       res.send(rows);
     }
   });
@@ -54,7 +50,7 @@ app.post('/changeToken', (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        console.log('change token complete');
+        // console.log('change token complete');
       }
     },
   );

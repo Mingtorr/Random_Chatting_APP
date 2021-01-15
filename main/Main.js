@@ -49,7 +49,7 @@ export default class Main extends Component {
   componentDidMount() {
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const user_info = JSON.parse(result);
-      // console.log(user_info);
+       console.log(user_info);
       this.setState({user_key: user_info.user_key});
       this.setState({user_nickname: user_info.user_nickname});
     });

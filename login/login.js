@@ -58,6 +58,7 @@ class Login extends React.Component {
     })
       .then((res) => res.json())
       .then((json) => {
+        console.log(JSON.stringify(json)+"시발");
         if (json) {
           AsyncStorage.setItem('login_onoff_set', 'true', () => {
             AsyncStorage.setItem(

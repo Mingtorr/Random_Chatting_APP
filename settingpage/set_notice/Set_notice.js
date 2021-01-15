@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, SafeAreaView} from 'react-native';
+import {Text, StyleSheet,Image, View, SafeAreaView, FlatList, TouchableOpacity} from 'react-native';
 import Noticepush from './noticepush';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 const func = require('../../server/api');
 
@@ -10,68 +11,114 @@ export default class Set_notice extends Component {
     this.state = {
       // notice: '',
       notices: [],
+      ids: [],
     };
   }
   componentDidMount() {
-    const post = {};
-    fetch(func.api(3003, 'notice'), {
+    console.log('12asa');
+    const post2 = {
+      sex: 'sex',
+    };
+    
+    fetch(func.api(3009, 'Getnotice'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(post),
+      body: JSON.stringify(post2),
     })
-      .then((res) => res.json())
-      .then((json) => {
+    .then((res) => res.json())
+    .then((json) => {
+        console.log('공지11');
+        console.log('공지'+ JSON.stringify(json));
+
         if (json !== undefined) {
+          console.log('이프문')
           json.map((rows) => {
             const newdate = new Date(rows.notice_date);
             var month = newdate.getMonth() + 1;
             var day = newdate.getDate();
             var noticeday = [month, day].join('/');
-            const newrow = {
-              title: rows.notice_body,
-              date: noticeday,
-            };
+            rows.notice_date = noticeday;
+            const newrow = rows;
             console.log(newrow);
             this.setState({
               notices: [...this.state.notices, newrow],
             });
-            // console.log(this.state.notices);
+            console.log('스테이트',this.state.notices);
 
-            return null;
+            // return null;
           });
         }
       });
   }
+  //<View style={{marginLeft:15,marginTop:10}}><Text style={{fontWeight:'500',fontSize:17}}>{item.notice_title}</Text></View>
+  //<View style={{marginTop:5,marginBottom:10,marginLeft:15}}><Text style={{color:'gray'}}>{item.notice_date}</Text></View>
+  
+  openNotice = (key, title, body, date) =>{
+    console.log('클릭함', key);
+    this.props.navigation.navigate('noticepush',{
+      notice_title: title,
+      notice_body: body,
+      notice_date: date,
+    })
+  }
+
+  renderItem = ({item}) => {
+    return (
+      <View>
+        <TouchableOpacity onPress ={() =>this.openNotice(item.notice_key, item.notice_title, item.notice_body, item.notice_date)}>
+          <View style={{borderBottomWidth: 1,borderBottomColor: 'lightgray',backgroundColor:'black',flexDirection:'row'}}>
+            <View style={{display:'flex',flex:0.15,backgroundColor:'white',alignItems:'center',justifyContent:'center'}}>
+            <Image
+                  style={{width: 45, height: 45}}
+                  source={require('./waglewagle.png')}
+                />
+            </View>
+            <View style={{display:'flex',flex:0.85,backgroundColor:'white',flexDirection:'column'}}>
+              <View style={{marginLeft:15,marginTop:10}}><Text style={{fontWeight:'500',fontSize:17}}>{item.notice_title}</Text></View>
+              <View style={{marginTop:5,marginBottom:10,marginLeft:15}}><Text style={{color:'gray'}}>{item.notice_date}</Text></View>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   render() {
     return (
-      <SafeAreaView style={styles.Container_notice}>
+      <SafeAreaView style ={{backgroundColor:'white',display:'flex',flex:1}}>
         <View style={styles.Head_notice}>
           <Text style={styles.Text_notice}>공지사항</Text>
         </View>
-        {/* <Noticepush /> */}
-        {this.state.notices.map((content, index) => {
-          console.log(content.notice_body);
-          // console.log(this.state.notices);
-          return (
-            <Noticepush
-              content={content.title}
-              key={index}
-              date={content.date}
-            />
-          );
-        })}
+        <FlatList
+          data={this.state.notices}
+          renderItem={this.renderItem}
+          keyExtractor={(item) => String(item.notice_key)}
+        />
       </SafeAreaView>
+      // <SafeAreaView style={styles.Container_notice}>
+      //   <View style={styles.Head_notice}>
+      //     <Text style={styles.Text_notice}>공지사항</Text>
+      //   </View>
+      //   {/* <Noticepush /> */}
+      //   {this.state.notices.map((content, index) => {
+      //     console.log(content.notice_body);
+      //     // console.log(this.state.notices);
+      //     return (
+      //       <Noticepush
+      //         content={content.title}
+      //         key={index}
+      //         date={content.date}
+      //       />
+      //     );
+      //   })}
+      // </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  Container_notice: {
-    display: 'flex',
-    flex: 1,
-  },
   Head_notice: {
     marginTop: 15,
     marginBottom: 30,
@@ -92,7 +139,7 @@ const styles = StyleSheet.create({
   Noticecon_notice: {
     display: 'flex',
     justifyContent: 'center',
-    borderColor: 'lightgray',
+    // borderColor: 'lightgray',
     borderWidth: 1,
     height: 40,
   },

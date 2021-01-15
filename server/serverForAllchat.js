@@ -5,8 +5,6 @@ const cors = require('cors');
 const bodyparser = require('body-parser');
 const mysql = require('mysql');
 
-
-
 // nodemailer 모듈 요청
 
 var http = require('http').createServer(app);
@@ -31,13 +29,13 @@ app.post('/Allchatroom_message', (req, res) => {
     function (err, rows, field) {
       if (err) {
         console.log(err);
-        console.log('allchatroom message err');
+        // console.log('allchatroom message err');
         res.send(false);
       } else if (rows[0] !== undefined) {
-        console.log('전체 메세지 보냄');
+        // console.log('전체 메세지 보냄');
         res.send(rows);
       } else {
-        console.log('data x');
+        // console.log('data x');
         res.send(false);
       }
     },
@@ -71,12 +69,12 @@ app.post('/Allchatroom_message', (req, res) => {
 // });
 
 app.post('/Infinite_scroll', (req, res) => {
-  console.log('infinite_scroll');
+  // console.log('infinite_scroll');
   const scroll_number = req.body.scroll_number;
   let scroll_number_limit = scroll_number * 30;
 
-  console.log(scroll_number);
-  console.log(scroll_number_limit);
+  // console.log(scroll_number);
+  // console.log(scroll_number_limit);
 
   connection.query(
     'SELECT A.allmessage_key, A.allmessage_body, A.allmessage_time, A.user_key, user_table.user_nickname FROM (SELECT * FROM allmessage_table ORDER BY allmessage_key DESC limit ?, 30) A LEFT JOIN user_table ON A.user_key = user_table.user_key ORDER BY allmessage_key DESC',
@@ -96,7 +94,7 @@ app.post('/Infinite_scroll', (req, res) => {
 });
 
 io.on('connection', function (socket) {
-  console.log('connection');
+  // console.log('connection');
 
   socket.on('send_allchatroom', (data) => {
     connection.query(
@@ -106,7 +104,7 @@ io.on('connection', function (socket) {
         if (err) {
           console.log(err);
         } else {
-          console.log('전체방_내가 보낸 메세지 저장');
+          // console.log('전체방_내가 보낸 메세지 저장');
           connection.query(
             'SELECT allmessage_key, allmessage_time FROM allmessage_table WHERE user_key = (?) and allmessage_body = (?) ORDER BY allmessage_time DESC',
             [data.user_key, data.message_body],
@@ -115,12 +113,12 @@ io.on('connection', function (socket) {
                 console.log(err);
                 console.log('send_allchatroom qrl err');
               } else {
-                console.log('send_allchatroom o');
+                // console.log('send_allchatroom o');
                 const index = {
                   key: rows[0].allmessage_key,
                   time: rows[0].allmessage_time,
                 };
-                console.log(index);
+                // console.log(index);
                 const all_send_message = {
                   key: index.key,
                   message_body: data.message_body,
@@ -128,10 +126,10 @@ io.on('connection', function (socket) {
                   user_key: data.user_key,
                   allmessage_time: index.time,
                 };
-                console.log(all_send_message);
+                // console.log(all_send_message);
                 io.emit('recieve_allchatroom_message', all_send_message);
 
-                console.log('내가 전체 메세지 보냄');
+                // console.log('내가 전체 메세지 보냄');
               }
             },
           );

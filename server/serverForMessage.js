@@ -12,7 +12,7 @@ const io = require('socket.io')(http);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: 'snsk3779@',
   database: 'mydb',
 });
 
@@ -25,7 +25,6 @@ app.use(bodyparser.json());
 // 아이디 중복체크
 app.post('/save_message', (req, res) => {
   console.log(req.body);
-
   connection.query(
     'insert into message_table (room_id,user_key,message_body) values (?,?,?)',
     [req.body.roomid, req.body.userkey, req.body.message],

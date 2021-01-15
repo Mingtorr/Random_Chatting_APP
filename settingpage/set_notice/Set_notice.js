@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet,Image, View, SafeAreaView, FlatList, TouchableOpacity} from 'react-native';
 import Noticepush from './noticepush';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
@@ -52,6 +52,8 @@ export default class Set_notice extends Component {
         }
       });
   }
+  //<View style={{marginLeft:15,marginTop:10}}><Text style={{fontWeight:'500',fontSize:17}}>{item.notice_title}</Text></View>
+  //<View style={{marginTop:5,marginBottom:10,marginLeft:15}}><Text style={{color:'gray'}}>{item.notice_date}</Text></View>
   
   openNotice = (key, title, body, date) =>{
     console.log('클릭함', key);
@@ -66,13 +68,17 @@ export default class Set_notice extends Component {
     return (
       <View>
         <TouchableOpacity onPress ={() =>this.openNotice(item.notice_key, item.notice_title, item.notice_body, item.notice_date)}>
-          <View style={{borderBottomWidth: 1,borderBottomColor: 'lightgray',backgroundColor:'white'}}>
-          <View><Text style={{fontWeight:'bold',fontSize:17}}>{item.notice_title}</Text></View>
-          <View>
-            <Text>{item.notice_body.length >35
-            ? item.notice_body.substr(0, 37).padEnd(40, '.')
-            : item.notice_body}</Text></View>
-          <View><Text>{item.notice_date}</Text></View>
+          <View style={{borderBottomWidth: 1,borderBottomColor: 'lightgray',backgroundColor:'black',flexDirection:'row'}}>
+            <View style={{display:'flex',flex:0.15,backgroundColor:'white',alignItems:'center',justifyContent:'center'}}>
+            <Image
+                  style={{width: 45, height: 45}}
+                  source={require('./waglewagle.png')}
+                />
+            </View>
+            <View style={{display:'flex',flex:0.85,backgroundColor:'white',flexDirection:'column'}}>
+              <View style={{marginLeft:15,marginTop:10}}><Text style={{fontWeight:'500',fontSize:17}}>{item.notice_title}</Text></View>
+              <View style={{marginTop:5,marginBottom:10,marginLeft:15}}><Text style={{color:'gray'}}>{item.notice_date}</Text></View>
+            </View>
           </View>
         </TouchableOpacity>
       </View>
@@ -81,7 +87,7 @@ export default class Set_notice extends Component {
 
   render() {
     return (
-      <SafeAreaView style ={styles.container}>
+      <SafeAreaView style ={{backgroundColor:'white',display:'flex',flex:1}}>
         <View style={styles.Head_notice}>
           <Text style={styles.Text_notice}>공지사항</Text>
         </View>
@@ -113,11 +119,6 @@ export default class Set_notice extends Component {
 }
 
 const styles = StyleSheet.create({
-  Container_notice: {
-    display: 'flex',
-    backgroundColor:'white',
-    flex: 1,
-  },
   Head_notice: {
     marginTop: 15,
     marginBottom: 30,

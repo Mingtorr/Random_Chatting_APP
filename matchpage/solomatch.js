@@ -249,6 +249,7 @@ export default class Solo_match extends React.Component {
               <View
                 style={{display: 'flex', flex: 0.3, justifyContent: 'center',alignItems:'flex-start'}}>
                 <Switch
+                  // dafult ='true'
                   trackColor={{false: 'white', true: '#eb6c63'}}
                   thumbColor={this.state.isEnabled ? 'white' : 'white'}
                   ios_backgroundColor="#white"

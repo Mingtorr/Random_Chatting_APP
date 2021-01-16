@@ -239,7 +239,7 @@ function Bottom() {
                 name="homeimo"
                 color={color}
                 source={icon}
-                style={{marginTop: 15, width: 25, height: 25}}
+                style={{marginTop: 15, width: size*1.1, height: size*1.1}}
               />
             );
           },
@@ -259,14 +259,14 @@ function Bottom() {
             if (focused) {
               icon = require('./Image/mainimo_full.png');
             } else {
-              icon = require('./Image/mainimo.png');
+              icon = require('./Image/mainmo3.png');
             }
             return (
               <Image
                 name="homeimo"
                 color={color}
                 source={icon}
-                style={{marginTop: 15, width: 25, height: 25}}
+                style={{marginTop: 15, width: size*1.6, height: size*1.1}}
               />
             );
           },
@@ -287,14 +287,14 @@ function Bottom() {
             if (focused) {
               icon = require('./Image/msgimo_full.png');
             } else {
-              icon = require('./Image/msgimo.png');
+              icon = require('./Image/msgimo2.png');
             }
             return (
               <Image
                 name="homeimo"
                 color={color}
                 source={icon}
-                style={{marginTop: 15, width: 25, height: 25}}
+                style={{marginTop: 15, width: size*1.1, height: size*1.1}}
               />
             );
           },
@@ -316,7 +316,7 @@ function Bottom() {
             if (focused) {
               icon = require('./Image/setting.png');
             } else {
-              icon = require('./Image/alarmimo.png');
+              icon = require('./Image/gear.png');
               //setting이미지 만드는중..
             }
             return (
@@ -324,7 +324,7 @@ function Bottom() {
                 name="homeimo"
                 color={color}
                 source={icon}
-                style={{marginTop: 15, width: 25, height: 25}}
+                style={{marginTop: 15, width: size*1.2, height: size*1.2}}
               />
             );
           },

@@ -1,8 +1,9 @@
+import React, {Component} from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import {Platform} from 'react-native';
+import {Platform, AppState} from 'react-native';
 
-class LocalNotificationService {
+class LocalNotificationService extends Component {
   configure = (onOpenNotification) => {
     PushNotification.configure({
       onRegister: function (token) {
@@ -13,13 +14,16 @@ class LocalNotificationService {
       },
       onNotification: function (notification) {
         console.log('[LocalNotificationService] onNotification ', notification);
-        PushNotificationIOS.addNotificationRequest({
-          id: 'test-2',
-          title: notification.title,
-          body: notification.message,
-          category: 'test',
-          threadId: 'thread-id',
-        });
+        console.log(this.state.appState);
+        if (Platform.OS === 'ios') {
+          PushNotificationIOS.addNotificationRequest({
+            id: 'test-2',
+            title: notification.title,
+            body: notification.message,
+            category: 'test',
+            threadId: 'thread-id',
+          });
+        }
         if (!notification?.data) {
           return;
         }
@@ -56,11 +60,6 @@ class LocalNotificationService {
       requestPermissions: true,
     });
   };
-
-  unRegister = () => {
-    PushNotification.unregister();
-  };
-
   showNotification = (id, title, message, data = {}, options = {}) => {
     PushNotification.localNotification({
       // Android only Properties

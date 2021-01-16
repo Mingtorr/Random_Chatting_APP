@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Switch,
   Dimensions,
+  Alert
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -37,7 +38,13 @@ export default class Solo_match extends React.Component {
     let userkey = '';
     let nickname;
     if (this.state.message === '') {
-      alert('전송할 메시지를 입력하세요');
+      // alert('전송할 메시지를 입력하세요');
+      Alert.alert(
+        "안내",
+        "전송할 메시지를 입력하세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       return;
     }
     AsyncStorage.getItem('login_user_info', (err, result) => {
@@ -52,13 +59,25 @@ export default class Solo_match extends React.Component {
       if (this.state.isDepton) {
         console.log(JSON.parse(result).user_deptno);
         if (JSON.parse(result).user_deptno === '') {
-          alert('자신의 학과를 먼저 선택해주세요');
+          // alert('자신의 학과를 먼저 선택해주세요');
+          Alert.alert(
+            "안내",
+            "자신의 학과를 먼저 선택해주세요",
+            [{text: "OK", style: "OK"}],
+            { cancelable: false }
+          );
           return;
         }
         deptno = JSON.parse(result).user_deptno;
       }
       if (this.state.major !== '' && JSON.parse(result).user_deptno === '') {
-        alert('자신의 학번를 먼저 선택해주세요');
+        // alert('자신의 학번를 먼저 선택해주세요');
+        Alert.alert(
+          "안내",
+          "자신의 학번를 먼저 선택해주세요",
+          [{text: "OK", style: "OK"}],
+          { cancelable: false }
+        );
         return;
       }
     }).then(() => {
@@ -75,7 +94,13 @@ export default class Solo_match extends React.Component {
         .then((res) => res.json())
         .then((json) => {
           if (json === false) {
-            alert('채팅권 갯수가 부족합니다. 충전해주세요');
+            // alert('채팅권 갯수가 부족합니다. 충전해주세요');
+            Alert.alert(
+              "안내",
+              "채팅권 갯수가 부족합니다. 충전해주세요",
+              [{text: "OK", style: "OK"}],
+              { cancelable: false }
+            );
             console.log(json);
           } else {
             this.props.resetHeart(json.heart);
@@ -86,7 +111,13 @@ export default class Solo_match extends React.Component {
               message: this.state.message,
               user_key: userkey,
             };
-
+            console.log(
+              '..............................................................................................',
+            );
+            console.log(box);
+            console.log(
+              '..............................................................................................',
+            );
             fetch(func.api(3003, 'sendMessage'), {
               method: 'post',
               headers: {
@@ -97,12 +128,26 @@ export default class Solo_match extends React.Component {
               .then((res) => res.json())
               .then((json) => {
                 console.log(json.user_token);
-                if (json === false) alert('조건에 맞는 사용자가 없습니다.');
+                if (json === false) {
+                  // alert('조건에 맞는 사용자가 없습니다.')
+                  Alert.alert(
+                    "안내",
+                    "조건에 맞는 사용자가 없습니다.",
+                    [{text: "OK", style: "OK"}],
+                    { cancelable: false }
+                  );
+                }
                 else if (json === true || json === undefined || json === 0) {
                   this.setState({
                     message: '',
                   });
-                  alert('메시지를 전송했습니다.');
+                  // alert('메시지를 전송했습니다.');
+                  Alert.alert(
+                    "안내",
+                    "메시지를 전송했습니다.",
+                    [{text: "OK", style: "OK"}],
+                    { cancelable: false }
+                  );
                 } else {
                   console.log(json);
                   fetch('https://fcm.googleapis.com/fcm/send', {
@@ -114,7 +159,7 @@ export default class Solo_match extends React.Component {
                     },
                     body: JSON.stringify({
                       to: json.user_token,
-                      "content_available" : true,
+                      content_available: true,
                       notification: {
                         title: nickname + '님이 메세지를 보냈습니다.',
                         body: this.state.message,
@@ -128,7 +173,13 @@ export default class Solo_match extends React.Component {
                   this.setState({
                     message: '',
                   });
-                  alert('메시지를 전송했습니다.');
+                  // alert('메시지를 전송했습니다.');
+                  Alert.alert(
+                    "안내",
+                    "메시지를 전송했습니다.",
+                    [{text: "OK", style: "OK"}],
+                    { cancelable: false }
+                  );
                 }
               });
           }

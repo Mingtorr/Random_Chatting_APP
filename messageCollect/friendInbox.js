@@ -315,12 +315,7 @@ export default class FriendInbox extends React.Component {
       })
   }
 
-<<<<<<< HEAD
-  renderItem = ({item}) => {
-    console.log(JSON.stringify(item));
-=======
   renderItem = ({ item }) => {
->>>>>>> won
     return (
       <SafeAreaView style={styles.container}>
         <Modal
@@ -390,23 +385,14 @@ export default class FriendInbox extends React.Component {
                 {item.message_body === 'delcode5010' ? (
                   <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
                 ) : (
-<<<<<<< HEAD
-                  // <Text>{item.message_body}</Text>
-                  <Text style={styles.lastChat}>
-                    {item.message_body}
-                  </Text>
-                  // <View/>
-                )}
-=======
-                    // <Text>{item.message_body}</Text>
-                    <Text style={styles.lastChat}>
-                      {item.message_body.length > 35
-                        ? item.message_body.substr(0, 37).padEnd(40, '.')
-                        : item.message_body}
-                    </Text>
+                    <Text>{item.message_body}</Text>
+                    // <Text style={styles.lastChat}>
+                    //   {item.message_body.length > 35
+                    //     ? item.message_body.substr(0, 37).padEnd(40, '.')
+                    //     : item.message_body}
+                    // </Text>
                     // <View/>
                   )}
->>>>>>> won
               </View>
             </View>
             {this.props.outButtonBool ? (

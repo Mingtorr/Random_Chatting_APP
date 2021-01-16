@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Switch,
   Dimensions,
+  Alert
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -37,7 +38,13 @@ export default class Solo_match extends React.Component {
     let userkey = '';
     let nickname;
     if (this.state.message === '') {
-      alert('전송할 메시지를 입력하세요');
+      // alert('전송할 메시지를 입력하세요');
+      Alert.alert(
+        "안내",
+        "전송할 메시지를 입력하세요",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       return;
     }
     AsyncStorage.getItem('login_user_info', (err, result) => {

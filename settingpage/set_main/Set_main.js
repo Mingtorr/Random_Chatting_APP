@@ -4,21 +4,11 @@ import {
   StyleSheet,
   View,
   SafeAreaView,
-  Modal,
   TouchableOpacity,
-  TouchableHighlight,
-  Alert,
-  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {withNavigation} from 'react-navigation';
 import {CommonActions} from '@react-navigation/native';
-let imagePath = require('./info.png');
-let avatar = require('./avatar.png');
-let question = require('./question.png');
-let blackboard = require('./blackboard.png');
-let logout = require('./logout.png');
-let on = require('./on.png');
 
 const func = require('../../server/api');
 

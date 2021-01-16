@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import {Platform, AppState} from 'react-native';
+import {Platform} from 'react-native';
 
 class LocalNotificationService extends Component {
   configure = (onOpenNotification) => {
@@ -14,7 +14,6 @@ class LocalNotificationService extends Component {
       },
       onNotification: function (notification) {
         console.log('[LocalNotificationService] onNotification ', notification);
-        console.log(this.state.appState);
         if (Platform.OS === 'ios') {
           PushNotificationIOS.addNotificationRequest({
             id: 'test-2',

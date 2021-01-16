@@ -28,8 +28,8 @@ const func = require('./server/api');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 import Noticepush from './settingpage/set_notice/noticepush';
-import Set_yb from './settingpage/set_yb/setting_nick'
-import Set_pw from './settingpage/set_yb/setting_pw'
+import Set_yb from './settingpage/set_yb/setting_nick.js';
+import Set_pw from './settingpage/set_yb/setting_pw';
 const Stack = createStackNavigator();
 export default class App extends React.Component {
   state = {
@@ -205,7 +205,7 @@ export default class App extends React.Component {
                 component={Set_exit}
                 options={{headerShown: false}}
               />
-               <Stack.Screen
+              <Stack.Screen
                 name="Set_nick"
                 component={Set_yb}
                 options={{headerShown: false}}
@@ -255,7 +255,7 @@ function Bottom() {
                 name="homeimo"
                 color={color}
                 source={icon}
-                style={{marginTop: 15, width: size*1.1, height: size*1.1}}
+                style={{marginTop: 15, width: size * 1.1, height: size * 1.1}}
               />
             );
           },
@@ -282,7 +282,7 @@ function Bottom() {
                 name="homeimo"
                 color={color}
                 source={icon}
-                style={{marginTop: 15, width: size*1.6, height: size*1.1}}
+                style={{marginTop: 15, width: size * 1.6, height: size * 1.1}}
               />
             );
           },
@@ -310,7 +310,7 @@ function Bottom() {
                 name="homeimo"
                 color={color}
                 source={icon}
-                style={{marginTop: 15, width: size*1.1, height: size*1.1}}
+                style={{marginTop: 15, width: size * 1.1, height: size * 1.1}}
               />
             );
           },
@@ -340,7 +340,7 @@ function Bottom() {
                 name="homeimo"
                 color={color}
                 source={icon}
-                style={{marginTop: 15, width: size*1.2, height: size*1.2}}
+                style={{marginTop: 15, width: size * 1.2, height: size * 1.2}}
               />
             );
           },

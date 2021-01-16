@@ -66,7 +66,9 @@ export default class Main_Yourmessage extends React.Component {
                 paddingTop: 8,
                 borderRadius: 20,
               }}>
-              <Text style={{fontSize: 14}}>{this.props.message}</Text>
+              <Text style={{fontSize: 14, color: 'white'}}>
+                {this.props.message}
+              </Text>
             </View>
             <View style={{display: 'flex', justifyContent: 'flex-end'}}>
               <Text style={{fontSize: 10}}>{this.props.time}</Text>

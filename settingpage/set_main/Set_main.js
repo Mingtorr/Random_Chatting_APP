@@ -5,6 +5,7 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {withNavigation} from 'react-navigation';
@@ -24,7 +25,7 @@ class Set_main extends Component {
       email: '',
     };
   }
-  
+
   componentDidMount() {
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const user_info = JSON.parse(result);
@@ -39,7 +40,22 @@ class Set_main extends Component {
     });
   }
 
-  logout = async () => {
+  logout = () => {
+    Alert.alert(
+      '로그아웃',
+      '로그아웃 하시겠습니까?',
+      [
+        {
+          text: '아니요',
+          style: 'cancel',
+        },
+        {text: '네', onPress: () => this.logout2()}, // 화살표 함수로 바인딩 대체
+      ],
+      {cancelable: false},
+    );
+  };
+
+  logout2 = async () => {
     let userkey;
     await AsyncStorage.getItem('login_user_info', (err, result) => {
       userkey = JSON.parse(result).user_key;

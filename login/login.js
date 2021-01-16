@@ -66,7 +66,7 @@ class Login extends React.Component {
               JSON.stringify({
                 login_set: 'true',
                 user_key: json.user_key,
-                user_id: json.user_id,
+                user_id: this.state.name1,
                 user_sex: json.user_sex,
                 user_email: json.user_email,
                 user_deptno: json.user_deptno,

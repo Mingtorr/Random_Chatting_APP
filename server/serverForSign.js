@@ -212,7 +212,7 @@ app.post('/Find_idpw', (req, res) => {
 });
 
 app.post('/Find_idpw2', (req, res) => {
-  const id = 'req.body.user_id';
+  const id = req.body.user_id;
   let inputPassword = req.body.user_pw;
   let salt = Math.round(new Date().valueOf() * Math.random()) + '';
   let hashPassword = crypto

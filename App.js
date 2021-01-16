@@ -27,7 +27,7 @@ import Set_exit from './settingpage/set_exit/exit'
 const func = require('./server/api');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
-import Noticepush from './settingpage/set_notice/noticepush';
+import Noticepush from './settingpage/set_notice/Noticepush';
 
 const Stack = createStackNavigator();
 export default class App extends React.Component {

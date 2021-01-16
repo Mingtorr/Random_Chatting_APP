@@ -394,8 +394,8 @@ export default class FriendInbox extends React.Component {
                   ? <Text></Text>
                   // : <Text>거부</Text>}
                   : <Image
-                  style={{width: 15, height: 15, marginTop: 5}}
-                  source={require('../message/singo.png')}
+                  style={{width: 10, height: 10, marginTop: 10, marginLeft: 10}}
+                  source={require('./alarm2.png')}
                 />}
               </View>
               <View style={styles.messageLastChat}>
@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
   },
   messageHead: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    // justifyContent: 'spa'
   },
   nickName: {
     fontSize: 18,

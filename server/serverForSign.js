@@ -457,8 +457,12 @@ app.post('/Sendmail', (req, res) => {
     [email],
     function (err, rows, fields) {
       // console.log('발송');
-      mailSender.sendGmail(emailParam);
-      res.send(authNum.toString());
+      if (rows[0] === undefined) {
+        mailSender.sendGmail(emailParam);
+        res.send(authNum.toString());
+      } else {
+        res.send(false);
+      }
     },
   );
 });

@@ -142,7 +142,11 @@ class Login extends React.Component {
                     </Text>
                     <Text style={styles.swiper_text}>최고의 방법</Text>
                     <Image
-                      style={{height:'87%',width:'87%',resizeMode:'contain'}}
+                      style={{
+                        height: '87%',
+                        width: '87%',
+                        resizeMode: 'contain',
+                      }}
                       source={require('./1.png')}
                     />
                   </View>
@@ -152,7 +156,11 @@ class Login extends React.Component {
                     </Text>
                     <Text style={styles.swiper_text}>와글와글로 와!</Text>
                     <Image
-                      style={{height:'87%',width:'87%',resizeMode:'contain'}}
+                      style={{
+                        height: '87%',
+                        width: '87%',
+                        resizeMode: 'contain',
+                      }}
                       source={require('./2.png')}
                       resizeMode="stretch"
                     />
@@ -161,7 +169,11 @@ class Login extends React.Component {
                     <Text style={styles.swiper_text}>내 손 안에 작은 학교</Text>
                     <Text style={styles.swiper_text}>와글와글</Text>
                     <Image
-                       style={{height:'87%',width:'80%',resizeMode:'contain'}}
+                      style={{
+                        height: '87%',
+                        width: '80%',
+                        resizeMode: 'contain',
+                      }}
                       source={require('./3.png')}
                       resizeMode="stretch"
                     />
@@ -197,14 +209,14 @@ class Login extends React.Component {
                   <TouchableOpacity
                     style={{marginRight: 70}}
                     onPress={this.singupBtn}>
-                    <Text style={{fontSize: 15,fontWeight:'600'}}>
+                    <Text style={{fontSize: 15, fontWeight: '600'}}>
                       처음이신가요?
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={{marginRight: 20}}
                     onPress={this.find_idpwBtn}>
-                    <Text style={{fontSize: 15,fontWeight:'600'}}>
+                    <Text style={{fontSize: 15, fontWeight: '600'}}>
                       ID/PW 찾기
                     </Text>
                   </TouchableOpacity>
@@ -278,7 +290,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 7,
   },
-  swiper_text2:{
+  swiper_text2: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 15,

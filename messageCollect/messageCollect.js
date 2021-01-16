@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   messageHead: {
     flexDirection: 'row',
-    height: 40,
+    height: 80,
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 20,

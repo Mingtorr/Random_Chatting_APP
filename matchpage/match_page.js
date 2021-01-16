@@ -411,15 +411,13 @@ export default class match_page extends React.Component {
                 style={{
                   fontSize: responsiveFontSize(2.5),
                   fontWeight: 'bold',
-                  fontFamily: 'Jalnan',
                 }}>
                 {this.state.title}
               </Text>
-              <View style={{marginTop: chartHeight * 0.01}}>
+              <View style={{marginTop: chartHeight * 0.002}}>
                 <Text
                   style={{
                     fontSize: responsiveFontSize(1.5),
-                    fontWeight: 'bold',
                   }}>
                   하루에 5개씩 지급됩니다!
                 </Text>
@@ -437,7 +435,6 @@ export default class match_page extends React.Component {
                 style={{
                   fontSize: responsiveFontSize(2.2),
                   fontWeight: 'bold',
-                  fontFamily: 'Jalnan',
                 }}>
                 {this.state.Heart}/5
               </Text>
@@ -462,19 +459,18 @@ export default class match_page extends React.Component {
                 style={{
                   // width: 110,
                   width: chartWidth * 0.23,
-                  height: chartHeight * 0.055,
+                  height: chartHeight * 0.045,
                   backgroundColor: '#E94e68',
                   borderRadius: 10,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginTop: 10,
+                  marginTop: 15,
                 }}>
                 <Text
                   adjustsFontSizeToFit
                   style={{
                     fontSize: responsiveFontSize(2),
                     fontWeight: 'bold',
-                    fontFamily: 'Jalnan',
                     color: 'white',
                   }}>
                   {this.state.chatting}

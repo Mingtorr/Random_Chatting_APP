@@ -451,8 +451,8 @@ class Sign_up extends React.Component {
                       <Text
                         style={{
                           color: 'gray',
-                          fontFamily: 'Jalnan',
                           fontSize: 15,
+                          fontWeight:'700'
                         }}>
                         중복확인
                       </Text>
@@ -493,7 +493,7 @@ class Sign_up extends React.Component {
                       <Text
                         style={{
                           color: 'gray',
-                          fontFamily: 'Jalnan',
+                          fontWeight:'700',
                           fontSize: 15,
                         }}>
                         중복확인
@@ -537,7 +537,7 @@ class Sign_up extends React.Component {
                       <Text
                         style={{
                           color: 'gray',
-                          fontFamily: 'Jalnan',
+                          fontWeight:'700',
                           fontSize: 15,
                         }}>
                         중복확인
@@ -570,7 +570,7 @@ class Sign_up extends React.Component {
                     <TouchableOpacity
                       style={styles.Btn_sign2}
                       onPress={this.sendEmail}>
-                      <Text style={{color: 'white', fontFamily: 'Jalnan'}}>
+                      <Text style={{color: 'white',fontWeight:'700'}}>
                         전송
                       </Text>
                     </TouchableOpacity>
@@ -595,7 +595,7 @@ class Sign_up extends React.Component {
                     <TouchableOpacity
                       style={styles.Btn_sign2}
                       onPress={this.authEmail}>
-                      <Text style={{color: 'white', fontFamily: 'Jalnan'}}>
+                      <Text style={{color: 'white',fontWeight:'700'}}>
                         확인
                       </Text>
                     </TouchableOpacity>
@@ -846,8 +846,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     // backgroundColor:'#f05052',
     marginBottom: 5,
-    marginRight: -20,
-    marginTop: -8,
+    marginRight:  0,
+    marginTop: 0,
   },
 
   Btn_sign2: {

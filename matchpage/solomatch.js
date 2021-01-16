@@ -191,13 +191,12 @@ export default class Solo_match extends React.Component {
                 <Text
                   style={{
                     fontSize: responsiveFontSize(2.3),
-                    fontWeight: 'bold',
                   }}>
                   {this.state.sex}에게만
                 </Text>
               </View>
               <View
-                style={{display: 'flex', flex: 0.3, justifyContent: 'center'}}>
+                style={{display: 'flex', flex: 0.3, justifyContent: 'center',alignItems:'flex-start'}}>
                 <Switch
                   trackColor={{false: 'white', true: '#eb6c63'}}
                   thumbColor={this.state.isEnabled ? 'white' : 'white'}
@@ -217,17 +216,17 @@ export default class Solo_match extends React.Component {
                   justifyContent: 'center',
                   marginLeft: 40,
                   height: Height * 0.08,
+                  marginBottom:Height * 0.02,
                 }}>
                 <Text
                   style={{
                     fontSize: responsiveFontSize(2.3),
-                    fontWeight: 'bold',
                   }}>
                   같은 학과만
                 </Text>
               </View>
               <View
-                style={{display: 'flex', flex: 0.3, justifyContent: 'center'}}>
+                style={{display: 'flex', flex: 0.3, justifyContent: 'center',alignItems:'flex-start'}}>
                 <Switch
                   trackColor={{false: 'white', true: '#eb6c63'}}
                   thumbColor={this.state.isEnabled ? 'white' : 'white'}
@@ -249,7 +248,6 @@ export default class Solo_match extends React.Component {
                 <Text
                   style={{
                     fontSize: responsiveFontSize(2.3),
-                    fontWeight: 'bold',
                   }}>
                   학번
                 </Text>
@@ -336,7 +334,6 @@ export default class Solo_match extends React.Component {
                 <Text
                   style={{
                     fontSize: responsiveFontSize(2.3),
-                    fontWeight: 'bold',
                   }}>
                   메세지
                 </Text>

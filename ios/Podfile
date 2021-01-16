@@ -11,6 +11,8 @@ target 'wagleapp' do
 
   pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'wagleappTests' do
     inherit! :complete
     # Pods for testing

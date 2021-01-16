@@ -270,6 +270,9 @@ function Bottom() {
             );
           },
         }}
+        listeners={({navigation}) => ({
+          blur: () => navigation.setParams({screen: undefined}),
+        })}
       />
       {/* 메세지함 */}
       <Tab.Screen

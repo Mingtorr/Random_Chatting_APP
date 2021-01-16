@@ -258,7 +258,7 @@ app.post('/call', (req, res) => {
 app.post('/withdrawal', (req, res) => {
   const key = req.body.key;
   connection.query(
-    'DELETE from user_table WHERE user_key = (?)',
+    'update user_table set user_id= concat(user_id,"@@thisisdeletedaccount@@33698512"), user_email= concat(user_email,"@@thisisdeletedaccount@@33698512"),user_nickname= "삭제된 닉네임입니다.", user_salt=0, user_deptno=NULL, user_stdno=NUll , user_token=0, user_NewMsg=1 where user_key=17;',
     [key],
     function (err, rows, result) {
       if (err) {

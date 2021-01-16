@@ -61,30 +61,7 @@ class Set_main extends Component {
   };
 
   withdrawal = () => {
-    AsyncStorage.getItem('login_user_info', (err, result) => {
-      const UserInfo = JSON.parse(result);
-      this.setState({
-        key: UserInfo.user_key,
-      });
-      const post = {
-        key: UserInfo.user_key,
-      };
-      fetch(func.api(3001, 'withdrawal'), {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(post),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          if (json) {
-            this.props.navigation.navigate('Login');
-          } else {
-            alert('삭제 실패');
-          }
-        });
-    });
+    
   };
   go_Privacy = (e) => {
     e.preventDefault();

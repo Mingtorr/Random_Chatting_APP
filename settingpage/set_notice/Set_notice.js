@@ -101,14 +101,13 @@ export default class Set_notice extends Component {
               style={{
                 borderBottomWidth: 1,
                 borderBottomColor: 'lightgray',
-                backgroundColor: 'black',
+                backgroundColor: 'white',
                 flexDirection: 'row',
               }}>
               <View
                 style={{
                   display: 'flex',
                   flex: 0.15,
-                  backgroundColor: 'white',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>

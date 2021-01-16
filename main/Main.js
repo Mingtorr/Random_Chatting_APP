@@ -363,11 +363,7 @@ export default class Main extends Component {
                   borderBottomColor: 'lightgray',
                 }}>
                 <Text
-<<<<<<< HEAD
-                  style={{ fontFamily: 'Jalnan', color: 'black', fontSize: 20 }}>
-=======
                   style={{fontWeight:'800', color: 'black', fontSize: 20}}>
->>>>>>> vvv
                   전체 채팅방
                 </Text>
               </View>

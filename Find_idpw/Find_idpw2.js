@@ -81,7 +81,7 @@ class Find_idpw2 extends React.Component {
               <View style={{marginTop: 20, left: '5%'}}>
                 <Image
                   style={{width: 25, height: 25}}
-                  source={require('./cancel.png')}
+                  source={require('../Image/cancel.png')}
                 />
               </View>
             </TouchableOpacity>

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  Alert
+  Alert,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
@@ -32,7 +32,10 @@ class Sign_up2 extends React.Component {
       studno: this.state.studno,
       user_id: this.props.route.params.user_id,
     };
-
+    if (this.state.major === '' || this.state.studno === '') {
+      alert('학과와 학번을 선택해주세요!');
+      return;
+    }
     fetch(func.api(3001, 'Signup2'), {
       method: 'post',
       headers: {
@@ -45,12 +48,9 @@ class Sign_up2 extends React.Component {
         if (json === true) {
           this.props.navigation.navigate('Login');
         } else {
-          Alert.alert(
-            "안내",
-            "회원가입 실패",
-            [{text: "OK", style: "OK"}],
-            { cancelable: false }
-          );
+          Alert.alert('안내', '회원가입 실패', [{text: 'OK', style: 'OK'}], {
+            cancelable: false,
+          });
         }
       });
   };
@@ -109,7 +109,7 @@ class Sign_up2 extends React.Component {
                 onPress={this.backBtn}>
                 <Image
                   style={{width: 25, height: 25}}
-                  source={require('./cancel.png')}
+                  source={require('../Image/cancel.png')}
                 />
               </TouchableOpacity>
 
@@ -190,7 +190,10 @@ class Sign_up2 extends React.Component {
                     {label: '정보통신공학과', value: '정보통신공학과'},
                     {label: '기계공학과', value: '기계공학과'},
                     {label: '전기공학전공', value: '전기공학전공'},
-                    {label: '로봇제어계측공학전공', value: '로봇제어계측공학전공'},
+                    {
+                      label: '로봇제어계측공학전공',
+                      value: '로봇제어계측공학전공',
+                    },
                     {label: '스마트제조융합전공', value: '스마트제조융합전공'},
                     {label: '전자공학전공', value: '전자공학전공'},
                     {label: '신소재공학부', value: '신소재공학부'},
@@ -248,10 +251,6 @@ class Sign_up2 extends React.Component {
                   ]}
                 />
               </View>
-
-              <Text style={styles.sign_explain}>
-                ! 필수항목이 아니며 일부 기능이 제한 될 수 있습니다.
-              </Text>
 
               <View style={{height: '25%'}}></View>
               {/* 빈공간 채우기용 */}

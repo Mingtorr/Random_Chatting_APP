@@ -18,21 +18,22 @@ export default class Main_Mymessage extends React.Component {
             justifyContent: 'flex-end',
             marginRight: 10,
           }}>
-          <Text style={{fontSize: 12}}>{this.props.time}</Text>
+          <Text style={{fontSize: 10}}>{this.props.time}</Text>
         </View>
         <View
           style={{
             display: 'flex',
-            backgroundColor: '#eb6c63',
+            backgroundColor: '#eaeaea',
             marginRight: 16,
             maxWidth: '70%',
-            paddingLeft: 20,
-            paddingRight: 20,
-            paddingBottom: 10,
-            paddingTop: 10,
-            borderRadius: 28,
+            paddingLeft: 15,
+            paddingRight: 15,
+            paddingBottom: 8,
+            paddingTop: 8,
+            borderRadius: 20,
           }}>
-          <Text style={{color: this.props.animate_boolean ? 'white': 'black', fontSize: 15}}>{this.props.message}</Text>
+          {/* <Text style={{color: this.props.animate_boolean ? 'black': 'white', fontSize: 14}}>{this.props.message}</Text> */}
+          <Text style={{color: 'black', fontSize: 14}}>{this.props.message}</Text>
         </View>
       </View>
     );

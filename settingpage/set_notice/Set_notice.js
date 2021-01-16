@@ -8,7 +8,6 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import Noticepush from './noticepush';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 const func = require('../../server/api');

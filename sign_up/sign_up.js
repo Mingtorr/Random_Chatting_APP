@@ -38,6 +38,8 @@ class Sign_up extends React.Component {
       sendEmailClick: false, //메일 보냄 확인
       checking_passwd: false, //비번 확인
       nickname_check: false, //닉네임 중복검사
+
+      email_send_check: false,
     };
   }
 
@@ -128,7 +130,7 @@ class Sign_up extends React.Component {
       !this.check(re, this.state.email, '안내', '잘못된 형식의 이메일입니다')
     ) {
       return;
-    } else {
+    } else if (this.state.email_send_check === false) {
       this.setState({
         sendEmailClick: true,
       });
@@ -144,6 +146,10 @@ class Sign_up extends React.Component {
       })
         .then((res) => res.json())
         .then((json) => {
+          if (json === false) {
+            alert('이미 등록된 이메일입니다.');
+            return;
+          }
           Alert.alert(
             '안내',
             '인증 메일이 전송되었습니다',
@@ -175,6 +181,24 @@ class Sign_up extends React.Component {
           //   });
           // }
         });
+      this.setState({
+        email_send_check: true,
+      });
+    } else if (this.state.email_send_check === true) {
+      Alert.alert(
+        '안내',
+        '10초 뒤에 다시 전송 가능합니다',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
+      );
+
+      setTimeout(
+        () =>
+          this.setState({
+            email_send_check: false,
+          }),
+        10000,
+      );
     }
   };
 
@@ -414,7 +438,7 @@ class Sign_up extends React.Component {
                   onPress={() => this.props.navigation.goBack()}>
                   <Image
                     style={{width: 25, height: 25}}
-                    source={require('./cancel.png')}
+                    source={require('../Image/cancel.png')}
                   />
                 </TouchableOpacity>
 
@@ -448,7 +472,7 @@ class Sign_up extends React.Component {
                         style={{
                           color: 'gray',
                           fontSize: 15,
-                          fontWeight:'700'
+                          fontWeight: '700',
                         }}>
                         중복확인
                       </Text>
@@ -489,7 +513,7 @@ class Sign_up extends React.Component {
                       <Text
                         style={{
                           color: 'gray',
-                          fontWeight:'700',
+                          fontWeight: '700',
                           fontSize: 15,
                         }}>
                         중복확인
@@ -533,7 +557,7 @@ class Sign_up extends React.Component {
                       <Text
                         style={{
                           color: 'gray',
-                          fontWeight:'700',
+                          fontWeight: '700',
                           fontSize: 15,
                         }}>
                         중복확인
@@ -566,7 +590,7 @@ class Sign_up extends React.Component {
                     <TouchableOpacity
                       style={styles.Btn_sign2}
                       onPress={this.sendEmail}>
-                      <Text style={{color: 'white',fontWeight:'700'}}>
+                      <Text style={{color: 'white', fontWeight: '700'}}>
                         전송
                       </Text>
                     </TouchableOpacity>
@@ -591,7 +615,7 @@ class Sign_up extends React.Component {
                     <TouchableOpacity
                       style={styles.Btn_sign2}
                       onPress={this.authEmail}>
-                      <Text style={{color: 'white',fontWeight:'700'}}>
+                      <Text style={{color: 'white', fontWeight: '700'}}>
                         확인
                       </Text>
                     </TouchableOpacity>
@@ -842,7 +866,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     // backgroundColor:'#f05052',
     marginBottom: 5,
-    marginRight:  0,
+    marginRight: 0,
     marginTop: 0,
   },
 

@@ -411,6 +411,7 @@ export default class match_page extends React.Component {
                 style={{
                   fontSize: responsiveFontSize(2.5),
                   fontWeight: 'bold',
+                  fontFamily: 'Jalnan',
                 }}>
                 {this.state.title}
               </Text>
@@ -434,7 +435,7 @@ export default class match_page extends React.Component {
               <Text
                 style={{
                   fontSize: responsiveFontSize(2.2),
-                  fontWeight: 'bold',
+                  // fontWeight: 'bold',
                 }}>
                 {this.state.Heart}/5
               </Text>

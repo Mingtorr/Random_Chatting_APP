@@ -435,7 +435,7 @@ class Message extends React.Component {
                 style={{display: 'flex', marginLeft: 10}}
                 onPress={this.back}>
                 <Image
-                  style={{width: 20, height: 20}}
+                  style={{width: 15, height: 20}}
                   source={require('./back2.png')}
                 />
               </TouchableOpacity>

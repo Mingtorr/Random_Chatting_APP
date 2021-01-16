@@ -60,32 +60,7 @@ class Set_main extends Component {
     });
   };
 
-  withdrawal = () => {
-    AsyncStorage.getItem('login_user_info', (err, result) => {
-      const UserInfo = JSON.parse(result);
-      this.setState({
-        key: UserInfo.user_key,
-      });
-      const post = {
-        key: UserInfo.user_key,
-      };
-      fetch(func.api(3001, 'withdrawal'), {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(post),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          if (json) {
-            this.props.navigation.navigate('Login');
-          } else {
-            alert('삭제 실패');
-          }
-        });
-    });
-  };
+  withdrawal = () => {};
   go_Privacy = (e) => {
     e.preventDefault();
     this.props.navigation.navigate('Set_privacy');
@@ -130,17 +105,7 @@ class Set_main extends Component {
             {'>'}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.Box_set_main}>
-          <View
-            style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
-            <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
-              건의 사항/도움말
-            </Text>
-          </View>
-          <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>
-            {'>'}
-          </Text>
-        </TouchableOpacity>
+
         <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Notice}>
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>

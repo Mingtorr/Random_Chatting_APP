@@ -13,7 +13,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '2ajrrhtlvj',
+  password: 'snsk3779@',
   database: 'mydb',
 });
 //snsk3779@
@@ -266,13 +266,23 @@ app.post('/withdrawal', (req, res) => {
         console.log('withdrawal fail');
         res.send(false);
       } else {
-        // console.log('withdrawal good');
-        // console.log(rows);
-        res.send(true);
+        connection.query(
+          'insert into exit_table (exit_reason,user_key) values(?,?);',
+          [req.body.reason, key],
+          function (err, rows, result) {
+            if (err) {
+              console.log(err);
+              res.send(false);
+            } else {
+              res.send(true);
+            }
+          },
+        );
       }
     },
   );
 });
+
 //아이디 변경
 app.post('/ChangeId', (req, res) => {
   const key = req.body.key;

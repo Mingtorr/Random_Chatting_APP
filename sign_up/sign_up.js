@@ -11,7 +11,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert
+  Alert,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import RadioForm from 'react-native-simple-radio-button';
@@ -51,39 +51,36 @@ class Sign_up extends React.Component {
 
     if (!this.state.checked_id) {
       Alert.alert(
-        "안내",
-        "아이디 중복검사를 해주세요",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '아이디 중복검사를 해주세요',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
-    } else if (!(this.state.checking_passwd)) {
+    } else if (!this.state.checking_passwd) {
       Alert.alert(
-        "안내",
-        "비밀번호가 일치하지 않습니다",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '비밀번호가 일치하지 않습니다',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
     } else if (checkpass === '') {
       Alert.alert(
-        "안내",
-        "비밀번호에 공백은 들어가서는 안됩니다",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '비밀번호에 공백은 들어가서는 안됩니다',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
-    } else if (!(this.state.nickname_check)){
+    } else if (!this.state.nickname_check) {
       Alert.alert(
-        "안내",
-        "닉네임 중복 검사를 해주세요",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '닉네임 중복 검사를 해주세요',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
     } else if (!this.state.checked_email) {
-      Alert.alert(
-        "안내",
-        "메일 인증을 해주세요",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
-      );
+      Alert.alert('안내', '메일 인증을 해주세요', [{text: 'OK', style: 'OK'}], {
+        cancelable: false,
+      });
     } else {
       const user_info = {
         id: this.state.id,
@@ -102,7 +99,7 @@ class Sign_up extends React.Component {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            console.log("singup2");
+            console.log('singup2');
             this.props.navigation.navigate('Signup2', {
               user_id: this.state.id,
             });
@@ -112,14 +109,21 @@ class Sign_up extends React.Component {
   };
 
   sendEmail = (e) => {
-    var re = /^[a-zA-Z0-9_]{1,20}$/;
     e.preventDefault();
     if (this.state.email.length === 0) {
       Alert.alert(
-        "안내",
-        "이메일을 입력해주세요!",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '이메일을 입력해주세요!',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
+      );
+      return;
+    } else if (this.state.email.length > 15) {
+      Alert.alert(
+        '안내',
+        '이메일을 확인해주세요!',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
       return;
     } else if (
@@ -143,10 +147,10 @@ class Sign_up extends React.Component {
         .then((res) => res.json())
         .then((json) => {
           Alert.alert(
-            "안내",
-            "인증 메일이 전송되었습니다",
-            [{text: "OK", style: "OK"}],
-            { cancelable: false }
+            '안내',
+            '인증 메일이 전송되었습니다',
+            [{text: 'OK', style: 'OK'}],
+            {cancelable: false},
           );
           this.setState({
             authNum: json,
@@ -196,30 +200,24 @@ class Sign_up extends React.Component {
     e.preventDefault();
     if (this.state.authCheckNum.length === 0) {
       Alert.alert(
-        "안내",
-        "인증번호를 입력해주세요",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '인증번호를 입력해주세요',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
       return;
     }
     if (this.state.authNum.toString() === this.state.authCheckNum.toString()) {
-      Alert.alert(
-        "안내",
-        "인증성공",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
-      );
+      Alert.alert('안내', '인증성공', [{text: 'OK', style: 'OK'}], {
+        cancelable: false,
+      });
       this.setState({
         checked_email: true,
       });
     } else {
-      Alert.alert(
-        "안내",
-        "인증실패",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
-      );
+      Alert.alert('안내', '인증실패', [{text: 'OK', style: 'OK'}], {
+        cancelable: false,
+      });
     }
   };
 
@@ -227,12 +225,9 @@ class Sign_up extends React.Component {
     if (re.test(what)) {
       return true;
     }
-    Alert.alert(
-      title,
-      message,
-      [{text: "OK", style: "OK"}],
-      { cancelable: false }
-    );
+    Alert.alert(title, message, [{text: 'OK', style: 'OK'}], {
+      cancelable: false,
+    });
     return false;
   };
 
@@ -243,7 +238,8 @@ class Sign_up extends React.Component {
       !this.check(
         re,
         this.state.id,
-        "안내", '아이디는 4~12자의 영문 대소문자와 숫자로만 입력가능합니다.',
+        '안내',
+        '아이디는 4~12자의 영문 대소문자와 숫자로만 입력가능합니다.',
       )
     ) {
       return;
@@ -262,20 +258,20 @@ class Sign_up extends React.Component {
         .then((json) => {
           if (json) {
             Alert.alert(
-              "안내",
-              "사용 가능한 아이디입니다",
-              [{text: "OK", style: "OK"}],
-              { cancelable: false }
+              '안내',
+              '사용 가능한 아이디입니다',
+              [{text: 'OK', style: 'OK'}],
+              {cancelable: false},
             );
             this.setState({
               checked_id: true,
             });
           } else {
             Alert.alert(
-              "안내",
-              "이미 사용중인 아이디입니다",
-              [{text: "OK", style: "OK"}],
-              { cancelable: false }
+              '안내',
+              '이미 사용중인 아이디입니다',
+              [{text: 'OK', style: 'OK'}],
+              {cancelable: false},
             );
           }
         });
@@ -289,7 +285,7 @@ class Sign_up extends React.Component {
       !this.check(
         re,
         this.state.nickname,
-        "안내", 
+        '안내',
         '닉네임은 2~8자의 영문,한글 ,숫자로만 입력가능합니다.',
       )
     ) {
@@ -310,20 +306,20 @@ class Sign_up extends React.Component {
         .then((json) => {
           if (json) {
             Alert.alert(
-              "안내",
-              "사용가능한 닉네임입니다",
-              [{text: "OK", style: "OK"}],
-              { cancelable: false }
+              '안내',
+              '사용가능한 닉네임입니다',
+              [{text: 'OK', style: 'OK'}],
+              {cancelable: false},
             );
             this.setState({
               nickname_check: true,
             });
           } else {
             Alert.alert(
-              "안내",
-              "이미 사용중인 닉네임입니다",
-              [{text: "OK", style: "OK"}],
-              { cancelable: false }
+              '안내',
+              '이미 사용중인 닉네임입니다',
+              [{text: 'OK', style: 'OK'}],
+              {cancelable: false},
             );
           }
         });
@@ -333,24 +329,24 @@ class Sign_up extends React.Component {
   passwdcheck = (e) => {
     if (this.state.passwd.length === 0 || this.state.passwd2.length === 0) {
       Alert.alert(
-        "안내",
-        "비밀번호를 입력해주세요",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '비밀번호를 입력해주세요',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
     } else if (this.state.passwd !== this.state.passwd2) {
       Alert.alert(
-        "안내",
-        "비밀번호가 일치하지 않습니다",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '비밀번호가 일치하지 않습니다',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
     } else if (this.state.passwd === this.state.passwd2) {
       Alert.alert(
-        "안내",
-        "비밀번호가 일치합니다",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '비밀번호가 일치합니다',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
       this.setState({
         checking_passwd: true,
@@ -468,8 +464,8 @@ class Sign_up extends React.Component {
                       <Text
                         style={{
                           color: 'gray',
-                          fontFamily: 'Jalnan',
                           fontSize: 15,
+                          fontWeight:'700'
                         }}>
                         중복확인
                       </Text>
@@ -510,7 +506,7 @@ class Sign_up extends React.Component {
                       <Text
                         style={{
                           color: 'gray',
-                          fontFamily: 'Jalnan',
+                          fontWeight:'700',
                           fontSize: 15,
                         }}>
                         중복확인
@@ -554,7 +550,7 @@ class Sign_up extends React.Component {
                       <Text
                         style={{
                           color: 'gray',
-                          fontFamily: 'Jalnan',
+                          fontWeight:'700',
                           fontSize: 15,
                         }}>
                         중복확인
@@ -587,7 +583,7 @@ class Sign_up extends React.Component {
                     <TouchableOpacity
                       style={styles.Btn_sign2}
                       onPress={this.sendEmail}>
-                      <Text style={{color: 'white', fontFamily: 'Jalnan'}}>
+                      <Text style={{color: 'white',fontWeight:'700'}}>
                         전송
                       </Text>
                     </TouchableOpacity>
@@ -612,7 +608,7 @@ class Sign_up extends React.Component {
                     <TouchableOpacity
                       style={styles.Btn_sign2}
                       onPress={this.authEmail}>
-                      <Text style={{color: 'white', fontFamily: 'Jalnan'}}>
+                      <Text style={{color: 'white',fontWeight:'700'}}>
                         확인
                       </Text>
                     </TouchableOpacity>
@@ -863,8 +859,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     // backgroundColor:'#f05052',
     marginBottom: 5,
-    marginRight: -20,
-    marginTop: -8,
+    marginRight:  0,
+    marginTop: 0,
   },
 
   Btn_sign2: {

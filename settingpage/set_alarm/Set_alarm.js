@@ -24,6 +24,7 @@ class Set_alarm extends Component {
       isEnabled: true,
       isEnabled_two: messaging().isDeviceRegisteredForRemoteMessages,
       isEnabled_message: false,
+      user_key: '',
     };
   }
 
@@ -31,6 +32,9 @@ class Set_alarm extends Component {
     let userkey;
     await AsyncStorage.getItem('login_user_info', (err, result) => {
       userkey = JSON.parse(result).user_key;
+      this.setState({
+        user_key: userkey,
+      });
     });
     const box = {userkey: userkey};
     fetch(func.api(3001, 'get_message_state'), {
@@ -42,11 +46,16 @@ class Set_alarm extends Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        if (json.user_pushstate === 1)
+        console.log('hihi');
+        console.log(json);
+        console.log(json.user_pushstate);
+        if (json.user_pushstate === 1) {
+          console.log('1111');
           this.setState({
             isEnabled: true,
           });
-        else {
+        } else {
+          console.log('00000');
           this.setState({
             isEnabled: false,
           });
@@ -60,6 +69,15 @@ class Set_alarm extends Component {
             isEnabled_message: false,
           });
         }
+        if (json.user_sendNoticestate === 1) {
+          this.setState({
+            isEnabled_two: true,
+          });
+        } else {
+          this.setState({
+            isEnabled_two: false,
+          });
+        }
       });
   }
 
@@ -69,10 +87,8 @@ class Set_alarm extends Component {
     if (this.state.isEnabled === false) {
       pid = 1;
     }
-    await AsyncStorage.getItem('login_user_info', (err, result) => {
-      userkey = JSON.parse(result).user_key;
-    });
-    const box = {userkey: userkey, pid: pid};
+
+    const box = {userkey: this.state.user_key, pid: pid};
     fetch(func.api(3001, 'reset_token2'), {
       method: 'post',
       headers: {
@@ -91,10 +107,8 @@ class Set_alarm extends Component {
     if (this.state.isEnabled_message === false) {
       pid = 1;
     }
-    await AsyncStorage.getItem('login_user_info', (err, result) => {
-      userkey = JSON.parse(result).user_key;
-    });
-    const box = {userkey: userkey, pid: pid};
+
+    const box = {userkey: this.state.user_key, pid: pid};
     fetch(func.api(3001, 'reset_token3'), {
       method: 'post',
       headers: {
@@ -109,16 +123,30 @@ class Set_alarm extends Component {
   };
 
   toggleSwitch_two = async () => {
-    this.setState({
-      isEnabled_two: !this.state.isEnabled_two,
+    let pid = 0;
+    //0은 false  1은 true
+    if (this.state.isEnabled_two === false) {
+      pid = 1;
+    }
+    const box = {userkey: this.state.user_key, pid: pid};
+    fetch(func.api(3001, 'reset_token2'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(box),
+    }).then(() => {
+      this.setState({
+        isEnabled_two: !this.state.isEnabled_two,
+      });
     });
+
     //시발 안드로이드는 true만 반환함
     if (this.state.isEnabled_two === false) {
       //특정 토픽 구독 시작 (안드도 됨)
       await messaging().subscribeToTopic('notices');
       // console.log(token);
       //구독 시작
-      await messaging().registerDeviceForRemoteMessages();
       // alert('true');
       // console.log(messaging().isDeviceRegisteredForRemoteMessages);
     } else {
@@ -140,14 +168,17 @@ class Set_alarm extends Component {
       alert: false,
     });
   };
-
+  backBtn = () => {
+    this.props.navigation.goBack(null);
+  };
   render() {
     return (
-      <SafeAreaView style={styles.Conainer_alarm}>
+      <SafeAreaView style={{display: 'flex',
+      backgroundColor: 'white',}}>
         <View style={styles.Header_alarm}>
           <TouchableOpacity
             style={styles.back_alarm}
-            onPress={() => this.props.navigation.goBack()}>
+            onPress={this.backBtn}>
             <Image
               style={{width: 25, height: 25}}
               source={require('./cancel.png')}
@@ -265,10 +296,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     borderBottomWidth: 1,
+    borderColor:'lightgray',
+    backgroundColor:'white'
   },
   back_alarm: {
     marginLeft: 30,
-    position: 'absolute',
+    display: 'flex',
+    zIndex:999
   },
   Head_alarm: {
     width: '100%',
@@ -301,7 +335,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: 'gray',
+    borderBottomColor: 'lightgray',
     paddingBottom: 10,
     paddingRight: 10,
     ...Platform.select({
@@ -314,7 +348,6 @@ const styles = StyleSheet.create({
     }),
   },
   Textmsg_alarm: {
-    fontFamily: 'Jalnan',
     fontSize: 15,
     color: 'black',
     // color: '#f05052',

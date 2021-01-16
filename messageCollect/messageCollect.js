@@ -76,7 +76,8 @@ function MessageTab(props) {
       />
       <Tab.Screen
         name="오픈채팅"
-        children={() => <Grouproom go={props.go} />}
+        // children={() => <Grouproom go={props.go} />}
+        children={() => <View/>}
       />
     </Tab.Navigator>
   );
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
   },
   messageHead: {
     flexDirection: 'row',
-    height: 40,
+    height: 80,
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 20,

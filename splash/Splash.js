@@ -1,6 +1,13 @@
 // LOGO version
 import React, {Component} from 'react';
-import {View, Text, Animated, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  Animated,
+  SafeAreaView,
+  StyleSheet,
+} from 'react-native';
 
 export default class Splash extends Component {
   state = {
@@ -24,7 +31,10 @@ export default class Splash extends Component {
           {/* <Text style={styles.handfont_splash}>내손안에 우리학교</Text> */}
         </Animated.View>
         <Animated.View style={[styles.splash_mid, animationStyles]}>
-          <Text style={styles.drfont_splash}>ㅇㄱㅇㄱ</Text>
+          <Image
+            style={{height: '100%', width: '100%', resizeMode: 'contain'}}
+            source={require('./splashmain.png')}
+          />
         </Animated.View>
         <View style={styles.splash_end}>
           <Text>copyright by wesix</Text>
@@ -40,6 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   splash_top: {
     flex: 0.45,
@@ -47,7 +58,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue',
   },
   splash_mid: {
-    backgroundColor: 'pink',
+    backgroundColor: 'white',
     borderRadius: 30,
     width: 300,
     height: 300,

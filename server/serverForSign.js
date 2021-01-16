@@ -102,7 +102,7 @@ app.post('/Signup2', async function (req, res, next) {
 });
 //로그인 salt 적용
 app.post('/login', async function (req, res, next) {
-  // console.log('login');
+  console.log('login');
   let body = req.body;
   let userkey;
   let arr;
@@ -212,7 +212,7 @@ app.post('/Find_idpw', (req, res) => {
 });
 
 app.post('/Find_idpw2', (req, res) => {
-  const id = 'req.body.user_id';
+  const id = req.body.user_id;
   let inputPassword = req.body.user_pw;
   let salt = Math.round(new Date().valueOf() * Math.random()) + '';
   let hashPassword = crypto
@@ -258,7 +258,7 @@ app.post('/call', (req, res) => {
 app.post('/withdrawal', (req, res) => {
   const key = req.body.key;
   connection.query(
-    'DELETE from user_table WHERE user_key = (?)',
+    'update user_table set user_id= concat(user_id,"*@thisisdeletedaccount@*"), user_email= concat(user_email,"*@thisisdeletedaccount@*"),user_nickname= "삭제된 닉네임입니다.", user_salt=0, user_deptno=NULL, user_stdno=NUll , user_token=0, user_NewMsg=1 where user_key=(?);',
     [key],
     function (err, rows, result) {
       if (err) {
@@ -266,13 +266,23 @@ app.post('/withdrawal', (req, res) => {
         console.log('withdrawal fail');
         res.send(false);
       } else {
-        // console.log('withdrawal good');
-        // console.log(rows);
-        res.send(true);
+        connection.query(
+          'insert into exit_table (exit_reason,user_key) values(?,?);',
+          [req.body.reason, key],
+          function (err, rows, result) {
+            if (err) {
+              console.log(err);
+              res.send(false);
+            } else {
+              res.send(true);
+            }
+          },
+        );
       }
     },
   );
 });
+
 //아이디 변경
 app.post('/ChangeId', (req, res) => {
   const key = req.body.key;
@@ -652,13 +662,29 @@ app.post('/reset_token3', (req, res) => {
 app.post('/get_message_state', (req, res) => {
   let body = req.body;
   connection.query(
-    'select user_pushstate,user_NewMsg from user_table where user_key= (?)',
+    'select user_pushstate, user_NewMsg,user_sendNoticestate from user_table where user_key= (?)',
     [body.userkey],
     function (err, rows, fields) {
       if (err) {
         console.log(err);
       }
-      res.send(rows);
+      res.send(rows[0]);
+    },
+  );
+});
+
+app.post('/reset_token2', (req, res) => {
+  let body = req.body;
+  // console.log(body);
+  connection.query(
+    'UPDATE user_table SET user_sendNoticestate = (?) WHERE user_key= (?);',
+    [body.pid, body.userkey],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      }
+      res.send(true);
     },
   );
 });

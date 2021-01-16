@@ -32,7 +32,7 @@ export default class Main_Mymessage extends React.Component {
             paddingTop: 10,
             borderRadius: 28,
           }}>
-          <Text style={{color: this.props.animate_boolean ? 'white': 'black', fontSize: 18}}>{this.props.message}</Text>
+          <Text style={{color: this.props.animate_boolean ? 'white': 'black', fontSize: 15}}>{this.props.message}</Text>
         </View>
       </View>
     );

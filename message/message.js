@@ -24,6 +24,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   AppState,
+  Alert
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -63,7 +64,8 @@ class Message extends React.Component {
       resultshownickname: 0,
       change: 1,
       appState: AppState.currentState,
-      reception:this.props.route.params.reception,
+      reception: this.props.route.params.reception,
+      exit: 0,
     };
   }
   _handleAppStateChange = (nextAppState) => {
@@ -72,21 +74,21 @@ class Message extends React.Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      console.log('App has come to the foreground!');
+      // console.log('App has come to the foreground!');
     } else {
-      console.log('App has gone to the background!');
+      // console.log('App has gone to the background!');
       socket.emit('roomleave', roomid);
       // start your background task here
     }
     this.setState({appState: nextAppState});
   };
   componentWillUnmount() {
-    console.log('asdasd');
+    // console.log('asdasd');
     const roomid = this.props.route.params.roomid;
     socket.emit('roomleave', roomid);
   }
   componentDidMount() {
-    console.log(this.props.route.params);
+    // console.log(this.props.route.params);
     this.scrolltobottom();
     AppState.addEventListener('change', this._handleAppStateChange);
     AsyncStorage.getItem('login_user_info', (err, result) => {
@@ -94,9 +96,10 @@ class Message extends React.Component {
         userkey: JSON.parse(result).user_key,
         myname: JSON.parse(result).user_nickname,
         myshownickname: this.props.route.params.myshownickname,
-        recpetion:this.props.route.params.recpetion
+        recpetion: this.props.route.params.recpetion,
       });
     });
+    
     const data = {
       roomid: this.props.route.params.roomid, //roomid
       userkey: this.state.userkey,
@@ -105,12 +108,12 @@ class Message extends React.Component {
       touser: this.state.touserkey,
     };
     socket.emit('roomjoin', data); //방참가
-    socket.on('receptionrecieve',(data)=>{
-      console.log(JSON.stringify(data)+"미낭ㅁ나ㅣㅓㅇ마ㅣ너아ㅣㅁ넝");
+    socket.on('receptionrecieve', (data) => {
+      // console.log(JSON.stringify(data) + '미낭ㅁ나ㅣㅓㅇ마ㅣ너아ㅣㅁ넝');
       this.setState({
-        reception:data.reception
-      })
-    })
+        reception: data.reception,
+      });
+    });
     socket.on('socketid', (data) => {
       //my socketid
       this.setState({
@@ -119,7 +122,7 @@ class Message extends React.Component {
     });
     socket.on('roomsockets', (data) => {
       //change roomsockets
-      console.log(data + '실험');
+      // console.log(data + '실험');
       this.setState({
         roomsockets: data,
       });
@@ -199,11 +202,23 @@ class Message extends React.Component {
   }
 
   sendmessage = () => {
-    console.log("상대방의 리셉션"+this.state.reception);
+    
+    // console.log('상대방의 리셉션' + this.state.reception);
     if (this.state.text.trim() === '') {
       this.setState({
         text: '',
       });
+    } else if(this.state.arr[this.state.arr.length-1].message === 'delcode5010'){
+      this.setState({
+        text:''
+      })
+      // alert("상대방이 나가셔서 메시지를 보낼 수 없습니다.")
+      Alert.alert(
+        "안내",
+        "상대방이 나가서 메시지를 보낼 수 없습니다.",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else {
       const realtime = timefunc.settime();
       const realtime2 = new Date();
@@ -221,8 +236,8 @@ class Message extends React.Component {
         toshownickname: this.state.toshownickname,
         tousertoken: this.props.route.params.tousertoken,
       };
-      if (this.state.roomsockets.length !== 2&&this.state.reception === 1) {
-        console.log("상대방에게 푸시알림 전송");
+      if (this.state.roomsockets.length !== 2 && this.state.reception === 1) {
+        // console.log('상대방에게 푸시알림 전송');
         fetch('https://fcm.googleapis.com/fcm/send', {
           method: 'POST',
           headers: {
@@ -232,7 +247,7 @@ class Message extends React.Component {
           },
           body: JSON.stringify({
             to: data.tousertoken,
-            content_available : true,
+            content_available: true,
             notification: {
               title: data.name + '님이 메세지를 보냈습니다.',
               body: data.message,
@@ -271,7 +286,7 @@ class Message extends React.Component {
       if (this.scrollViewRef !== null && this.scrollViewRef.current !== null) {
         this.scrollViewRef.current.scrollToEnd({animated: false});
       }
-    }, 900);
+    }, 400);
   };
   scrolltomessage = () => {
     /*
@@ -289,7 +304,7 @@ class Message extends React.Component {
       userkey: this.state.userkey,
       count: this.state.change,
     };
-    console.log('asd');
+    // console.log('asd');
     fetch(func.api(3005, 'showmessageadd'), {
       method: 'post',
       headers: {
@@ -312,46 +327,12 @@ class Message extends React.Component {
             this.setState({
               arr: [row, ...this.state.arr],
             });
-            /*
-      if(this.state.arr.length >20){
-        this.setState({
-          start:this.state.arr.length-20
-        },this.scrolltobottom())
-      }else{
-        this.setState({
-          start:0
-        },this.scrolltobottom())
-      }*/
           });
           this.setState({
             change: this.state.change + 1,
           });
         }
       });
-    /*
-  console.log(this.state.start);
-  if(this.state.start<19){
-    this.setState({
-      refresh:true,
-      start:0
-    },()=>{
-      this.setState({
-        refresh:false
-      })
-    })
-  }else{
-    this.setState({
-      refresh:true,
-      start:this.state.start-20,
-    },()=>{
-   
-      this.scrolltomessage();
-      this.setState({
-        refresh:false
-      })
-    })
-  }
-  */
   };
   message_onchange = (e) => {
     this.setState({

@@ -29,23 +29,32 @@ export default class Set_notice extends Component {
     })
     .then((res) => res.json())
     .then((json) => {
-        console.log('공지11');
         console.log('공지'+ JSON.stringify(json));
 
         if (json !== undefined) {
-          console.log('이프문')
+
           json.map((rows) => {
             const newdate = new Date(rows.notice_date);
+            var year = newdate.getFullYear();
+            year = year-2000;
             var month = newdate.getMonth() + 1;
+            
+            if(month < 10 ){
+              month = '0' + month
+            }
             var day = newdate.getDate();
-            var noticeday = [month, day].join('/');
+
+            if(day <10){
+              day = '0' + day
+            }
+            var noticeday = [year, month, day].join('.');
             rows.notice_date = noticeday;
             const newrow = rows;
             console.log(newrow);
             this.setState({
               notices: [...this.state.notices, newrow],
             });
-            console.log('스테이트',this.state.notices);
+            // console.log('스테이트',this.state.notices);
 
             // return null;
           });
@@ -56,7 +65,7 @@ export default class Set_notice extends Component {
   //<View style={{marginTop:5,marginBottom:10,marginLeft:15}}><Text style={{color:'gray'}}>{item.notice_date}</Text></View>
   
   openNotice = (key, title, body, date) =>{
-    console.log('클릭함', key);
+    // console.log('클릭함', key);
     this.props.navigation.navigate('noticepush',{
       notice_title: title,
       notice_body: body,

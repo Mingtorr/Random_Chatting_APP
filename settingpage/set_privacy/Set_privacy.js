@@ -176,11 +176,20 @@ export default class Set_privacy extends Component {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            alert('아이디가 변경되었습니다. 다시 로그인해주세요.');
-            AsyncStorage.clear();
-            this.props.navigation.navigate('Login');
+            alert('아이디가 변경되었습니다');
+            AsyncStorage.mergeItem('login_user_info',JSON.stringify({
+                user_id: this.state.id,
+              }),
+            );
+            // console.log("변경");
+            // AsyncStorage.getItem('login_user_info', (err, result) => {
+            //   let info = JSON.parse(result);
+            //   console.log(info);
+            // });
+            // AsyncStorage.clear();
+            // this.props.navigation.navigate('Login');
           } else {
-            alert('이미 사용중인 아이디 입니다.');
+            alert('이미 사용중인 아이디 입니다');
           }
         });
     }
@@ -242,6 +251,7 @@ export default class Set_privacy extends Component {
         key: this.state.key,
         nickname: this.state.nickname,
       };
+      console.log(nickname_info);
       fetch(func.api(3001, 'ChangeNickname'), {
         method: 'post',
         headers: {
@@ -252,11 +262,18 @@ export default class Set_privacy extends Component {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
+
             alert('닉네임이 변경되었습니다.');
-            AsyncStorage.setItem('login_user_info',JSON.stringify({
+            AsyncStorage.mergeItem('login_user_info',JSON.stringify({
                 user_nickname: this.state.nickname,
               }),
             );
+            
+            // console.log("변경");
+            // AsyncStorage.getItem('login_user_info', (err, result) => {
+            //   let info = JSON.parse(result);
+            //   console.log(info);
+            // });
           } else {
             alert('이미 사용중인 닉네임입니다');
           }

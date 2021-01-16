@@ -12,6 +12,9 @@ export default class Noticepush extends Component {
     //    <Text style={styles.Noticetext_noticepush}>{this.props.route.params.notice_title}</Text>
       //  <Text style = {styles.notice_body}>{this.props.route.params.notice_body}</Text>
      // </View>
+  back =() =>{
+    this.props.navigation.goBack(null);
+  }
   render() {
     return (
       <SafeAreaView style ={{backgroundColor:'white',display:'flex',flex:1}}>

@@ -8,7 +8,7 @@ import {
   Image,
   SafeAreaView,
   Keyboard,
-  Alert
+  Alert,
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {withNavigation} from 'react-navigation';
@@ -26,17 +26,17 @@ class Find_idpw2 extends React.Component {
   changeBtn = (e) => {
     if (this.state.pw1.length === 0 || this.state.pw2.length === 0) {
       Alert.alert(
-        "안내",
-        "비밀번호를 입력해주세요",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '비밀번호를 입력해주세요',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
     } else if (this.state.pw1 !== this.state.pw2) {
       Alert.alert(
-        "안내",
-        "비밀번호가 일치하지 않습니다",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '비밀번호가 일치하지 않습니다',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
     } else if (this.state.pw1 === this.state.pw2) {
       const user_info = {
@@ -57,10 +57,10 @@ class Find_idpw2 extends React.Component {
             this.props.navigation.navigate('Login');
           } else {
             Alert.alert(
-              "안내",
-              "비밀번호 수정 실패",
-              [{text: "OK", style: "OK"}],
-              { cancelable: false }
+              '안내',
+              '비밀번호 수정 실패',
+              [{text: 'OK', style: 'OK'}],
+              {cancelable: false},
             );
           }
         });
@@ -81,7 +81,7 @@ class Find_idpw2 extends React.Component {
               <View style={{marginTop: 20, left: '5%'}}>
                 <Image
                   style={{width: 25, height: 25}}
-                  source={require('./cancel.png')}
+                  source={require('../Image/cancel.png')}
                 />
               </View>
             </TouchableOpacity>

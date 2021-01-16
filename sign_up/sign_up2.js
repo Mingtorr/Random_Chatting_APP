@@ -109,7 +109,7 @@ class Sign_up2 extends React.Component {
                 onPress={this.backBtn}>
                 <Image
                   style={{width: 25, height: 25}}
-                  source={require('./cancel.png')}
+                  source={require('../Image/cancel.png')}
                 />
               </TouchableOpacity>
 

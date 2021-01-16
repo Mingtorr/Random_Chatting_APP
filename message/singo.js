@@ -16,7 +16,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Alert
+  Alert,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -73,15 +73,12 @@ class Singo extends React.Component {
         'content-type': 'application/json',
       },
       body: JSON.stringify(data),
-    })
-      // alert('신고완료');
-      Alert.alert(
-        "안내",
-        "신고 완료",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
-      );
-      this.props.navigation.goBack(null);
+    });
+    // alert('신고완료');
+    Alert.alert('안내', '신고 완료', [{text: 'OK', style: 'OK'}], {
+      cancelable: false,
+    });
+    this.props.navigation.goBack(null);
   };
   handletxt = (e) => {
     this.setState({
@@ -100,7 +97,7 @@ class Singo extends React.Component {
           <View style={{marginTop: 20, left: '5%'}}>
             <Image
               style={{width: 25, height: 25}}
-              source={require('./cancel.png')}
+              source={require('../Image/cancel.png')}
             />
           </View>
         </TouchableOpacity>

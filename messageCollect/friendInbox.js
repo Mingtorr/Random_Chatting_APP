@@ -307,7 +307,13 @@ export default class FriendInbox extends React.Component {
     }).then((res) => res.json())
       .then((json) => {
         if (json) {
-          alert('알람이 설정되었습니다.')
+          // alert('알람이 설정되었습니다.')
+          Alert.alert(
+            "안내",
+            "알람이 설정 되었습니다.",
+            [{text: "OK", style: "OK"}],
+            { cancelable: false }
+          );
           this.setModalVisible(false, roomid)
         } else {
           console.log('알람꺼짐 버그');

@@ -24,6 +24,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   AppState,
+  Alert
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -212,7 +213,13 @@ class Message extends React.Component {
       this.setState({
         text:''
       })
-      alert("상대방이 나가셔서 메시지를 보낼 수 없습니다.")
+      // alert("상대방이 나가셔서 메시지를 보낼 수 없습니다.")
+      Alert.alert(
+        "안내",
+        "상대방이 나가서 메시지를 보낼 수 없습니다.",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
     } else {
       const realtime = timefunc.settime();
       const realtime2 = new Date();

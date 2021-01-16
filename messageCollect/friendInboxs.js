@@ -51,7 +51,7 @@ export default class FriendsInbox extends React.Component {
       DATA: data.filter((info) => info.id !== itemId),
     });
     console.log('Delete ' + itemId);
-    alert(itemId + '삭제되었습니다.');
+    // alert(itemId + '삭제되었습니다.');
   };
 
   longPressAlert = (itemId) => {
@@ -78,7 +78,7 @@ export default class FriendsInbox extends React.Component {
         itemId === info.id ? {...info, isNewChatNum: 0} : info,
       ),
     });
-    alert(itemId + '클릭' + data[itemId - 1].isNewChatNum);
+    // alert(itemId + '클릭' + data[itemId - 1].isNewChatNum);
   };
 
   renderItem = ({item}) => {

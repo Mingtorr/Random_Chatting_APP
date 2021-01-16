@@ -29,12 +29,12 @@ export default class Set_notice extends Component {
     })
     .then((res) => res.json())
     .then((json) => {
-        console.log('공지'+ JSON.stringify(json));
+        // console.log('공지'+ JSON.stringify(json));
 
         if (json !== undefined) {
 
           json.map((rows) => {
-            const newdate = new Date(rows.notice_date);
+            const newdate = new Date(rows.notice_time);
             var year = newdate.getFullYear();
             year = year-2000;
             var month = newdate.getMonth() + 1;

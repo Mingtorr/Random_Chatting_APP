@@ -53,8 +53,8 @@ export default class FriendInbox extends React.Component {
         ampm = '오전';
         hour = hour;
       }
-
       const room = [...this.state.messagesRoom];
+
       this.setState({
         messagesRoom: room.map((info) =>
           data.roomid === info.room_id
@@ -64,10 +64,18 @@ export default class FriendInbox extends React.Component {
               ampm: ampm,
               hour: hour,
               min: min,
+              message_time: data.time2
             }
             : info,
         ),
       });
+      const sortBefore = [...this.state.messagesRoom];
+      const sortRoom = sortBefore.sort((a,b) =>{
+        return a.message_time > b.message_time ? -1 : a.message_time < b.message_time ? 1: 0;
+      })
+      this.setState({
+        messagesRoom: sortRoom,
+      })
     });
     socket.on('receptionrecieve', (data) => {
       const room = [...this.state.messagesRoom];
@@ -232,7 +240,6 @@ export default class FriendInbox extends React.Component {
       room_id: itemId,
       user_key: this.state.user_Info.user_key,
     };
-    console.log(tousertoken);
     fetch(func.api(3003, 'ChatNumZero'), {
       method: 'post',
       headers: {
@@ -269,7 +276,6 @@ export default class FriendInbox extends React.Component {
     this.setState({
       messagesRoom: data,
     });
-    console.log(data);
   };
 
   receptionOnOff = (roomid, reception, touserkey) => {
@@ -437,7 +443,8 @@ export default class FriendInbox extends React.Component {
       <SafeAreaView style={styles.container}>
         {/* <Button title = '나가기' onPress = {this.deleteChek}></Button> */}
         <FlatList
-          data={this.state.messagesRoom}
+          data={this.state.messagesRoom.sort((a,b) =>{
+            return a.message_time > b.message_time ? -1 : a.message_time < b.message_time ? 1: 0})}
           renderItem={this.renderItem}
           keyExtractor={(item) => String(item.room_id)}
         />

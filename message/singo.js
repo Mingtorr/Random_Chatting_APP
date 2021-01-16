@@ -16,6 +16,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Alert
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -73,7 +74,13 @@ class Singo extends React.Component {
       },
       body: JSON.stringify(data),
     })
-      alert('신고완료');
+      // alert('신고완료');
+      Alert.alert(
+        "안내",
+        "신고 완료",
+        [{text: "OK", style: "OK"}],
+        { cancelable: false }
+      );
       this.props.navigation.goBack(null);
   };
   handletxt = (e) => {

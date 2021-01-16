@@ -76,7 +76,8 @@ function MessageTab(props) {
       />
       <Tab.Screen
         name="오픈채팅"
-        children={() => <Grouproom go={props.go} />}
+        // children={() => <Grouproom go={props.go} />}
+        children={() => <View/>}
       />
     </Tab.Navigator>
   );

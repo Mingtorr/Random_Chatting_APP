@@ -85,7 +85,7 @@ class Find_idpw extends React.Component {
             this.setState({
               authNum: json,
             });
-            console.log(this.state.authNum)
+            // console.log(this.state.authNum)
           } else {
             Alert.alert(
               "안내",

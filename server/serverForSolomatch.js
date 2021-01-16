@@ -79,12 +79,12 @@ app.post('/GetMessageRoom', (req, res) => {
                   'SELECT count, reception FROM participant where user_key = ?',
                   [userKey],
                   function (err, rows, fields) {
-                    // console.log('rororo', rows);
+                    console.log('rororo', rows);
                     const mess = [];
                     message.map((info, index) => {
                       mess.push({...info, ...rows[index]});
                     });
-                    // console.log('reception최종', mess);
+                    console.log('reception최종', mess);
                     res.send(mess);
                   },
                 );
@@ -212,7 +212,7 @@ app.post('/Get_Group', (req, res) => {
             [group_key],
             function (err, rows, fields) {
               if (err) {
-                console.log('err', err);
+                                console.log('err', err);
               } else {
                 const groups = [];
                 group_room.map((info, index) => {
@@ -466,7 +466,7 @@ async function checkroom(row, user_key, message) {
                         'INSERT INTO message_table (room_id,user_key,message_body) values(?,?,?);',
                         [room_key, user_key, message],
                         function (err, rows, fields) {
-                          if (err) console.lo(err);
+                          if (err) console.log(err);
                           // console.log('매칭 완료');
                           bool = res;
                           resolve();

@@ -33,50 +33,56 @@ export default class Set_privacy extends Component {
       id: '',
       passwd: '',
       nickname: '',
-      key: '',
       deptno: '',
       stdno: '',
-      studno: '',
-      major: '',
       email: '',
     };
   }
 
   componentDidMount() {
-    AsyncStorage.getItem('login_user_info', (err, result) => {
-      const UserInfo = JSON.parse(result);
-      // console.log('닉네임 : ' + UserInfo.user_nickname);
-      this.setState({
-        key: UserInfo.user_key,
-        id: UserInfo.user_id,
-        nickname: UserInfo.user_nickname,
-        deptno: UserInfo.user_deptno,
-        stdno: UserInfo.user_stdno,
-        email: UserInfo.user_email,
-      });
-      const post = {
-        key: UserInfo.user_key,
-      };
-      fetch(func.api(3001, 'call'), {
-        method: 'post',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(post),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          this.setState({
-            id: json.user_id,
-            nickname: json.user_nickname,
-            sex: json.user_sex,
-            deptno: json.user_deptno,
-            stdno: json.user_stdno,
-          });
-        });
-    });
+    console.log(JSON.stringify(this.props.route.params)+'sex');
+    this.setState({
+      id: this.props.route.params.id,
+      nickname: this.props.route.params.nickname,
+      deptno: this.props.route.params.deptno,
+      stdno: this.props.route.params.stdno,
+      email: this.props.route.params.email
+    })
   }
-  
+  componentDidCatch(){
+    console.log(JSON.stringify(this.props.route.params)+'sex');
+    this.setState({
+      id: this.props.route.params.id,
+      nickname: this.props.route.params.nickname,
+      deptno: this.props.route.params.deptno,
+      stdno: this.props.route.params.stdno,
+      email: this.props.route.params.email
+    })
+  }
+  nickname_check_change = (e) => {
+    const data = {
+      id: this.props.route.params.id,
+      nickname: this.props.route.params.nickname,
+      deptno: this.props.route.params.deptno,
+      stdno: this.props.route.params.stdno,
+      email: this.props.route.params.email
+    }
+    this.props.navigation.navigate('Set_nick',{data:data,changenick:this.changenick});
+  };
+  changenick =(id,nickname,deptno,stdno,email) =>{
+    console.log("asdasd");
+    this.setState({
+      id: id,
+      nickname: nickname,
+      deptno: deptno,
+      stdno: stdno,
+      email: email
+    })
+  }
+  pw_check_change = (e) => {
+    
+    this.props.navigation.navigate('Set_pw');
+  };
   render() {
     return (
       <SafeAreaView style={{display: 'flex', flex: 1, backgroundColor:'white'}}>
@@ -96,7 +102,7 @@ export default class Set_privacy extends Component {
                 </View>
               </View>
               <View style={{display: 'flex', width: '90%', marginBottom: '10%'}}>
-                <Text style={{fontSize: 15}}>{this.state.email}</Text>
+                <Text style={{fontSize: 15}}>{this.state.email}@changwon.ac.kr</Text>
               </View>
 
               <View style={{display: 'flex', flexDirection: 'row', width: '90%', height: 30, justifyContent: 'space-between',
@@ -109,8 +115,8 @@ export default class Set_privacy extends Component {
                   <TouchableOpacity
                     onPress={this.nickname_check_change}>
                     <Image
-                      style={{width: 20, height: 20, marginLeft: 10}}
-                      source={require('./cancel.png')}
+                      style={{width: 13, height: 13, marginLeft: 10}}
+                      source={require('./next_button2.png')}
                     />
                   </TouchableOpacity>
                 </View>
@@ -121,15 +127,8 @@ export default class Set_privacy extends Component {
                 <Text style={{fontSize: 15, color: '#f05052'}}>아이디</Text>
                 <View style={{display: 'flex', flexDirection: 'row'}}>
                   <Text style={{display: 'flex', color: 'black', fontSize: 15}}>
-                    {this.state.nickname}
+                    {this.state.id}
                   </Text>
-                  <TouchableOpacity
-                    onPress={this.nickname_check_change}>
-                    <Image
-                      style={{width: 20, height: 20, marginLeft: 10}}
-                      source={require('./cancel.png')}
-                    />
-                  </TouchableOpacity>
                 </View>
               </View>
 
@@ -137,14 +136,11 @@ export default class Set_privacy extends Component {
                             borderBottomWidth: 1, borderBottomColor: 'gray', marginBottom: '10%'}}>
                 <Text style={{fontSize: 15, color: '#f05052'}}>비밀번호</Text>
                 <View style={{display: 'flex', flexDirection: 'row'}}>
-                  <Text style={{display: 'flex', color: 'black', fontSize: 15}}>
-                    {this.state.nickname}
-                  </Text>
                   <TouchableOpacity
-                    onPress={this.nickname_check_change}>
+                    onPress={this.pw_check_change}>
                     <Image
-                      style={{width: 20, height: 20, marginLeft: 10}}
-                      source={require('./cancel.png')}
+                      style={{width: 13, height: 13, marginLeft: 10}}
+                      source={require('./next_button2.png')}
                     />
                   </TouchableOpacity>
                 </View>
@@ -155,13 +151,13 @@ export default class Set_privacy extends Component {
                 <Text style={{fontSize: 15, color: '#f05052'}}>학과</Text>
                 <View style={{display: 'flex', flexDirection: 'row'}}>
                   <Text style={{display: 'flex', color: 'black', fontSize: 15}}>
-                    {this.state.nickname}
+                    {this.state.deptno}
                   </Text>
                   <TouchableOpacity
                     onPress={this.nickname_check_change}>
                     <Image
-                      style={{width: 20, height: 20, marginLeft: 10}}
-                      source={require('./cancel.png')}
+                      style={{width: 13, height: 13, marginLeft: 10}}
+                      source={require('./next_button2.png')}
                     />
                   </TouchableOpacity>
                 </View>
@@ -172,13 +168,13 @@ export default class Set_privacy extends Component {
                 <Text style={{fontSize: 15, color: '#f05052'}}>학번</Text>
                 <View style={{display: 'flex', flexDirection: 'row'}}>
                   <Text style={{display: 'flex', color: 'black', fontSize: 15}}>
-                    {this.state.nickname}
+                    {this.state.stdno}
                   </Text>
                   <TouchableOpacity
                     onPress={this.nickname_check_change}>
                     <Image
-                      style={{width: 20, height: 20, marginLeft: 10}}
-                      source={require('./cancel.png')}
+                      style={{width: 13, height: 13, marginLeft: 10}}
+                      source={require('./next_button2.png')}
                     />
                   </TouchableOpacity>
                 </View>

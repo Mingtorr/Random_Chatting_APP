@@ -82,23 +82,25 @@ class Set_exit extends Component {
           <View
             style={{
               display: 'flex',
-              flex: 0.2,
+              // flex: 0.2,
               backgroundColor: 'white',
             }}></View>
           <View
             style={{
               display: 'flex',
-              flex: 0.2,
+              // flex: 0.2,
               backgroundColor: 'white',
               justifyContent: 'flex-end',
               alignItems: 'center',
             }}>
-            <Text style={{fontSize: 21, color: '#eb6c63'}}>와글 와글</Text>
+            <Text style={{fontSize: 21, color: '#eb6c63', marginTop: 10}}>
+              와글 와글
+            </Text>
           </View>
           <View
             style={{
               display: 'flex',
-              flex: 0.23,
+              // flex: 0.23,
               backgroundColor: 'white',
               justifyContent: 'flex-start',
               alignItems: 'center',
@@ -110,19 +112,25 @@ class Set_exit extends Component {
           <View
             style={{
               display: 'flex',
-              flex: 0.1,
+              // flex: 0.1,
               backgroundColor: 'white',
               justifyContent: 'flex-end',
               alignItems: 'center',
             }}>
-            <Text style={{fontSize: 15, color: 'black', fontWeight: '500'}}>
+            <Text
+              style={{
+                fontSize: 15,
+                color: 'black',
+                fontWeight: '500',
+                marginTop: 20,
+              }}>
               정말 떠나실 건가요?
             </Text>
           </View>
           <View
             style={{
               display: 'flex',
-              flex: 0.15,
+              // flex: 0.15,
               backgroundColor: 'white',
               justifyContent: 'flex-start',
               alignItems: 'center',
@@ -155,7 +163,7 @@ class Set_exit extends Component {
           <View
             style={{
               display: 'flex',
-              flex: 0.8,
+              // flex: 0.8,
               backgroundColor: 'white',
               marginTop: 3,
             }}>
@@ -178,7 +186,7 @@ class Set_exit extends Component {
             style={{
               display: 'flex',
               flex: 1,
-              backgroundColor: '#eb6c63',
+              backgroundColor: '#f05052',
               alignItems: 'center',
               justifyContent: 'center',
             }}

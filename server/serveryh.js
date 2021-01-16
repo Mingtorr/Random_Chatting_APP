@@ -39,6 +39,42 @@ app.post('/Getnotice', (req, res) => {
     }
   });
 });
+app.post('/changeNickname', (req, res) => {
+  // console.log(req.body);
+  // console.log('sex');
+  console.log(req.body);
+  connection.query('UPDATE user_table SET user_nickname = (?) WHERE user_key= (?)',[req.body.nickname,req.body.userkey],function(err,rows,field){
+    if(err){
+      console.log(err);
+    }else{
+      connection.query('select * from user_table where user_key = ?',[req.body.userkey],function(err,rows,field){
+        if(rows[0]===undefined){
+          console.log('닉네임변경실패');
+        }else{
+          res.send(rows[0])
+        }
+      })
+    }
+  })
+});
+app.post('/changPW', (req, res) => {
+  // console.log(req.body);
+  // console.log('sex');
+  let inputPassword = req.body.passwd;
+  let salt = Math.round(new Date().valueOf() * Math.random()) + '';
+  let hashPassword = crypto
+    .createHash('sha512')
+    .update(inputPassword + salt)
+    .digest('hex');
+  console.log(req.body);
+  connection.query('UPDATE user_table SET user_salt = (?),user_passwd = (?) WHERE user_key= (?)',[salt,hashPassword,req.body.user_key],function(err,rows,field){
+    if(err){
+      console.log(err);
+    }else{
+      res.send(true)
+    }
+  })
+});
 //token변경
 app.post('/changeToken', (req, res) => {
   const key = req.body.key;

@@ -13,9 +13,31 @@ import {CommonActions} from '@react-navigation/native';
 const func = require('../../server/api');
 
 class Set_main extends Component {
-  state = {
-    key: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      key: '',
+      id: '',
+      nickname: '',
+      deptno: '',
+      stdno: '',
+      email: '',
+    };
+  }
+  
+  componentDidMount() {
+    AsyncStorage.getItem('login_user_info', (err, result) => {
+      const user_info = JSON.parse(result);
+      console.log(user_info);
+      this.setState({
+        id: user_info.user_id,
+        nickname: user_info.user_nickname,
+        deptno: user_info.user_deptno,
+        stdno: user_info.user_stdno,
+        email: user_info.user_email,
+      });
+    });
+  }
 
   logout = async () => {
     let userkey;
@@ -53,7 +75,13 @@ class Set_main extends Component {
   withdrawal = () => {};
   go_Privacy = (e) => {
     e.preventDefault();
-    this.props.navigation.navigate('Set_privacy');
+    this.props.navigation.navigate('Set_privacy', {
+      id: this.state.id,
+      nickname: this.state.nickname,
+      deptno: this.state.deptno,
+      stdno: this.state.stdno,
+      email: this.state.email,
+    });
   };
   go_Alarm = (e) => {
     e.preventDefault();

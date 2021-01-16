@@ -27,8 +27,9 @@ import Set_exit from './settingpage/set_exit/exit';
 const func = require('./server/api');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
-import Noticepush from './settingpage/set_notice/Noticepush';
-
+import Noticepush from './settingpage/set_notice/noticepush';
+import Set_yb from './settingpage/set_yb/setting_nick'
+import Set_pw from './settingpage/set_yb/setting_pw'
 const Stack = createStackNavigator();
 export default class App extends React.Component {
   state = {
@@ -202,6 +203,16 @@ export default class App extends React.Component {
               <Stack.Screen
                 name="exit"
                 component={Set_exit}
+                options={{headerShown: false}}
+              />
+               <Stack.Screen
+                name="Set_nick"
+                component={Set_yb}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Set_pw"
+                component={Set_pw}
                 options={{headerShown: false}}
               />
             </>

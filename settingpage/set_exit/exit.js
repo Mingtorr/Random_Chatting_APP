@@ -186,7 +186,7 @@ class Set_exit extends Component {
             style={{
               display: 'flex',
               flex: 1,
-              backgroundColor: '#eb6c63',
+              backgroundColor: '#f05052',
               alignItems: 'center',
               justifyContent: 'center',
             }}

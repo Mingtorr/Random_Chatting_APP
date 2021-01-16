@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   FlatList,
   View,
@@ -8,12 +8,14 @@ import {
   TextInput,
   Image,
   Animated,
+  Keyboard,
+  Platform,
 } from 'react-native';
-import {SafeAreaView} from 'react-navigation';
+import { SafeAreaView } from 'react-navigation';
 import Main_Mymessage from './main_mymessage';
 import Main_Yourmessage from './main_yourmessage';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
 // import { post } from '../server/routes/indexswy';
 const func = require('../server/api');
 import io from 'socket.io-client';
@@ -27,7 +29,7 @@ export default class Main extends Component {
     this.flatlist_ref = React.createRef();
     this.state = {
       value: new Animated.Value(0.2),
-      position: new Animated.ValueXY({x: 0, y: 0}),
+      position: new Animated.ValueXY({ x: 0, y: 0 }),
       animatedValue: new Animated.Value(display_Height * 0.85),
       animatedValue_back: new Animated.Value(1),
       // animation: new Animated.Value(0),
@@ -43,15 +45,16 @@ export default class Main extends Component {
 
       scroll_number: 1,
       refreshing: false,
+      keyboardH: 0,
     };
   }
 
   componentDidMount() {
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const user_info = JSON.parse(result);
-       console.log(user_info);
-      this.setState({user_key: user_info.user_key});
-      this.setState({user_nickname: user_info.user_nickname});
+      console.log(user_info);
+      this.setState({ user_key: user_info.user_key });
+      this.setState({ user_nickname: user_info.user_nickname });
     });
 
     // console.log('allchatroom_message');
@@ -90,6 +93,30 @@ export default class Main extends Component {
       });
       this.scrolltobottom();
     });
+
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+  }
+
+  _keyboardDidShow = (e) => {
+    // this.props.navigation.setParams({
+    //     keyboardHeight: e.endCoordinates.height,
+    //     normalHeight: Dimensions.get('window').height, 
+    //     shortHeight: Dimensions.get('window').height - e.endCoordinates.height, 
+    // }); 
+    
+    this.setState({
+      
+      keyboardH: (Platform.OS === 'ios') ? e.endCoordinates.height - 50 : 0
+    })
+    console.log('open');
+  }
+
+  _keyboardDidHide  =()=> {
+    this.setState({
+      keyboardH: 0,
+    })
+    console.log('hide');
   }
 
   sendmessage = () => {
@@ -231,7 +258,7 @@ export default class Main extends Component {
 
   //////////////////////////////////////////////////////////////////////////
 
-  rendermessage = ({item, index}) => {
+  rendermessage = ({ item, index }) => {
     let send_time = new Date(item.allmessage_time);
     let send_time_hour = send_time.getHours();
     let send_time_minute = send_time.getMinutes(); //+9
@@ -280,9 +307,9 @@ export default class Main extends Component {
           JSON.stringify(send_time_minute);
       }
     }
-    
+
     if (item.user_nickname === this.state.user_nickname) {
-      return <Main_Mymessage message={item.message_body} time={message_time} animate_boolean={this.state.allchatroom_animate_boolean}/>;
+      return <Main_Mymessage message={item.message_body} time={message_time} animate_boolean={this.state.allchatroom_animate_boolean} />;
     } else {
       return (
         <Main_Yourmessage
@@ -297,7 +324,7 @@ export default class Main extends Component {
   scrolltobottom = () => {
     setTimeout(() => {
       if (this.flatlist_ref !== null && this.flatlist_ref.current !== null) {
-        this.flatlist_ref.current.scrollToEnd({animated: false});
+        this.flatlist_ref.current.scrollToEnd({ animated: false });
       }
     }, 600);
   };
@@ -316,8 +343,8 @@ export default class Main extends Component {
       <SafeAreaView style={styles.Container_main}>
         <SafeAreaView style={styles.Container_main}>
           <SafeAreaView
-            style={{position: 'absolute', height: '100%', width: '100%'}}>
-            <Animated.View style={{flex: 1, opacity: this.state.value}}>
+            style={{ position: 'absolute', height: '100%', width: '100%' }}>
+            <Animated.View style={{ flex: 1, opacity: this.state.value }}>
               {/* <TouchableOpacity
                 style={{position: 'absolute', marginTop: 7, left: '2%'}}
                 onPress={this.backBtn}>
@@ -336,11 +363,11 @@ export default class Main extends Component {
                   borderBottomColor: 'black',
                 }}>
                 <Text
-                  style={{fontFamily: 'Jalnan', color: 'black', fontSize: 20}}>
+                  style={{ fontFamily: 'Jalnan', color: 'black', fontSize: 20 }}>
                   전체 채팅방
                 </Text>
               </View>
-              <View style={{flex: 1}}>
+              <View style={{ flex: 1 }}>
                 <FlatList
                   ref={this.flatlist_ref}
                   keyExtractor={(item) => item.key.toString()}
@@ -356,21 +383,22 @@ export default class Main extends Component {
                   backgroundColor: 'white',
                   flexDirection: 'row',
                   justifyContent: 'center',
+                  marginBottom: this.state.keyboardH
                 }}>
                 <TextInput
                   value={this.state.my_all_message}
                   id="my_all_message"
-                  onChangeText={(text) => this.setState({my_all_message: text})}
+                  onChangeText={(text) => this.setState({ my_all_message: text })}
                   onFocus={this.scrolltobottom}
                   onTouchStart={this.scrolltobottom}
-                  editable= {this.state.allchatroom_animate_boolean ? true : false}
+                  editable={this.state.allchatroom_animate_boolean ? true : false}
                   style={styles.text_input}
                 />
                 <TouchableOpacity
                   style={styles.text_input_image}
                   onPress={this.sendmessage}>
                   <Image
-                    style={{width: 35, height: 35}}
+                    style={{ width: 35, height: 35 }}
                     source={require('./send6.png')}
                   />
                 </TouchableOpacity>
@@ -390,7 +418,7 @@ export default class Main extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <View style={{alignItems: 'center'}}>
+              <View style={{ alignItems: 'center' }}>
                 <Text
                   style={{
                     fontSize: 40,
@@ -400,13 +428,13 @@ export default class Main extends Component {
                   와글 와글
                 </Text>
               </View>
-              <View style={{alignItems: 'center'}}>
+              <View style={{ alignItems: 'center' }}>
                 <Text
-                  style={{fontSize: 18, color: '#eb6c63', fontWeight: 'bold'}}>
+                  style={{ fontSize: 18, color: '#eb6c63', fontWeight: 'bold' }}>
                   다른학과 사람들과 친해질 수 있는
                 </Text>
                 <Text
-                  style={{fontSize: 18, color: '#eb6c63', fontWeight: 'bold'}}>
+                  style={{ fontSize: 18, color: '#eb6c63', fontWeight: 'bold' }}>
                   최고의 방법
                 </Text>
               </View>
@@ -430,7 +458,7 @@ export default class Main extends Component {
                 }}
                 onPress={this.allchatroom_message}>
                 <Text
-                  style={{fontFamily: 'Jalnan', fontSize: 17, color: 'white'}}>
+                  style={{ fontFamily: 'Jalnan', fontSize: 17, color: 'white' }}>
                   전체 채팅 참여하기
                 </Text>
               </TouchableOpacity>

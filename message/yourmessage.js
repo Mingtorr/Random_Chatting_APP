@@ -32,7 +32,7 @@ export default class Yourmessage extends React.Component{
                         <Text style={{fontSize:18}}>{this.props.message}</Text>
                         </View>
                         <View style={{display:'flex',justifyContent:'flex-end'}}>
-                            <Text style={{fontSize:12}}>{this.props.time}</Text>
+                            <Text style={{fontSize:10}}>{this.props.time}</Text>
                         </View>
                     </View>
                 </View>
@@ -42,14 +42,14 @@ export default class Yourmessage extends React.Component{
             return(
                 <View style={{display:'flex',flexDirection:'column',justifyContent:'flex-start',marginBottom:5,marginTop:5}}>
                     <View style={{marginLeft:22,marginBottom:10,display:'flex'}}>
-                        <Text style={{fontSize:15,fontWeight:'bold'}}>{this.props.name}</Text>
+                        <Text style={{fontSize:13,fontWeight:'bold'}}>{this.props.name}</Text>
                     </View>
                     <View style={{display:"flex",flexDirection:'row'}}>
                         <View style={{display:'flex',backgroundColor:'#eaeaea',marginRight:10,marginLeft:16,maxWidth:'70%',paddingLeft:15,paddingRight:15,paddingBottom:8,paddingTop:8,borderRadius:20}}>
-                        <Text style={{fontSize:18}}>{this.props.message}</Text>
+                        <Text style={{fontSize:14}}>{this.props.message}</Text>
                         </View>
                         <View style={{display:'flex',justifyContent:'flex-end'}}>
-                            <Text style={{fontSize:12}}>{this.props.time}</Text>
+                            <Text style={{fontSize:10}}>{this.props.time}</Text>
                         </View>
                     </View>
                 </View>

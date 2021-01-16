@@ -360,10 +360,14 @@ export default class Main extends Component {
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderBottomWidth: 1,
-                  borderBottomColor: 'black',
+                  borderBottomColor: 'lightgray',
                 }}>
                 <Text
+<<<<<<< HEAD
                   style={{ fontFamily: 'Jalnan', color: 'black', fontSize: 20 }}>
+=======
+                  style={{fontWeight:'800', color: 'black', fontSize: 20}}>
+>>>>>>> vvv
                   전체 채팅방
                 </Text>
               </View>
@@ -424,6 +428,7 @@ export default class Main extends Component {
                     fontSize: 40,
                     color: '#eb6c63',
                     fontFamily: 'Jalnan',
+                    marginBottom:15
                   }}>
                   와글 와글
                 </Text>

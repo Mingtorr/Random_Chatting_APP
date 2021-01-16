@@ -23,6 +23,7 @@ import {localNotificationService} from './push/LocalNotificationService';
 import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
+import Set_exit from './settingpage/set_exit/exit'
 const func = require('./server/api');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
@@ -191,6 +192,11 @@ export default class App extends React.Component {
               <Stack.Screen
                 name="Groupmessage"
                 component={Groupmessage}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="exit"
+                component={Set_exit}
                 options={{headerShown: false}}
               />
             </>

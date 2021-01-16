@@ -60,9 +60,7 @@ class Set_main extends Component {
     });
   };
 
-  withdrawal = () => {
-    
-  };
+  withdrawal = () => {};
   go_Privacy = (e) => {
     e.preventDefault();
     this.props.navigation.navigate('Set_privacy');
@@ -107,17 +105,7 @@ class Set_main extends Component {
             {'>'}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.Box_set_main}>
-          <View
-            style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
-            <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
-              건의 사항/도움말
-            </Text>
-          </View>
-          <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>
-            {'>'}
-          </Text>
-        </TouchableOpacity>
+
         <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Notice}>
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>

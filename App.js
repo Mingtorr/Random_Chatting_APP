@@ -23,11 +23,12 @@ import {localNotificationService} from './push/LocalNotificationService';
 import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
-import Set_exit from './settingpage/set_exit/exit'
+import Set_exit from './settingpage/set_exit/exit';
 const func = require('./server/api');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
 import Noticepush from './settingpage/set_notice/noticepush';
+import ChangePW from './sign_up/changePW';
 
 const Stack = createStackNavigator();
 export default class App extends React.Component {
@@ -110,6 +111,11 @@ export default class App extends React.Component {
         <Stack.Navigator>
           {this.state.isLoading ? (
             <>
+              {/* <Stack.Screen
+                name="ChangePW"
+                component={ChangePW}
+                options={{headerShown: false}}
+              /> */}
               <Stack.Screen
                 name={this.state.fisrt_name}
                 component={this.state.fisrt_components}

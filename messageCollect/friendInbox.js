@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Image
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import io from 'socket.io-client';
@@ -390,8 +391,12 @@ export default class FriendInbox extends React.Component {
                     <Text style={styles.nickName}>{item.user_nickname}</Text>
                   )}
                 {item.reception === 1 // 1켜기 0 끄기
-                  ? <Text>동의</Text>
-                  : <Text>거부</Text>}
+                  ? <Text></Text>
+                  // : <Text>거부</Text>}
+                  : <Image
+                  style={{width: 15, height: 15, marginTop: 5}}
+                  source={require('../message/singo.png')}
+                />}
               </View>
               <View style={styles.messageLastChat}>
                 {item.message_body === 'delcode5010' ? (
@@ -481,7 +486,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 5,
   },
-  messageHead: {},
+  messageHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   nickName: {
     fontSize: 18,
   },
@@ -588,13 +596,17 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 15
+    marginBottom: '10%'
   },
   modalTouch: {
+    // backgroundColor: 'lightgray',
+    height: '25%',
+    // flex:0.8,
     marginBottom: 15,
     textAlign: "center"
   },
   modalText: {
     fontSize: 16,
+    marginTop: -3
   }
 });

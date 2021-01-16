@@ -258,7 +258,7 @@ app.post('/call', (req, res) => {
 app.post('/withdrawal', (req, res) => {
   const key = req.body.key;
   connection.query(
-    'update user_table set user_id= concat(user_id,"@@thisisdeletedaccount@@33698512"), user_email= concat(user_email,"@@thisisdeletedaccount@@33698512"),user_nickname= "삭제된 닉네임입니다.", user_salt=0, user_deptno=NULL, user_stdno=NUll , user_token=0, user_NewMsg=1 where user_key=17;',
+    'update user_table set user_id= concat(user_id,"*@thisisdeletedaccount@*"), user_email= concat(user_email,"*@thisisdeletedaccount@*"),user_nickname= "삭제된 닉네임입니다.", user_salt=0, user_deptno=NULL, user_stdno=NUll , user_token=0, user_NewMsg=1 where user_key=(?);',
     [key],
     function (err, rows, result) {
       if (err) {

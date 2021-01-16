@@ -168,14 +168,17 @@ class Set_alarm extends Component {
       alert: false,
     });
   };
-
+  backBtn = () => {
+    this.props.navigation.goBack(null);
+  };
   render() {
     return (
-      <SafeAreaView style={styles.Conainer_alarm}>
+      <SafeAreaView style={{display: 'flex',
+      backgroundColor: 'white',}}>
         <View style={styles.Header_alarm}>
           <TouchableOpacity
             style={styles.back_alarm}
-            onPress={() => this.props.navigation.goBack()}>
+            onPress={this.backBtn}>
             <Image
               style={{width: 25, height: 25}}
               source={require('./cancel.png')}
@@ -293,10 +296,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     borderBottomWidth: 1,
+    borderColor:'lightgray',
+    backgroundColor:'white'
   },
   back_alarm: {
     marginLeft: 30,
-    position: 'absolute',
+    display: 'flex',
+    zIndex:999
   },
   Head_alarm: {
     width: '100%',
@@ -329,7 +335,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: 'gray',
+    borderBottomColor: 'lightgray',
     paddingBottom: 10,
     paddingRight: 10,
     ...Platform.select({
@@ -342,7 +348,6 @@ const styles = StyleSheet.create({
     }),
   },
   Textmsg_alarm: {
-    fontFamily: 'Jalnan',
     fontSize: 15,
     color: 'black',
     // color: '#f05052',

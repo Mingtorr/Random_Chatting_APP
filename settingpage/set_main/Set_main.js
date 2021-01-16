@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {withNavigation} from 'react-navigation';
-import { CommonActions } from "@react-navigation/native";
+import {CommonActions} from '@react-navigation/native';
 let imagePath = require('./info.png');
 let avatar = require('./avatar.png');
 let question = require('./question.png');
@@ -24,12 +24,7 @@ const func = require('../../server/api');
 
 class Set_main extends Component {
   state = {
-    modalVisible: false,
     key: '',
-  };
-
-  setModalVisible = (visible) => {
-    this.setState({modalVisible: visible});
   };
 
   logout = async () => {
@@ -58,10 +53,8 @@ class Set_main extends Component {
         this.props.navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [
-              {name: 'Login'},
-            ],
-   })
+            routes: [{name: 'Login'}],
+          }),
         );
       });
     });
@@ -105,99 +98,81 @@ class Set_main extends Component {
     e.preventDefault();
     this.props.navigation.navigate('Set_notice');
   };
+  go_exit = (e) => {
+    this.props.navigation.navigate('exit');
+  };
   render() {
     const {modalVisible} = this.state;
     return (
-      <SafeAreaView style={styles.Container_set_main}>
-        <Modal animationType="slide" transparent={true} visible={modalVisible}>
-          <View style={styles.centeredView_set_main}>
-            <View style={styles.modalView_set_main}>
-              <Text style={styles.modalText_set_main}>
-                정말 떠나실 건가요 😂...?
-              </Text>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  width: '60%',
-                }}>
-                <TouchableHighlight
-                  style={{
-                    ...styles.openButton_set_main,
-                    backgroundColor: '#2196F3',
-                  }}
-                  onPress={this.withdrawal}>
-                  <Text style={styles.textStyle_set_main}>네</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  style={{
-                    ...styles.openButton_set_main,
-                    backgroundColor: '#2196F3',
-                  }}
-                  onPress={() => {
-                    this.setModalVisible(!modalVisible);
-                  }}>
-                  <Text style={styles.textStyle_set_main}>아니오</Text>
-                </TouchableHighlight>
-              </View>
-            </View>
-          </View>
-        </Modal>
+      <SafeAreaView style={{display: 'flex', backgroundColor: 'white'}}>
         <View style={styles.Head_set_main}>
-          <Text style={{fontSize: 20}}>Setting</Text>
+          <Text style={{fontSize: 20, color: 'black'}}>Setting</Text>
         </View>
         <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Privacy}>
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
-            <Image style={{height: 20, width: 20}} source={avatar} />
-            <Text style={{marginLeft: 15, fontSize: 16}}>개인정보 변경</Text>
+            <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
+              개인정보 변경
+            </Text>
           </View>
-          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
+          <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>
+            {'>'}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Alarm}>
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
-            <Image style={{height: 20, width: 20}} source={imagePath} />
-            <Text style={{marginLeft: 15, fontSize: 16}}>알람 설정</Text>
+            <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
+              알람 설정
+            </Text>
           </View>
-          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
+          <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>
+            {'>'}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.Box_set_main}>
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
-            <Image style={{height: 20, width: 20}} source={question} />
-            <Text style={{marginLeft: 15, fontSize: 16}}>건의 사항/도움말</Text>
+            <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
+              건의 사항/도움말
+            </Text>
           </View>
-          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
+          <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>
+            {'>'}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.Box_set_main} onPress={this.go_Notice}>
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
-            <Image style={{height: 20, width: 20}} source={blackboard} />
-            <Text style={{marginLeft: 15, fontSize: 16}}>공지 사항</Text>
+            <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
+              공지 사항
+            </Text>
           </View>
-          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
+          <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>
+            {'>'}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.Box_set_main} onPress={this.logout}>
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
-            <Image style={{height: 20, width: 20}} source={logout} />
-            <Text style={{marginLeft: 15, fontSize: 16}}>로그아웃</Text>
+            <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
+              로그아웃
+            </Text>
           </View>
-          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
+          <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>
+            {'>'}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.Box_set_main}
-          onPress={() => {
-            this.setModalVisible(true);
-          }}>
+        <TouchableOpacity style={styles.Box_set_main} onPress={this.go_exit}>
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
-            <Image style={{height: 20, width: 20}} source={on} />
-            <Text style={{marginLeft: 15, fontSize: 16}}>회원 탈퇴</Text>
+            <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
+              회원 탈퇴
+            </Text>
           </View>
-          <Text style={{marginRight: 30, fontSize: 20}}>{'>'}</Text>
+          <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>
+            {'>'}
+          </Text>
         </TouchableOpacity>
       </SafeAreaView>
     );

@@ -63,7 +63,7 @@ class Message extends React.Component {
       resultshownickname: 0,
       change: 1,
       appState: AppState.currentState,
-      reception:this.props.route.params.reception,
+      reception: this.props.route.params.reception,
     };
   }
   _handleAppStateChange = (nextAppState) => {
@@ -94,7 +94,7 @@ class Message extends React.Component {
         userkey: JSON.parse(result).user_key,
         myname: JSON.parse(result).user_nickname,
         myshownickname: this.props.route.params.myshownickname,
-        recpetion:this.props.route.params.recpetion
+        recpetion: this.props.route.params.recpetion,
       });
     });
     const data = {
@@ -105,12 +105,12 @@ class Message extends React.Component {
       touser: this.state.touserkey,
     };
     socket.emit('roomjoin', data); //방참가
-    socket.on('receptionrecieve',(data)=>{
-      console.log(JSON.stringify(data)+"미낭ㅁ나ㅣㅓㅇ마ㅣ너아ㅣㅁ넝");
+    socket.on('receptionrecieve', (data) => {
+      console.log(JSON.stringify(data) + '미낭ㅁ나ㅣㅓㅇ마ㅣ너아ㅣㅁ넝');
       this.setState({
-        reception:data.reception
-      })
-    })
+        reception: data.reception,
+      });
+    });
     socket.on('socketid', (data) => {
       //my socketid
       this.setState({
@@ -199,7 +199,7 @@ class Message extends React.Component {
   }
 
   sendmessage = () => {
-    console.log("상대방의 리셉션"+this.state.reception);
+    console.log('상대방의 리셉션' + this.state.reception);
     if (this.state.text.trim() === '') {
       this.setState({
         text: '',
@@ -221,8 +221,9 @@ class Message extends React.Component {
         toshownickname: this.state.toshownickname,
         tousertoken: this.props.route.params.tousertoken,
       };
-      if (this.state.roomsockets.length !== 2&&this.state.reception === 1) {
-        console.log("상대방에게 푸시알림 전송");
+      console.log(data);
+      if (this.state.roomsockets.length !== 2 && this.state.reception === 1) {
+        console.log('상대방에게 푸시알림 전송');
         fetch('https://fcm.googleapis.com/fcm/send', {
           method: 'POST',
           headers: {
@@ -232,7 +233,7 @@ class Message extends React.Component {
           },
           body: JSON.stringify({
             to: data.tousertoken,
-            content_available : true,
+            content_available: true,
             notification: {
               title: data.name + '님이 메세지를 보냈습니다.',
               body: data.message,
@@ -312,46 +313,12 @@ class Message extends React.Component {
             this.setState({
               arr: [row, ...this.state.arr],
             });
-            /*
-      if(this.state.arr.length >20){
-        this.setState({
-          start:this.state.arr.length-20
-        },this.scrolltobottom())
-      }else{
-        this.setState({
-          start:0
-        },this.scrolltobottom())
-      }*/
           });
           this.setState({
             change: this.state.change + 1,
           });
         }
       });
-    /*
-  console.log(this.state.start);
-  if(this.state.start<19){
-    this.setState({
-      refresh:true,
-      start:0
-    },()=>{
-      this.setState({
-        refresh:false
-      })
-    })
-  }else{
-    this.setState({
-      refresh:true,
-      start:this.state.start-20,
-    },()=>{
-   
-      this.scrolltomessage();
-      this.setState({
-        refresh:false
-      })
-    })
-  }
-  */
   };
   message_onchange = (e) => {
     this.setState({

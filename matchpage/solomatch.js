@@ -86,7 +86,13 @@ export default class Solo_match extends React.Component {
               message: this.state.message,
               user_key: userkey,
             };
-
+            console.log(
+              '..............................................................................................',
+            );
+            console.log(box);
+            console.log(
+              '..............................................................................................',
+            );
             fetch(func.api(3003, 'sendMessage'), {
               method: 'post',
               headers: {
@@ -114,7 +120,7 @@ export default class Solo_match extends React.Component {
                     },
                     body: JSON.stringify({
                       to: json.user_token,
-                      "content_available" : true,
+                      content_available: true,
                       notification: {
                         title: nickname + '님이 메세지를 보냈습니다.',
                         body: this.state.message,

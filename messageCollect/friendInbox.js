@@ -387,7 +387,8 @@ export default class FriendInbox extends React.Component {
                 ) : (
                   // <Text>{item.message_body}</Text>
                   <Text style={styles.lastChat}>
-                    {item.message_body.length > 35
+                    {
+                    item.message_body.length > 35
                       ? item.message_body.substr(0, 37).padEnd(40, '.')
                       : item.message_body}
                   </Text>

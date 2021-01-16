@@ -13,7 +13,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: '2ajrrhtlvj',
   database: 'mydb',
 });
 //snsk3779@
@@ -102,7 +102,7 @@ app.post('/Signup2', async function (req, res, next) {
 });
 //로그인 salt 적용
 app.post('/login', async function (req, res, next) {
-  // console.log('login');
+  console.log('login');
   let body = req.body;
   let userkey;
   let arr;
@@ -652,13 +652,29 @@ app.post('/reset_token3', (req, res) => {
 app.post('/get_message_state', (req, res) => {
   let body = req.body;
   connection.query(
-    'select user_pushstate,user_NewMsg from user_table where user_key= (?)',
+    'select user_pushstate, user_NewMsg,user_sendNoticestate from user_table where user_key= (?)',
     [body.userkey],
     function (err, rows, fields) {
       if (err) {
         console.log(err);
       }
-      res.send(rows);
+      res.send(rows[0]);
+    },
+  );
+});
+
+app.post('/reset_token2', (req, res) => {
+  let body = req.body;
+  // console.log(body);
+  connection.query(
+    'UPDATE user_table SET user_sendNoticestate = (?) WHERE user_key= (?);',
+    [body.pid, body.userkey],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      }
+      res.send(true);
     },
   );
 });

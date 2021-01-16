@@ -56,10 +56,30 @@ function delete_room() {
     },
   );
 }
+function heat_plus() {
+  connection.query('select user_key from user_table;', function (
+    err,
+    rows,
+    fields,
+  ) {
+    rows.map((row, index) => {
+      connection.query(
+        'UPDATE user_table SET user_heart = 5 WHERE user_key = (?)',
+        [row.user_key],
+        function (err, rows, fields) {
+          if (err) console.log(err);
+        },
+      );
+    });
+  });
+}
 
 function test() {
   var date = moment().format('hh');
   // console.log(date);
+  if (data.tostring() === 00) {
+    heat_plus();
+  }
   clearInterval(interval);
   delete_room();
   interval = setInterval(test, 1000 * 60);

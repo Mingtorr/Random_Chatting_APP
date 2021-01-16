@@ -24,14 +24,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Groupmessage from './groupmessage/groupmessage';
 import messaging from '@react-native-firebase/messaging';
 const func = require('./server/api');
-// let homeimo = require('./Image/homeimo.png');
-// let alarmimo = require('./Image/alarmimo.png');
-// let mainimo = require('./Image/mainimo.png');
-// let msgimo = require('./Image/msgimo.png');
-// let setting = require('./Image/setting.png');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
-import Noticepush from './settingpage/set_notice/noticepush'
+import Noticepush from './settingpage/set_notice/noticepush';
 
 const Stack = createStackNavigator();
 export default class App extends React.Component {
@@ -184,9 +179,9 @@ export default class App extends React.Component {
                 options={{headerShown: false}}
               />
               <Stack.Screen
-              name="noticepush"
-              component={Noticepush}
-              options={{headerShown: false}}
+                name="noticepush"
+                component={Noticepush}
+                options={{headerShown: false}}
               />
               <Stack.Screen
                 name="singo"

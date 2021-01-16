@@ -42,13 +42,14 @@ class Login extends React.Component {
   };
 
   onlogin = async (e) => {
-    console.log('asdf');
     const token = await messaging().getToken();
     const post = {
       id: this.state.name1,
       passwd: this.state.pass,
       token: token,
     };
+    console.log(post);
+
     fetch(func.api(3001, 'login'), {
       method: 'post',
       headers: {
@@ -58,7 +59,7 @@ class Login extends React.Component {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(JSON.stringify(json)+"시발");
+        console.log(JSON.stringify(json) + '시발');
         if (json) {
           AsyncStorage.setItem('login_onoff_set', 'true', () => {
             AsyncStorage.setItem(

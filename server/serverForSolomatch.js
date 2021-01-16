@@ -10,7 +10,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'snsk3779@',
+  password: '2ajrrhtlvj',
   database: 'mydb',
 });
 
@@ -540,7 +540,7 @@ async function sending1(user_key, message) {
           room_key = rows.insertId;
           connection.query(
             'INSERT INTO participant (room_id,user_key,count,room_del,shownickname) values(?,?,?,?,?)',
-            [room_key, 0, 1, 0, 0],
+            [room_key, 1, 1, 0, 0],
             function (err, rows, fields) {
               if (err) console.log(err);
               connection.query(

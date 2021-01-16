@@ -466,7 +466,7 @@ async function checkroom(row, user_key, message) {
                         'INSERT INTO message_table (room_id,user_key,message_body) values(?,?,?);',
                         [room_key, user_key, message],
                         function (err, rows, fields) {
-                          if (err) console.lo(err);
+                          if (err) console.log(err);
                           // console.log('매칭 완료');
                           bool = res;
                           resolve();

@@ -35,13 +35,14 @@ export default class Set_notice extends Component {
         if (json !== undefined) {
           console.log('이프문')
           json.map((rows) => {
-            const newdate = new Date(rows.notice_date);
+            const newdate = new Date(rows.notice_time);
+            var year = newdate.getFullYear();
             var month = newdate.getMonth() + 1;
             var day = newdate.getDate();
-            var noticeday = [month, day].join('/');
+            var noticeday = [year,month, day].join('.');
             rows.notice_date = noticeday;
             const newrow = rows;
-            console.log(newrow);
+            console.log(noticeday+"시간");
             this.setState({
               notices: [...this.state.notices, newrow],
             });
@@ -64,38 +65,74 @@ export default class Set_notice extends Component {
     })
   }
 
+  backBtn = () => {
+    this.props.navigation.goBack(null);
+  };
+
   renderItem = ({item}) => {
-    return (
-      <View>
-        <TouchableOpacity onPress ={() =>this.openNotice(item.notice_key, item.notice_title, item.notice_body, item.notice_date)}>
-          <View style={{borderBottomWidth: 1,borderBottomColor: 'lightgray',backgroundColor:'black',flexDirection:'row'}}>
-            <View style={{display:'flex',flex:0.15,backgroundColor:'white',alignItems:'center',justifyContent:'center'}}>
-            <Image
-                  style={{width: 45, height: 45}}
-                  source={require('./waglewagle.png')}
-                />
+    if(item.notice_type === 0){
+      return (
+        <View>
+          <TouchableOpacity onPress ={() =>this.openNotice(item.notice_key, item.notice_title, item.notice_body, item.notice_date)}>
+            <View style={{borderBottomWidth: 1,borderBottomColor: 'lightgray',backgroundColor:'black',flexDirection:'row'}}>
+              <View style={{display:'flex',flex:0.15,backgroundColor:'white',alignItems:'center',justifyContent:'center'}}>
+              <Image
+                    style={{width: 45, height: 45}}
+                    source={require('./wagle.png')}
+                  />
+              </View>
+              <View style={{display:'flex',flex:0.85,backgroundColor:'white',flexDirection:'column'}}>
+                <View style={{marginLeft:15,marginTop:10,backgroundColor:'white'}}><Text style={{fontWeight:'900',fontSize:12,color:'#eb6c63'}}>공지사항</Text></View>
+                <View style={{marginLeft:15,marginTop:10,backgroundColor:'white'}}><Text style={{fontWeight:'500',fontSize:14}}>{item.notice_title}</Text></View>
+                <View style={{marginTop:10,marginBottom:10,marginLeft:15,backgroundColor:'white'}}><Text style={{color:'gray',fontSize:12,fontWeight:'700'}}>{item.notice_date}</Text></View>
+              </View>
             </View>
-            <View style={{display:'flex',flex:0.85,backgroundColor:'white',flexDirection:'column'}}>
-              <View style={{marginLeft:15,marginTop:10}}><Text style={{fontWeight:'500',fontSize:17}}>{item.notice_title}</Text></View>
-              <View style={{marginTop:5,marginBottom:10,marginLeft:15}}><Text style={{color:'gray'}}>{item.notice_date}</Text></View>
+          </TouchableOpacity>
+        </View>
+      )
+    }else{
+      return (
+        <View>
+          <TouchableOpacity onPress ={() =>this.openNotice(item.notice_key, item.notice_title, item.notice_body, item.notice_date)}>
+            <View style={{borderBottomWidth: 1,borderBottomColor: 'lightgray',backgroundColor:'black',flexDirection:'row'}}>
+              <View style={{display:'flex',flex:0.15,backgroundColor:'white',alignItems:'center',justifyContent:'center'}}>
+              <Image
+                    style={{width: 45, height: 45}}
+                    source={require('./wagle.png')}
+                  />
+              </View>
+              <View style={{display:'flex',flex:0.85,backgroundColor:'white',flexDirection:'column'}}>
+                <View style={{marginLeft:15,marginTop:10,backgroundColor:'white'}}><Text style={{fontWeight:'900',fontSize:12,color:'#eb6c63'}}>이벤트</Text></View>
+                <View style={{marginLeft:15,marginTop:10,backgroundColor:'white'}}><Text style={{fontWeight:'500',fontSize:14}}>{item.notice_title}</Text></View>
+                <View style={{marginTop:10,marginBottom:10,marginLeft:15,backgroundColor:'white'}}><Text style={{color:'gray',fontSize:12,fontWeight:'700'}}>{item.notice_date}</Text></View>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    )
+          </TouchableOpacity>
+        </View>
+      )
+    }
   }
 
   render() {
     return (
       <SafeAreaView style ={{backgroundColor:'white',display:'flex',flex:1}}>
-        <View style={styles.Head_notice}>
-          <Text style={styles.Text_notice}>공지사항</Text>
+        <View style={{display:'flex',flex:0.12,backgroundColor:'white',marginTop:10,borderBottomWidth:1,borderColor:'lightgray'}}>
+          <View style={{display:'flex',flex:0.3,backgroundColor:'white'}}>
+            <TouchableOpacity onPress={this.backBtn}>
+              <Image source={require('./back2.png')} style={{width:18,height:25,marginLeft:15}}/>
+            </TouchableOpacity>
+          </View>
+          <View style={{display:'flex',flex:0.88,backgroundColor:'white',justifyContent:'center'}}>
+            <Text style={{fontSize:23,marginLeft:26,color:'#eb6c63',fontWeight:'800'}}>공지사항</Text>
+          </View>
         </View>
+        <View style={{display:'flex',flex:0.84}}>
         <FlatList
           data={this.state.notices}
           renderItem={this.renderItem}
           keyExtractor={(item) => String(item.notice_key)}
         />
+        </View>
       </SafeAreaView>
       // <SafeAreaView style={styles.Container_notice}>
       //   <View style={styles.Head_notice}>

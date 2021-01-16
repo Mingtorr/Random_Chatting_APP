@@ -142,17 +142,17 @@ class Login extends React.Component {
                     </Text>
                     <Text style={styles.swiper_text}>최고의 방법</Text>
                     <Image
-                      style={styles.swiper_image}
-                      source={require('./swiper_image1.png')}
+                      style={{height:'100%',width:'100%'}}
+                      source={require('./swiper1.png')}
                       resizeMode="cover"
                     />
                   </View>
                   <View style={styles.slide2}>
-                    <Text style={styles.swiper_text}>실친구함 친구구함</Text>
-                    <Text style={styles.swiper_text}>창원대</Text>
+                    <Text style={styles.swiper_text}>학교사람들과 친해지고 싶다면?</Text>
+                    <Text style={styles.swiper_text}>와글와글로 와!</Text>
                     <Image
-                      style={styles.swiper_image}
-                      source={require('./swiper_image1.png')}
+                      style={{height:'100%',width:'100%'}}
+                      source={require('./swiper2.png')}
                       resizeMode="cover"
                     />
                   </View>
@@ -160,8 +160,8 @@ class Login extends React.Component {
                     <Text style={styles.swiper_text}>내 손 안에 작은 학교</Text>
                     <Text style={styles.swiper_text}>와글와글</Text>
                     <Image
-                      style={styles.swiper_image}
-                      source={require('./swiper_image1.png')}
+                       style={{height:'100%',width:'100%'}}
+                      source={require('./swiper3.png')}
                       resizeMode="cover"
                     />
                   </View>

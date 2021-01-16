@@ -181,7 +181,7 @@ class Set_alarm extends Component {
             onPress={this.backBtn}>
             <Image
               style={{width: 25, height: 25}}
-              source={require('./cancel.png')}
+              source={require('../../Image/cancel.png')}
             />
           </TouchableOpacity>
           <View style={styles.Head_alarm}>

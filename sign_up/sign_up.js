@@ -438,7 +438,7 @@ class Sign_up extends React.Component {
                   onPress={() => this.props.navigation.goBack()}>
                   <Image
                     style={{width: 25, height: 25}}
-                    source={require('./cancel.png')}
+                    source={require('../Image/cancel.png')}
                   />
                 </TouchableOpacity>
 

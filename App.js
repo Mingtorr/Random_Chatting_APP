@@ -67,7 +67,7 @@ export default class App extends React.Component {
           token: token,
           user_key: userkey,
         };
-        console.log(box);
+        // console.log(box);
         fetch(func.api(3001, 'onMain'), {
           method: 'post',
           headers: {

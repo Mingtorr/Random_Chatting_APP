@@ -38,6 +38,8 @@ class Sign_up extends React.Component {
       sendEmailClick: false, //메일 보냄 확인
       checking_passwd: false, //비번 확인
       nickname_check: false, //닉네임 중복검사
+
+      email_send_check: false,
     };
   }
 
@@ -124,7 +126,7 @@ class Sign_up extends React.Component {
       !this.check(re, this.state.email, '안내', '잘못된 형식의 이메일입니다')
     ) {
       return;
-    } else {
+    } else if (this.state.email_send_check === false) {
       this.setState({
         sendEmailClick: true,
       });
@@ -171,6 +173,21 @@ class Sign_up extends React.Component {
           //   });
           // }
         });
+        this.setState({
+          email_send_check: true,
+        });
+    } else if (this.state.email_send_check === true){
+      Alert.alert(
+          "안내",
+          "10초 뒤에 다시 전송 가능합니다",
+          [{text: "OK", style: "OK"}],
+          { cancelable: false }
+        );
+        
+      setTimeout(() =>
+        this.setState({
+          email_send_check: false,
+        }),10000);
     }
   };
 

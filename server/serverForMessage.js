@@ -43,7 +43,6 @@ app.post('/save_message', (req, res) => {
             }
           },
         );
-        res.send(true);
       }
     },
   );
@@ -224,7 +223,6 @@ io.on('connection', function (socket) {
     };
     const roomsize = data.roomsockets.length;
     const messagedata = {
-      key: index,
       name: data.name,
       message: data.message,
       time: data.time,
@@ -441,3 +439,5 @@ io.on('connection', function (socket) {
 http.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+

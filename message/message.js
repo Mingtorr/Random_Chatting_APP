@@ -159,7 +159,6 @@ class Message extends React.Component {
           json.map((value, index) => {
             const realtime = timefunc.settime2(value.message_time);
             const row = {
-              key: value.message_key,
               name: value.user_nickname,
               message: value.message_body,
               sendid: value.user_key,
@@ -487,7 +486,6 @@ class Message extends React.Component {
           <View style={{display: 'flex', flex: 0.97, backgroundColor: 'white'}}>
             <FlatList
               ref={this.scrollViewRef}
-              keyExtractor={(item) => item.key.toString()}
               refreshing={this.state.refresh}
               onRefresh={this.func}
               data={this.state.arr} //여기서

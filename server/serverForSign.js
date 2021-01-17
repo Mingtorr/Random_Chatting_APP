@@ -649,7 +649,7 @@ app.post('/reset_token2', (req, res) => {
   } else {
     connection.query(
       'UPDATE user_table SET user_token = (?),user_pushstate = (?) WHERE user_key= (?);',
-      [body, user_token, body.pid, body.userkey],
+      [body.user_token, body.pid, body.userkey],
       function (err, rows, fields) {
         if (err) {
           console.log(err);

@@ -25,7 +25,6 @@ class Set_alarm extends Component {
       isEnabled_two: messaging().isDeviceRegisteredForRemoteMessages,
       isEnabled_message: false,
       user_key: '',
-      token: messaging().getToken(),
     };
   }
 
@@ -91,8 +90,9 @@ class Set_alarm extends Component {
     const box = {
       userkey: this.state.user_key,
       pid: pid,
-      user_token: this.state.token,
+      user_token: await messaging().getToken(),
     };
+    console.log(box);
     fetch(func.api(3001, 'reset_token2'), {
       method: 'post',
       headers: {

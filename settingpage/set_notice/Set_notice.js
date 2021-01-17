@@ -253,7 +253,7 @@ export default class Set_notice extends Component {
             borderBottomWidth: 1,
             borderColor: 'lightgray',
           }}>
-          <View style={{display: 'flex', flex: 0.3, backgroundColor: 'white'}}>
+          <View style={{display: 'flex', flex: 0.3, backgroundColor: 'white', marginBottom: 10}}>
             <TouchableOpacity onPress={this.backBtn}>
               <Image
                 source={require('./back2.png')}
@@ -267,6 +267,7 @@ export default class Set_notice extends Component {
               flex: 0.88,
               backgroundColor: 'white',
               justifyContent: 'center',
+              // marginBottom: 10,
             }}>
             <Text
               style={{

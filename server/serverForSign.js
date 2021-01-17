@@ -13,7 +13,7 @@ var http = require('http').createServer(app);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: 'snsk3779@',
   database: 'mydb',
 });
 //snsk3779@
@@ -24,21 +24,19 @@ app.use(bodyparser.urlencoded({extended: false}));
 app.use(cors());
 app.use(bodyparser.json());
 
-app.post('/version',(req,res)=>{
+app.post('/version', (req, res) => {
   console.log(req.body.version);
-  connection.query('select * from version',[],function(err,rows,field){
-    if(err){
+  connection.query('select * from version', [], function (err, rows, field) {
+    if (err) {
       console.log(err);
+    } else if (rows[0] === undefined) {
+    } else if (req.body.version === rows[0].version) {
+      res.send(true);
+    } else {
+      res.send(false);
     }
-    else if(rows[0]===undefined){
-
-    }else if(req.body.version === rows[0].version){
-      res.send(true)
-    }else{
-      res.send(false)
-    }
-  })
-})
+  });
+});
 app.post('/CheckId', (req, res) => {
   const checkId = req.body.id;
   // console.log(checkId);
@@ -635,30 +633,33 @@ app.post('/reset_token', (req, res) => {
 
 app.post('/reset_token2', (req, res) => {
   let body = req.body;
-  // console.log(body);
-  connection.query(
-    'UPDATE user_table SET user_token = (?) WHERE user_key= (?);',
-    [0, body.userkey],
-    function (err, rows, fields) {
-      if (err) {
-        console.log(err);
-        res.send(false);
-      } else {
-        connection.query(
-          'UPDATE user_table SET user_pushstate = (?) WHERE user_key= (?);',
-          [body.pid, body.userkey],
-          function (err, rows, fields) {
-            if (err) {
-              console.log(err);
-              res.send(false);
-            } else {
-              res.send(true);
-            }
-          },
-        );
-      }
-    },
-  );
+  if (body.pid === 0) {
+    connection.query(
+      'UPDATE user_table SET user_token = (?),user_pushstate = (?) WHERE user_key= (?);',
+      [0, body.pid, body.userkey],
+      function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+          res.send(false);
+        } else {
+          res.send(true);
+        }
+      },
+    );
+  } else {
+    connection.query(
+      'UPDATE user_table SET user_token = (?),user_pushstate = (?) WHERE user_key= (?);',
+      [body, user_token, body.pid, body.userkey],
+      function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+          res.send(false);
+        } else {
+          res.send(true);
+        }
+      },
+    );
+  }
 });
 
 app.post('/reset_token3', (req, res) => {
@@ -691,7 +692,7 @@ app.post('/get_message_state', (req, res) => {
   );
 });
 
-app.post('/reset_token2', (req, res) => {
+app.post('/reset_token4', (req, res) => {
   let body = req.body;
   // console.log(body);
   connection.query(

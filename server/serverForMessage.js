@@ -33,7 +33,13 @@ app.post('/save_message', (req, res) => {
         console.log(err);
         res.send(false);
       } else {
-        // console.log('성공');
+        connection.query(
+          'select user_pushstate from user_table where user_key=(?)',[req.body.userkey],function (err, rows, field) {
+            if(err) console.log(err);
+            else {
+              res.send(rows[0])
+            }
+          })
         res.send(true);
       }
     },

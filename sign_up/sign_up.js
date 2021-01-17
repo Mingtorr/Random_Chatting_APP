@@ -517,7 +517,7 @@ class Sign_up extends React.Component {
                           fontWeight: '700',
                           fontSize: 15,
                         }}>
-                        중복확인
+                        확인
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -886,7 +886,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginRight: -15,
     marginTop: -4,
-    // marginLeft: 
+    // marginLeft:
   },
 
   sign_explain: {

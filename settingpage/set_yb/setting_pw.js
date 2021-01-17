@@ -74,9 +74,9 @@ class ChangePW extends React.Component {
       })
         .then((res) => res.json())
         .then((json) => {
-            if(json === true){
-                this.props.navigation.goBack(null);
-            }
+          if (json === true) {
+            this.props.navigation.goBack(null);
+          }
         });
     }
   };
@@ -202,7 +202,7 @@ class ChangePW extends React.Component {
                           fontWeight: '700',
                           fontSize: 15,
                         }}>
-                        중복확인
+                        확인
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -279,7 +279,6 @@ const styles = StyleSheet.create({
   Container_sign2: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'red',
     // flex:1,
     // borderRadius:60,
     // height:'100%'

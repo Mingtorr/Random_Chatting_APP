@@ -24,7 +24,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   AppState,
-  Alert
+  Alert,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -99,7 +99,7 @@ class Message extends React.Component {
         recpetion: this.props.route.params.recpetion,
       });
     });
-    
+
     const data = {
       roomid: this.props.route.params.roomid, //roomid
       userkey: this.state.userkey,
@@ -202,22 +202,23 @@ class Message extends React.Component {
   }
 
   sendmessage = () => {
-    
     // console.log('상대방의 리셉션' + this.state.reception);
     if (this.state.text.trim() === '') {
       this.setState({
         text: '',
       });
-    } else if(this.state.arr[this.state.arr.length-1].message === 'delcode5010'){
+    } else if (
+      this.state.arr[this.state.arr.length - 1].message === 'delcode5010'
+    ) {
       this.setState({
-        text:''
-      })
+        text: '',
+      });
       // alert("상대방이 나가셔서 메시지를 보낼 수 없습니다.")
       Alert.alert(
-        "안내",
-        "상대방이 나가서 메시지를 보낼 수 없습니다.",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '상대방이 나가서 메시지를 보낼 수 없습니다.',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
     } else {
       const realtime = timefunc.settime();
@@ -236,34 +237,42 @@ class Message extends React.Component {
         toshownickname: this.state.toshownickname,
         tousertoken: this.props.route.params.tousertoken,
       };
-      if (this.state.roomsockets.length !== 2 && this.state.reception === 1) {
-        // console.log('상대방에게 푸시알림 전송');
-        fetch('https://fcm.googleapis.com/fcm/send', {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            Authorization:
-              'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
-          },
-          body: JSON.stringify({
-            to: data.tousertoken,
-            content_available: true,
-            notification: {
-              title: data.name + '님이 메세지를 보냈습니다.',
-              body: data.message,
-              android_channel_id: '500',
-            },
-            priority: 'high',
-          }),
-        });
-      }
+
       fetch(func.api(3005, 'save_message'), {
         method: 'post',
         headers: {
           'content-type': 'application/json',
         },
         body: JSON.stringify(data),
-      }).then();
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          if (
+            this.state.roomsockets.length !== 2 &&
+            this.state.reception === 1 &&
+            json.user_pushstate === 1
+          ) {
+            // console.log('상대방에게 푸시알림 전송');
+            fetch('https://fcm.googleapis.com/fcm/send', {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json',
+                Authorization:
+                  'key=AAAAf8r9TLk:APA91bGRKvjP5bZaQfb1m0BUK9JGk1RZLvDQF4BJZ6ZJXGAEzR3ZRrf2I3ZqaZlluDOMCLh6QtRW9i54NTeZFeBEAIpW5mJtZ5ZU0RwEs8PFhGi4DvPIZeH3yK5xBktqdCXBolvqiECA',
+              },
+              body: JSON.stringify({
+                to: data.tousertoken,
+                content_available: true,
+                notification: {
+                  title: data.name + '님이 메세지를 보냈습니다.',
+                  body: data.message,
+                  android_channel_id: '500',
+                },
+                priority: 'high',
+              }),
+            });
+          }
+        });
       if (this.state.myshownickname === 0) {
         fetch(func.api(3005, 'updateshownickname'), {
           method: 'post',

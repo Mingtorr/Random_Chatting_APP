@@ -25,6 +25,7 @@ class Set_alarm extends Component {
       isEnabled_two: messaging().isDeviceRegisteredForRemoteMessages,
       isEnabled_message: false,
       user_key: '',
+      token: messaging().getToken(),
     };
   }
 
@@ -87,8 +88,11 @@ class Set_alarm extends Component {
     if (this.state.isEnabled === false) {
       pid = 1;
     }
-
-    const box = {userkey: this.state.user_key, pid: pid};
+    const box = {
+      userkey: this.state.user_key,
+      pid: pid,
+      user_token: this.state.token,
+    };
     fetch(func.api(3001, 'reset_token2'), {
       method: 'post',
       headers: {
@@ -129,7 +133,7 @@ class Set_alarm extends Component {
       pid = 1;
     }
     const box = {userkey: this.state.user_key, pid: pid};
-    fetch(func.api(3001, 'reset_token2'), {
+    fetch(func.api(3001, 'reset_token4'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
@@ -173,12 +177,9 @@ class Set_alarm extends Component {
   };
   render() {
     return (
-      <SafeAreaView style={{display: 'flex',
-      backgroundColor: 'white',}}>
+      <SafeAreaView style={{display: 'flex', backgroundColor: 'white'}}>
         <View style={styles.Header_alarm}>
-          <TouchableOpacity
-            style={styles.back_alarm}
-            onPress={this.backBtn}>
+          <TouchableOpacity style={styles.back_alarm} onPress={this.backBtn}>
             <Image
               style={{width: 25, height: 25}}
               source={require('../../Image/cancel.png')}
@@ -296,13 +297,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor:'lightgray',
-    backgroundColor:'white'
+    borderColor: 'lightgray',
+    backgroundColor: 'white',
   },
   back_alarm: {
     marginLeft: 30,
     display: 'flex',
-    zIndex:999
+    zIndex: 999,
   },
   Head_alarm: {
     width: '100%',

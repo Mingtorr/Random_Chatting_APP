@@ -57,7 +57,6 @@ export default class Solo_match extends PureComponent {
         to_sex = 1;
       }
       if (this.state.isDepton) {
-        console.log(JSON.parse(result).user_deptno);
         if (JSON.parse(result).user_deptno === '') {
           // alert('자신의 학과를 먼저 선택해주세요');
           Alert.alert(
@@ -101,7 +100,6 @@ export default class Solo_match extends PureComponent {
               [{text: 'OK', style: 'OK'}],
               {cancelable: false},
             );
-            console.log(json);
           } else {
             this.props.resetHeart(json.heart);
             const box = {
@@ -111,13 +109,6 @@ export default class Solo_match extends PureComponent {
               message: this.state.message,
               user_key: userkey,
             };
-            console.log(
-              '..............................................................................................',
-            );
-            console.log(box);
-            console.log(
-              '..............................................................................................',
-            );
             fetch(func.api(3003, 'sendMessage'), {
               method: 'post',
               headers: {
@@ -127,7 +118,6 @@ export default class Solo_match extends PureComponent {
             })
               .then((res) => res.json())
               .then((json) => {
-                console.log(json.user_token);
                 if (json === false) {
                   // alert('조건에 맞는 사용자가 없습니다.')
                   Alert.alert(
@@ -148,7 +138,6 @@ export default class Solo_match extends PureComponent {
                     {cancelable: false},
                   );
                 } else {
-                  console.log(json);
                   fetch('https://fcm.googleapis.com/fcm/send', {
                     method: 'POST',
                     headers: {

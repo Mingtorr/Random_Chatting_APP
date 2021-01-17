@@ -42,7 +42,7 @@ app.post('/Getnotice', (req, res) => {
 app.post('/changeNickname', (req, res) => {
   // console.log(req.body);
   // console.log('sex');
-  console.log(req.body);
+  // console.log(req.body);
   connection.query('UPDATE user_table SET user_nickname = (?) WHERE user_key= (?)',[req.body.nickname,req.body.userkey],function(err,rows,field){
     if(err){
       console.log(err);

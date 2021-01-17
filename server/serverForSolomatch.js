@@ -79,12 +79,11 @@ app.post('/GetMessageRoom', (req, res) => {
                   'SELECT count, reception FROM participant where user_key = ?',
                   [userKey],
                   function (err, rows, fields) {
-                    console.log('rororo', rows);
                     const mess = [];
                     message.map((info, index) => {
                       mess.push({...info, ...rows[index]});
                     });
-                    console.log('reception최종', mess);
+                    // console.log('reception최종', mess);
                     res.send(mess);
                   },
                 );

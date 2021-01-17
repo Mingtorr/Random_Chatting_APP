@@ -79,19 +79,19 @@ export default class App extends React.PureComponent {
       this.setState({
         foreground:localNotificationService.configure(onOpenNotification)
       })
-      console.log('App has come to the foreground!');
+      // console.log('App has come to the foreground!');
 
     } else {
       this.setState({
         foreground:localNotificationService.configure2(onOpenNotification)
       })
-      console.log('App has gone to the background!');
+      // console.log('App has gone to the background!');
       // start your background task here
     }
     this.setState({appState: nextAppState});
   };
   componentWillMount(){
-    console.log(this.state.forground+'gldldldl');
+    // console.log(this.state.forground+'gldldldl');
   }
   componentDidMount = async () => {
     AppState.addEventListener("change", this._handleAppStateChange);
@@ -108,7 +108,7 @@ export default class App extends React.PureComponent {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
+        // console.log(json);
         if (json === false) {
           callalert();
         }
@@ -152,12 +152,12 @@ export default class App extends React.PureComponent {
     {this.state.forground}
     await messaging().subscribeToTopic('notices');
     function onRegister(token) {
-      console.log(token);
+      // console.log(token);
     }
 
     
     return () => {
-      console.log('[App] unRegister');
+      // console.log('[App] unRegister');
       fcmService.unRegister();
       localNotificationService.unregister();
     };
@@ -185,6 +185,11 @@ export default class App extends React.PureComponent {
                 options={{headerShown: false}}
               />
 
+              <Stack.Screen
+                name="bottomtab"
+                component={Bottom}
+                options={{headerShown: false}}
+              />
               <Stack.Screen
                 name="Signup"
                 component={Signup}

@@ -58,8 +58,6 @@ export default class match_page extends PureComponent {
       myname: '',
       shadowDisplay: true,
     };
-    console.log('가로', chartHeight);
-    console.log('세로', chartWidth);
   }
   componentDidMount = async () => {
     let box;
@@ -77,7 +75,6 @@ export default class match_page extends PureComponent {
       };
     });
 
-    console.log(box);
 
     fetch(func.api(3003, 'Heart_number'), {
       method: 'post',
@@ -88,7 +85,6 @@ export default class match_page extends PureComponent {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log('하트불러오기', json);
         this.setState({
           Heart: json.user_heart,
         });
@@ -115,7 +111,6 @@ export default class match_page extends PureComponent {
 
     let rewardlListener = rewardAd.onAdEvent(async (type, error, reward) => {
       if (error) {
-        console.log('동영상을 불러오는 중 오류가 발생했어요', error);
         this.setState({
           CircleTF: 'off', //프로그래스 끄기
           Heart: 5,
@@ -164,7 +159,6 @@ export default class match_page extends PureComponent {
             myname: JSON.parse(result).user_nickname,
           };
         });
-        console.log(box);
 
         await fetch(func.api(3003, 'Heart_reset'), {
           method: 'post',
@@ -194,7 +188,6 @@ export default class match_page extends PureComponent {
     }
   };
   shadowSwitch = () => {
-    console.log('스위치', this.state.shadowDisplay);
     this.setState({
       shadowDisplay: !this.state.shadowDisplay,
     });

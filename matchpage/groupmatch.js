@@ -28,8 +28,6 @@ const DATA = [
 ];
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
-console.log(Width + 'asdasd');
-console.log(Height + 'asdxzz');
 const Item = ({title}) => (
   <View style={{display: 'flex', backgroundColor: 'green', flex: 1}}>
     <Text style={styles.title}>{title}</Text>
@@ -95,7 +93,6 @@ export default class Group_match extends PureComponent {
     };
   }
   modalSwhich = () => {
-    console.log('모달스위치: ', this.state.modalDisplay);
     this.setState({
       modalDisplay: !this.state.modalDisplay,
     });

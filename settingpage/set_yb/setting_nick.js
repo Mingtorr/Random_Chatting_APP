@@ -30,12 +30,10 @@ class Set_yb extends PureComponent {
     };
   }
   componentDidMount() {
-    console.log(this.props.route.params);
     AsyncStorage.getItem('login_user_info', (err, result) => {
       this.setState({
         userkey: JSON.parse(result).user_key,
       });
-      console.log(JSON.stringify(result));
     });
   }
   check = (re, what, title, message) => {
@@ -49,7 +47,6 @@ class Set_yb extends PureComponent {
   };
   nickNamecheck = (e) => {
     e.preventDefault();
-    console.log(this.state.userkey);
     e.preventDefault();
     var re = /^[a-zA-Z0-9가-힣]{2,8}$/;
     if (
@@ -112,7 +109,6 @@ class Set_yb extends PureComponent {
     this.setState({
       text: e,
     });
-    console.log(this.state.text);
   };
   backBtn = () => {
     this.props.navigation.goBack(null);

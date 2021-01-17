@@ -29,7 +29,7 @@ class Set_main extends PureComponent {
   componentDidMount() {
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const user_info = JSON.parse(result);
-      console.log(user_info);
+      
       this.setState({
         id: user_info.user_id,
         nickname: user_info.user_nickname,
@@ -69,13 +69,11 @@ class Set_main extends PureComponent {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log(json);
         });
     });
 
     AsyncStorage.removeItem('login_onoff_set', () => {
       AsyncStorage.removeItem('login_user_info', () => {
-        console.log('로그아웃'); // User1 출력
         // console.log(AsyncStorage.getItem('login_onoff'));
         // this.props.navigation.navigate('Login');
         this.props.navigation.dispatch(

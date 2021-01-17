@@ -27,7 +27,6 @@ export default class Set_privacy extends PureComponent {
   }
 
   componentDidMount() {
-    console.log(JSON.stringify(this.props.route.params) + 'sex');
     this.setState({
       id: this.props.route.params.id,
       nickname: this.props.route.params.nickname,
@@ -37,7 +36,6 @@ export default class Set_privacy extends PureComponent {
     });
   }
   componentDidCatch() {
-    console.log(JSON.stringify(this.props.route.params) + 'sex');
     this.setState({
       id: this.props.route.params.id,
       nickname: this.props.route.params.nickname,
@@ -60,7 +58,6 @@ export default class Set_privacy extends PureComponent {
     });
   };
   changenick = (id, nickname, deptno, stdno, email) => {
-    console.log('asdasd');
     this.setState({
       id: id,
       nickname: nickname,

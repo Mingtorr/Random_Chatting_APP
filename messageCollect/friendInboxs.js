@@ -50,7 +50,7 @@ export default class FriendsInbox extends PureComponent {
     this.setState({
       DATA: data.filter((info) => info.id !== itemId),
     });
-    console.log('Delete ' + itemId);
+    // console.log('Delete ' + itemId);
     // alert(itemId + '삭제되었습니다.');
   };
 

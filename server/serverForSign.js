@@ -25,7 +25,7 @@ app.use(cors());
 app.use(bodyparser.json());
 
 app.post('/version', (req, res) => {
-  console.log(req.body.version);
+  // console.log(req.body.version);
   connection.query('select * from version', [], function (err, rows, field) {
     if (err) {
       console.log(err);
@@ -115,7 +115,7 @@ app.post('/Signup2', async function (req, res, next) {
 });
 //로그인 salt 적용
 app.post('/login', async function (req, res, next) {
-  console.log('login');
+  // console.log('login');
   let body = req.body;
   let userkey;
   let arr;
@@ -400,7 +400,7 @@ app.post('/Setdeptno', (req, res) => {
         console.log('setdeptno error' + err);
         res.send(false);
       } else {
-        console.log('setdeptno good');
+        // console.log('setdeptno good');
         res.send(true);
       }
     },

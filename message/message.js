@@ -222,7 +222,6 @@ class Message extends PureComponent {
         toshownickname: this.state.toshownickname,
         tousertoken: this.props.route.params.tousertoken,
       };
-      console.log('시작');
       fetch(func.api(3005, 'save_message'), {
         method: 'post',
         headers: {
@@ -232,13 +231,11 @@ class Message extends PureComponent {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log(json);
           if (
             this.state.roomsockets.length !== 2 &&
             this.state.reception === 1 &&
             json.user_pushstate === 1
           ) {
-            console.log('상대방에게 푸시알림 전송');
             fetch('https://fcm.googleapis.com/fcm/send', {
               method: 'POST',
               headers: {

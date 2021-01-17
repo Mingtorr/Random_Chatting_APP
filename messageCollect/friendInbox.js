@@ -340,7 +340,7 @@ export default class FriendInbox extends PureComponent {
           );
           this.setModalVisible(false, roomid);
         } else {
-          console.log('알람꺼짐 버그');
+          // console.log('알람꺼짐 버그');
         }
       });
   };

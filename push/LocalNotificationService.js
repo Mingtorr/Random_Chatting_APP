@@ -16,13 +16,13 @@ class LocalNotificationService extends React.PureComponent {
     this.setState({
       foreground:data
     })
-    console.log(this.state.foreground);
+    // console.log(this.state.foreground);
   }
   componentDidMount(){
-    console.log("zzzzzzzzzz");
+    // console.log("zzzzzzzzzz");
   }
   configure = (onOpenNotification) => {
-    console.log("시발1");
+    // console.log("시발1");
     PushNotification.configure({
       onRegister: function (token) {
         console.log(
@@ -31,7 +31,7 @@ class LocalNotificationService extends React.PureComponent {
         );
       },
       onNotification: function (notification) {
-        console.log('[LocalNotificationService] onNotification ', notification);
+        // console.log('[LocalNotificationService] onNotification ', notification);
           PushNotificationIOS.addNotificationRequest({
             id: 'test-2',
             title: notification.title,
@@ -76,7 +76,6 @@ class LocalNotificationService extends React.PureComponent {
     });
   };
   configure2 = (onOpenNotification) => {
-    console.log("시발2");
     PushNotification.configure({
       onRegister: function (token) {
         console.log(

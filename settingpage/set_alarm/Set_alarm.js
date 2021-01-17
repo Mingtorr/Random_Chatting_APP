@@ -46,16 +46,13 @@ class Set_alarm extends PureComponent {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log('hihi');
-        console.log(json);
-        console.log(json.user_pushstate);
         if (json.user_pushstate === 1) {
-          console.log('1111');
+          // console.log('1111');
           this.setState({
             isEnabled: true,
           });
         } else {
-          console.log('00000');
+          // console.log('00000');
           this.setState({
             isEnabled: false,
           });
@@ -92,7 +89,7 @@ class Set_alarm extends PureComponent {
       pid: pid,
       user_token: await messaging().getToken(),
     };
-    console.log(box);
+    // console.log(box);
     fetch(func.api(3001, 'reset_token2'), {
       method: 'post',
       headers: {

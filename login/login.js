@@ -48,7 +48,7 @@ class Login extends PureComponent {
       passwd: this.state.pass,
       token: token,
     };
-    console.log(post);
+    // console.log(post);
 
     fetch(func.api(3001, 'login'), {
       method: 'post',

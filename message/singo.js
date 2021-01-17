@@ -27,8 +27,6 @@ class Singo extends PureComponent {
 
   componentDidMount() {
     /*
-        console.log(this.props.route.params.messages);
-        console.log(this.props.route.params.touserkey);
         const data = {
             userkey:this.state.userkey,
             touserkey:this.state.touserkey,
@@ -45,7 +43,6 @@ class Singo extends PureComponent {
           */
   }
   singobutton = (e) => {
-    console.log(this.props.route.params.touserkey);
     const data = {
       userkey: this.state.userkey,
       touserkey: this.state.touserkey,
@@ -69,7 +66,6 @@ class Singo extends PureComponent {
     this.setState({
       singobody: e,
     });
-    console.log(this.state.singobody);
   };
 
   backBtn = () => {

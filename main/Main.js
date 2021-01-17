@@ -52,7 +52,7 @@ export default class Main extends PureComponent {
   componentDidMount() {
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const user_info = JSON.parse(result);
-      console.log(user_info);
+      // console.log(user_info);
       this.setState({user_key: user_info.user_key});
       this.setState({user_nickname: user_info.user_nickname});
     });
@@ -114,14 +114,14 @@ export default class Main extends PureComponent {
     this.setState({
       keyboardH: Platform.OS === 'ios' ? e.endCoordinates.height - 50 : 0,
     });
-    console.log('open');
+    // console.log('open');
   };
 
   _keyboardDidHide = () => {
     this.setState({
       keyboardH: 0,
     });
-    console.log('hide');
+    // console.log('hide');
   };
 
   sendmessage = () => {

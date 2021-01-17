@@ -53,7 +53,7 @@ export default class Grouproom extends PureComponent {
               // group_date: ,
               // group_message_body: ,
               // group_message_time:
-              console.log('row:' + JSON.stringify(row));
+              // console.log('row:' + JSON.stringify(row));
               const newtime = new Date(row.group_message_time);
               let year = newtime.getFullYear();
               let month = newtime.getMonth() + 1;
@@ -73,7 +73,7 @@ export default class Grouproom extends PureComponent {
               newrow.month = month;
               newrow.day = day;
               newrow.min = min;
-              console.log('new' + JSON.stringify(newrow));
+              // console.log('new' + JSON.stringify(newrow));
 
               this.setState({
                 grouproom: [...this.state.grouproom, newrow],
@@ -93,7 +93,7 @@ export default class Grouproom extends PureComponent {
       group_key: itemId,
       userkey: this.state.user_Info.user_key,
     };
-    console.log('그룹삭제', DelGroup);
+    // console.log('그룹삭제', DelGroup);
 
     fetch(func.api(3003, 'DelGroupRoom'), {
       method: 'post',

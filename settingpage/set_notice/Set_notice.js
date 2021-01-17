@@ -21,7 +21,6 @@ export default class Set_notice extends PureComponent {
     };
   }
   componentDidMount() {
-    console.log('12asa');
     const post2 = {
       sex: 'sex',
     };
@@ -55,7 +54,6 @@ export default class Set_notice extends PureComponent {
             var noticeday = [year, month, day].join('.');
             rows.notice_date = noticeday;
             const newrow = rows;
-            console.log(noticeday + '시간');
             this.setState({
               notices: [...this.state.notices, newrow],
             });

@@ -38,7 +38,6 @@ class Set_exit extends PureComponent {
   };
 
   exit_app = () => {
-    console.log('hi');
     AsyncStorage.getItem('login_user_info', (err, result) => {
       const UserInfo = JSON.parse(result);
       const post = {
@@ -57,7 +56,6 @@ class Set_exit extends PureComponent {
           if (json) {
             AsyncStorage.removeItem('login_onoff_set', () => {
               AsyncStorage.removeItem('login_user_info', () => {
-                console.log('회원탈퇴'); // User1 출력
                 // console.log(AsyncStorage.getItem('login_onoff'));
                 this.props.navigation.navigate('Login');
                 // this.props.navigation.dispatch(

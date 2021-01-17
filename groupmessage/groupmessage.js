@@ -53,10 +53,10 @@ class Groupmessage extends React.PureComponent {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      console.log('App has come to the foreground!');
+      // console.log('App has come to the foreground!');
       socket.emit('groupjoin', {groupkey: '1'});
     } else {
-      console.log('App has gone to the background!');
+      // console.log('App has gone to the background!');
       socket.emit('groupleave', {roomkey: '1'});
       // start your background task here
     }
@@ -205,7 +205,7 @@ class Groupmessage extends React.PureComponent {
     }
   };
   go = () => {
-    console.log('신고하기');
+    // console.log('신고하기');
   };
   render() {
     return (

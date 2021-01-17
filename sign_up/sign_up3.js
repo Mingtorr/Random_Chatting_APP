@@ -30,13 +30,13 @@ class Sign_up3 extends PureComponent {
     this.setState({
       id: e,
     });
-    console.log(this.state.id);
+    // console.log(this.state.id);
   };
   handleName2 = (e) => {
     this.setState({
       pw: e,
     });
-    console.log(this.state.pw);
+    // console.log(this.state.pw);
   };
 
   onclick = (e) => {

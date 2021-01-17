@@ -99,7 +99,6 @@ class Sign_up extends PureComponent {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            console.log('singup2');
             this.props.navigation.navigate('Signup2', {
               user_id: this.state.id,
             });
@@ -160,7 +159,6 @@ class Sign_up extends PureComponent {
           this.setState({
             authNum: json,
           });
-          console.log('인증번호', this.state.authNum);
 
           // 테스트 (메일인증x)
           // if (json === true) {
@@ -367,7 +365,6 @@ class Sign_up extends PureComponent {
     e.preventDefault(); //이벤트 발생시 새로고침을 안하게 한다.
     var checkpass = this.state.passwd;
     checkpass = checkpass.replace(/(\s*)/g, '');
-    console.log(checkpass.charAt(0));
     if (this.state.id.length > 100 || this.state.passwd.length > 100) {
       alert('아이디와 비밀번호의 길이가 너무 깁니다!!');
       return;

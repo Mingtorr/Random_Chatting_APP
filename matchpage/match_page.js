@@ -244,7 +244,7 @@ export default class match_page extends React.Component {
   startAnimationR = () => {
     Alert.alert(
       '출시 준비 중',
-      '개발 중입니다. 기다려 주세요',
+      '개발 예정인 기능입니다.',
       [
         {text: '확인', style: 'cancel'}, // 화살표 함수로 바인딩 대체
       ],

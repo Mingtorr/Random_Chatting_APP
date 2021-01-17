@@ -141,7 +141,7 @@ class Set_exit extends Component {
             </Text>
           </View>
         </View>
-        <View style={{display: 'flex', flex: 0.5}}>
+        <View style={{display: 'flex', flex: 0.5, marginTop: '7%'}}>
           <View
             style={{
               display: 'flex',

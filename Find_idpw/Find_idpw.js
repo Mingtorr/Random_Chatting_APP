@@ -9,8 +9,9 @@ import {
   SafeAreaView,
   Keyboard,
   Alert,
+  TouchableWithoutFeedback
 } from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+// import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {withNavigation} from 'react-navigation';
 const func = require('../server/api');
 

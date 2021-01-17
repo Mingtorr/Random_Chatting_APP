@@ -2,8 +2,6 @@ import React, {PureComponent} from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Platform} from 'react-native';
-import {AppState, StyleSheet, Text, View} from 'react-native';
-
 class LocalNotificationService extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -24,10 +22,10 @@ class LocalNotificationService extends React.PureComponent {
     // console.log("시발1");
     PushNotification.configure({
       onRegister: function (token) {
-        console.log(
-          '[LocalNotificationService] onRegister : localtoken',
-          token,
-        );
+        //console.log(
+        //  '[LocalNotificationService] onRegister : localtoken',
+        //  token,
+        //);
       },
       onNotification: function (notification) {
         // console.log('[LocalNotificationService] onNotification ', notification);

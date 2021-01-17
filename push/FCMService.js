@@ -83,10 +83,10 @@ class FCMService {
       ({navigation}) => {
         navigation.navigate('MessageCollect');
       };
-      console.log(
-        '[FCMService] onNotificationOpenApp Notification caused app to open from background',
-        remoteMessage,
-      );
+      //console.log(
+      // '[FCMService] onNotificationOpenApp Notification caused app to open from background',
+      // remoteMessage,
+      //);
       if (remoteMessage) {
         const notification = remoteMessage.notification;
         onOpenNotification(notification);

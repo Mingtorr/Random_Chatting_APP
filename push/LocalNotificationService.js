@@ -2,9 +2,27 @@ import React, {PureComponent} from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Platform} from 'react-native';
+import { AppState, StyleSheet, Text, View } from "react-native";
 
-class LocalNotificationService extends PureComponent {
+class LocalNotificationService extends React.PureComponent {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      foreground: 'asd'
+    }
+  }
+  changestate = (data)=>{
+    this.setState({
+      foreground:data
+    })
+    console.log(this.state.foreground);
+  }
+  componentDidMount(){
+    console.log("zzzzzzzzzz");
+  }
   configure = (onOpenNotification) => {
+    console.log("시발1");
     PushNotification.configure({
       onRegister: function (token) {
         console.log(
@@ -14,7 +32,6 @@ class LocalNotificationService extends PureComponent {
       },
       onNotification: function (notification) {
         console.log('[LocalNotificationService] onNotification ', notification);
-        if (Platform.OS === 'ios') {
           PushNotificationIOS.addNotificationRequest({
             id: 'test-2',
             title: notification.title,
@@ -22,7 +39,53 @@ class LocalNotificationService extends PureComponent {
             category: 'test',
             threadId: 'thread-id',
           });
+        if (!notification?.data) {
+          return;
         }
+        notification.userInteraction = true;
+        onOpenNotification(
+          Platform.OS === 'ios' ? notification.data.item : notification.data,
+        );
+
+        //Only call callback if not from foreground
+        if (Platform.OS === 'ios') {
+          // (required) Called when a remote is received or opened, or local notification is opened
+          notification.finish(PushNotificationIOS.FetchResult.NoData);
+        }
+      },
+
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+
+      // Should the initial notification be popped automatically
+      // default: true
+      popInitialNotification: true,
+
+      /**
+       * (optional) default: true
+       * - Specified if permissions (ios) and token (android and ios) will requested or not,
+       * - if not, you must call PushNotificationsHandler.requestPermissions() later
+       * - if you are not using remote notification or do not have Firebase installed, use this:
+       *     requestPermissions: Platform.OS === 'ios'
+       */
+      requestPermissions: true,
+    });
+  };
+  configure2 = (onOpenNotification) => {
+    console.log("시발2");
+    PushNotification.configure({
+      onRegister: function (token) {
+        console.log(
+          '[LocalNotificationService] onRegister : localtoken',
+          token,
+        );
+      },
+      onNotification: function (notification) {
+        console.log('[LocalNotificationService] onNotification ', notification);
         if (!notification?.data) {
           return;
         }

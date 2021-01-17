@@ -57,13 +57,14 @@ export default class Main extends Component {
       this.setState({ user_nickname: user_info.user_nickname });
     });
 
+    post = {};
     // console.log('allchatroom_message');
     fetch(func.api(3002, 'Allchatroom_message'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(),
+      body: JSON.stringify(post),
     })
       .then((res) => res.json())
       .then((json) => {

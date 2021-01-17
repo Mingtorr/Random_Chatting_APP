@@ -30,7 +30,19 @@ import FriendInbox from './messageCollect/friendInbox';
 import Noticepush from './settingpage/set_notice/Noticepush';
 import Set_yb from './settingpage/set_yb/setting_nick.js';
 import Set_pw from './settingpage/set_yb/setting_pw';
+import {
+  BackHandler,
+  Alert
+} from 'react-native';
 const Stack = createStackNavigator();
+function callalert(){
+  Alert.alert(
+    '안내',
+    '앱 업데이트를 해주셔야됩니다!',
+    [{text: 'OK', onPress: () =>callalert(), style: 'OK'}],
+    {cancelable: false},
+  );
+}
 export default class App extends React.Component {
   state = {
     isLoading: false,
@@ -39,10 +51,27 @@ export default class App extends React.Component {
     fisrt_components: Login,
     second_name: 'Main',
     second_components: Bottom,
+    version:1
   };
-
+  callalert=()=>{
+    
+  }
   componentDidMount = async () => {
     let bool = false;
+    const version = {
+      version : this.state.version
+    }
+    fetch(func.api(3001, 'version'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(version),
+    }).then(res=>res.json()).then((json)=>{
+      if(json === false){
+        callalert();
+      }
+    })
     await AsyncStorage.getItem('login_onoff_set', (err, result) => {
       if (result !== null) {
         this.setState({

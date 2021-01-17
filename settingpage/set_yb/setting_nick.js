@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   Container_sign2: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
     // flex:1,
     // borderRadius:60,
     // height:'100%'

@@ -23,6 +23,7 @@ connection.connect();
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(cors());
 app.use(bodyparser.json());
+
 app.post('/version',(req,res)=>{
   console.log(req.body.version);
   connection.query('select * from version',[],function(err,rows,field){
@@ -31,7 +32,7 @@ app.post('/version',(req,res)=>{
     }
     else if(rows[0]===undefined){
 
-    }else if(JSON.stringify(req.body.version) === rows[0].version){
+    }else if(req.body.version === rows[0].version){
       res.send(true)
     }else{
       res.send(false)

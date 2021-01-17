@@ -30,11 +30,7 @@ import FriendInbox from './messageCollect/friendInbox';
 import Noticepush from './settingpage/set_notice/noticepush';
 import Set_yb from './settingpage/set_yb/setting_nick.js';
 import Set_pw from './settingpage/set_yb/setting_pw';
-import {
-  BackHandler,
-  Alert,
-  AppState
-} from 'react-native';
+import {BackHandler, Alert, AppState} from 'react-native';
 const Stack = createStackNavigator();
 function callalert() {
   Alert.alert(
@@ -45,19 +41,19 @@ function callalert() {
   );
 }
 function onNotification(notify) {}
-    function onOpenNotification(notify) {
-      // this.setState({
-      //   fisrt_name: 'Setting',
-      //   fisrt_components: Bottom,
-      // });
-      // () => {
-      // navigation.navigate('Setting');
-      // };
-      // alert('test');
-      // console.log('[App] onOpenNotification : notify :', notify);
-      // alert('Open Notification : notify.title :' + notify.title);
-      // alert('Open Notification : notify.body :' + notify.body);
-    }
+function onOpenNotification(notify) {
+  // this.setState({
+  //   fisrt_name: 'Setting',
+  //   fisrt_components: Bottom,
+  // });
+  // () => {
+  // navigation.navigate('Setting');
+  // };
+  // alert('test');
+  // console.log('[App] onOpenNotification : notify :', notify);
+  // alert('Open Notification : notify.title :' + notify.title);
+  // alert('Open Notification : notify.body :' + notify.body);
+}
 export default class App extends React.PureComponent {
   state = {
     isLoading: false,
@@ -66,9 +62,9 @@ export default class App extends React.PureComponent {
     fisrt_components: Login,
     second_name: 'Main',
     second_components: Bottom,
-    version:1,
+    version: 1,
     appState: AppState.currentState,
-    forground:localNotificationService.configure(onOpenNotification)
+    forground: localNotificationService.configure(onOpenNotification),
   };
 
   _handleAppStateChange = (nextAppState) => {
@@ -77,24 +73,20 @@ export default class App extends React.PureComponent {
       nextAppState === 'active'
     ) {
       this.setState({
-        foreground:localNotificationService.configure(onOpenNotification)
-      })
+        foreground: localNotificationService.configure(onOpenNotification),
+      });
       // console.log('App has come to the foreground!');
-
     } else {
       this.setState({
-        foreground:localNotificationService.configure2(onOpenNotification)
-      })
+        foreground: localNotificationService.configure2(onOpenNotification),
+      });
       // console.log('App has gone to the background!');
       // start your background task here
     }
     this.setState({appState: nextAppState});
   };
-  componentWillMount(){
-    // console.log(this.state.forground+'gldldldl');
-  }
   componentDidMount = async () => {
-    AppState.addEventListener("change", this._handleAppStateChange);
+    AppState.addEventListener('change', this._handleAppStateChange);
     let bool = false;
     const version = {
       version: this.state.version,
@@ -149,13 +141,14 @@ export default class App extends React.PureComponent {
     }, 1000);
     fcmService.registerAppWithFCM();
     fcmService.register(onRegister, onNotification, onOpenNotification);
-    {this.state.forground}
+    {
+      this.state.forground;
+    }
     await messaging().subscribeToTopic('notices');
     function onRegister(token) {
       // console.log(token);
     }
 
-    
     return () => {
       // console.log('[App] unRegister');
       fcmService.unRegister();

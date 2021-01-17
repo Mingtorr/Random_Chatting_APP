@@ -278,7 +278,7 @@ class Message extends PureComponent {
       if (this.scrollViewRef !== null && this.scrollViewRef.current !== null) {
         this.scrollViewRef.current.scrollToEnd({animated: false});
       }
-    }, 400);
+    }, 500);
   };
   scrolltomessage = () => {
     /*

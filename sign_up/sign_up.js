@@ -517,7 +517,7 @@ class Sign_up extends React.Component {
                           fontWeight: '700',
                           fontSize: 15,
                         }}>
-                        중복확인
+                        확인
                       </Text>
                     </TouchableOpacity>
                   </View>

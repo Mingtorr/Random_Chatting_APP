@@ -10,6 +10,7 @@ import {
   Animated,
   Keyboard,
   Platform,
+  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-navigation';
 import Main_Mymessage from './main_mymessage';
@@ -377,7 +378,7 @@ export default class Main extends PureComponent {
                   전체 채팅방
                 </Text>
               </View>
-              <View style={{flex: 1}}>
+              <ScrollView style={{flex: 1}} ref="scrollView" onContentSizeChange={(width,height) => this.refs.scrollView.scrollTo({y:height})}>
                 <FlatList
                   ref={this.flatlist_ref}
                   keyExtractor={(item) => item.key.toString()}
@@ -386,7 +387,7 @@ export default class Main extends PureComponent {
                   refreshing={this.state.refreshing}
                   onRefresh={this._getdata}
                 />
-              </View>
+              </ScrollView>
               <View
                 style={{
                   display: 'flex',

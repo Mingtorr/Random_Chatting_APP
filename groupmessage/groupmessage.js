@@ -103,7 +103,7 @@ class Groupmessage extends React.PureComponent {
       if (this.scrollViewRef !== null && this.scrollViewRef.current !== null) {
         this.scrollViewRef.current.scrollToEnd({animated: false});
       }
-    }, 500);
+    }, 100);
   };
   scrolltomessage = () => {
     setTimeout(() => {
@@ -111,7 +111,7 @@ class Groupmessage extends React.PureComponent {
       } else {
         this.scrollViewRef.current.scrollToIndex({animated: false, index: 19});
       }
-    }, 500);
+    }, 300);
   };
   func = () => {
     if (this.state.start < 19) {

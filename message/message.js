@@ -12,6 +12,7 @@ import {
   Platform,
   AppState,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
@@ -278,7 +279,7 @@ class Message extends PureComponent {
       if (this.scrollViewRef !== null && this.scrollViewRef.current !== null) {
         this.scrollViewRef.current.scrollToEnd({animated: false});
       }
-    }, 500);
+    }, 400);
   };
   scrolltomessage = () => {
     /*
@@ -466,7 +467,12 @@ class Message extends PureComponent {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{display: 'flex', flex: 0.97, backgroundColor: 'white'}}>
+          <ScrollView
+            style={{display: 'flex', flex: 0.97, backgroundColor: 'white'}}
+            ref="scrollView"
+            onContentSizeChange={(width, height) =>
+              this.refs.scrollView.scrollTo({y: height})
+            }>
             <FlatList
               ref={this.scrollViewRef}
               refreshing={this.state.refresh}
@@ -474,7 +480,8 @@ class Message extends PureComponent {
               data={this.state.arr} //여기서
               renderItem={this.rendermessage}
             />
-          </View>
+          </ScrollView>
+
           <View
             style={{
               display: 'flex',

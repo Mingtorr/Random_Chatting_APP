@@ -173,12 +173,9 @@ class Set_alarm extends Component {
   };
   render() {
     return (
-      <SafeAreaView style={{display: 'flex',
-      backgroundColor: 'white',}}>
+      <SafeAreaView style={{display: 'flex', backgroundColor: 'white'}}>
         <View style={styles.Header_alarm}>
-          <TouchableOpacity
-            style={styles.back_alarm}
-            onPress={this.backBtn}>
+          <TouchableOpacity style={styles.back_alarm} onPress={this.backBtn}>
             <Image
               style={{width: 25, height: 25}}
               source={require('../../Image/cancel.png')}
@@ -186,7 +183,7 @@ class Set_alarm extends Component {
           </TouchableOpacity>
           <View style={styles.Head_alarm}>
             <Text>Setting</Text>
-            <Text>알람 설정</Text>
+            <Text>알림 설정</Text>
           </View>
         </View>
         {/* 메세지 알람 */}
@@ -296,13 +293,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor:'lightgray',
-    backgroundColor:'white'
+    borderColor: 'lightgray',
+    backgroundColor: 'white',
   },
   back_alarm: {
     marginLeft: 30,
     display: 'flex',
-    zIndex:999
+    zIndex: 999,
   },
   Head_alarm: {
     width: '100%',

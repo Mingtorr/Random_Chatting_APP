@@ -11,7 +11,7 @@ import {
   Platform,
   Dimensions,
   Keyboard,
-  Alert
+  Alert,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -31,7 +31,7 @@ class Set_exit extends Component {
     };
   }
 
-  exitAlert = () =>{
+  exitAlert = () => {
     Alert.alert(
       '회원 탈퇴',
       '정말 떠나실 건가요?',
@@ -40,11 +40,11 @@ class Set_exit extends Component {
           text: '아니요',
           style: 'cancel',
         },
-        { text: '네', onPress: () => this.exit_app() }, // 화살표 함수로 바인딩 대체
+        {text: '네', onPress: () => this.exit_app()}, // 화살표 함수로 바인딩 대체
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
-  }
+  };
 
   exit_app = () => {
     console.log('hi');
@@ -116,31 +116,36 @@ class Set_exit extends Component {
               // flex: 0.2,
               backgroundColor: 'white',
             }}></View>
-          
-          <View style ={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 10}}>
-            <TouchableOpacity onPress = {this.backBtn}>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingLeft: 10,
+            }}>
+            <TouchableOpacity onPress={this.backBtn}>
               <Image
                 style={{width: 20, height: 25, marginTop: 10}}
                 source={require('../../message/back2.png')}
               />
             </TouchableOpacity>
-            
+
             <View
-            style={{
-              display: 'flex',
-              // flex: 0.2,
-              backgroundColor: 'white',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              marginLeft: '-5%'
-            }}>
+              style={{
+                display: 'flex',
+                // flex: 0.2,
+                backgroundColor: 'white',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                marginLeft: '-5%',
+              }}>
               <Text style={{fontSize: 21, color: '#eb6c63', marginTop: 10}}>
                 와글 와글
               </Text>
             </View>
-            <View/>
+            <View />
           </View>
-          
+
           <View
             style={{
               display: 'flex',
@@ -189,7 +194,7 @@ class Set_exit extends Component {
           <View
             style={{
               display: 'flex',
-              flex: 0.15,
+              // flex: 0.15,
               backgroundColor: 'white',
               justifyContent: 'flex-end',
               alignItems: 'flex-start',

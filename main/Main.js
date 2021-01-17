@@ -337,7 +337,7 @@ export default class Main extends PureComponent {
       if (this.flatlist_ref !== null && this.flatlist_ref.current !== null) {
         this.flatlist_ref.current.scrollToEnd({animated: false});
       }
-    }, 200);
+    }, 500);
   };
 
   // _scrollEnd = (e) => {

@@ -75,7 +75,6 @@ export default class match_page extends PureComponent {
       };
     });
 
-
     fetch(func.api(3003, 'Heart_number'), {
       method: 'post',
       headers: {
@@ -104,7 +103,7 @@ export default class match_page extends PureComponent {
 
     let box;
 
-    const rewardAd = RewardedAd.createForAdRequest(adUnitId, {
+    const rewardAd = RewardedAd.createForAdRequest(unitId, {
       requestNonPersonalizedAdsOnly: true,
       keywords: ['fashion', 'clothing'],
     });

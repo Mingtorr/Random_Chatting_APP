@@ -11,12 +11,14 @@ import {
   Platform,
   Dimensions,
   Keyboard,
+  Alert
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import RadioButtonRN from 'radio-buttons-react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {CommonActions} from '@react-navigation/native';
 
 const func = require('../../server/api');
 
@@ -28,6 +30,22 @@ class Set_exit extends Component {
       reason: '',
     };
   }
+
+  exitAlert = () =>{
+    Alert.alert(
+      '회원 탈퇴',
+      '정말 떠나실 건가요?',
+      [
+        {
+          text: '아니요',
+          style: 'cancel',
+        },
+        { text: '네', onPress: () => this.exit_app() }, // 화살표 함수로 바인딩 대체
+      ],
+      { cancelable: false },
+    );
+  }
+
   exit_app = () => {
     console.log('hi');
     AsyncStorage.getItem('login_user_info', (err, result) => {
@@ -46,7 +64,20 @@ class Set_exit extends Component {
         .then((res) => res.json())
         .then((json) => {
           if (json) {
-            this.props.navigation.navigate('Login');
+            AsyncStorage.removeItem('login_onoff_set', () => {
+              AsyncStorage.removeItem('login_user_info', () => {
+                console.log('회원탈퇴'); // User1 출력
+                // console.log(AsyncStorage.getItem('login_onoff'));
+                this.props.navigation.navigate('Login');
+                // this.props.navigation.dispatch(
+                //   CommonActions.reset({
+                //     index: 0,
+                //     routes: [{name: 'Login'}],
+                //   }),
+                // );
+              });
+            });
+            // this.props.navigation.navigate('Login');
           } else {
             alert('삭제 실패');
           }
@@ -85,18 +116,31 @@ class Set_exit extends Component {
               // flex: 0.2,
               backgroundColor: 'white',
             }}></View>
-          <View
+          
+          <View style ={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 10}}>
+            <TouchableOpacity onPress = {this.backBtn}>
+              <Image
+                style={{width: 20, height: 25, marginTop: 10}}
+                source={require('../../message/back2.png')}
+              />
+            </TouchableOpacity>
+            
+            <View
             style={{
               display: 'flex',
               // flex: 0.2,
               backgroundColor: 'white',
               justifyContent: 'flex-end',
               alignItems: 'center',
+              marginLeft: '-5%'
             }}>
-            <Text style={{fontSize: 21, color: '#eb6c63', marginTop: 10}}>
-              와글 와글
-            </Text>
+              <Text style={{fontSize: 21, color: '#eb6c63', marginTop: 10}}>
+                와글 와글
+              </Text>
+            </View>
+            <View/>
           </View>
+          
           <View
             style={{
               display: 'flex',
@@ -141,7 +185,7 @@ class Set_exit extends Component {
             </Text>
           </View>
         </View>
-        <View style={{display: 'flex', flex: 0.5}}>
+        <View style={{display: 'flex', flex: 0.5, marginTop: '7%'}}>
           <View
             style={{
               display: 'flex',
@@ -190,7 +234,7 @@ class Set_exit extends Component {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={this.exit_app}>
+            onPress={this.exitAlert}>
             <Text style={{color: 'white', fontSize: 24, fontWeight: '900'}}>
               확 인
             </Text>

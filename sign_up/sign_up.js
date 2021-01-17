@@ -886,6 +886,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginRight: -15,
     marginTop: -4,
+    // marginLeft: 
   },
 
   sign_explain: {

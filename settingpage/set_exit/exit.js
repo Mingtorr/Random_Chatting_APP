@@ -1,28 +1,19 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   Text,
-  StyleSheet,
   View,
   SafeAreaView,
   TouchableOpacity,
   Image,
-  Switch,
-  TextInput,
-  Platform,
-  Dimensions,
-  Keyboard,
   Alert,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
-import messaging from '@react-native-firebase/messaging';
 import RadioButtonRN from 'radio-buttons-react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {CommonActions} from '@react-navigation/native';
 
 const func = require('../../server/api');
 
-class Set_exit extends Component {
+class Set_exit extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -87,7 +87,7 @@ const arr = [
   },
 ];
 
-export default class Groupmatch extends React.Component {
+export default class Groupmatch extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

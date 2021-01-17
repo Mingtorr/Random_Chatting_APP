@@ -1,38 +1,24 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   View,
   StyleSheet,
-  Keyboard,
   Text,
-  Animated,
   TouchableOpacity,
-  Button,
-  Switch,
   Alert,
 } from 'react-native';
 import {
-  InterstitialAd,
   RewardedAd,
-  BannerAd,
   TestIds,
-  AdEventType,
   RewardedAdEventType,
-  BannerAdSize,
 } from '@react-native-firebase/admob';
 import Solo_match from './solomatch';
-import Group_match from './groupmatch';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {Dimensions} from 'react-native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  responsiveHeight,
-  responsiveWidth,
-  responsiveFontSize,
-} from 'react-native-responsive-dimensions';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 // import { Dimensions } from 'react-native';
 
 const chartHeight = Dimensions.get('window').height;
@@ -52,7 +38,7 @@ const unitId =
 let animatedValue =
   Platform.OS === 'ios' ? chartHeight * 0.16 : chartHeight * 0.12;
 
-export default class match_page extends React.Component {
+export default class match_page extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

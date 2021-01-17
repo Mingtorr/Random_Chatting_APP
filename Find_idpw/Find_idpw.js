@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,13 +9,13 @@ import {
   SafeAreaView,
   Keyboard,
   Alert,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {withNavigation} from 'react-navigation';
 const func = require('../server/api');
 
-class Find_idpw extends React.Component {
+class Find_idpw extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

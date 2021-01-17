@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,25 +8,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
-  TextInput,
   Image,
 } from 'react-native';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from 'react-native-simple-radio-button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import AsyncStorage from '@react-native-community/async-storage';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {getBottomSpace} from 'react-native-iphone-x-helper';
-import RNPickerSelect from 'react-native-picker-select';
-
 const Height = Dimensions.get('window').height;
 
-const func = require('../../server/api');
-
-export default class Set_privacy extends Component {
+export default class Set_privacy extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -233,12 +220,29 @@ export default class Set_privacy extends Component {
                 </View>
               </View>
 
-              <View style={{width: '100%', display: 'flex', alignItems: 'center'}}>
-                <TouchableOpacity style={{width: '100%', marginTop: 25, color: 'white', 
-                fontFamily: 'Jalnan', paddingTop: 10, 
-                paddingBottom: 10, fontSize: 20, backgroundColor: '#f05052'}}
-                  onPress={() => {this.props.navigation.navigate('bottomtab');}}>
-                  <Text style={{color: 'white', fontFamily: 'Jalnan', fontSize: 20, textAlign: 'center'}}>
+              <View
+                style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                <TouchableOpacity
+                  style={{
+                    width: '100%',
+                    marginTop: 25,
+                    color: 'white',
+                    fontFamily: 'Jalnan',
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    fontSize: 20,
+                    backgroundColor: '#f05052',
+                  }}
+                  onPress={() => {
+                    this.props.navigation.navigate('bottomtab');
+                  }}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'Jalnan',
+                      fontSize: 20,
+                      textAlign: 'center',
+                    }}>
                     확인
                   </Text>
                 </TouchableOpacity>

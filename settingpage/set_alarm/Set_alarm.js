@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   Text,
   StyleSheet,
@@ -15,7 +15,7 @@ import messaging from '@react-native-firebase/messaging';
 
 const func = require('../../server/api');
 
-class Set_alarm extends Component {
+class Set_alarm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

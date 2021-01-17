@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
 
-export default class Mangroup extends React.Component {
+export default class Mangroup extends PureComponent {
   render() {
     return (
       <View

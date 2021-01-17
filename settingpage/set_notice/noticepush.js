@@ -1,26 +1,27 @@
-import React, {Component} from 'react';
-import {Text, StyleSheet,SafeAreaView, View, TouchableOpacity, Image} from 'react-native';
+import React, {PureComponent} from 'react';
+import {
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  View,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 
-export default class Noticepush extends Component {
-  constructor(props){
-    super(props)
+export default class Noticepush extends PureComponent {
+  constructor(props) {
+    super(props);
   }
-  componentDidMount(){
-    // console.log('머가나올까', this.props.route.params);
-  }
-  //<View style={styles.Noticecon_noticepush}>
-    //    <Text style={styles.Noticetext_noticepush}>{this.props.route.params.notice_title}</Text>
-      //  <Text style = {styles.notice_body}>{this.props.route.params.notice_body}</Text>
-     // </View>
-  back =() =>{
+  back = () => {
     this.props.navigation.goBack(null);
-  }
+  };
   render() {
     return (
-      <SafeAreaView style ={{backgroundColor:'white',display:'flex',flex:1}}>
+      <SafeAreaView
+        style={{backgroundColor: 'white', display: 'flex', flex: 1}}>
         <View style={styles.Head_notice}>
           <TouchableOpacity
-            style={{display: 'flex', marginLeft: 10, alignSelf: 'center',}}
+            style={{display: 'flex', marginLeft: 10, alignSelf: 'center'}}
             onPress={this.back}>
             <Image
               style={{width: 20, height: 20}}
@@ -30,21 +31,54 @@ export default class Noticepush extends Component {
           {/* <Text style={styles.Text_notice}>공지사항</Text> */}
           <View></View>
         </View>
-        <View style={{display:'flex',flex:0.9,backgroundColor:'white'}}>
-          <View style={{display:'flex',flex:0.07,backgroundColor:'white',justifyContent:'center',alignItems: 'flex-start',borderBottomColor:'lightgray',borderBottomWidth:1, paddingLeft: '5%', paddingBottom:'8%', marginTop: '5%'}}>
-            <Text style={styles.Noticetext_noticepush}>{this.props.route.params.notice_title}</Text>
-            <Text style={{color: 'gray'}}>{this.props.route.params.notice_date}</Text>
+        <View style={{display: 'flex', flex: 0.9, backgroundColor: 'white'}}>
+          <View
+            style={{
+              display: 'flex',
+              flex: 0.07,
+              backgroundColor: 'white',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              borderBottomColor: 'lightgray',
+              borderBottomWidth: 1,
+              paddingLeft: '5%',
+              paddingBottom: '8%',
+              marginTop: '5%',
+            }}>
+            <Text style={styles.Noticetext_noticepush}>
+              {this.props.route.params.notice_title}
+            </Text>
+            <Text style={{color: 'gray'}}>
+              {this.props.route.params.notice_date}
+            </Text>
             {/* <Text style={{color: 'gray'}}>21.01.16</Text> */}
           </View>
-          <View style={{display:'flex',flex:0.8,backgroundColor:'white'}}>
-            <Text style={{fontSize:18,marginLeft:20,marginTop:'10%',marginRight:20}}>{this.props.route.params.notice_body.replace(/\\n/g,'\n')}</Text>
+          <View style={{display: 'flex', flex: 0.8, backgroundColor: 'white'}}>
+            <Text
+              style={{
+                fontSize: 18,
+                marginLeft: 20,
+                marginTop: '10%',
+                marginRight: 20,
+              }}>
+              {this.props.route.params.notice_body.replace(/\\n/g, '\n')}
+            </Text>
           </View>
         </View>
-        <View style={{display:'flex',flex:0.1,backgroundColor:'white',justifyContent:'center',alignItems:'center'}}>
-          <Text style={{fontSize:14}}>궁금한 사항은 jybin96@naver.com 로 문의주시면</Text> 
-          <Text style={{fontSize:14}}>빠른시일내에 답변해드리겠습니다. </Text>
+        <View
+          style={{
+            display: 'flex',
+            flex: 0.1,
+            backgroundColor: 'white',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 14}}>
+            궁금한 사항은 jybin96@naver.com 로 문의주시면
+          </Text>
+          <Text style={{fontSize: 14}}>빠른시일내에 답변해드리겠습니다. </Text>
         </View>
-    </SafeAreaView>
+      </SafeAreaView>
     );
   }
 }
@@ -55,9 +89,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',    
+    justifyContent: 'space-between',
     // backgroundColor: 'red',
-    paddingBottom: '5%'
+    paddingBottom: '5%',
   },
   Text_notice: {
     fontFamily: 'Jalnan',
@@ -74,11 +108,11 @@ const styles = StyleSheet.create({
     // height: 40,
   },
   Noticetext_noticepush: {
-    fontWeight:'700',
+    fontWeight: '700',
     fontSize: 18,
   },
-  notice_body:{
+  notice_body: {
     fontSize: 15,
     marginTop: 5,
-  }
+  },
 });

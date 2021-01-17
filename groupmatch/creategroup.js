@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,7 +8,7 @@ import {
   Image,
   Picker,
 } from 'react-native';
-export default class Creatgroup extends React.Component {
+export default class Creatgroup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

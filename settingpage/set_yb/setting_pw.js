@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,7 +14,6 @@ import {
   Alert,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
-import RadioForm from 'react-native-simple-radio-button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {getBottomSpace} from 'react-native-iphone-x-helper';
@@ -22,7 +21,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const func = require('../../server/api');
 
-class ChangePW extends React.Component {
+class ChangePW extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

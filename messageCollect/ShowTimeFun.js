@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 
-export default class ShowTimeFun extends React.Component {
+export default class ShowTimeFun extends PureComponent {
   render() {
     if (this.props.year == !this.props.item.year) {
       return (

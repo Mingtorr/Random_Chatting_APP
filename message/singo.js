@@ -1,36 +1,21 @@
-import React from 'react';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
-  BackHandler,
   View,
   Text,
   TouchableOpacity,
-  Button,
   TextInput,
   Image,
   Dimensions,
-  FlatList,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   Alert,
 } from 'react-native';
-import {withNavigation} from 'react-navigation';
-import io from 'socket.io-client';
-import Mymessage from './mymessage';
-import Yourmessage from './yourmessage';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 const func = require('../server/api');
-const timefunc = require('./timefunction');
-const {windowHidth, windowHeight} = Dimensions.get('window');
 const Height = Dimensions.get('window').height;
-const Width = Dimensions.get('window').width;
-import AsyncStorage from '@react-native-community/async-storage';
 
-class Singo extends React.Component {
+class Singo extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

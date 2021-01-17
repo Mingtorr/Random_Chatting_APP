@@ -1,5 +1,5 @@
 // LOGO version
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   View,
   Image,
@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-export default class Splash extends Component {
+export default class Splash extends PureComponent {
   state = {
     animation: new Animated.Value(0),
   };

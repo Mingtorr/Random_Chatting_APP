@@ -30,20 +30,18 @@ import FriendInbox from './messageCollect/friendInbox';
 import Noticepush from './settingpage/set_notice/noticepush';
 import Set_yb from './settingpage/set_yb/setting_nick.js';
 import Set_pw from './settingpage/set_yb/setting_pw';
-import {
-  BackHandler,
-  Alert
-} from 'react-native';
+import {BackHandler, Alert} from 'react-native';
 const Stack = createStackNavigator();
-function callalert(){
+function callalert() {
   Alert.alert(
     '안내',
     '앱 업데이트를 해주셔야됩니다!',
-    [{text: 'OK', onPress: () =>callalert(), style: 'OK'}],
+    [{text: 'OK', onPress: () => callalert(), style: 'OK'}],
     {cancelable: false},
   );
 }
-export default class App extends React.Component {
+
+export default class App extends React.PureComponent {
   state = {
     isLoading: false,
     isLogin: false,
@@ -51,28 +49,28 @@ export default class App extends React.Component {
     fisrt_components: Login,
     second_name: 'Main',
     second_components: Bottom,
-    version:1
+    version: 1,
   };
-  callalert=()=>{
-    
-  }
+  callalert = () => {};
   componentDidMount = async () => {
     let bool = false;
     const version = {
-      version : this.state.version
-    }
+      version: this.state.version,
+    };
     fetch(func.api(3001, 'version'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify(version),
-    }).then(res=>res.json()).then((json)=>{
-      console.log(json);
-      if(json === false){
-        callalert();
-      }
     })
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json);
+        if (json === false) {
+          callalert();
+        }
+      });
     await AsyncStorage.getItem('login_onoff_set', (err, result) => {
       if (result !== null) {
         this.setState({
@@ -157,11 +155,7 @@ export default class App extends React.Component {
                 component={this.state.second_components}
                 options={{headerShown: false}}
               />
-              <Stack.Screen
-                name="bottomtab"
-                component={Bottom}
-                options={{headerShown: false}}
-              />
+
               <Stack.Screen
                 name="Signup"
                 component={Signup}

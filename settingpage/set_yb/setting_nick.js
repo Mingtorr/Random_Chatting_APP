@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -22,7 +21,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const func = require('../../server/api');
 
-class Set_yb extends React.Component {
+class Set_yb extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -20,7 +20,7 @@ import {getBottomSpace} from 'react-native-iphone-x-helper';
 import messaging from '@react-native-firebase/messaging';
 const func = require('../server/api');
 
-class Login extends React.Component {
+class Login extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

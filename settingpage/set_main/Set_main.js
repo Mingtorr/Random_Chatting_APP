@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   Text,
   StyleSheet,
@@ -13,7 +13,7 @@ import {CommonActions} from '@react-navigation/native';
 
 const func = require('../../server/api');
 
-class Set_main extends Component {
+class Set_main extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

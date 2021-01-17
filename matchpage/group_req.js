@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {StyleSheet, Text, View, TextInput, Dimensions} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import LinearGradient from 'react-native-linear-gradient';
@@ -6,7 +6,7 @@ const Width_ = Dimensions.get('window').width * 0.9;
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
-export default class Group_req extends React.Component {
+export default class Group_req extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};

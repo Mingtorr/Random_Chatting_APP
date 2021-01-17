@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 
-export default class Main_Mymessage extends React.Component {
+export default class Main_Mymessage extends React.PureComponent {
   render() {
     return (
       <View
@@ -33,7 +33,9 @@ export default class Main_Mymessage extends React.Component {
             borderRadius: 20,
           }}>
           {/* <Text style={{color: this.props.animate_boolean ? 'black': 'white', fontSize: 14}}>{this.props.message}</Text> */}
-          <Text style={{color: 'black', fontSize: 14}}>{this.props.message}</Text>
+          <Text style={{color: 'black', fontSize: 14}}>
+            {this.props.message}
+          </Text>
         </View>
       </View>
     );

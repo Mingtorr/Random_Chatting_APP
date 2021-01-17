@@ -1,5 +1,5 @@
+import React, {PureComponent} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
 import ShowTimeFun from './ShowTimeFun';
 const func = require('../server/api');
 
-export default class Grouproom extends React.Component {
+export default class Grouproom extends PureComponent {
   constructor(props) {
     super(props);
     const today = new Date();

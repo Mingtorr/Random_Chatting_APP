@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,7 +17,7 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {getBottomSpace} from 'react-native-iphone-x-helper';
 const func = require('../server/api');
 
-class Sign_up2 extends React.Component {
+class Sign_up2 extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

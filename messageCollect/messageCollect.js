@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
 import FriendInbox from './friendInbox';
-import Grouproom from './grouproom';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-export default class messageCollect extends React.Component {
+export default class messageCollect extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -77,7 +76,9 @@ function MessageTab(props) {
       <Tab.Screen
         name="오픈채팅"
         // children={() => <Grouproom go={props.go} />}
-        children={() => <View style = {{flex: 1, backgroundColor: 'white'}}></View>}
+        children={() => (
+          <View style={{flex: 1, backgroundColor: 'white'}}></View>
+        )}
       />
     </Tab.Navigator>
   );

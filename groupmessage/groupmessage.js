@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -24,7 +24,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 0;
 const socket = io(func.api(3005, ''));
 
-class Groupmessage extends React.Component {
+class Groupmessage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.scrollViewRef = React.createRef();

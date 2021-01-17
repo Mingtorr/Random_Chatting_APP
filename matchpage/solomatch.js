@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Switch,
   Dimensions,
-  Alert
+  Alert,
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -20,7 +20,7 @@ const keyboardVerticalOffset = Platform.OS === 'ios' ? 150 : 0;
 import AsyncStorage from '@react-native-community/async-storage';
 const func = require('../server/api');
 
-export default class Solo_match extends React.Component {
+export default class Solo_match extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,10 +40,10 @@ export default class Solo_match extends React.Component {
     if (this.state.message === '') {
       // alert('전송할 메시지를 입력하세요');
       Alert.alert(
-        "안내",
-        "전송할 메시지를 입력하세요",
-        [{text: "OK", style: "OK"}],
-        { cancelable: false }
+        '안내',
+        '전송할 메시지를 입력하세요',
+        [{text: 'OK', style: 'OK'}],
+        {cancelable: false},
       );
       return;
     }
@@ -61,10 +61,10 @@ export default class Solo_match extends React.Component {
         if (JSON.parse(result).user_deptno === '') {
           // alert('자신의 학과를 먼저 선택해주세요');
           Alert.alert(
-            "안내",
-            "자신의 학과를 먼저 선택해주세요",
-            [{text: "OK", style: "OK"}],
-            { cancelable: false }
+            '안내',
+            '자신의 학과를 먼저 선택해주세요',
+            [{text: 'OK', style: 'OK'}],
+            {cancelable: false},
           );
           return;
         }
@@ -73,10 +73,10 @@ export default class Solo_match extends React.Component {
       if (this.state.major !== '' && JSON.parse(result).user_deptno === '') {
         // alert('자신의 학번를 먼저 선택해주세요');
         Alert.alert(
-          "안내",
-          "자신의 학번를 먼저 선택해주세요",
-          [{text: "OK", style: "OK"}],
-          { cancelable: false }
+          '안내',
+          '자신의 학번를 먼저 선택해주세요',
+          [{text: 'OK', style: 'OK'}],
+          {cancelable: false},
         );
         return;
       }
@@ -96,10 +96,10 @@ export default class Solo_match extends React.Component {
           if (json === false) {
             // alert('채팅권 갯수가 부족합니다. 충전해주세요');
             Alert.alert(
-              "안내",
-              "채팅권 갯수가 부족합니다. 충전해주세요",
-              [{text: "OK", style: "OK"}],
-              { cancelable: false }
+              '안내',
+              '채팅권 갯수가 부족합니다. 충전해주세요',
+              [{text: 'OK', style: 'OK'}],
+              {cancelable: false},
             );
             console.log(json);
           } else {
@@ -131,22 +131,21 @@ export default class Solo_match extends React.Component {
                 if (json === false) {
                   // alert('조건에 맞는 사용자가 없습니다.')
                   Alert.alert(
-                    "안내",
-                    "조건에 맞는 사용자가 없습니다.",
-                    [{text: "OK", style: "OK"}],
-                    { cancelable: false }
+                    '안내',
+                    '조건에 맞는 사용자가 없습니다.',
+                    [{text: 'OK', style: 'OK'}],
+                    {cancelable: false},
                   );
-                }
-                else if (json === true || json === undefined || json === 0) {
+                } else if (json === true || json === undefined || json === 0) {
                   this.setState({
                     message: '',
                   });
                   // alert('메시지를 전송했습니다.');
                   Alert.alert(
-                    "안내",
-                    "메시지를 전송했습니다.",
-                    [{text: "OK", style: "OK"}],
-                    { cancelable: false }
+                    '안내',
+                    '메시지를 전송했습니다.',
+                    [{text: 'OK', style: 'OK'}],
+                    {cancelable: false},
                   );
                 } else {
                   console.log(json);
@@ -175,10 +174,10 @@ export default class Solo_match extends React.Component {
                   });
                   // alert('메시지를 전송했습니다.');
                   Alert.alert(
-                    "안내",
-                    "메시지를 전송했습니다.",
-                    [{text: "OK", style: "OK"}],
-                    { cancelable: false }
+                    '안내',
+                    '메시지를 전송했습니다.',
+                    [{text: 'OK', style: 'OK'}],
+                    {cancelable: false},
                   );
                 }
               });
@@ -247,7 +246,12 @@ export default class Solo_match extends React.Component {
                 </Text>
               </View>
               <View
-                style={{display: 'flex', flex: 0.3, justifyContent: 'center',alignItems:'flex-start'}}>
+                style={{
+                  display: 'flex',
+                  flex: 0.3,
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                }}>
                 <Switch
                   // dafult ='true'
                   trackColor={{false: 'white', true: '#eb6c63'}}
@@ -268,7 +272,7 @@ export default class Solo_match extends React.Component {
                   justifyContent: 'center',
                   marginLeft: 40,
                   height: Height * 0.08,
-                  marginBottom:Height * 0.02,
+                  marginBottom: Height * 0.02,
                 }}>
                 <Text
                   style={{
@@ -278,7 +282,12 @@ export default class Solo_match extends React.Component {
                 </Text>
               </View>
               <View
-                style={{display: 'flex', flex: 0.3, justifyContent: 'center',alignItems:'flex-start'}}>
+                style={{
+                  display: 'flex',
+                  flex: 0.3,
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                }}>
                 <Switch
                   trackColor={{false: 'white', true: '#eb6c63'}}
                   thumbColor={this.state.isEnabled ? 'white' : 'white'}

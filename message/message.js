@@ -1,23 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import {Header} from 'react-navigation-stack';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
-  BackHandler,
   View,
   Text,
   TouchableOpacity,
-  Button,
   TextInput,
   Image,
   FlatList,
@@ -30,7 +17,6 @@ import {withNavigation} from 'react-navigation';
 import io from 'socket.io-client';
 import Mymessage from './mymessage';
 import Yourmessage from './yourmessage';
-import Firstmessage from './firstmessage';
 const func = require('../server/api');
 const timefunc = require('./timefunction');
 
@@ -39,7 +25,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 15 : 30;
 const socket = io(func.api(3005, ''));
 
-class Message extends React.Component {
+class Message extends PureComponent {
   constructor(props) {
     super(props);
     this.scrollViewRef = React.createRef();

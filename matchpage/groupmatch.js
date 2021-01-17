@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   StyleSheet,
   Text,
@@ -86,7 +86,7 @@ const renderItem = ({item}) => (
     </View>
   </View>
 );
-export default class Group_match extends React.Component {
+export default class Group_match extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

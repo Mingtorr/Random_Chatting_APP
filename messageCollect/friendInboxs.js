@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 
-export default class FriendsInbox extends React.Component {
+export default class FriendsInbox extends PureComponent {
   constructor(props) {
     super(props);
 

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,11 +8,10 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 const func = require('../../server/api');
 
-export default class Set_notice extends Component {
+export default class Set_notice extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -253,7 +252,13 @@ export default class Set_notice extends Component {
             borderBottomWidth: 1,
             borderColor: 'lightgray',
           }}>
-          <View style={{display: 'flex', flex: 0.3, backgroundColor: 'white', marginBottom: 10}}>
+          <View
+            style={{
+              display: 'flex',
+              flex: 0.3,
+              backgroundColor: 'white',
+              marginBottom: 10,
+            }}>
             <TouchableOpacity onPress={this.backBtn}>
               <Image
                 source={require('./back2.png')}

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 
-export default class Main_Yourmessage extends React.Component {
+export default class Main_Yourmessage extends React.PureComponent {
   render() {
     if (this.props.pre === true) {
       return (

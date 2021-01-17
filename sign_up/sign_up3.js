@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import {
   StyleSheet,
   View,
@@ -10,7 +10,7 @@ import {withNavigation} from 'react-navigation';
 import RNPickerSelect from 'react-native-picker-select';
 
 const func = require('../server/api');
-class Sign_up3 extends React.Component {
+class Sign_up3 extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

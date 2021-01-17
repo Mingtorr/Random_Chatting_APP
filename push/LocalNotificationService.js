@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Platform} from 'react-native';
 
-class LocalNotificationService extends Component {
+class LocalNotificationService extends PureComponent {
   configure = (onOpenNotification) => {
     PushNotification.configure({
       onRegister: function (token) {

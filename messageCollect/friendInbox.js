@@ -1,5 +1,5 @@
+import React, {PureComponent} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,14 +9,14 @@ import {
   FlatList,
   Alert,
   TouchableWithoutFeedback,
-  Image
+  Image,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import io from 'socket.io-client';
 import LinearGradient from 'react-native-linear-gradient';
 import ShowTimeFun from './ShowTimeFun';
-import Modal from "react-native-modal";
-import { Dimensions } from 'react-native';
+import Modal from 'react-native-modal';
+import {Dimensions} from 'react-native';
 
 const chartHeight = Dimensions.get('window').height;
 const chartWidth = Dimensions.get('window').width;
@@ -25,7 +25,7 @@ const timefunc = require('../message/timefunction');
 
 const socket = io(func.api(3005, ''));
 
-export default class FriendInbox extends React.Component {
+export default class FriendInbox extends PureComponent {
   constructor(props) {
     super(props);
     const today = new Date();
@@ -60,37 +60,43 @@ export default class FriendInbox extends React.Component {
         messagesRoom: room.map((info) =>
           data.roomid === info.room_id
             ? {
-              ...info,
-              message_body: data.message,
-              ampm: ampm,
-              hour: hour,
-              min: min,
-              message_time: data.time2
-            }
+                ...info,
+                message_body: data.message,
+                ampm: ampm,
+                hour: hour,
+                min: min,
+                message_time: data.time2,
+              }
             : info,
         ),
       });
       const sortBefore = [...this.state.messagesRoom];
-      const sortRoom = sortBefore.sort((a,b) =>{
-        return a.message_time > b.message_time ? -1 : a.message_time < b.message_time ? 1: 0;
-      })
+      const sortRoom = sortBefore.sort((a, b) => {
+        return a.message_time > b.message_time
+          ? -1
+          : a.message_time < b.message_time
+          ? 1
+          : 0;
+      });
       this.setState({
         messagesRoom: sortRoom,
-      })
+      });
     });
     socket.on('receptionrecieve', (data) => {
       const room = [...this.state.messagesRoom];
       this.setState({
         messagesRoom: room.map((info) =>
-          data.roomid === info.room_id ? { ...info, toreception: data.reception } : info,
+          data.roomid === info.room_id
+            ? {...info, toreception: data.reception}
+            : info,
         ),
       });
-    })
+    });
     socket.on('recieve_ChatNum', (data) => {
       const room = [...this.state.messagesRoom];
       this.setState({
         messagesRoom: room.map((info) =>
-          data.roomid === info.room_id ? { ...info, count: data.count } : info,
+          data.roomid === info.room_id ? {...info, count: data.count} : info,
         ),
       });
     });
@@ -98,7 +104,7 @@ export default class FriendInbox extends React.Component {
       const room = [...this.state.messagesRoom];
       this.setState({
         messagesRoom: room.map((info) =>
-          data.roomid === info.room_id ? { ...info, shownickname: 1 } : info,
+          data.roomid === info.room_id ? {...info, shownickname: 1} : info,
         ),
       });
     });
@@ -147,8 +153,9 @@ export default class FriendInbox extends React.Component {
             });
             // console.log("room", this.state.messagesRoom);
           });
-        }).catch((err) => console.log('err: ', err));
-    })
+        })
+        .catch((err) => console.log('err: ', err));
+    });
   }
 
   isChecked = (itemId) => {
@@ -158,12 +165,12 @@ export default class FriendInbox extends React.Component {
   };
 
   setModalVisible = (bool, room_id) => {
-    const data = [...this.state.messagesRoom]
+    const data = [...this.state.messagesRoom];
     this.setState({
       messagesRoom: data.map((info) =>
-        room_id === info.room_id ? { ...info, modalVisible: bool } : info,
+        room_id === info.room_id ? {...info, modalVisible: bool} : info,
       ),
-    })
+    });
   };
 
   toggleChecked = (itemId) => {
@@ -223,9 +230,9 @@ export default class FriendInbox extends React.Component {
           text: '아니요',
           style: 'cancel',
         },
-        { text: '네', onPress: () => this.deleteRoom(itemId) }, // 화살표 함수로 바인딩 대체
+        {text: '네', onPress: () => this.deleteRoom(itemId)}, // 화살표 함수로 바인딩 대체
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
@@ -234,7 +241,7 @@ export default class FriendInbox extends React.Component {
     //클릭시 새로운 메시지 표시 삭제
     this.setState({
       messagesRoom: data.map((info) =>
-        itemId === info.room_id ? { ...info, count: 0 } : info,
+        itemId === info.room_id ? {...info, count: 0} : info,
       ),
     });
     const room_chat = {
@@ -286,22 +293,31 @@ export default class FriendInbox extends React.Component {
       userkey: this.state.user_Info.user_key,
       roomid: roomid,
       reception: null,
-    }
-    if (reception === 1) { //알람 켜진상태
+    };
+    if (reception === 1) {
+      //알람 켜진상태
       this.setState({
         messagesRoom: data.map((info) =>
-          roomid === info.room_id ? { ...info, reception: 0 } : info,
+          roomid === info.room_id ? {...info, reception: 0} : info,
         ),
       });
-      socket.emit('reception', ({ roomid: roomid, reception: 0, touserkey: touserkey }))
+      socket.emit('reception', {
+        roomid: roomid,
+        reception: 0,
+        touserkey: touserkey,
+      });
       userkey.reception = 0;
     } else {
       this.setState({
         messagesRoom: data.map((info) =>
-          roomid === info.room_id ? { ...info, reception: 1 } : info,
+          roomid === info.room_id ? {...info, reception: 1} : info,
         ),
       });
-      socket.emit('reception', ({ roomid: roomid, reception: 1, touserkey: touserkey }))
+      socket.emit('reception', {
+        roomid: roomid,
+        reception: 1,
+        touserkey: touserkey,
+      });
       userkey.reception = 1;
     }
 
@@ -311,47 +327,62 @@ export default class FriendInbox extends React.Component {
         'content-type': 'application/json',
       },
       body: JSON.stringify(userkey),
-    }).then((res) => res.json())
+    })
+      .then((res) => res.json())
       .then((json) => {
         if (json) {
           // alert('알람이 설정되었습니다.')
           Alert.alert(
-            "안내",
-            "알람이 설정 되었습니다.",
-            [{text: "OK", style: "OK"}],
-            { cancelable: false }
+            '안내',
+            '알람이 설정 되었습니다.',
+            [{text: 'OK', style: 'OK'}],
+            {cancelable: false},
           );
-          this.setModalVisible(false, roomid)
+          this.setModalVisible(false, roomid);
         } else {
           console.log('알람꺼짐 버그');
         }
-      })
-  }
+      });
+  };
 
-  renderItem = ({ item }) => {
+  renderItem = ({item}) => {
     return (
       <SafeAreaView style={styles.container}>
         <Modal
           animationType="slide"
           transparent={true}
           visible={item.modalVisible}
-          onRequestClose={() => { this.setModalVisible(false, item.room_id) }}
-        >
-          
-          <TouchableWithoutFeedback style={styles.centeredView} onPress={() => { this.setModalVisible(false, item.room_id) }}>
+          onRequestClose={() => {
+            this.setModalVisible(false, item.room_id);
+          }}>
+          <TouchableWithoutFeedback
+            style={styles.centeredView}
+            onPress={() => {
+              this.setModalVisible(false, item.room_id);
+            }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <Text style={styles.modalTitle}>방 설정</Text>
 
-                <TouchableOpacity style={styles.modalTouch}
-                  onPress={() => { this.receptionOnOff(item.room_id, item.reception, item.user_key) }}>
-                  {item.reception === 1
-                    ? (<Text style={styles.modalText}>채팅방 알림 끄기</Text>)
-                    : (<Text style={styles.modalText}>채팅방 알림 켜기</Text>)
-                  }
+                <TouchableOpacity
+                  style={styles.modalTouch}
+                  onPress={() => {
+                    this.receptionOnOff(
+                      item.room_id,
+                      item.reception,
+                      item.user_key,
+                    );
+                  }}>
+                  {item.reception === 1 ? (
+                    <Text style={styles.modalText}>채팅방 알림 끄기</Text>
+                  ) : (
+                    <Text style={styles.modalText}>채팅방 알림 켜기</Text>
+                  )}
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.modalTouch} onPress={() => this.longPressAlert(item.room_id)}>
+                <TouchableOpacity
+                  style={styles.modalTouch}
+                  onPress={() => this.longPressAlert(item.room_id)}>
                   <Text style={styles.modalText}>나가기</Text>
                 </TouchableOpacity>
               </View>
@@ -363,12 +394,18 @@ export default class FriendInbox extends React.Component {
           // onLongPress={() => this.longPressAlert(item.room_id)}
           onLongPress={() => this.setModalVisible(true, item.room_id)}
           onPress={() =>
-            this.onpress(item.room_id, item.user_key, item.shownickname, item.user_token, item.toreception)
+            this.onpress(
+              item.room_id,
+              item.user_key,
+              item.shownickname,
+              item.user_token,
+              item.toreception,
+            )
           }>
           <View style={styles.messageElem}>
             <LinearGradient
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
               colors={
                 item.user_sex === '0'
                   ? ['#8ac3dc', '#63a7eb']
@@ -388,28 +425,35 @@ export default class FriendInbox extends React.Component {
                     답장을 기다리고 있습니다.
                   </Text>
                 ) : (
-                    <Text style={styles.nickName}>{item.user_nickname}</Text>
-                  )}
-                {item.reception === 1 // 1켜기 0 끄기
-                  ? <Text></Text>
+                  <Text style={styles.nickName}>{item.user_nickname}</Text>
+                )}
+                {item.reception === 1 ? ( // 1켜기 0 끄기
+                  <Text></Text>
+                ) : (
                   // : <Text>거부</Text>}
-                  : <Image
-                  style={{width: 10, height: 10, marginTop: 10, marginLeft: 10}}
-                  source={require('./alarm2.png')}
-                />}
+                  <Image
+                    style={{
+                      width: 10,
+                      height: 10,
+                      marginTop: 10,
+                      marginLeft: 10,
+                    }}
+                    source={require('./alarm2.png')}
+                  />
+                )}
               </View>
               <View style={styles.messageLastChat}>
                 {item.message_body === 'delcode5010' ? (
                   <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
                 ) : (
-                    <Text>{item.message_body}</Text>
-                    // <Text style={styles.lastChat}>
-                    //   {item.message_body.length > 35
-                    //     ? item.message_body.substr(0, 37).padEnd(40, '.')
-                    //     : item.message_body}
-                    // </Text>
-                    // <View/>
-                  )}
+                  <Text>{item.message_body}</Text>
+                  // <Text style={styles.lastChat}>
+                  //   {item.message_body.length > 35
+                  //     ? item.message_body.substr(0, 37).padEnd(40, '.')
+                  //     : item.message_body}
+                  // </Text>
+                  // <View/>
+                )}
               </View>
             </View>
             {this.props.outButtonBool ? (
@@ -424,20 +468,20 @@ export default class FriendInbox extends React.Component {
                     {item.count < 300 ? (
                       <Text style={styles.isNewchat}>{item.count}</Text>
                     ) : (
-                        <Text style={styles.isNewchat}>+300</Text>
-                      )}
+                      <Text style={styles.isNewchat}>+300</Text>
+                    )}
                   </View>
                 ) : (
-                    <View />
-                  )}
+                  <View />
+                )}
               </View>
             ) : (
-                <CheckBox
-                  style={{ flex: 1, marginLeft: 40 }}
-                  onClick={() => this.toggleChecked(item.id)}
-                  isChecked={this.isChecked(item.id)}
-                />
-              )}
+              <CheckBox
+                style={{flex: 1, marginLeft: 40}}
+                onClick={() => this.toggleChecked(item.id)}
+                isChecked={this.isChecked(item.id)}
+              />
+            )}
           </View>
         </TouchableOpacity>
       </SafeAreaView>
@@ -448,8 +492,13 @@ export default class FriendInbox extends React.Component {
       <SafeAreaView style={styles.container}>
         {/* <Button title = '나가기' onPress = {this.deleteChek}></Button> */}
         <FlatList
-          data={this.state.messagesRoom.sort((a,b) =>{
-            return a.message_time > b.message_time ? -1 : a.message_time < b.message_time ? 1: 0})}
+          data={this.state.messagesRoom.sort((a, b) => {
+            return a.message_time > b.message_time
+              ? -1
+              : a.message_time < b.message_time
+              ? 1
+              : 0;
+          })}
           renderItem={this.renderItem}
           keyExtractor={(item) => String(item.room_id)}
         />
@@ -558,8 +607,8 @@ const styles = StyleSheet.create({
 
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
     // backgroundColor:'red'
   },
@@ -568,45 +617,45 @@ const styles = StyleSheet.create({
     height: chartHeight * 0.2,
     width: chartWidth * 0.6,
     margin: 10,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
     paddingTop: 20,
     paddingLeft: 30,
     // alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
   },
   openButton: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: '10%'
+    marginBottom: '10%',
   },
   modalTouch: {
     // backgroundColor: 'lightgray',
     height: '25%',
     // flex:0.8,
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: 'center',
   },
   modalText: {
     fontSize: 16,
-    marginTop: -3
-  }
+    marginTop: -3,
+  },
 });

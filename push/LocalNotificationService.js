@@ -2,23 +2,22 @@ import React, {PureComponent} from 'react';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Platform} from 'react-native';
-import { AppState, StyleSheet, Text, View } from "react-native";
+import {AppState, StyleSheet, Text, View} from 'react-native';
 
 class LocalNotificationService extends React.PureComponent {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      foreground: 'asd'
-    }
+      foreground: 'asd',
+    };
   }
-  changestate = (data)=>{
+  changestate = (data) => {
     this.setState({
-      foreground:data
-    })
+      foreground: data,
+    });
     // console.log(this.state.foreground);
-  }
-  componentDidMount(){
+  };
+  componentDidMount() {
     // console.log("zzzzzzzzzz");
   }
   configure = (onOpenNotification) => {
@@ -32,6 +31,7 @@ class LocalNotificationService extends React.PureComponent {
       },
       onNotification: function (notification) {
         // console.log('[LocalNotificationService] onNotification ', notification);
+        if (Platform.OS === 'ios') {
           PushNotificationIOS.addNotificationRequest({
             id: 'test-2',
             title: notification.title,
@@ -39,6 +39,7 @@ class LocalNotificationService extends React.PureComponent {
             category: 'test',
             threadId: 'thread-id',
           });
+        }
         if (!notification?.data) {
           return;
         }

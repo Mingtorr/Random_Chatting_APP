@@ -27,7 +27,7 @@ import Set_exit from './settingpage/set_exit/exit';
 const func = require('./server/api');
 import {Image} from 'react-native';
 import FriendInbox from './messageCollect/friendInbox';
-import Noticepush from './settingpage/set_notice/noticepush';
+import Noticepush from './settingpage/set_notice/Noticepush';
 import Set_yb from './settingpage/set_yb/setting_nick.js';
 import Set_pw from './settingpage/set_yb/setting_pw';
 const Stack = createStackNavigator();

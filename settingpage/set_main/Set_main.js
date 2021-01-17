@@ -132,7 +132,7 @@ class Set_main extends Component {
           <View
             style={{display: 'flex', flexDirection: 'row', marginLeft: '5%'}}>
             <Text style={{marginLeft: 15, fontSize: 16, color: '#000000'}}>
-              알람 설정
+              알림 설정
             </Text>
           </View>
           <Text style={{marginRight: 30, fontSize: 20, color: '#eb6c63'}}>

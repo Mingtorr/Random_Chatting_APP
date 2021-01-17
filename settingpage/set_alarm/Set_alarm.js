@@ -187,7 +187,7 @@ class Set_alarm extends Component {
           </TouchableOpacity>
           <View style={styles.Head_alarm}>
             <Text>Setting</Text>
-            <Text>알람 설정</Text>
+            <Text>알림 설정</Text>
           </View>
         </View>
         {/* 메세지 알람 */}

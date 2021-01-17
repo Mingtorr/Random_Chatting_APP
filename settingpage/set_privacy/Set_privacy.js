@@ -233,29 +233,12 @@ export default class Set_privacy extends Component {
                 </View>
               </View>
 
-              <View
-                style={{width: '100%', display: 'flex', alignItems: 'center'}}>
-                <TouchableOpacity
-                  style={{
-                    width: '100%',
-                    marginTop: 25,
-                    color: 'white',
-                    fontFamily: 'Jalnan',
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    fontSize: 20,
-                    backgroundColor: '#f05052',
-                  }}
-                  onPress={() => {
-                    this.props.navigation.navigate('Main');
-                  }}>
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontFamily: 'Jalnan',
-                      fontSize: 20,
-                      textAlign: 'center',
-                    }}>
+              <View style={{width: '100%', display: 'flex', alignItems: 'center'}}>
+                <TouchableOpacity style={{width: '100%', marginTop: 25, color: 'white', 
+                fontFamily: 'Jalnan', paddingTop: 10, 
+                paddingBottom: 10, fontSize: 20, backgroundColor: '#f05052'}}
+                  onPress={() => {this.props.navigation.navigate('bottomtab');}}>
+                  <Text style={{color: 'white', fontFamily: 'Jalnan', fontSize: 20, textAlign: 'center'}}>
                     확인
                   </Text>
                 </TouchableOpacity>

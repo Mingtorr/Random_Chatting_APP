@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   idpw_5: {
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: -30,
   },
 
   Intro_idpw1: {

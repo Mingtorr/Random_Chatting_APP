@@ -157,7 +157,11 @@ export default class App extends React.Component {
                 component={this.state.second_components}
                 options={{headerShown: false}}
               />
-
+              <Stack.Screen
+                name="bottomtab"
+                component={Bottom}
+                options={{headerShown: false}}
+              />
               <Stack.Screen
                 name="Signup"
                 component={Signup}

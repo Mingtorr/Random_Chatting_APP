@@ -23,7 +23,21 @@ connection.connect();
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(cors());
 app.use(bodyparser.json());
+app.post('/version',(req,res)=>{
+  console.log(req.body.version);
+  connection.query('select * from version',[],function(err,rows,field){
+    if(err){
+      console.log(err);
+    }
+    else if(rows[0]===undefined){
 
+    }else if(JSON.stringify(req.body.version) === rows[0].version){
+      res.send(true)
+    }else{
+      res.send(false)
+    }
+  })
+})
 app.post('/CheckId', (req, res) => {
   const checkId = req.body.id;
   // console.log(checkId);

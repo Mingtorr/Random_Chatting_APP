@@ -110,6 +110,7 @@ class Sign_up extends React.Component {
 
   sendEmail = (e) => {
     e.preventDefault();
+    var re = /^[a-zA-Z0-9_]{4,20}$/;
     if (this.state.email.length === 0) {
       Alert.alert(
         '안내',

@@ -411,7 +411,7 @@ export default class match_page extends React.Component {
                 style={{
                   fontSize: responsiveFontSize(2.5),
                   fontWeight: 'bold',
-                  fontFamily: 'Jalnan',
+                  // fontFamily: 'Jalnan',
                 }}>
                 {this.state.title}
               </Text>

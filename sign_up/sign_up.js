@@ -800,7 +800,7 @@ const styles = StyleSheet.create({
 
     ...Platform.select({
       ios: {
-        marginBottom: 15,
+        marginBottom: 5,
       },
       android: {
         marginBottom: 5,

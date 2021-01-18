@@ -14,6 +14,7 @@
     "@material-ui/core": "^4.11.0",
     "@react-native-community/art": "^1.2.0",
     "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/push-notification-ios": "^1.8.0",
     "@react-native-firebase/admob": "^10.4.0",

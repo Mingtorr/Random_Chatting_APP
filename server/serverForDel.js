@@ -77,7 +77,7 @@ function heat_plus() {
 function test() {
   var date = moment().format('hh');
   // console.log(date);
-  if (data.tostring() === 00) {
+  if (date.tostring() === 00) {
     heat_plus();
   }
   clearInterval(interval);

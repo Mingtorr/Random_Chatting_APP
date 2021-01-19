@@ -10,6 +10,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Image,
+  Animated
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import io from 'socket.io-client';
@@ -17,6 +18,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import ShowTimeFun from './ShowTimeFun';
 import Modal from 'react-native-modal';
 import {Dimensions} from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+
 
 const chartHeight = Dimensions.get('window').height;
 const chartWidth = Dimensions.get('window').width;
@@ -345,9 +348,37 @@ export default class FriendInbox extends PureComponent {
       });
   };
 
+  RightAction = (item) =>{
+    return (
+      <View style ={{flexDirection: 'row'}}>
+        <TouchableOpacity onPress={() => {
+                    this.receptionOnOff(
+                      item.room_id,
+                      item.reception,
+                      item.user_key,
+                    );
+                  }}
+          style = {[styles.swipeActionBtn,{backgroundColor:'#8ac3dc'}]}>
+          <View>
+            <Text style = {{color: 'white'}}>알림설정</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => this.deleteRoom(item.room_id)}
+          style = {[styles.swipeActionBtn,{backgroundColor:'#eb6c63'}]}>
+          <View >
+            <Text style ={{color: 'white'}}>나가기</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   renderItem = ({item}) => {
+
     return (
       <SafeAreaView style={styles.container}>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -382,14 +413,18 @@ export default class FriendInbox extends PureComponent {
 
                 <TouchableOpacity
                   style={styles.modalTouch}
-                  onPress={() => this.longPressAlert(item.room_id)}>
+                  onPress={() => this.longPressAlert(item.room_id)}
+                  >
                   <Text style={styles.modalText}>나가기</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </TouchableWithoutFeedback>
         </Modal>
-
+        
+        {/* <Swipeable renderR?ightActions ={() => this.RightAction(item)}> */}
+        <Swipeable renderRightActions = {() => this.RightAction(item)} >
+        
         <TouchableOpacity
           // onLongPress={() => this.longPressAlert(item.room_id)}
           onLongPress={() => this.setModalVisible(true, item.room_id)}
@@ -484,6 +519,7 @@ export default class FriendInbox extends PureComponent {
             )}
           </View>
         </TouchableOpacity>
+        </Swipeable>
       </SafeAreaView>
     );
   };
@@ -507,6 +543,37 @@ export default class FriendInbox extends PureComponent {
   }
 }
 
+// const renderRightActions = (progress, dragX) =>{
+//   const scale = dragX.interpolate({
+//     inputRange: [0, 100],
+//     outputRange: [0, 1],
+//     extrapolate: 'clamp',
+//   });
+//   return (
+//     <View style ={{flexDirection: 'row'}}>
+//       <TouchableOpacity onPress={() => {
+//                   this.receptionOnOff(
+//                     item.room_id,
+//                     item.reception,
+//                     item.user_key,
+//                   );
+//                 }}
+//         style = {[styles.swipeActionBtn,{backgroundColor:'#8ac3dc'}]}>
+//         <View>
+//           <Text style = {{color: 'white'}}>알림설정</Text>
+//         </View>
+//       </TouchableOpacity>
+
+//       <TouchableOpacity onPress={() => this.deleteRoom(item.room_id)}
+//         style = {[styles.swipeActionBtn,{backgroundColor:'#eb6c63'}]}>
+//         <View >
+//           <Text style ={{color: 'white'}}>나가기</Text>
+//         </View>
+//       </TouchableOpacity>
+//     </View>
+//   )
+// }
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -522,12 +589,13 @@ const styles = StyleSheet.create({
   },
   messageElem: {
     display: 'flex',
-    width: '100%',
+    width: chartWidth, 
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#eee',
     borderBottomWidth: 0.5,
     padding: 5,
+    backgroundColor: 'white'
   },
   messageInfo: {
     display: 'flex',
@@ -657,5 +725,11 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 16,
     marginTop: -3,
+  },
+  swipeActionBtn: {
+    justifyContent: 'center',
+    alignItems:'center',
+    width: 80,
+    // backgroundColor: 'lightgray'
   },
 });

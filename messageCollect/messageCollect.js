@@ -50,6 +50,7 @@ const Tab = createMaterialTopTabNavigator();
 function MessageTab(props) {
   return (
     <Tab.Navigator
+      swipeEnabled = {false}
       tabBarOptions={{
         style: {
           backgroundColor: 'none',

@@ -12,12 +12,16 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import RadioForm from 'react-native-simple-radio-button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {getBottomSpace} from 'react-native-iphone-x-helper';
+import Modal from 'react-native-modal';
+import Yakgwan from './yakgwan';
+
 const func = require('../server/api');
 
 class Sign_up extends PureComponent {
@@ -38,7 +42,7 @@ class Sign_up extends PureComponent {
       sendEmailClick: false, //메일 보냄 확인
       checking_passwd: false, //비번 확인
       nickname_check: false, //닉네임 중복검사
-
+      onoff: true,
       email_send_check: false,
     };
   }
@@ -400,6 +404,13 @@ class Sign_up extends PureComponent {
         });
     }
   };
+
+  go = (onoff) => {
+    this.setState({
+      onoff: onoff,
+    });
+    this.props.navigation.goBack();
+  };
   /////////////////////
 
   render() {
@@ -415,6 +426,10 @@ class Sign_up extends PureComponent {
     return (
       <SafeAreaView
         style={{backgroundColor: 'white', flex: 1, backgroundColor: 'white'}}>
+        {/* -------------------------------------------------- */}
+        {this.state.onoff ? <Yakgwan go={this.go} /> : <View></View>}
+        {/* -------------------------------------------------- */}
+
         <KeyboardAwareScrollView
           // behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.Container_sign2}>

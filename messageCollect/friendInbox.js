@@ -10,6 +10,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Image,
+  Animated,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import io from 'socket.io-client';
@@ -17,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import ShowTimeFun from './ShowTimeFun';
 import Modal from 'react-native-modal';
 import {Dimensions} from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const chartHeight = Dimensions.get('window').height;
 const chartWidth = Dimensions.get('window').width;
@@ -345,6 +347,30 @@ export default class FriendInbox extends PureComponent {
       });
   };
 
+  RightAction = (item) => {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity
+          onPress={() => {
+            this.receptionOnOff(item.room_id, item.reception, item.user_key);
+          }}
+          style={[styles.swipeActionBtn, {backgroundColor: '#8ac3dc'}]}>
+          <View>
+            <Text style={{color: 'white'}}>알림설정</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => this.deleteRoom(item.room_id)}
+          style={[styles.swipeActionBtn, {backgroundColor: '#eb6c63'}]}>
+          <View>
+            <Text style={{color: 'white'}}>나가기</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   renderItem = ({item}) => {
     return (
       <SafeAreaView style={styles.container}>
@@ -390,100 +416,103 @@ export default class FriendInbox extends PureComponent {
           </TouchableWithoutFeedback>
         </Modal>
 
-        <TouchableOpacity
-          // onLongPress={() => this.longPressAlert(item.room_id)}
-          onLongPress={() => this.setModalVisible(true, item.room_id)}
-          onPress={() =>
-            this.onpress(
-              item.room_id,
-              item.user_key,
-              item.shownickname,
-              item.user_token,
-              item.toreception,
-            )
-          }>
-          <View style={styles.messageElem}>
-            <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              colors={
-                item.user_sex === '0'
-                  ? ['#8ac3dc', '#63a7eb']
-                  : ['#eb6c63', '#e94e68']
-              }
-              style={styles.linearGradient}
-              style={[
-                item.user_sex === '0'
-                  ? styles.profileMale
-                  : styles.profileFemale,
-              ]}></LinearGradient>
+        {/* <Swipeable renderR?ightActions ={() => this.RightAction(item)}> */}
+        <Swipeable renderRightActions={renderRightActions}>
+          <TouchableOpacity
+            // onLongPress={() => this.longPressAlert(item.room_id)}
+            onLongPress={() => this.setModalVisible(true, item.room_id)}
+            onPress={() =>
+              this.onpress(
+                item.room_id,
+                item.user_key,
+                item.shownickname,
+                item.user_token,
+                item.toreception,
+              )
+            }>
+            <View style={styles.messageElem}>
+              <LinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={
+                  item.user_sex === '0'
+                    ? ['#8ac3dc', '#63a7eb']
+                    : ['#eb6c63', '#e94e68']
+                }
+                style={styles.linearGradient}
+                style={[
+                  item.user_sex === '0'
+                    ? styles.profileMale
+                    : styles.profileFemale,
+                ]}></LinearGradient>
 
-            <View style={styles.messageInfo}>
-              <View style={styles.messageHead}>
-                {item.shownickname === 0 ? (
-                  <Text style={styles.nickName2}>
-                    답장을 기다리고 있습니다.
-                  </Text>
-                ) : (
-                  <Text style={styles.nickName}>{item.user_nickname}</Text>
-                )}
-                {item.reception === 1 ? ( // 1켜기 0 끄기
-                  <Text></Text>
-                ) : (
-                  // : <Text>거부</Text>}
-                  <Image
-                    style={{
-                      width: 10,
-                      height: 10,
-                      marginTop: 10,
-                      marginLeft: 10,
-                    }}
-                    source={require('./alarm2.png')}
+              <View style={styles.messageInfo}>
+                <View style={styles.messageHead}>
+                  {item.shownickname === 0 ? (
+                    <Text style={styles.nickName2}>
+                      답장을 기다리고 있습니다.
+                    </Text>
+                  ) : (
+                    <Text style={styles.nickName}>{item.user_nickname}</Text>
+                  )}
+                  {item.reception === 1 ? ( // 1켜기 0 끄기
+                    <Text></Text>
+                  ) : (
+                    // : <Text>거부</Text>}
+                    <Image
+                      style={{
+                        width: 10,
+                        height: 10,
+                        marginTop: 10,
+                        marginLeft: 10,
+                      }}
+                      source={require('./alarm2.png')}
+                    />
+                  )}
+                </View>
+                <View style={styles.messageLastChat}>
+                  {item.message_body === 'delcode5010' ? (
+                    <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
+                  ) : (
+                    <Text>{item.message_body}</Text>
+                    // <Text style={styles.lastChat}>
+                    //   {item.message_body.length > 35
+                    //     ? item.message_body.substr(0, 37).padEnd(40, '.')
+                    //     : item.message_body}
+                    // </Text>
+                    // <View/>
+                  )}
+                </View>
+              </View>
+              {this.props.outButtonBool ? (
+                <View style={styles.messageTime}>
+                  <ShowTimeFun
+                    item={item}
+                    year={this.state.year}
+                    day={this.state.day}
                   />
-                )}
-              </View>
-              <View style={styles.messageLastChat}>
-                {item.message_body === 'delcode5010' ? (
-                  <Text style={styles.lastChat}>상대방이 나갔습니다.</Text>
-                ) : (
-                  <Text>{item.message_body}</Text>
-                  // <Text style={styles.lastChat}>
-                  //   {item.message_body.length > 35
-                  //     ? item.message_body.substr(0, 37).padEnd(40, '.')
-                  //     : item.message_body}
-                  // </Text>
-                  // <View/>
-                )}
-              </View>
-            </View>
-            {this.props.outButtonBool ? (
-              <View style={styles.messageTime}>
-                <ShowTimeFun
-                  item={item}
-                  year={this.state.year}
-                  day={this.state.day}
+                  {item.count > 0 ? (
+                    <View style={styles.newChat}>
+                      {item.count < 300 ? (
+                        <Text style={styles.isNewchat}>{item.count}</Text>
+                      ) : (
+                        <Text style={styles.isNewchat}>+300</Text>
+                      )}
+                    </View>
+                  ) : (
+                    <View />
+                  )}
+                </View>
+              ) : (
+                <CheckBox
+                  style={{flex: 1, marginLeft: 40}}
+                  onClick={() => this.toggleChecked(item.id)}
+                  isChecked={this.isChecked(item.id)}
                 />
-                {item.count > 0 ? (
-                  <View style={styles.newChat}>
-                    {item.count < 300 ? (
-                      <Text style={styles.isNewchat}>{item.count}</Text>
-                    ) : (
-                      <Text style={styles.isNewchat}>+300</Text>
-                    )}
-                  </View>
-                ) : (
-                  <View />
-                )}
-              </View>
-            ) : (
-              <CheckBox
-                style={{flex: 1, marginLeft: 40}}
-                onClick={() => this.toggleChecked(item.id)}
-                isChecked={this.isChecked(item.id)}
-              />
-            )}
-          </View>
-        </TouchableOpacity>
+              )}
+            </View>
+          </TouchableOpacity>
+        </Swipeable>
       </SafeAreaView>
     );
   };
@@ -506,6 +535,28 @@ export default class FriendInbox extends PureComponent {
     );
   }
 }
+
+const renderRightActions = (progress, dragX) => {
+  const scale = dragX.interpolate({
+    inputRange: [0, 100],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+  return (
+    <View style={(styles.swipeActionBtn, {backgroundColor: 'red'})}>
+      <Animated.Text
+        style={[
+          {
+            color: 'black',
+            fontSize: 16,
+            transform: [{scale: scale}],
+          },
+        ]}>
+        알람설정
+      </Animated.Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -657,5 +708,11 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 16,
     marginTop: -3,
+  },
+  swipeActionBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    // backgroundColor: 'lightgray'
   },
 });

@@ -161,11 +161,6 @@ export default class App extends React.PureComponent {
         <Stack.Navigator>
           {this.state.isLoading ? (
             <>
-              {/* <Stack.Screen
-                name="ChangePW"
-                component={ChangePW}
-                options={{headerShown: false}}
-              /> */}
               <Stack.Screen
                 name={this.state.fisrt_name}
                 component={this.state.fisrt_components}
@@ -177,7 +172,11 @@ export default class App extends React.PureComponent {
                 component={this.state.second_components}
                 options={{headerShown: false}}
               />
-
+              <Stack.Screen
+                name="login"
+                component={Login}
+                options={{headerShown: false}}
+              />
               <Stack.Screen
                 name="bottomtab"
                 component={Bottom}

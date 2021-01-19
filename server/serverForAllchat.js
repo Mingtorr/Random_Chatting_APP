@@ -12,7 +12,7 @@ const io = require('socket.io')(http);
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: 'snsk3779@',
   database: 'mydb',
 });
 
@@ -23,7 +23,21 @@ app.use(bodyparser.urlencoded({extended: false}));
 app.use(cors());
 app.use(bodyparser.json());
 
+app.post('/Allmessage_bock', (req, res) => {
+  console.log(req.body);
+  connection.query('insert into allmessageblock_table (user_key,bockuser_key) values (?,?)',[req.body.myuser_key,req.body.user_key],function(err,rows,field){
+    if(err){
+      console.log(err);
+    }else{
+      connection.query('select * from allmessageblock_table where user_key = ?',[req.body.myuser_key],function(err,rows,feild){
+        console.log(rows);
+        res.send(rows);
+      })
+    }
+  })
+});
 app.post('/Allchatroom_message', (req, res) => {
+  console.log(req.body);
   connection.query(
     'SELECT A.allmessage_key, A.allmessage_body, A.allmessage_time, A.user_key, user_table.user_nickname FROM (SELECT * FROM allmessage_table ORDER BY allmessage_key DESC limit 30) A LEFT JOIN user_table ON A.user_key = user_table.user_key ORDER BY allmessage_key ASC',
     function (err, rows, field) {
@@ -33,7 +47,14 @@ app.post('/Allchatroom_message', (req, res) => {
         res.send(false);
       } else if (rows[0] !== undefined) {
         // console.log('전체 메세지 보냄');
-        res.send(rows);
+        connection.query('select * from allmessageblock_table where user_key = ?',[req.body.user_key],function(err,rows2,feild){
+          console.log(rows);
+          const data = {
+            bockusers:rows2,
+            allmessages:rows
+          }
+          res.send(data);
+        })
       } else {
         // console.log('data x');
         res.send(false);

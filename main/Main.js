@@ -41,7 +41,7 @@ export default class Main extends PureComponent {
       user_nickname: '',
       message: '',
       messages: [],
-
+      bockusers:[],
       my_all_message: '',
 
       scroll_number: 1,
@@ -56,42 +56,74 @@ export default class Main extends PureComponent {
       // console.log(user_info);
       this.setState({user_key: user_info.user_key});
       this.setState({user_nickname: user_info.user_nickname});
-    });
-
-    // console.log('allchatroom_message');
-    fetch(func.api(3002, 'Allchatroom_message'), {
-      method: 'post',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json !== undefined) {
-          json.map((rows, index) => {
-            const message_data = {
-              key: rows.allmessage_key,
-              message_body: rows.allmessage_body,
-              user_nickname: rows.user_nickname,
-              user_key: rows.user_key,
-              allmessage_time: rows.allmessage_time,
-            };
-            this.setState({
-              messages: [...this.state.messages, message_data],
+      const data = {
+        user_key:this.state.user_key
+      }
+      // console.log('allchatroom_message');
+      fetch(func.api(3002, 'Allchatroom_message'), {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          console.log(JSON.stringify(json));
+          const bockusers = []
+          json.bockusers.map((value2,index2,arr2)=>{
+            bockusers.push(value2.bockuser_key)
+          })
+          const arr = Array.from(new Set(bockusers));
+          this.setState({
+            bockusers:arr
+          })
+          if (json.allmessages !== undefined) {
+            json.allmessages.map((rows, index) => {
+              const message_data = {
+                key: rows.allmessage_key,
+                message_body: rows.allmessage_body,
+                user_nickname: rows.user_nickname,
+                user_key: rows.user_key,
+                allmessage_time: rows.allmessage_time,
+              };
+              console.log(arr.length);
+              if(arr.length === 0){
+                this.setState({
+                  messages: [...this.state.messages, message_data],
+                });
+              }else{
+                arr.map((value,index,arr)=>{
+                  if(message_data.user_key !== value){
+                    this.setState({
+                      messages: [...this.state.messages, message_data],
+                    });
+                  }
+                })
+              }
+              this.scrolltobottom();
             });
-
-            this.scrolltobottom();
-          });
-        }
-      });
+          }
+        });
+    });
+    
 
     socket.on('recieve_allchatroom_message', (data) => {
       // console.log('받은 데이터');
       // console.log(data);
-      this.setState({
-        messages: [...this.state.messages, data],
-      });
+      if(this.state.bockusers.length === 0){
+        this.setState({
+          messages: [...this.state.messages, data],
+        });
+      }else{
+        this.state.bockusers.map((value,index,arr)=>{
+          if(data.user_key !== value){
+            this.setState({
+              messages: [...this.state.messages, data],
+            });
+          }
+        })
+      }
       this.scrolltobottom();
     });
 
@@ -104,7 +136,41 @@ export default class Main extends PureComponent {
       this._keyboardDidHide,
     );
   }
-
+  bockuser=(user_key,myuser_key)=>{ //메시지차단기능
+    const data = {
+      user_key : user_key,
+      myuser_key: myuser_key
+    }
+    fetch(func.api(3002, 'Allmessage_bock'), {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }).then(res=>res.json()).then((json)=>{
+      const bockusers = []
+      json.map((value2,index2,arr2)=>{
+        bockusers.push(value2.bockuser_key)
+      })
+      const arr = Array.from(new Set(bockusers));
+      this.setState({
+        bockusers:arr
+      })
+      const newmessages = []
+      this.state.messages.map((value,index,array)=>{
+        arr.map((value2,index2,arr2)=>{
+          if(value.user_key === value2){
+            
+          }else{
+            newmessages.push(value);
+          }
+        })
+      })
+      this.setState({
+        messages:newmessages
+      })
+    })
+  }
   _keyboardDidShow = (e) => {
     // this.props.navigation.setParams({
     //     keyboardHeight: e.endCoordinates.height,
@@ -317,6 +383,7 @@ export default class Main extends PureComponent {
     if (item.user_nickname === this.state.user_nickname) {
       return (
         <Main_Mymessage
+          user_key={item.user_key}
           message={item.message_body}
           time={message_time}
           animate_boolean={this.state.allchatroom_animate_boolean}
@@ -325,6 +392,9 @@ export default class Main extends PureComponent {
     } else {
       return (
         <Main_Yourmessage
+          user_key={item.user_key}
+          myuser_key={this.state.user_key}
+          bockuser = {this.bockuser}
           nickname={item.user_nickname}
           message={item.message_body}
           time={message_time}

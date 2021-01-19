@@ -1,10 +1,23 @@
 import React from 'react';
 import {StyleSheet, View, Text, Linking, Clipboard, TouchableOpacity, Alert} from 'react-native';
-
+// import { post } from '../server/routes/indexswy';
+const func = require('../server/api');
 export default class Main_Yourmessage extends React.PureComponent {
   copyToClipboard = () => {
-    Clipboard.setString(this.props.message)
-    Alert.alert('','텍스트가 복사되었습니다.')
+    Alert.alert(
+      '차단하시겠습니까?',
+      `${this.props.nickname}`,
+      [
+        {
+          text: '아니요',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        { text: '네', onPress: () => this.props.bockuser(this.props.user_key,this.props.myuser_key)},
+      ],
+      { cancelable: false }
+    );
+    //차단기능
   }
 
   render() {

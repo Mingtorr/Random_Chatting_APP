@@ -10,11 +10,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Image,
-<<<<<<< HEAD
-  Animated
-=======
   Animated,
->>>>>>> branch1
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import io from 'socket.io-client';
@@ -23,10 +19,6 @@ import ShowTimeFun from './ShowTimeFun';
 import Modal from 'react-native-modal';
 import {Dimensions} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-<<<<<<< HEAD
-
-=======
->>>>>>> branch1
 
 const chartHeight = Dimensions.get('window').height;
 const chartWidth = Dimensions.get('window').width;

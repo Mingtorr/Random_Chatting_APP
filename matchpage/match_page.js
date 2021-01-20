@@ -119,8 +119,8 @@ export default class match_page extends PureComponent {
           myname: this.state.myname,
         };
         Alert.alert(
-          '광고 오류',
-          '광고를 불러오는데 실패했어요',
+          '현재 불러올 광고가 없어요',
+          '🙃',
           [
             {text: '확인', style: 'cancel'}, // 화살표 함수로 바인딩 대체
           ],

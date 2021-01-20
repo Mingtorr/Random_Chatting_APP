@@ -41,9 +41,9 @@ export default class Main extends PureComponent {
       user_nickname: '',
       message: '',
       messages: [],
-      bockusers:[],
+      bockusers: [],
       my_all_message: '',
-      chadanmessage:[],
+      chadanmessage: [],
       scroll_number: 1,
       refreshing: false,
       keyboardH: 0,
@@ -57,8 +57,8 @@ export default class Main extends PureComponent {
       this.setState({user_key: user_info.user_key});
       this.setState({user_nickname: user_info.user_nickname});
       const data = {
-        user_key:this.state.user_key
-      }
+        user_key: this.state.user_key,
+      };
       // console.log('allchatroom_message');
       fetch(func.api(3002, 'Allchatroom_message'), {
         method: 'post',
@@ -69,16 +69,15 @@ export default class Main extends PureComponent {
       })
         .then((res) => res.json())
         .then((json) => {
-          const bockusers = []
-          json.bockusers.map((value2,index2,arr2)=>{
-            bockusers.push(value2.bockuser_key)
-          })
+          const bockusers = [];
+          json.bockusers.map((value2, index2, arr2) => {
+            bockusers.push(value2.bockuser_key);
+          });
           const arr = Array.from(new Set(bockusers));
           this.setState({
-            bockusers:arr
-          })
+            bockusers: arr,
+          });
           if (json.allmessages !== undefined) {
-            
             json.allmessages.map((rows, index) => {
               const message_data = {
                 message_body: rows.allmessage_body,
@@ -86,30 +85,33 @@ export default class Main extends PureComponent {
                 user_key: rows.user_key,
                 allmessage_time: rows.allmessage_time,
               };
-              const itemToFind = arr.find(function(item) {return item === rows.user_key})
+              const itemToFind = arr.find(function (item) {
+                return item === rows.user_key;
+              });
               console.log(itemToFind);
-              if(itemToFind === -1 || itemToFind ===undefined){
+              if (itemToFind === -1 || itemToFind === undefined) {
                 this.setState({
-                  messages:[...this.state.messages,message_data]
-                })
+                  messages: [...this.state.messages, message_data],
+                });
               }
             });
           }
           this.scrolltobottom();
         });
     });
-    
 
     socket.on('recieve_allchatroom_message', (data) => {
       // console.log('받은 데이터');
       // console.log(data);
-      const itemToFind = this.state.bockusers.find(function(item) {return item === data.user_key})
-              console.log(itemToFind);
-              if(itemToFind === -1 || itemToFind ===undefined){
-                this.setState({
-                  messages:[...this.state.messages,data]
-                })
-              }
+      const itemToFind = this.state.bockusers.find(function (item) {
+        return item === data.user_key;
+      });
+      console.log(itemToFind);
+      if (itemToFind === -1 || itemToFind === undefined) {
+        this.setState({
+          messages: [...this.state.messages, data],
+        });
+      }
       this.scrolltobottom();
     });
 
@@ -122,47 +124,82 @@ export default class Main extends PureComponent {
       this._keyboardDidHide,
     );
   }
-  bockuser=(user_key,myuser_key)=>{ //메시지차단기능
+  bockuser = (user_key, myuser_key) => {
+    //메시지차단기능
     const data = {
-      user_key : user_key,
-      myuser_key: myuser_key
-    }
+      user_key: user_key,
+      myuser_key: myuser_key,
+    };
     fetch(func.api(3002, 'Allmessage_bock'), {
       method: 'post',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify(data),
-    }).then(res=>res.json()).then((json)=>{
-      const bockusers = []
-      json.map((value2,index2,arr2)=>{
-        bockusers.push(value2.bockuser_key)
-      })
-      const arr = Array.from(new Set(bockusers));
-      console.log(arr);
-      this.setState({
-        bockusers:arr
-      })
-      
-      const newmessages = [...this.state.messages]
-      this.setState({
-        chadanmessage:[]
-      })
-      newmessages.map((value,index,array)=>{
-        const itemToFind = arr.find(function(item) {return item === value.user_key})
-              console.log(itemToFind);
-              if(itemToFind === -1 || itemToFind ===undefined){
-                this.setState({
-                  chadanmessage:[...this.state.chadanmessage,value]
-                })
-              }
-      })
-      this.setState({
-        messages:this.state.chadanmessage
-      })
-      
     })
-  }
+      .then((res) => res.json())
+      .then((json) => {
+        const bockusers = [];
+        json.map((value2, index2, arr2) => {
+          bockusers.push(value2.bockuser_key);
+        });
+        const arr = Array.from(new Set(bockusers));
+        console.log(arr);
+        this.setState({
+          bockusers: arr,
+        });
+
+        const newmessages = [...this.state.messages];
+        this.setState({
+          chadanmessage: [],
+        });
+        newmessages.map((value, index, array) => {
+          const itemToFind = arr.find(function (item) {
+            return item === value.user_key;
+          });
+          console.log(itemToFind);
+          if (itemToFind === -1 || itemToFind === undefined) {
+            this.setState({
+              chadanmessage: [...this.state.chadanmessage, value],
+            });
+          }
+        });
+        this.setState({
+          messages: this.state.chadanmessage,
+        });
+      })
+      .then((res) => res.json())
+      .then((json) => {
+        const bockusers = [];
+        json.map((value2, index2, arr2) => {
+          bockusers.push(value2.bockuser_key);
+        });
+        const arr = Array.from(new Set(bockusers));
+        console.log(arr);
+        this.setState({
+          bockusers: arr,
+        });
+
+        const newmessages = [...this.state.messages];
+        this.setState({
+          chadanmessage: [],
+        });
+        newmessages.map((value, index, array) => {
+          const itemToFind = arr.find(function (item) {
+            return item === value.user_key;
+          });
+          console.log(itemToFind);
+          if (itemToFind === -1 || itemToFind === undefined) {
+            this.setState({
+              chadanmessage: [...this.state.chadanmessage, value],
+            });
+          }
+        });
+        this.setState({
+          messages: this.state.chadanmessage,
+        });
+      });
+  };
   _keyboardDidShow = (e) => {
     // this.props.navigation.setParams({
     //     keyboardHeight: e.endCoordinates.height,
@@ -273,13 +310,15 @@ export default class Main extends PureComponent {
             };
             // console.log('받아온 데이터');
             // console.log(message_data);
-            const itemToFind = this.state.bockusers.find(function(item) {return item === rows.user_key})
-              console.log(itemToFind);
-              if(itemToFind === -1 || itemToFind ===undefined){
-                this.setState({
-                  messages: [message_data, ...this.state.messages],
-                });
-              }
+            const itemToFind = this.state.bockusers.find(function (item) {
+              return item === rows.user_key;
+            });
+            console.log(itemToFind);
+            if (itemToFind === -1 || itemToFind === undefined) {
+              this.setState({
+                messages: [message_data, ...this.state.messages],
+              });
+            }
           });
           this.setState({
             scroll_number: this.state.scroll_number + 1,
@@ -388,7 +427,7 @@ export default class Main extends PureComponent {
         <Main_Yourmessage
           user_key={item.user_key}
           myuser_key={this.state.user_key}
-          bockuser = {this.bockuser}
+          bockuser={this.bockuser}
           nickname={item.user_nickname}
           message={item.message_body}
           time={message_time}
@@ -442,7 +481,12 @@ export default class Main extends PureComponent {
                   전체 채팅방
                 </Text>
               </View>
-              <ScrollView style={{flex: 1}} ref="scrollView" onContentSizeChange={(width,height) => this.refs.scrollView.scrollTo({y:height})}>
+              <ScrollView
+                style={{flex: 1}}
+                ref="scrollView"
+                onContentSizeChange={(width, height) =>
+                  this.refs.scrollView.scrollTo({y: height})
+                }>
                 <FlatList
                   ref={this.flatlist_ref}
                   data={this.state.messages}

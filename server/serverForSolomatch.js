@@ -31,7 +31,7 @@ app.post('/receptionOnOff', (req, res) => {
         console.log(err);
         res.send(false);
       } else {
-        res.send(true);
+        res.send(req.body.reception);
       }
     },
   );
@@ -211,7 +211,7 @@ app.post('/Get_Group', (req, res) => {
             [group_key],
             function (err, rows, fields) {
               if (err) {
-                                console.log('err', err);
+                console.log('err', err);
               } else {
                 const groups = [];
                 group_room.map((info, index) => {

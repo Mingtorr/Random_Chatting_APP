@@ -148,7 +148,7 @@ export default class FriendInbox extends PureComponent {
             newrow.month = month;
             newrow.day = day;
             newrow.min = min;
-            console.log('new' + JSON.stringify(newrow));
+            //console.log('new' + JSON.stringify(newrow));
 
             this.setState({
               messagesRoom: [...this.state.messagesRoom, newrow],
@@ -332,7 +332,8 @@ export default class FriendInbox extends PureComponent {
     })
       .then((res) => res.json())
       .then((json) => {
-        if (json) {
+        console.log(json);
+        if (json.reception === 1) {
           // alert('알람이 설정되었습니다.')
           Alert.alert(
             '안내',
@@ -342,7 +343,13 @@ export default class FriendInbox extends PureComponent {
           );
           this.setModalVisible(false, roomid);
         } else {
-          // console.log('알람꺼짐 버그');
+          Alert.alert(
+            '안내',
+            '알람이 해제 되었습니다.',
+            [{text: 'OK', style: 'OK'}],
+            {cancelable: false},
+          );
+          this.setModalVisible(false, roomid);
         }
       });
   };

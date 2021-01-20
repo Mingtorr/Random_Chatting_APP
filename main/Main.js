@@ -43,7 +43,7 @@ export default class Main extends PureComponent {
       messages: [],
       bockusers:[],
       my_all_message: '',
-
+      chadanmessage:[],
       scroll_number: 1,
       refreshing: false,
       keyboardH: 0,
@@ -69,7 +69,6 @@ export default class Main extends PureComponent {
       })
         .then((res) => res.json())
         .then((json) => {
-          console.log(JSON.stringify(json));
           const bockusers = []
           json.bockusers.map((value2,index2,arr2)=>{
             bockusers.push(value2.bockuser_key)
@@ -79,31 +78,24 @@ export default class Main extends PureComponent {
             bockusers:arr
           })
           if (json.allmessages !== undefined) {
+            
             json.allmessages.map((rows, index) => {
               const message_data = {
-                key: rows.allmessage_key,
                 message_body: rows.allmessage_body,
                 user_nickname: rows.user_nickname,
                 user_key: rows.user_key,
                 allmessage_time: rows.allmessage_time,
               };
-              console.log(arr.length);
-              if(arr.length === 0){
+              const itemToFind = arr.find(function(item) {return item === rows.user_key})
+              console.log(itemToFind);
+              if(itemToFind === -1 || itemToFind ===undefined){
                 this.setState({
-                  messages: [...this.state.messages, message_data],
-                });
-              }else{
-                arr.map((value,index,arr)=>{
-                  if(message_data.user_key !== value){
-                    this.setState({
-                      messages: [...this.state.messages, message_data],
-                    });
-                  }
+                  messages:[...this.state.messages,message_data]
                 })
               }
-              this.scrolltobottom();
             });
           }
+          this.scrolltobottom();
         });
     });
     
@@ -111,19 +103,13 @@ export default class Main extends PureComponent {
     socket.on('recieve_allchatroom_message', (data) => {
       // console.log('받은 데이터');
       // console.log(data);
-      if(this.state.bockusers.length === 0){
-        this.setState({
-          messages: [...this.state.messages, data],
-        });
-      }else{
-        this.state.bockusers.map((value,index,arr)=>{
-          if(data.user_key !== value){
-            this.setState({
-              messages: [...this.state.messages, data],
-            });
-          }
-        })
-      }
+      const itemToFind = this.state.bockusers.find(function(item) {return item === data.user_key})
+              console.log(itemToFind);
+              if(itemToFind === -1 || itemToFind ===undefined){
+                this.setState({
+                  messages:[...this.state.messages,data]
+                })
+              }
       this.scrolltobottom();
     });
 
@@ -153,22 +139,28 @@ export default class Main extends PureComponent {
         bockusers.push(value2.bockuser_key)
       })
       const arr = Array.from(new Set(bockusers));
+      console.log(arr);
       this.setState({
         bockusers:arr
       })
-      const newmessages = []
-      this.state.messages.map((value,index,array)=>{
-        arr.map((value2,index2,arr2)=>{
-          if(value.user_key === value2){
-            
-          }else{
-            newmessages.push(value);
-          }
-        })
+      
+      const newmessages = [...this.state.messages]
+      this.setState({
+        chadanmessage:[]
+      })
+      newmessages.map((value,index,array)=>{
+        const itemToFind = arr.find(function(item) {return item === value.user_key})
+              console.log(itemToFind);
+              if(itemToFind === -1 || itemToFind ===undefined){
+                this.setState({
+                  chadanmessage:[...this.state.chadanmessage,value]
+                })
+              }
       })
       this.setState({
-        messages:newmessages
+        messages:this.state.chadanmessage
       })
+      
     })
   }
   _keyboardDidShow = (e) => {
@@ -281,12 +273,14 @@ export default class Main extends PureComponent {
             };
             // console.log('받아온 데이터');
             // console.log(message_data);
-            this.setState({
-              messages: [message_data, ...this.state.messages],
-              // refreshing: false
-            });
+            const itemToFind = this.state.bockusers.find(function(item) {return item === rows.user_key})
+              console.log(itemToFind);
+              if(itemToFind === -1 || itemToFind ===undefined){
+                this.setState({
+                  messages: [message_data, ...this.state.messages],
+                });
+              }
           });
-
           this.setState({
             scroll_number: this.state.scroll_number + 1,
           });
@@ -451,7 +445,6 @@ export default class Main extends PureComponent {
               <ScrollView style={{flex: 1}} ref="scrollView" onContentSizeChange={(width,height) => this.refs.scrollView.scrollTo({y:height})}>
                 <FlatList
                   ref={this.flatlist_ref}
-                  keyExtractor={(item) => item.key.toString()}
                   data={this.state.messages}
                   renderItem={this.rendermessage}
                   refreshing={this.state.refreshing}

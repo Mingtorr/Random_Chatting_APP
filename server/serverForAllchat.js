@@ -141,7 +141,6 @@ io.on('connection', function (socket) {
                 };
                 // console.log(index);
                 const all_send_message = {
-                  key: index.key,
                   message_body: data.message_body,
                   user_nickname: data.user_nickname,
                   user_key: data.user_key,
